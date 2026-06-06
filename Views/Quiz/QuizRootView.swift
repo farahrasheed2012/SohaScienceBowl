@@ -41,10 +41,8 @@ struct QuizRootView: View {
                         Label("Quiz this week", systemImage: "calendar")
                     }
 
-                    NavigationLink {
-                        WeekPlanView()
-                    } label: {
-                        Label("Browse week by day", systemImage: "list.bullet")
+                    NavigationLink(value: StudyNavigationRoute.topicBrowser(initialWeek: nil)) {
+                        Label("Browse all topics", systemImage: "books.vertical.fill")
                     }
                 }
 
@@ -173,6 +171,7 @@ struct QuizRootView: View {
             }
             .navigationTitle("Quiz")
             .navigationBarTitleDisplayMode(.large)
+            .studyNavigationDestinations()
             .onAppear {
                 appState.refreshScheduleFromCalendar()
             }

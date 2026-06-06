@@ -1,0 +1,108 @@
+import SwiftUI
+
+/// Topic hub — preview then open study material, full session, or quiz.
+struct TopicDetailView: View {
+    @Environment(AppState.self) private var appState
+    let block: StudyBlock
+
+    var body: some View {
+        List {
+            Section {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        SubjectBadge(subject: block.subject)
+                        Spacer()
+                        Text("Week \(block.week)")
+                            .font(.caption.weight(.semibold))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(Color(uiColor: .secondarySystemFill))
+                            .clipShape(Capsule())
+                    }
+
+                    Text(block.primaryTopic)
+                        .font(.title2.weight(.semibold))
+
+                    Label(
+                        "\(block.day.fullName) · \(ScheduleConstants.blockTimeLabel(day: block.day, subject: block.subject))",
+                        systemImage: "clock"
+                    )
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                    Text(block.bookLine(for: appState.currentPass))
+                        .font(.subheadline)
+
+                    if let theme = DeepDiveContent.weekTheme(week: block.week, pass: appState.currentPass) {
+                        Text(theme)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(Color(uiColor: .systemBlue))
+                    }
+                }
+                .padding(.vertical, 4)
+            }
+
+            Section("Focus preview") {
+                StudyMaterialBodyText(text: block.focus)
+                    .listRowInsets(EdgeInsets(top: 12, leading: 20, bottom: 12, trailing: 20))
+            }
+
+            Section("Study & practice") {
+                NavigationLink(value: StudyNavigationRoute.studyMaterial(block)) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Read study material")
+                                .font(.headline)
+                            Text("Focus, deep dive, formulas, know cold")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "book.fill")
+                            .foregroundStyle(Color(uiColor: .systemBlue))
+                    }
+                }
+
+                NavigationLink(value: StudyNavigationRoute.fullSession(block)) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Full study session")
+                                .font(.headline)
+                            Text("Read → Know cold → Sample toss-ups")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "text.book.closed.fill")
+                            .foregroundStyle(Color(uiColor: .systemGreen))
+                    }
+                }
+
+                NavigationLink(value: StudyNavigationRoute.planDrill(.dayBlock(block, week: block.week))) {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Quiz this topic")
+                                .font(.headline)
+                            Text("Plan-aligned toss-ups · DOE + curriculum")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    } icon: {
+                        Image(systemName: "bolt.fill")
+                            .foregroundStyle(Color(uiColor: .systemOrange))
+                    }
+                }
+            }
+
+            if !block.formulasAndTerms.isEmpty {
+                Section("Formulas & key terms") {
+                    Text(block.formulasAndTerms)
+                        .font(.subheadline)
+                }
+            }
+        }
+        .navigationTitle(block.primaryTopic)
+        .navigationBarTitleDisplayMode(.inline)
+        .studyNavigationDestinations()
+    }
+}

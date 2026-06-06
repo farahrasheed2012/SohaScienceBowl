@@ -2,13 +2,14 @@ import SwiftUI
 
 struct TodayView: View {
     @Environment(AppState.self) private var appState
+    @State private var navigationPath = NavigationPath()
 
     private var isFriday: Bool {
         Weekday.from(Date()) == .friday
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 6) {
@@ -23,25 +24,27 @@ struct TodayView: View {
 
                 if let block = appState.todayBlocks().first {
                     Section("Study today") {
-                        NavigationLink {
-                            BlockStudyMaterialView(block: block)
-                        } label: {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Label("Read today's topic", systemImage: "book.fill")
-                                    .font(.headline)
+                        studyActionRow(
+                            title: "Read today's topic",
+                            systemImage: "book.fill",
+                            prominent: true
+                        ) {
+                            navigationPath.append(StudyNavigationRoute.studyMaterial(block))
+                        } subtitle: {
+                            VStack(alignment: .leading, spacing: 2) {
                                 Text("\(block.subject.rawValue) · \(block.primaryTopic)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
                                 Text(block.bookLine(for: appState.currentPass))
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
                             }
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                         }
 
-                        NavigationLink {
-                            StudySessionView(block: block, initialStage: .read)
-                        } label: {
-                            Label("Full study session (Read → Know cold → Quiz)", systemImage: "text.book.closed.fill")
+                        studyActionRow(
+                            title: "Full study session (Read → Know cold → Quiz)",
+                            systemImage: "text.book.closed.fill",
+                            prominent: false
+                        ) {
+                            navigationPath.append(StudyNavigationRoute.fullSession(block))
                         }
                     }
                 }
@@ -59,38 +62,40 @@ struct TodayView: View {
                                     timeLabel: ScheduleConstants.blockTimeLabel(day: block.day, subject: block.subject)
                                 )
 
-                                VStack(spacing: 10) {
-                                    NavigationLink {
-                                        BlockStudyMaterialView(block: block)
+                                Button {
+                                    navigationPath.append(StudyNavigationRoute.studyMaterial(block))
+                                } label: {
+                                    Text("Read study material")
+                                        .font(.subheadline.weight(.semibold))
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 10)
+                                }
+                                .buttonStyle(.borderedProminent)
+
+                                HStack(spacing: 12) {
+                                    Button {
+                                        navigationPath.append(StudyNavigationRoute.fullSession(block))
                                     } label: {
-                                        Text("Read study material")
+                                        Text("Full session")
                                             .font(.subheadline.weight(.semibold))
                                             .frame(maxWidth: .infinity)
                                             .padding(.vertical, 10)
                                     }
-                                    .buttonStyle(.borderedProminent)
+                                    .buttonStyle(.bordered)
 
-                                    HStack(spacing: 12) {
-                                        NavigationLink {
-                                            StudySessionView(block: block, initialStage: .read)
-                                        } label: {
-                                            Text("Full session")
-                                                .font(.subheadline.weight(.semibold))
-                                                .frame(maxWidth: .infinity)
-                                                .padding(.vertical, 10)
-                                        }
-                                        .buttonStyle(.bordered)
-
-                                        NavigationLink {
-                                            PlanDrillView(request: .todayBlock(block, week: appState.currentWeek))
-                                        } label: {
-                                            Text("Quiz only")
-                                                .font(.subheadline.weight(.semibold))
-                                                .frame(maxWidth: .infinity)
-                                                .padding(.vertical, 10)
-                                        }
-                                        .buttonStyle(.bordered)
+                                    Button {
+                                        navigationPath.append(
+                                            StudyNavigationRoute.planDrill(
+                                                .todayBlock(block, week: appState.currentWeek)
+                                            )
+                                        )
+                                    } label: {
+                                        Text("Quiz only")
+                                            .font(.subheadline.weight(.semibold))
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 10)
                                     }
+                                    .buttonStyle(.bordered)
                                 }
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
@@ -100,62 +105,82 @@ struct TodayView: View {
                     }
                 }
 
+                Section {
+                    studyActionRow(
+                        title: "Browse all topics",
+                        systemImage: "books.vertical.fill",
+                        prominent: false
+                    ) {
+                        navigationPath.append(StudyNavigationRoute.topicBrowser(initialWeek: nil))
+                    } subtitle: {
+                        Text("Weeks 1–10 · Biology, Chemistry, Physics · read or quiz any topic")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 Section("Practice the plan") {
                     if let block = appState.todayBlocks().first {
-                        NavigationLink {
-                            PlanDrillView(request: .todayBlock(block, week: appState.currentWeek))
-                        } label: {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Label("Quiz today's block", systemImage: "bolt.circle.fill")
-                                Text("Questions only — read the topic first")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
+                        studyActionRow(
+                            title: "Quiz today's block",
+                            systemImage: "bolt.circle.fill",
+                            prominent: false
+                        ) {
+                            navigationPath.append(
+                                StudyNavigationRoute.planDrill(
+                                    .todayBlock(block, week: appState.currentWeek)
+                                )
+                            )
+                        } subtitle: {
+                            Text("Questions only — read the topic first")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
                     }
 
-                    NavigationLink {
-                        PlanDrillView(request: .thisWeek(week: appState.currentWeek))
-                    } label: {
-                        Label("Quiz this week", systemImage: "calendar.circle.fill")
+                    studyActionRow(
+                        title: "Quiz this week",
+                        systemImage: "calendar.circle.fill",
+                        prominent: false
+                    ) {
+                        navigationPath.append(
+                            StudyNavigationRoute.planDrill(.thisWeek(week: appState.currentWeek))
+                        )
                     }
 
-                    NavigationLink {
-                        WeekPlanView()
-                    } label: {
-                        Label("See full week topics", systemImage: "list.bullet.rectangle")
+                    studyActionRow(
+                        title: "Browse all topics",
+                        systemImage: "books.vertical.fill",
+                        prominent: false
+                    ) {
+                        navigationPath.append(StudyNavigationRoute.topicBrowser(initialWeek: nil))
                     }
                 }
 
                 Section("Buzzer drills today") {
                     if let weekday = Weekday.from(Date()) {
                         ForEach(ScheduleConstants.buzzerSlots.filter { $0.weekday == weekday }) { slot in
-                            NavigationLink {
-                                PlanDrillView(request: .buzzer(slot: slot, week: appState.currentWeek))
-                            } label: {
+                            studyActionRow(
+                                title: slot.label,
+                                systemImage: "bolt.fill",
+                                prominent: false
+                            ) {
+                                navigationPath.append(
+                                    StudyNavigationRoute.planDrill(
+                                        .buzzer(slot: slot, week: appState.currentWeek)
+                                    )
+                                )
+                            } subtitle: {
                                 HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(slot.label)
-                                            .font(.subheadline)
-                                        HStack {
-                                            if slot.isMixed {
-                                                Text("Mixed Bio · Chem · Phys")
-                                                    .font(.caption)
-                                                    .foregroundStyle(.secondary)
-                                            } else {
-                                                SubjectBadge(subject: slot.subject)
-                                            }
-                                            Text(slot.duration)
-                                                .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                        }
+                                    if slot.isMixed {
+                                        Text("Mixed Bio · Chem · Phys")
+                                    } else if let subject = slot.subjects.first {
+                                        SubjectBadge(subject: subject)
                                     }
-                                    Spacer()
-                                    Image(systemName: "bolt.fill")
-                                        .foregroundStyle(Color(uiColor: .systemBlue))
-                                        .accessibilityHidden(true)
+                                    Text(slot.duration)
                                 }
-                                .padding(.vertical, 4)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                             }
                         }
                     } else {
@@ -178,10 +203,14 @@ struct TodayView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            NavigationLink {
-                                PlanDrillView(request: .thisWeek(week: appState.currentWeek))
-                            } label: {
-                                Label("Friday review quiz (full week)", systemImage: "checkmark.circle")
+                            studyActionRow(
+                                title: "Friday review quiz (full week)",
+                                systemImage: "checkmark.circle",
+                                prominent: false
+                            ) {
+                                navigationPath.append(
+                                    StudyNavigationRoute.planDrill(.thisWeek(week: appState.currentWeek))
+                                )
                             }
                         }
                         .padding(.vertical, 4)
@@ -189,16 +218,41 @@ struct TodayView: View {
                 }
 
                 Section {
-                    NavigationLink("Formula reference") {
-                        FormulaReferenceView()
+                    studyActionRow(
+                        title: "Formula reference",
+                        systemImage: "function",
+                        prominent: false
+                    ) {
+                        navigationPath.append(StudyNavigationRoute.formulaReference)
                     }
                 }
             }
             .navigationTitle("Today")
             .navigationBarTitleDisplayMode(.large)
+            .studyNavigationDestinations()
             .onAppear {
                 appState.refreshScheduleFromCalendar()
             }
         }
+    }
+
+    @ViewBuilder
+    private func studyActionRow(
+        title: String,
+        systemImage: String,
+        prominent: Bool,
+        action: @escaping () -> Void,
+        @ViewBuilder subtitle: () -> some View = { EmptyView() }
+    ) -> some View {
+        Button(action: action) {
+            VStack(alignment: .leading, spacing: 4) {
+                Label(title, systemImage: systemImage)
+                    .font(prominent ? .headline : .body)
+                subtitle()
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 }

@@ -132,58 +132,16 @@ struct StudySessionView: View {
 
     private var readStage: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                if let workflow = DeepDiveContent.passWorkflow(week: block.week, pass: appState.currentPass) {
-                    Group {
-                        Text("How to use this block")
-                            .font(.headline)
-                        Text(workflow)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
+            StudyMaterialScrollContent(block: block)
+                .padding(.horizontal, 20)
+                .padding(.vertical, 20)
 
-                Group {
-                    Text("Reading")
-                        .font(.headline)
-                    Text(block.bookLine(for: appState.currentPass))
-                        .font(.subheadline)
-
-                    if let theme = DeepDiveContent.weekTheme(week: block.week, pass: appState.currentPass) {
-                        Text(theme)
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Color(uiColor: .systemBlue))
-                    }
-
-                    Text("Focus")
-                        .font(.headline)
-                    Text(DeepDiveContent.blockContent(for: block, pass: appState.currentPass) ?? block.focus)
-                        .font(.body)
-
-                    Text("Formulas & key terms")
-                        .font(.headline)
-                    Text(block.formulasAndTerms)
-                        .font(.body)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                if block.day == .friday, let fridayNote = DeepDiveContent.fridayReviewNote(week: block.week) {
-                    Group {
-                        Text("Friday review block")
-                            .font(.headline)
-                        Text(fridayNote)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-
-                Toggle("Done reading", isOn: $readingDone)
-                    .font(.subheadline.weight(.semibold))
-            }
-            .padding(16)
+            Toggle("Done reading", isOn: $readingDone)
+                .font(.subheadline.weight(.semibold))
+                .padding(.horizontal, 20)
+                .padding(.bottom, 24)
         }
+        .background(Color(uiColor: .systemGroupedBackground))
     }
 
     private var knowColdStage: some View {
