@@ -1,7 +1,17 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct SettingsView: View {
     @Environment(AppState.self) private var appState
+
+    @State private var showBackupImporter = false
+    @State private var showBackupExporter = false
+    @State private var exportDocument: ProgressBackupFileDocument?
+    @State private var pendingBackup: ProgressBackup?
+    @State private var showImportConfirm = false
+    @State private var showBackupAlert = false
+    @State private var backupAlertTitle = ""
+    @State private var backupAlertMessage = ""
 
     var body: some View {
         NavigationStack {
@@ -60,6 +70,24 @@ struct SettingsView: View {
                 }
 
                 Section {
+                    Button {
+                        prepareExport()
+                    } label: {
+                        Label("Export progress backup", systemImage: "square.and.arrow.up")
+                    }
+
+                    Button {
+                        showBackupImporter = true
+                    } label: {
+                        Label("Import progress backup", systemImage: "square.and.arrow.down")
+                    }
+                } header: {
+                    Text("Backup & restore")
+                } footer: {
+                    Text("Exports all progress to a JSON file — share via AirDrop, Files, or email. Import replaces current progress on this device. DOE PDFs are not included.")
+                }
+
+                Section {
                     Text("Import PDF, CSV, or JSON files into your local question bank.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
@@ -110,7 +138,90 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
+            .fileExporter(
+                isPresented: $showBackupExporter,
+                document: exportDocument,
+                contentType: .json,
+                defaultFilename: ProgressBackupService.defaultFilename()
+            ) { result in
+                if case .failure(let error) = result {
+                    presentBackupAlert(title: "Export failed", message: error.localizedDescription)
+                }
+            }
+            .fileImporter(
+                isPresented: $showBackupImporter,
+                allowedContentTypes: [.json]
+            ) { result in
+                handleImportResult(result)
+            }
+            .alert("Restore this backup?", isPresented: $showImportConfirm) {
+                Button("Replace progress", role: .destructive) {
+                    confirmImport()
+                }
+                Button("Cancel", role: .cancel) {
+                    pendingBackup = nil
+                }
+            } message: {
+                if let pendingBackup {
+                    Text("\(ProgressBackupService.summary(for: pendingBackup))\n\nThis replaces all saved progress on this device.")
+                }
+            }
+            .alert(backupAlertTitle, isPresented: $showBackupAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(backupAlertMessage)
+            }
         }
+    }
+
+    private func prepareExport() {
+        do {
+            let data = try ProgressBackupService.encode(ProgressBackupService.makeBackup(from: appState))
+            exportDocument = ProgressBackupFileDocument(data: data)
+            showBackupExporter = true
+        } catch {
+            presentBackupAlert(title: "Export failed", message: error.localizedDescription)
+        }
+    }
+
+    private func handleImportResult(_ result: Result<URL, Error>) {
+        switch result {
+        case .failure(let error):
+            presentBackupAlert(title: "Import failed", message: error.localizedDescription)
+        case .success(let url):
+            importBackup(from: url)
+        }
+    }
+
+    private func importBackup(from url: URL) {
+        let accessed = url.startAccessingSecurityScopedResource()
+        defer {
+            if accessed { url.stopAccessingSecurityScopedResource() }
+        }
+        do {
+            let data = try Data(contentsOf: url)
+            let backup = try ProgressBackupService.decode(data)
+            pendingBackup = backup
+            showImportConfirm = true
+        } catch {
+            presentBackupAlert(title: "Import failed", message: error.localizedDescription)
+        }
+    }
+
+    private func confirmImport() {
+        guard let pendingBackup else { return }
+        ProgressBackupService.apply(pendingBackup, to: appState)
+        self.pendingBackup = nil
+        presentBackupAlert(
+            title: "Progress restored",
+            message: ProgressBackupService.summary(for: pendingBackup)
+        )
+    }
+
+    private func presentBackupAlert(title: String, message: String) {
+        backupAlertTitle = title
+        backupAlertMessage = message
+        showBackupAlert = true
     }
 
     @ViewBuilder

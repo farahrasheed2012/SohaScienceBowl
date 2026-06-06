@@ -178,4 +178,13 @@ final class EncyclopediaStore {
             UserDefaults.standard.set(data, forKey: wrongKey)
         }
     }
+
+    func importSnapshot(_ snapshot: ProgressBackup.EncyclopediaSnapshot) {
+        reviewedTopicIds = Set(snapshot.reviewedTopicIds)
+        sessionHistory = snapshot.sessionHistory
+        wrongCountPerTopicId = snapshot.wrongCountPerTopicId
+        currentStreak = snapshot.currentStreak
+        lastStudyDate = snapshot.lastStudyDate
+        saveProgress()
+    }
 }

@@ -39,7 +39,7 @@ enum AppTheme {
     )
 }
 
-enum AppAppearance: String, CaseIterable, Identifiable {
+enum AppAppearance: String, CaseIterable, Identifiable, Codable {
     case system
     case dark
     case warmLight
