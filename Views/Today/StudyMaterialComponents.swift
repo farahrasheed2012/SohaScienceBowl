@@ -114,29 +114,12 @@ struct StudyMaterialBodyText: View {
     }
 
     private var chunks: [Chunk] {
-        text
-            .components(separatedBy: "\n\n")
-            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .filter { !$0.isEmpty }
-            .map { paragraph in
-                if paragraph.contains(" · ") {
-                    let items = paragraph
-                        .components(separatedBy: " · ")
-                        .map { $0.trimmingCharacters(in: .whitespaces) }
-                        .filter { !$0.isEmpty }
-                    return items.count > 1 ? .bullets(items) : .paragraph(paragraph)
-                }
-                if paragraph.contains("\n") {
-                    let lines = paragraph
-                        .components(separatedBy: "\n")
-                        .map { $0.trimmingCharacters(in: .whitespaces) }
-                        .filter { !$0.isEmpty }
-                    if lines.count > 1 {
-                        return .bullets(lines)
-                    }
-                }
-                return .paragraph(paragraph)
+        StudyTextChunk.parse(text).map { chunk in
+            switch chunk {
+            case .paragraph(let body): return .paragraph(body)
+            case .bullets(let items): return .bullets(items)
             }
+        }
     }
 }
 

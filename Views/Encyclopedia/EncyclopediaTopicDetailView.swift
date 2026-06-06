@@ -2,6 +2,7 @@ import SwiftUI
 
 struct EncyclopediaTopicDetailView: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.themePalette) private var theme
     let topicId: String
 
     private var topic: NSBTopic? {
@@ -24,80 +25,82 @@ struct EncyclopediaTopicDetailView: View {
     @ViewBuilder
     private func scrollContent(_ topic: NSBTopic) -> some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                StudyMaterialCard(title: topic.title, systemImage: "text.book.closed.fill", accent: Color(uiColor: .systemBlue)) {
-                    Text(topic.subject)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+            VStack(alignment: .leading, spacing: 20) {
+                LearnTopicHeaderCard(title: topic.title, subject: topic.subject)
+
+                LearnSectionCard(title: "What Is It?", systemImage: "lightbulb.fill", accent: theme.accent) {
+                    LearnBodyText(text: topic.whatIsIt)
                 }
 
-                StudyMaterialCard(title: "What Is It?", systemImage: "lightbulb.fill", accent: Color(uiColor: .systemYellow)) {
-                    StudyMaterialBodyText(text: topic.whatIsIt)
+                LearnSectionCard(title: "How It Works", systemImage: "gears") {
+                    LearnBodyText(text: topic.howItWorks)
                 }
 
-                StudyMaterialCard(title: "How It Works", systemImage: "gears", accent: Color(uiColor: .systemTeal)) {
-                    StudyMaterialBodyText(text: topic.howItWorks)
+                LearnSectionCard(title: "Real-World Example", systemImage: "globe.americas.fill") {
+                    LearnBodyText(text: topic.realWorldExample)
                 }
 
-                StudyMaterialCard(title: "Real-World Example", systemImage: "globe.americas.fill", accent: Color(uiColor: .systemGreen)) {
-                    StudyMaterialBodyText(text: topic.realWorldExample)
-                }
-
-                StudyMaterialCard(title: "Key Terms to Know", systemImage: "character.book.closed.fill", accent: Color(uiColor: .systemPurple)) {
-                    VStack(alignment: .leading, spacing: 12) {
+                LearnSectionCard(title: "Key Terms to Know", systemImage: "character.book.closed.fill") {
+                    VStack(alignment: .leading, spacing: 16) {
                         ForEach(topic.keyTerms, id: \.term) { term in
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(term.term)
-                                    .font(.subheadline.weight(.semibold))
-                                Text(term.definition)
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
+                            LearnKeyTermRow(term: term.term, definition: term.definition)
                         }
                     }
                 }
 
-                StudyMaterialCard(title: "Common NSB Traps", systemImage: "exclamationmark.triangle.fill", accent: Color(uiColor: .systemOrange)) {
-                    VStack(alignment: .leading, spacing: 10) {
+                LearnSectionCard(title: "Common NSB Traps", systemImage: "exclamationmark.triangle.fill", accent: theme.wrong) {
+                    VStack(alignment: .leading, spacing: 12) {
                         ForEach(Array(topic.nsbTraps.enumerated()), id: \.offset) { _, trap in
-                            HStack(alignment: .top, spacing: 10) {
+                            HStack(alignment: .top, spacing: 12) {
                                 Text("•")
-                                    .fontWeight(.bold)
-                                    .foregroundStyle(Color(uiColor: .systemOrange))
+                                    .font(.system(size: ThemePalette.bodySize, weight: .bold))
+                                    .foregroundStyle(theme.wrong)
+                                    .padding(.top, 2)
                                 Text(trap)
-                                    .font(.body)
+                                    .font(.system(size: ThemePalette.captionSize))
+                                    .foregroundStyle(theme.primaryText)
+                                    .lineSpacing(6)
                                     .fixedSize(horizontal: false, vertical: true)
                             }
                         }
                     }
                 }
 
-                StudyMaterialCard(title: "Did You Know?", systemImage: "star.fill", accent: Color(uiColor: .systemIndigo)) {
-                    VStack(alignment: .leading, spacing: 10) {
+                LearnSectionCard(title: "Did You Know?", systemImage: "star.fill") {
+                    VStack(alignment: .leading, spacing: 12) {
                         ForEach(Array(topic.didYouKnow.enumerated()), id: \.offset) { _, fact in
                             Text(fact)
-                                .font(.subheadline)
+                                .font(.system(size: ThemePalette.captionSize))
                                 .italic()
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(theme.secondaryText)
+                                .lineSpacing(6)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                 }
 
                 if !topic.relatedTopics.isEmpty {
-                    StudyMaterialCard(title: "Related Topics", systemImage: "link", accent: Color(uiColor: .systemBlue)) {
+                    LearnSectionCard(title: "Related Topics", systemImage: "link") {
                         EncyclopediaTopicChipFlow(topicIds: topic.relatedTopics)
                     }
                 }
 
-                StudyMaterialCard(title: "Practice this topic", systemImage: "bolt.fill", accent: Color(uiColor: .systemOrange)) {
-                    VStack(spacing: 10) {
+                LearnSectionCard(title: "Practice this topic", systemImage: "bolt.fill", accent: theme.accent) {
+                    VStack(spacing: 4) {
                         ForEach([EncyclopediaPracticeMode.multipleChoice, .tossUpBonus, .freeResponse], id: \.self) { mode in
                             NavigationLink(value: StudyNavigationRoute.encyclopediaPractice(mode, topicIds: [topic.id])) {
-                                Label(mode.title, systemImage: practiceIcon(mode))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.vertical, 10)
+                                HStack {
+                                    Label(mode.title, systemImage: practiceIcon(mode))
+                                        .font(.system(size: ThemePalette.bodySize, weight: .medium))
+                                        .foregroundStyle(theme.primaryText)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(theme.secondaryText.opacity(0.7))
+                                }
+                                .padding(.vertical, 12)
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                 }
@@ -105,29 +108,30 @@ struct EncyclopediaTopicDetailView: View {
             .padding(20)
             .padding(.bottom, 80)
         }
-        .background(Color(uiColor: .systemGroupedBackground))
+        .background(theme.surface)
         .safeAreaInset(edge: .bottom) {
             if appState.encyclopedia.reviewedTopicIds.contains(topic.id) {
                 Label("Reviewed", systemImage: "checkmark.circle.fill")
-                    .font(.headline)
-                    .foregroundStyle(Color(uiColor: .systemGreen))
+                    .font(.system(size: ThemePalette.bodySize, weight: .semibold))
+                    .foregroundStyle(theme.success)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .background(.bar)
+                    .padding(.vertical, 16)
+                    .background(theme.cardBackground)
             } else {
                 Button {
                     appState.encyclopedia.markReviewed(topicId: topic.id)
                     HapticFeedback.success()
                 } label: {
                     Label("Mark as reviewed", systemImage: "checkmark.circle")
-                        .font(.headline)
+                        .font(.system(size: ThemePalette.bodySize, weight: .semibold))
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
+                        .padding(.vertical, 16)
                 }
                 .buttonStyle(.borderedProminent)
+                .tint(theme.accent)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
-                .background(.bar)
+                .background(theme.cardBackground)
                 .accessibilityLabel("Mark as reviewed")
                 .accessibilityHint("Double tap to mark this topic as reviewed")
             }
@@ -145,19 +149,20 @@ struct EncyclopediaTopicDetailView: View {
 
 struct EncyclopediaTopicChipFlow: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.themePalette) private var theme
     let topicIds: [String]
 
     var body: some View {
-        FlowLayout(spacing: 8) {
+        FlowLayout(spacing: 10) {
             ForEach(topicIds, id: \.self) { id in
                 if let related = appState.encyclopedia.topic(byId: id) {
                     NavigationLink(value: StudyNavigationRoute.encyclopediaTopic(id: related.id)) {
                         Text(related.title)
-                            .font(.caption.weight(.medium))
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(Color(uiColor: .systemBlue).opacity(0.12))
-                            .foregroundStyle(Color(uiColor: .systemBlue))
+                            .font(.system(size: ThemePalette.captionSize, weight: .medium))
+                            .foregroundStyle(theme.accent)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 10)
+                            .background(theme.accent.opacity(0.15))
                             .clipShape(Capsule())
                     }
                     .buttonStyle(.plain)
