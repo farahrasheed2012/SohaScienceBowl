@@ -7,6 +7,16 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
+                    Picker("Appearance", selection: Bindable(appState).appAppearance) {
+                        ForEach(AppAppearance.allCases) { appearance in
+                            Text(appearance.label).tag(appearance)
+                        }
+                    }
+                } footer: {
+                    Text("Dark (One Bee) uses large type and warm accents — the style from your original Science Bowl app.")
+                }
+
+                Section {
                     Toggle("Show countdown timer during Study Session", isOn: Bindable(appState).showSessionTimer)
                     Toggle("Parent reads toss-ups aloud", isOn: Bindable(appState).parentReadsAloud)
                 } footer: {

@@ -25,6 +25,9 @@ final class AppState {
     var passManuallySet: Bool {
         didSet { UserDefaults.standard.set(passManuallySet, forKey: "passManuallySet") }
     }
+    var appAppearance: AppAppearance {
+        didSet { UserDefaults.standard.set(appAppearance.rawValue, forKey: "appAppearance") }
+    }
 
     var checklistItems: [ChecklistItem]
     var drillResults: [DrillResult]
@@ -35,6 +38,7 @@ final class AppState {
     var duplicateStats: [DuplicateImportStats]
 
     var doeStore = DOEQuestionStore.shared
+    var encyclopedia = EncyclopediaStore()
     var isDOELoading = false
 
     init() {
@@ -46,6 +50,8 @@ final class AppState {
         autoSyncScheduleFromCalendar = UserDefaults.standard.object(forKey: "autoSyncScheduleFromCalendar") as? Bool ?? true
         weekManuallySet = UserDefaults.standard.object(forKey: "weekManuallySet") as? Bool ?? false
         passManuallySet = UserDefaults.standard.object(forKey: "passManuallySet") as? Bool ?? false
+        let appearanceRaw = UserDefaults.standard.string(forKey: "appAppearance") ?? AppAppearance.dark.rawValue
+        appAppearance = AppAppearance(rawValue: appearanceRaw) ?? .dark
 
         checklistItems = PersistenceService.loadChecklist() ?? SeedData.checklistItems
         drillResults = PersistenceService.loadDrillResults()

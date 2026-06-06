@@ -238,6 +238,31 @@ struct StudyMaterialScrollContent: View {
                     StudyMaterialBodyText(text: note)
                 }
             }
+
+            let related = appState.encyclopedia.relatedTopics(for: block)
+            if !related.isEmpty {
+                StudyMaterialCard(title: "Encyclopedia articles", systemImage: "books.vertical.fill", accent: Color(uiColor: .systemIndigo)) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Full NSB topic articles matched to today's block — What Is It, How It Works, traps, and more.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        ForEach(related) { topic in
+                            NavigationLink(value: StudyNavigationRoute.encyclopediaTopic(id: topic.id)) {
+                                HStack {
+                                    Text(topic.title)
+                                        .font(.subheadline.weight(.medium))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption)
+                                        .foregroundStyle(.tertiary)
+                                }
+                                .padding(.vertical, 8)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -46,6 +46,26 @@ struct QuizRootView: View {
                     }
                 }
 
+                Section("Encyclopedia practice") {
+                    Text("148 questions · MC (W/X/Y/Z) · Toss-up · Free response")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    NavigationLink(value: StudyNavigationRoute.encyclopediaPractice(.multipleChoice, topicIds: nil)) {
+                        Label("Multiple Choice", systemImage: "list.bullet.rectangle")
+                    }
+                    NavigationLink(value: StudyNavigationRoute.encyclopediaPractice(.tossUpBonus, topicIds: nil)) {
+                        Label("Toss-Up & Bonus", systemImage: "timer")
+                    }
+                    NavigationLink(value: StudyNavigationRoute.encyclopediaPractice(.freeResponse, topicIds: nil)) {
+                        Label("Free Response", systemImage: "keyboard")
+                    }
+                    if !appState.encyclopedia.weakTopicIds.isEmpty {
+                        NavigationLink(value: StudyNavigationRoute.encyclopediaPractice(.multipleChoice, topicIds: appState.encyclopedia.weakTopicIds)) {
+                            Label("Practice weak encyclopedia topics", systemImage: "exclamationmark.circle")
+                        }
+                    }
+                }
+
                 Section("Toss-up Drill") {
                     Text("Rapid fire: tap to reveal, log ✓/✗")
                         .font(.caption)

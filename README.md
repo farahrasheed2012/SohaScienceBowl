@@ -27,13 +27,15 @@ python3 Scripts/download_doe_pdfs.py
 ## Features
 
 - **Today** — daily study blocks, 4-stage study session (Recall → Read → Know Cold → Toss-ups), buzzer drill schedule, Friday review
-- **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill, search, weak-area practice
+- **Learn** — 113 NSB encyclopedia topics (6 categories) with full articles, related topics, MC/Toss-up/Free-response practice
+- **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill, encyclopedia practice, search, weak-area practice
 - **Progress** — weekly/lifetime accuracy, checklist, flash cards, spaced repetition
 - **Settings** — pass/week picker, parent-reads-aloud mode, session timer
 
 ## Data
 
 - Curriculum seed data: Weeks 1–4 full, Weeks 5–8 Pass 2, Weeks 9–10 flash-card mode
+- Encyclopedia: 113 topics + 148 practice questions (from original Science Bowl app JSON)
 - DOE PDFs parsed at first launch via PDFKit → cached in Documents as `doe_questions_cache.json`
 - All progress stored locally in UserDefaults (no network, no accounts)
 

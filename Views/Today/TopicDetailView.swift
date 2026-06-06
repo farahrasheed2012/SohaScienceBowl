@@ -53,7 +53,7 @@ struct TopicDetailView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Read study material")
                                 .font(.headline)
-                            Text("Focus, deep dive, formulas, know cold")
+                            Text("Schedule focus, deep dive, formulas, know cold")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -90,6 +90,23 @@ struct TopicDetailView: View {
                     } icon: {
                         Image(systemName: "bolt.fill")
                             .foregroundStyle(Color(uiColor: .systemOrange))
+                    }
+                }
+            }
+
+            let related = appState.encyclopedia.relatedTopics(for: block)
+            if !related.isEmpty {
+                Section("Encyclopedia articles") {
+                    ForEach(related) { topic in
+                        NavigationLink(value: StudyNavigationRoute.encyclopediaTopic(id: topic.id)) {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(topic.title)
+                                    .font(.subheadline.weight(.semibold))
+                                Text(topic.subject)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
                     }
                 }
             }

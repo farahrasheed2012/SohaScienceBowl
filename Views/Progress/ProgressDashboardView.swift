@@ -78,6 +78,8 @@ struct ProgressDashboardView: View {
                     }
                 }
 
+                EncyclopediaProgressSection()
+
                 Section("Weakest topics") {
                     if appState.weakTopics.isEmpty {
                         Text("Keep drilling to identify weak areas.")
@@ -129,6 +131,7 @@ struct ProgressDashboardView: View {
             }
             .navigationTitle("Progress")
             .navigationBarTitleDisplayMode(.large)
+            .studyNavigationDestinations()
         }
     }
 }

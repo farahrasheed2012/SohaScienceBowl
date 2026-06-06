@@ -12,6 +12,7 @@ def u():
     return uuid.uuid4().hex[:24].upper()
 
 swift_files = sorted(p for p in ROOT.rglob("*.swift") if ".xcodeproj" not in str(p))
+json_files = sorted(p for p in ROOT.glob("Resources/StudyContent/*.json"))
 
 ids = {k: u() for k in [
     "project", "target", "product", "main_group", "products_group",
@@ -23,6 +24,11 @@ file_map = {}
 for sf in swift_files:
     rel = sf.relative_to(ROOT).as_posix()
     file_map[rel] = {"ref": u(), "build": u()}
+
+resource_map = {}
+for jf in json_files:
+    rel = jf.relative_to(ROOT).as_posix()
+    resource_map[rel] = {"ref": u(), "build": u()}
 
 assets_build = u()
 lines = []
@@ -41,6 +47,8 @@ o("/* Begin PBXBuildFile section */")
 for rel, fm in file_map.items():
     o(f'\t\t{fm["build"]} /* {Path(rel).name} in Sources */ = {{isa = PBXBuildFile; fileRef = {fm["ref"]} /* {Path(rel).name} */; }};')
 o(f'\t\t{assets_build} /* Assets.xcassets in Resources */ = {{isa = PBXBuildFile; fileRef = {ids["assets"]} /* Assets.xcassets */; }};')
+for rel, rm in resource_map.items():
+    o(f'\t\t{rm["build"]} /* {Path(rel).name} in Resources */ = {{isa = PBXBuildFile; fileRef = {rm["ref"]} /* {Path(rel).name} */; }};')
 o("/* End PBXBuildFile section */")
 o("")
 o("/* Begin PBXFileReference section */")
@@ -48,6 +56,8 @@ o(f'\t\t{ids["product"]} /* {NAME}.app */ = {{isa = PBXFileReference; explicitFi
 for rel, fm in file_map.items():
     o(f'\t\t{fm["ref"]} /* {Path(rel).name} */ = {{isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "{rel}"; sourceTree = "<group>"; }};')
 o(f'\t\t{ids["assets"]} /* Assets.xcassets */ = {{isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; }};')
+for rel, rm in resource_map.items():
+    o(f'\t\t{rm["ref"]} /* {Path(rel).name} */ = {{isa = PBXFileReference; lastKnownFileType = text.json; path = "{rel}"; sourceTree = "<group>"; }};')
 o("/* End PBXFileReference section */")
 o("")
 o("/* Begin PBXFrameworksBuildPhase section */")
@@ -57,7 +67,8 @@ o("")
 o("/* Begin PBXGroup section */")
 o(f'\t\t{ids["main_group"]} = {{isa = PBXGroup; children = ({ids["resources_group"]} /* Resources */, {ids["products_group"]} /* Products */); sourceTree = "<group>"; }};')
 o(f'\t\t{ids["products_group"]} = {{isa = PBXGroup; children = ({ids["product"]} /* {NAME}.app */); name = Products; sourceTree = "<group>"; }};')
-o(f'\t\t{ids["resources_group"]} = {{isa = PBXGroup; children = ({ids["assets"]} /* Assets.xcassets */); name = Resources; sourceTree = "<group>"; }};')
+resource_children = [f'{ids["assets"]} /* Assets.xcassets */'] + [f'{rm["ref"]} /* {Path(rel).name} */' for rel, rm in resource_map.items()]
+o(f'\t\t{ids["resources_group"]} = {{isa = PBXGroup; children = ({", ".join(resource_children)}); name = Resources; sourceTree = "<group>"; }};')
 o("/* End PBXGroup section */")
 o("")
 o("/* Begin PBXNativeTarget section */")
@@ -85,7 +96,8 @@ o("\t\t};")
 o("/* End PBXProject section */")
 o("")
 o("/* Begin PBXResourcesBuildPhase section */")
-o(f'\t\t{ids["resources"]} = {{isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = ({assets_build} /* Assets */); runOnlyForDeploymentPostprocessing = 0; }};')
+resource_builds = [assets_build] + [rm["build"] for rm in resource_map.values()]
+o(f'\t\t{ids["resources"]} = {{isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = ({", ".join(f"{b} /* Resource */" for b in resource_builds)}); runOnlyForDeploymentPostprocessing = 0; }};')
 o("/* End PBXResourcesBuildPhase section */")
 o("")
 o("/* Begin PBXSourcesBuildPhase section */")
@@ -140,4 +152,4 @@ o(f'\trootObject = {ids["project"]} /* Project object */;')
 o("}")
 
 (ROOT / "ScienceBowlCoach.xcodeproj" / "project.pbxproj").write_text("\n".join(lines))
-print(f"Generated project with {len(file_map)} Swift files")
+print(f"Generated project with {len(file_map)} Swift files and {len(resource_map)} JSON resources")

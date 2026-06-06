@@ -14,10 +14,14 @@ extension View {
                 PlanDrillView(request: request)
             case .topicBrowser(let initialWeek):
                 TopicBrowserView(initialWeek: initialWeek)
-            case .weekPlan:
-                TopicBrowserView(initialWeek: nil)
             case .formulaReference:
                 FormulaReferenceView()
+            case .encyclopediaSubject(let subject):
+                EncyclopediaTopicListView(subject: subject)
+            case .encyclopediaTopic(let id):
+                EncyclopediaTopicDetailView(topicId: id)
+            case .encyclopediaPractice(let mode, let topicIds):
+                EncyclopediaPracticeSetupView(mode: mode, preferredTopicIds: topicIds)
             }
         }
     }

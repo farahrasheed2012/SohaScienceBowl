@@ -1,11 +1,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(AppState.self) private var appState
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var theme: ThemePalette {
+        AppAppearance.resolvedTheme(appearance: appState.appAppearance, systemColorScheme: colorScheme)
+    }
+
     var body: some View {
         TabView {
             TodayView()
                 .tabItem {
-                    Label("Today", systemImage: "book.fill")
+                    Label("Today", systemImage: "calendar")
+                }
+
+            EncyclopediaRootView()
+                .tabItem {
+                    Label("Learn", systemImage: "books.vertical.fill")
                 }
 
             QuizRootView()
@@ -23,6 +35,8 @@ struct ContentView: View {
                     Label("Settings", systemImage: "gearshape.fill")
                 }
         }
-        .tint(Color(uiColor: .systemBlue))
+        .tint(theme.accent)
+        .preferredColorScheme(appState.appAppearance.colorScheme)
+        .environment(\.themePalette, theme)
     }
 }

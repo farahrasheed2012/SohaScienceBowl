@@ -7,6 +7,8 @@ enum StudyNavigationRoute: Hashable {
     case fullSession(StudyBlock)
     case planDrill(PlanDrillRequest)
     case topicBrowser(initialWeek: Int?)
-    case weekPlan
     case formulaReference
+    case encyclopediaSubject(NSBSubject)
+    case encyclopediaTopic(id: String)
+    case encyclopediaPractice(EncyclopediaPracticeMode, topicIds: [String]?)
 }
