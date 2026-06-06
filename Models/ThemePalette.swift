@@ -19,7 +19,7 @@ struct ThemePalette {
 
 enum AppTheme {
     static let dark = ThemePalette(
-        accent: Color(red: 1, green: 0.6, blue: 0.2),
+        accent: Color(red: 0.95, green: 0.55, blue: 0.2),
         success: Color(red: 0.2, green: 0.8, blue: 0.4),
         wrong: Color(red: 0.95, green: 0.3, blue: 0.3),
         surface: Color(red: 0.12, green: 0.1, blue: 0.14),
@@ -29,7 +29,7 @@ enum AppTheme {
     )
 
     static let warmLight = ThemePalette(
-        accent: Color(red: 1, green: 0.6, blue: 0.2),
+        accent: Color(red: 0.95, green: 0.55, blue: 0.2),
         success: Color(red: 0.2, green: 0.8, blue: 0.4),
         wrong: Color(red: 0.95, green: 0.3, blue: 0.3),
         surface: Color(red: 1, green: 0.98, blue: 0.94),
