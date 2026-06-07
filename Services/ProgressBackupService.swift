@@ -54,7 +54,9 @@ enum ProgressBackupService {
                 wrongCountPerTopicId: encyclopedia.wrongCountPerTopicId,
                 currentStreak: encyclopedia.currentStreak,
                 lastStudyDate: encyclopedia.lastStudyDate
-            )
+            ),
+            elementCorrectCounts: ElementProgressStore.correctCounts,
+            elementFlashCardsSeeded: ElementProgressStore.flashCardsSeeded
         )
     }
 
@@ -118,6 +120,13 @@ enum ProgressBackupService {
 
         appState.encyclopedia.importSnapshot(backup.encyclopedia)
 
+        if let counts = backup.elementCorrectCounts {
+            ElementProgressStore.importCounts(counts)
+        }
+        if let seeded = backup.elementFlashCardsSeeded {
+            ElementProgressStore.flashCardsSeeded = seeded
+        }
+
         PersistenceService.saveChecklist(appState.checklistItems)
         PersistenceService.saveDrillResults(appState.drillResults)
         PersistenceService.saveNotebook(appState.notebookEntries)
@@ -132,9 +141,20 @@ enum ProgressBackupService {
         let drills = backup.drillResults.count
         let sessions = backup.encyclopedia.sessionHistory.count
         let cards = backup.flashCards.count
+        let elements = backup.elementCorrectCounts?.count ?? 0
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
-        return "Exported \(formatter.string(from: backup.exportedAt)) · \(drills) drills · \(sessions) encyclopedia sessions · \(reviewed) topics reviewed · \(cards) flash cards"
+        var parts = [
+            "Exported \(formatter.string(from: backup.exportedAt))",
+            "\(drills) drills",
+            "\(sessions) encyclopedia sessions",
+            "\(reviewed) topics reviewed",
+            "\(cards) flash cards"
+        ]
+        if elements > 0 {
+            parts.append("\(elements) element drill scores")
+        }
+        return parts.joined(separator: " · ")
     }
 }

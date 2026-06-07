@@ -22,7 +22,7 @@ struct TossupDrillView: View {
             } else {
                 ProgressView(value: Double(index), total: Double(questions.count))
                     .padding(.horizontal, 16)
-                    .tint(Color(uiColor: .systemBlue))
+                    .tint(PlatformColor.systemBlue)
 
                 Text("Question \(index + 1) of \(questions.count)")
                     .font(.caption)
@@ -66,7 +66,7 @@ struct TossupDrillView: View {
         }
         .padding(.vertical, 16)
         .navigationTitle("Toss-up Drill")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .onAppear { loadQuestions() }
     }
 
@@ -167,7 +167,7 @@ struct TopicQuizView: View {
             } else {
                 ProgressView(value: Double(index), total: Double(questions.count))
                     .padding(16)
-                    .tint(Color(uiColor: .systemBlue))
+                    .tint(PlatformColor.systemBlue)
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
@@ -224,7 +224,7 @@ struct TopicQuizView: View {
             }
         }
         .navigationTitle("Topic Quiz")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .onAppear { setup() }
     }
 
@@ -241,7 +241,7 @@ struct TopicQuizView: View {
 
     private func rowBackground(for choice: String) -> Color {
         guard checked else {
-            return choice == selected ? Color.accentColor.opacity(0.12) : Color(uiColor: .secondarySystemGroupedBackground)
+            return choice == selected ? Color.accentColor.opacity(0.12) : PlatformColor.secondaryGroupedBackground
         }
         if strip(choice) == strip(questions[index].answer) {
             return Color.green.opacity(0.15)
@@ -249,7 +249,7 @@ struct TopicQuizView: View {
         if choice == selected {
             return Color.red.opacity(0.15)
         }
-        return Color(uiColor: .secondarySystemGroupedBackground)
+        return PlatformColor.secondaryGroupedBackground
     }
 
     private func strip(_ s: String) -> String {

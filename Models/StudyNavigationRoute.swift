@@ -11,4 +11,7 @@ enum StudyNavigationRoute: Hashable {
     case encyclopediaSubject(NSBSubject)
     case encyclopediaTopic(id: String)
     case encyclopediaPractice(EncyclopediaPracticeMode, topicIds: [String]?)
+    case periodicTableDrill
+    case periodicTableReference
+    case elementFlashCards
 }

@@ -28,11 +28,11 @@ extension SeedData {
                   ("Name two structures found in plant cells but not in typical animal cells.", "Cell wall and chloroplast")
               ]),
         block(week: 1, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 1 + App. B", title: "About Science + Linear Motion",
-              focus: "Hypothesis vs theory vs law · SI base units (meter, kilogram, second) · speed (scalar) vs velocity (vector) · acceleration · d-t graph: slope = speed · flat line = at rest · v = d/t",
+              book: "Expl", chapter: "Ch 1 + App. B", title: "Ch 1 About Science + App. B Motion",
+              focus: "Ch 1: hypothesis vs theory vs law · SI base units (meter, kilogram, second) · precision vs accuracy · App. B: speed (scalar) vs velocity (vector) · acceleration · d-t graph: slope = speed · flat line = at rest · v = d/t",
               formulas: "v = d/t · a = Δv/Δt (concept) · slope = rise/run",
-              knowCold: ["120 km in 2 h → speed? (60 km/h)", "Flat d-t line means? (At rest / zero speed)", "Speed vs velocity difference? (Velocity has direction)"],
-              topic: "Motion",
+              knowCold: ["Theory vs law — which is broader? (Theory)", "120 km in 2 h → speed? (60 km/h)", "Flat d-t line means? (At rest / zero speed)", "Speed vs velocity difference? (Velocity has direction)"],
+              topic: "About Science + Motion",
               tossups: [
                   ("A car goes 150 km in 3 hours. What is its average speed?", "50 km/h"),
                   ("What does a horizontal (flat) line on a distance-time graph indicate?", "The object is at rest / not moving")

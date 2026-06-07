@@ -16,7 +16,7 @@ struct ProgressDashboardView: View {
                                     .font(.subheadline.weight(.semibold))
                             }
                             ProgressView(value: appState.weekAccuracy(subject: subject))
-                                .tint(Color(uiColor: .systemBlue))
+                                .tint(PlatformColor.systemBlue)
                         }
                         .padding(.vertical, 4)
                     }
@@ -130,7 +130,7 @@ struct ProgressDashboardView: View {
                 }
             }
             .navigationTitle("Progress")
-            .navigationBarTitleDisplayMode(.large)
+            .largeNavigationBarTitle()
             .studyNavigationDestinations()
         }
     }
@@ -156,7 +156,7 @@ struct ChecklistView: View {
             }
         }
         .navigationTitle("Checklist")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -201,7 +201,7 @@ struct FlashCardReviewView: View {
         }
         .padding(.top, 32)
         .navigationTitle("Flash Cards")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 
     private func updateCard(correct: Bool) {

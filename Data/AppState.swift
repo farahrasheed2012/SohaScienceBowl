@@ -61,6 +61,38 @@ final class AppState {
         importedQuestions = PersistenceService.loadImportedQuestions()
         duplicateStats = PersistenceService.loadDuplicateStats()
         refreshScheduleFromCalendar()
+        seedElementFlashCardsIfNeeded()
+    }
+
+    var elementFlashCards: [FlashCardItem] {
+        flashCards.filter { $0.topic == ElementData.flashCardTopic }
+    }
+
+    var elementMasteredCount: Int {
+        ElementProgressStore.masteredCount(flashCards: flashCards)
+    }
+
+    func seedElementFlashCardsIfNeeded() {
+        guard !ElementProgressStore.flashCardsSeeded else { return }
+        let newCards = ElementData.seedFlashCards(existing: flashCards)
+        guard !newCards.isEmpty else {
+            ElementProgressStore.flashCardsSeeded = true
+            return
+        }
+        flashCards.append(contentsOf: newCards)
+        PersistenceService.saveFlashCards(flashCards)
+        ElementProgressStore.flashCardsSeeded = true
+    }
+
+    func recordElementDrillAnswer(symbol: String, correct: Bool) {
+        if correct {
+            ElementProgressStore.recordCorrect(symbol: symbol)
+        }
+        updateElementChecklistProgress()
+    }
+
+    func updateElementChecklistProgress() {
+        ElementProgressStore.updateChecklistIfNeeded(appState: self)
     }
 
     var studyBlocks: [StudyBlock] { SeedData.studyBlocks }

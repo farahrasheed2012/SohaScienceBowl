@@ -63,7 +63,7 @@ enum SeedData {
     static func topics(for week: Int) -> [Subject: String] {
         let index = ((week - 1) % 4) + 1
         switch index {
-        case 1: return [.chemistry: "Atoms & periodic table", .biology: "Cell structure", .physics: "Motion"]
+        case 1: return [.chemistry: "Atoms & periodic table", .biology: "Cell structure", .physics: "About Science + Motion"]
         case 2: return [.chemistry: "States of matter", .biology: "Genetics", .physics: "Forces & Newton's laws"]
         case 3: return [.chemistry: "Acids, bases & pH", .biology: "Ecology", .physics: "Work & energy"]
         default: return [.chemistry: "Periodic trends & lab", .biology: "Evolution & plants", .physics: "Waves & electricity"]

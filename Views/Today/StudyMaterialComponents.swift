@@ -5,7 +5,7 @@ import SwiftUI
 struct StudyMaterialCard<Content: View>: View {
     let title: String
     var systemImage: String? = nil
-    var accent: Color = Color(uiColor: .systemBlue)
+    var accent: Color = PlatformColor.systemBlue
     @ViewBuilder var content: () -> Content
 
     var body: some View {
@@ -28,7 +28,7 @@ struct StudyMaterialCard<Content: View>: View {
         }
         .padding(18)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .background(PlatformColor.secondaryGroupedBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
@@ -47,7 +47,7 @@ struct StudyMaterialHeader: View {
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 5)
-                    .background(Color(uiColor: .tertiarySystemFill))
+                    .background(PlatformColor.tertiaryFill)
                     .clipShape(Capsule())
             }
 
@@ -58,7 +58,7 @@ struct StudyMaterialHeader: View {
             if let theme = DeepDiveContent.weekTheme(week: block.week, pass: pass) {
                 Text(theme)
                     .font(.subheadline.weight(.medium))
-                    .foregroundStyle(Color(uiColor: .systemBlue))
+                    .foregroundStyle(PlatformColor.systemBlue)
             }
 
             Label(block.bookLine(for: pass), systemImage: "book.closed.fill")
@@ -68,7 +68,7 @@ struct StudyMaterialHeader: View {
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .background(PlatformColor.secondaryGroupedBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
     }
 }
@@ -94,7 +94,7 @@ struct StudyMaterialBodyText: View {
                             HStack(alignment: .top, spacing: 10) {
                                 Text("•")
                                     .font(.body.weight(.semibold))
-                                    .foregroundStyle(Color(uiColor: .systemBlue))
+                                    .foregroundStyle(PlatformColor.systemBlue)
                                     .padding(.top, 1)
                                 Text(item)
                                     .font(.body)
@@ -142,7 +142,7 @@ struct StudyKnowColdCards: View {
                                 .frame(width: 52, alignment: .leading)
                             Text(item.answer)
                                 .font(.subheadline)
-                                .foregroundStyle(Color(uiColor: .systemGreen))
+                                .foregroundStyle(PlatformColor.systemGreen)
                                 .fixedSize(horizontal: false, vertical: true)
                         }
                         .padding(.top, 2)
@@ -150,7 +150,7 @@ struct StudyKnowColdCards: View {
                 }
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(uiColor: .tertiarySystemGroupedBackground))
+                .background(PlatformColor.tertiaryGroupedBackground)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             }
         }
@@ -177,7 +177,7 @@ struct StudyDeepDiveSections: View {
                 }
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(uiColor: .tertiarySystemGroupedBackground))
+                .background(PlatformColor.tertiaryGroupedBackground)
                 .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             }
         }
@@ -195,36 +195,36 @@ struct StudyMaterialScrollContent: View {
             StudyMaterialHeader(block: block, pass: appState.currentPass)
 
             if let workflow = DeepDiveContent.passWorkflow(week: block.week, pass: appState.currentPass) {
-                StudyMaterialCard(title: "How to use this block", systemImage: "clock.fill", accent: Color(uiColor: .systemIndigo)) {
+                StudyMaterialCard(title: "How to use this block", systemImage: "clock.fill", accent: PlatformColor.systemIndigo) {
                     StudyMaterialBodyText(text: workflow)
                 }
             }
 
-            StudyMaterialCard(title: "Focus", systemImage: "scope", accent: Color(uiColor: .systemBlue)) {
+            StudyMaterialCard(title: "Focus", systemImage: "scope", accent: PlatformColor.systemBlue) {
                 StudyMaterialBodyText(text: block.focus)
             }
 
-            StudyMaterialCard(title: "Deep dive", systemImage: "text.alignleft", accent: Color(uiColor: .systemTeal)) {
+            StudyMaterialCard(title: "Deep dive", systemImage: "text.alignleft", accent: PlatformColor.systemTeal) {
                 StudyDeepDiveSections(block: block, pass: appState.currentPass)
             }
 
-            StudyMaterialCard(title: "Formulas & key terms", systemImage: "function", accent: Color(uiColor: .systemPurple)) {
+            StudyMaterialCard(title: "Formulas & key terms", systemImage: "function", accent: PlatformColor.systemPurple) {
                 StudyMaterialBodyText(text: block.formulasAndTerms)
             }
 
-            StudyMaterialCard(title: "Know cold", systemImage: "brain.head.profile", accent: Color(uiColor: .systemGreen)) {
+            StudyMaterialCard(title: "Know cold", systemImage: "brain.head.profile", accent: PlatformColor.systemGreen) {
                 StudyKnowColdCards(items: appState.knowColdItems(for: block))
             }
 
             if block.day == .friday, let note = DeepDiveContent.fridayReviewNote(week: block.week) {
-                StudyMaterialCard(title: "Friday review block", systemImage: "calendar.badge.clock", accent: Color(uiColor: .systemOrange)) {
+                StudyMaterialCard(title: "Friday review block", systemImage: "calendar.badge.clock", accent: PlatformColor.systemOrange) {
                     StudyMaterialBodyText(text: note)
                 }
             }
 
             let related = appState.encyclopedia.relatedTopics(for: block)
             if !related.isEmpty {
-                StudyMaterialCard(title: "Encyclopedia articles", systemImage: "books.vertical.fill", accent: Color(uiColor: .systemIndigo)) {
+                StudyMaterialCard(title: "Encyclopedia articles", systemImage: "books.vertical.fill", accent: PlatformColor.systemIndigo) {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Full NSB topic articles matched to today's block — What Is It, How It Works, traps, and more.")
                             .font(.caption)

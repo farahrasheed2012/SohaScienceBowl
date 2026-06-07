@@ -108,7 +108,7 @@ struct EncyclopediaWeakTopicsReviewView: View {
             }
         }
         .navigationTitle("Review topics")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .studyNavigationDestinations()
     }
 }

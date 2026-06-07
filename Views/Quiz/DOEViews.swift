@@ -67,7 +67,7 @@ struct MockRoundView: View {
             }
         }
         .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .onAppear { load() }
     }
 
@@ -147,7 +147,7 @@ struct DOEMockRoundView: View {
             }
         }
         .navigationTitle("DOE Mock Round")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .onAppear { buildPairs() }
     }
 
@@ -205,7 +205,7 @@ struct DOECategoryListView: View {
             }
         }
         .navigationTitle("Browse by Category")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -232,7 +232,7 @@ struct DOECategoryQuestionListView: View {
             }
         }
         .navigationTitle(category.rawValue)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -276,7 +276,7 @@ struct DOESetListView: View {
             }
         }
         .navigationTitle("Browse by Set")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -295,7 +295,7 @@ struct DOERoundListView: View {
             }
         }
         .navigationTitle("Set \(setNumber)")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -325,7 +325,7 @@ struct DOERoundDetailView: View {
             }
         }
         .navigationTitle("Round \(roundNumber)")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -356,7 +356,7 @@ struct BrowseSourceView: View {
             }
         }
         .navigationTitle(source.rawValue)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -390,7 +390,7 @@ struct QuestionDetailView: View {
             }
         }
         .navigationTitle(question.category.rawValue)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -426,7 +426,7 @@ struct SingleQuestionDrillView: View {
         }
         .padding(.top, 32)
         .navigationTitle("Drill")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }
 
@@ -472,7 +472,7 @@ struct SearchQuestionsView: View {
             }
         }
         .navigationTitle("Search Questions")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .onAppear { subject = initialSubject }
     }
 }

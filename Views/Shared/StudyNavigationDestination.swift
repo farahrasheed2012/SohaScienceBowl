@@ -22,6 +22,12 @@ extension View {
                 EncyclopediaTopicDetailView(topicId: id)
             case .encyclopediaPractice(let mode, let topicIds):
                 EncyclopediaPracticeSetupView(mode: mode, preferredTopicIds: topicIds)
+            case .periodicTableDrill:
+                PeriodicTableDrillSetupView()
+            case .periodicTableReference:
+                PeriodicTableReferenceView()
+            case .elementFlashCards:
+                ElementFlashCardDeckView()
             }
         }
     }

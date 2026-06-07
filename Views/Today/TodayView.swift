@@ -49,6 +49,41 @@ struct TodayView: View {
                     }
                 }
 
+                if ElementData.shouldPromoteElementPractice(
+                    week: appState.currentWeek,
+                    blocks: appState.blocks(for: appState.currentWeek, pass: appState.currentPass)
+                ) {
+                    Section("Element symbols (H–Ca)") {
+                        Text("\(appState.elementMasteredCount) / \(ElementData.first20.count) mastered · checklist completes at 18")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        studyActionRow(
+                            title: "Element flash cards",
+                            systemImage: "rectangle.on.rectangle",
+                            prominent: false
+                        ) {
+                            navigationPath.append(StudyNavigationRoute.elementFlashCards)
+                        }
+
+                        studyActionRow(
+                            title: "Element drill",
+                            systemImage: "atom",
+                            prominent: false
+                        ) {
+                            navigationPath.append(StudyNavigationRoute.periodicTableDrill)
+                        }
+
+                        studyActionRow(
+                            title: "Periodic table reference",
+                            systemImage: "tablecells",
+                            prominent: false
+                        ) {
+                            navigationPath.append(StudyNavigationRoute.periodicTableReference)
+                        }
+                    }
+                }
+
                 Section("Today's blocks") {
                     if appState.todayBlocks().isEmpty {
                         Text("No science blocks scheduled for today.")
@@ -228,7 +263,7 @@ struct TodayView: View {
                 }
             }
             .navigationTitle("Today")
-            .navigationBarTitleDisplayMode(.large)
+            .largeNavigationBarTitle()
             .studyNavigationDestinations()
             .onAppear {
                 appState.refreshScheduleFromCalendar()

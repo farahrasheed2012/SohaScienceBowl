@@ -1,6 +1,6 @@
 # Science Bowl Coach — Soha
 
-Native SwiftUI iOS app for National Science Bowl (Middle School) prep in **Biology**, **Chemistry**, and **Physics**.
+Native SwiftUI app for National Science Bowl (Middle School) prep in **Biology**, **Chemistry**, and **Physics**.
 
 ## Project location
 
@@ -10,8 +10,8 @@ Native SwiftUI iOS app for National Science Bowl (Middle School) prep in **Biolo
 
 ## Requirements
 
-- Xcode 15+ (iOS 17+ deployment target)
-- iPhone only (v1)
+- Xcode 15+ (iOS 17+ · macOS 14+)
+- **iPhone** or **Mac** (no phone required on MacBook)
 
 ## Setup
 
@@ -22,7 +22,19 @@ Native SwiftUI iOS app for National Science Bowl (Middle School) prep in **Biolo
 python3 Scripts/download_doe_pdfs.py
 ```
 
-3. Build and run on a simulator or device.
+3. Build and run:
+   - **Mac:** choose **My Mac** as the run destination → **Run** (⌘R)
+   - **iPhone:** choose a simulator or device → **Run**
+
+### Run from Terminal (Mac)
+
+```bash
+cd /Users/farah/Documents/FarahRasheed/ScienceBowlCoach
+xcodebuild -scheme ScienceBowlCoach -destination 'platform=macOS' -configuration Debug build
+open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Debug/ScienceBowlCoach.app
+```
+
+Or in Xcode: destination **My Mac** → Run. The app opens in a resizable window (~960×720).
 
 ## Features
 

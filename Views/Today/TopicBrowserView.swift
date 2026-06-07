@@ -64,7 +64,7 @@ struct TopicBrowserView: View {
             }
         }
         .navigationTitle("Browse topics")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .studyNavigationDestinations()
         .onAppear {
             selectedWeek = initialWeek ?? appState.currentWeek

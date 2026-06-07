@@ -46,6 +46,21 @@ struct QuizRootView: View {
                     }
                 }
 
+                Section("Periodic table (H–Ca)") {
+                    Text("\(appState.elementMasteredCount) / \(ElementData.first20.count) elements mastered")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    NavigationLink(value: StudyNavigationRoute.elementFlashCards) {
+                        Label("Element flash cards", systemImage: "rectangle.on.rectangle")
+                    }
+                    NavigationLink(value: StudyNavigationRoute.periodicTableDrill) {
+                        Label("Element drill", systemImage: "atom")
+                    }
+                    NavigationLink(value: StudyNavigationRoute.periodicTableReference) {
+                        Label("Periodic table reference", systemImage: "tablecells")
+                    }
+                }
+
                 Section("Encyclopedia practice") {
                     Text("148 questions · MC (W/X/Y/Z) · Toss-up · Free response")
                         .font(.caption)
@@ -190,7 +205,7 @@ struct QuizRootView: View {
                 }
             }
             .navigationTitle("Quiz")
-            .navigationBarTitleDisplayMode(.large)
+            .largeNavigationBarTitle()
             .studyNavigationDestinations()
             .onAppear {
                 appState.refreshScheduleFromCalendar()
@@ -241,7 +256,7 @@ struct DrillSetupView: View {
             }
         }
         .navigationTitle(mode == .tossup ? "Toss-up Drill" : "Topic Quiz")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .onAppear {
             week = appState.currentWeek
         }

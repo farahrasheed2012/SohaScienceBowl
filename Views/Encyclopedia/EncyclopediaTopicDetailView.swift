@@ -18,7 +18,7 @@ struct EncyclopediaTopicDetailView: View {
             }
         }
         .navigationTitle(topic?.title ?? "Topic")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .studyNavigationDestinations()
     }
 

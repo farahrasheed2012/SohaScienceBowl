@@ -26,7 +26,7 @@ struct PlanDrillView: View {
             } else {
                 ProgressView(value: Double(index), total: Double(questions.count))
                     .padding(.horizontal, 16)
-                    .tint(Color(uiColor: .systemBlue))
+                    .tint(PlatformColor.systemBlue)
 
                 VStack(spacing: 4) {
                     Text("Question \(index + 1) of \(questions.count)")
@@ -82,7 +82,7 @@ struct PlanDrillView: View {
         }
         .padding(.vertical, 16)
         .navigationTitle(request.title)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .onAppear {
             questions = appState.questions(for: request)
         }

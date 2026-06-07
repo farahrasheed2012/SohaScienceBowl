@@ -75,7 +75,7 @@ struct EncyclopediaProgressSection: View {
         HStack {
             Image(systemName: "flame.fill")
                 .font(.title2)
-                .foregroundStyle(Color(uiColor: .systemOrange))
+                .foregroundStyle(PlatformColor.systemOrange)
             Text("\(appState.encyclopedia.currentStreak) day streak")
                 .font(.system(size: ThemePalette.bodySize))
                 .foregroundStyle(theme.primaryText)

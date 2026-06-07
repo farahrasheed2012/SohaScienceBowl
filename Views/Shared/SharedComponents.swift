@@ -5,9 +5,9 @@ struct SubjectBadge: View {
 
     var color: Color {
         switch subject {
-        case .biology: return Color(uiColor: .systemGreen)
-        case .chemistry: return Color(uiColor: .systemBlue)
-        case .physics: return Color(uiColor: .systemOrange)
+        case .biology: return PlatformColor.systemGreen
+        case .chemistry: return PlatformColor.systemBlue
+        case .physics: return PlatformColor.systemOrange
         }
     }
 
@@ -28,13 +28,13 @@ struct DOECategoryBadge: View {
 
     var color: Color {
         switch category {
-        case .biology: return Color(uiColor: .systemGreen)
-        case .chemistry: return Color(uiColor: .systemBlue)
-        case .physics: return Color(uiColor: .systemOrange)
-        case .earthSpace: return Color(uiColor: .systemBrown)
-        case .energy: return Color(uiColor: .systemYellow)
-        case .math: return Color(uiColor: .systemPurple)
-        case .generalScience: return Color(uiColor: .systemTeal)
+        case .biology: return PlatformColor.systemGreen
+        case .chemistry: return PlatformColor.systemBlue
+        case .physics: return PlatformColor.systemOrange
+        case .earthSpace: return PlatformColor.systemBrown
+        case .energy: return PlatformColor.systemYellow
+        case .math: return PlatformColor.systemPurple
+        case .generalScience: return PlatformColor.systemTeal
         }
     }
 
@@ -96,7 +96,7 @@ struct StudyBlockCard: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(uiColor: .secondarySystemGroupedBackground))
+        .background(PlatformColor.secondaryGroupedBackground)
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 }
@@ -113,6 +113,6 @@ struct PrimaryButton: View {
                 .padding(.vertical, 14)
         }
         .buttonStyle(.borderedProminent)
-        .tint(Color(uiColor: .systemBlue))
+        .tint(PlatformColor.systemBlue)
     }
 }

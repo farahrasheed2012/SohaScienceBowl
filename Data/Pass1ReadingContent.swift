@@ -150,11 +150,28 @@ enum Pass1ReadingContent {
 
         m[k(1, .wednesday, .physics)] = [
             rs("Big picture", """
-            Motion is the entry point for physics toss-ups. Expl Ch 1 + Appendix B introduce how scientists measure movement and read graphs.
+            Week 1 physics is two readings — not one chapter about motion.
 
-            Master v = d/t and distance-time graphs before forces in Week 2.
+            **Expl Ch 1 — About Science:** how science works, SI units, hypothesis vs theory vs law, precision vs accuracy.
+
+            **Appendix B — Linear and Rotational Motion:** speed, velocity, acceleration, v = d/t, and distance-time graphs.
+
+            Read Ch 1 first for measurement and scientific thinking; then App. B for the motion formulas NSB loves.
             """),
-            rs("Speed, velocity, acceleration", """
+            rs("Ch 1 — About Science", """
+            Scientific method: observe → question → hypothesis → test → analyze → conclude.
+
+            Hypothesis — testable explanation for one experiment.
+
+            Theory — well-tested explanation that ties together many observations (broader than a hypothesis).
+
+            Law — concise statement of a pattern (often a formula), e.g. v = d/t for average speed.
+
+            SI base units for mechanics: meter (m), kilogram (kg), second (s).
+
+            Precision — repeatability of measurements. Accuracy — how close to the true value.
+            """),
+            rs("App. B — Speed, velocity, acceleration", """
             Speed — how fast (scalar: number only). Units: m/s, km/h.
 
             Velocity — speed with direction (vector). "60 km/h north" is velocity; "60 km/h" is speed.

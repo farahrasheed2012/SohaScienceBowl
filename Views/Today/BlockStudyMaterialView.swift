@@ -11,9 +11,9 @@ struct BlockStudyMaterialView: View {
                 .padding(.vertical, 20)
                 .padding(.bottom, 8)
         }
-        .background(Color(uiColor: .systemGroupedBackground))
+        .background(PlatformColor.groupedBackground)
         .navigationTitle("Study material")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .safeAreaInset(edge: .bottom) {
             NavigationLink {
                 StudySessionView(block: block, initialStage: .read)

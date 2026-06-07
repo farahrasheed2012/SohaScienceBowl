@@ -16,7 +16,7 @@ struct TopicDetailView: View {
                             .font(.caption.weight(.semibold))
                             .padding(.horizontal, 8)
                             .padding(.vertical, 4)
-                            .background(Color(uiColor: .secondarySystemFill))
+                            .background(PlatformColor.secondaryFill)
                             .clipShape(Capsule())
                     }
 
@@ -36,7 +36,7 @@ struct TopicDetailView: View {
                     if let theme = DeepDiveContent.weekTheme(week: block.week, pass: appState.currentPass) {
                         Text(theme)
                             .font(.caption.weight(.semibold))
-                            .foregroundStyle(Color(uiColor: .systemBlue))
+                            .foregroundStyle(PlatformColor.systemBlue)
                     }
                 }
                 .padding(.vertical, 4)
@@ -59,7 +59,7 @@ struct TopicDetailView: View {
                         }
                     } icon: {
                         Image(systemName: "book.fill")
-                            .foregroundStyle(Color(uiColor: .systemBlue))
+                            .foregroundStyle(PlatformColor.systemBlue)
                     }
                 }
 
@@ -74,7 +74,7 @@ struct TopicDetailView: View {
                         }
                     } icon: {
                         Image(systemName: "text.book.closed.fill")
-                            .foregroundStyle(Color(uiColor: .systemGreen))
+                            .foregroundStyle(PlatformColor.systemGreen)
                     }
                 }
 
@@ -89,7 +89,7 @@ struct TopicDetailView: View {
                         }
                     } icon: {
                         Image(systemName: "bolt.fill")
-                            .foregroundStyle(Color(uiColor: .systemOrange))
+                            .foregroundStyle(PlatformColor.systemOrange)
                     }
                 }
             }
@@ -119,7 +119,7 @@ struct TopicDetailView: View {
             }
         }
         .navigationTitle(block.primaryTopic)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .studyNavigationDestinations()
     }
 }

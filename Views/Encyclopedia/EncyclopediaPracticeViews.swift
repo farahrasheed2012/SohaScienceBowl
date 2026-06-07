@@ -49,7 +49,7 @@ struct EncyclopediaPracticeSetupView: View {
             }
         }
         .navigationTitle(preferredTopicIds == nil ? mode.title : "Practice topic")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 
     private var fetchedQuestions: [NSBQuestion] {
@@ -117,7 +117,7 @@ struct EncyclopediaMultipleChoiceView: View {
             }
         }
         .navigationTitle("Multiple Choice")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .background(theme.surface.ignoresSafeArea())
     }
 
@@ -330,7 +330,7 @@ struct EncyclopediaTossUpView: View {
             }
         }
         .navigationTitle("Toss-Up & Bonus")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .background(theme.surface.ignoresSafeArea())
     }
 
@@ -484,7 +484,7 @@ struct EncyclopediaFreeResponseView: View {
             }
         }
         .navigationTitle("Free Response")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .background(theme.surface.ignoresSafeArea())
     }
 

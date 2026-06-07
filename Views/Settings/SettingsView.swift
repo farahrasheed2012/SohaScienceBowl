@@ -137,7 +137,7 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("Settings")
-            .navigationBarTitleDisplayMode(.large)
+            .largeNavigationBarTitle()
             .fileExporter(
                 isPresented: $showBackupExporter,
                 document: exportDocument,
@@ -328,6 +328,6 @@ struct FormulaReferenceView: View {
             }
         }
         .navigationTitle("Formula Reference")
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
     }
 }

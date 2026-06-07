@@ -43,13 +43,13 @@ struct StudySessionView: View {
                 knowColdStage.tag(StudySessionStage.knowCold)
                 tossupStage.tag(StudySessionStage.tossups)
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
+            .pagedStudyTabStyle()
             .animation(.easeInOut, value: stage)
 
             bottomBar
         }
         .navigationTitle(block.subject.rawValue)
-        .navigationBarTitleDisplayMode(.inline)
+        .inlineNavigationBarTitle()
         .onAppear {
             stage = initialStage
             if appState.showSessionTimer {
@@ -141,7 +141,7 @@ struct StudySessionView: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 24)
         }
-        .background(Color(uiColor: .systemGroupedBackground))
+        .background(PlatformColor.groupedBackground)
     }
 
     private var knowColdStage: some View {
@@ -268,7 +268,7 @@ struct StudySessionView: View {
             }
         }
         .padding(16)
-        .background(Color(uiColor: .systemGroupedBackground))
+        .background(PlatformColor.groupedBackground)
     }
 
     private var timerString: String {

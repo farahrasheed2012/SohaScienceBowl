@@ -35,7 +35,7 @@ struct EncyclopediaRootView: View {
                 }
             }
             .navigationTitle("Learn")
-            .navigationBarTitleDisplayMode(.large)
+            .largeNavigationBarTitle()
             .studyNavigationDestinations()
         }
     }
@@ -58,7 +58,7 @@ struct EncyclopediaRootView: View {
                 HStack(spacing: 4) {
                     if reviewed == topics.count {
                         Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(Color(uiColor: .systemGreen))
+                            .foregroundStyle(PlatformColor.systemGreen)
                             .font(.caption)
                             .accessibilityLabel("All topics reviewed")
                     }
@@ -105,7 +105,7 @@ struct EncyclopediaTopicListView: View {
             }
         }
         .navigationTitle(subject.rawValue)
-        .navigationBarTitleDisplayMode(.large)
+        .largeNavigationBarTitle()
         .searchable(text: $searchText, prompt: "Search topics")
         .studyNavigationDestinations()
     }
@@ -114,7 +114,7 @@ struct EncyclopediaTopicListView: View {
         HStack(spacing: 12) {
             if appState.encyclopedia.reviewedTopicIds.contains(topic.id) {
                 Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(Color(uiColor: .systemGreen))
+                    .foregroundStyle(PlatformColor.systemGreen)
             }
             Text(topic.title)
                 .font(.body)
