@@ -76,8 +76,11 @@ struct StudyBlockCard: View {
                     .foregroundStyle(.secondary)
             }
 
-            Text(block.bookLine(for: pass))
+            Text(block.primaryTopic)
                 .font(.subheadline.weight(.semibold))
+
+            Text(block.bookLine(for: pass))
+                .font(.caption.weight(.medium))
 
             Text(block.focus)
                 .font(.caption)

@@ -15,129 +15,20 @@ struct SettingsView: View {
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    Picker("Appearance", selection: Bindable(appState).appAppearance) {
-                        ForEach(AppAppearance.allCases) { appearance in
-                            Text(appearance.label).tag(appearance)
-                        }
-                    }
-                } footer: {
-                    Text("Dark (One Bee) uses large type and warm accents — the style from your original Science Bowl app.")
-                }
-
-                Section {
-                    Toggle("Show countdown timer during Study Session", isOn: Bindable(appState).showSessionTimer)
-                    Toggle("Parent reads toss-ups aloud", isOn: Bindable(appState).parentReadsAloud)
-                } footer: {
-                    Text("When enabled, answers stay hidden until you tap Reveal — for verbal practice with a parent.")
-                }
-
-                Section {
-                    Toggle("Follow summer calendar", isOn: Bindable(appState).autoSyncScheduleFromCalendar)
-                        .onChange(of: appState.autoSyncScheduleFromCalendar) { _, enabled in
-                            if enabled {
-                                appState.resetScheduleToCalendar()
-                            }
-                        }
-                    Picker("Study week", selection: Binding(
-                        get: { appState.currentWeek },
-                        set: { appState.userDidSetWeek($0) }
-                    )) {
-                        ForEach(1...10, id: \.self) { w in
-                            Text("Week \(w) · \(SeedData.topics(for: w)[.chemistry] ?? "")").tag(w)
-                        }
-                    }
-                    .disabled(appState.autoSyncScheduleFromCalendar)
-                    Picker("Current pass", selection: Binding(
-                        get: { appState.currentPass },
-                        set: { appState.userDidSetPass($0) }
-                    )) {
-                        ForEach(StudyPass.allCases) { p in
-                            Text(p.label).tag(p)
-                        }
-                    }
-                    .disabled(appState.autoSyncScheduleFromCalendar)
-                    if appState.autoSyncScheduleFromCalendar {
-                        Button("Reset week & pass to today's date") {
-                            appState.resetScheduleToCalendar()
-                        }
-                    }
-                } header: {
-                    Text("Study plan")
-                } footer: {
-                    Text("With calendar sync on: Jun–Jul 3 = Pass 1 · Jul 6–Jul 31 = Pass 2 · Aug 3–14 = Pass 3. Turn off to set week and pass manually.")
-                }
-
-                Section {
-                    Button {
-                        prepareExport()
-                    } label: {
-                        Label("Export progress backup", systemImage: "square.and.arrow.up")
-                    }
-
-                    Button {
-                        showBackupImporter = true
-                    } label: {
-                        Label("Import progress backup", systemImage: "square.and.arrow.down")
-                    }
-                } header: {
-                    Text("Backup & restore")
-                } footer: {
-                    Text("Exports all progress to a JSON file — share via AirDrop, Files, or email. Import replaces current progress on this device. DOE PDFs are not included.")
-                }
-
-                Section {
-                    Text("Import PDF, CSV, or JSON files into your local question bank.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                } header: {
-                    Text("Import questions")
-                }
-
-                Section {
-                    doeStatusView
-
-                    Button("Download all DOE PDFs") {
-                        Task { await appState.downloadDOEQuestions(fullCatalog: true) }
-                    }
-                    .disabled(appState.doeStore.isDownloading || appState.isDOELoading)
-
-                    Button("Download Set 1 + samples only") {
-                        Task { await appState.downloadDOEQuestions(fullCatalog: false) }
-                    }
-                    .font(.caption)
-                    .disabled(appState.doeStore.isDownloading || appState.isDOELoading)
-
-                    Button("Re-parse downloaded PDFs") {
-                        Task { await appState.loadDOEQuestions(forceReload: true) }
-                    }
-                    .disabled(appState.doeStore.isDownloading || appState.isDOELoading)
-                } header: {
-                    Text("DOE question bank")
-                } footer: {
-                    Text("PDFs save to the device. First launch auto-downloads all sets when none are present (~200 PDFs). Pass 2 plan quizzes lead with DOE questions.")
-                }
-
-                Section {
-                    HStack {
-                        Text("Version")
-                        Spacer()
-                        Text("1.1.0")
-                            .foregroundStyle(.secondary)
-                    }
-                    HStack {
-                        Text("Built for")
-                        Spacer()
-                        Text("Soha · NSB Middle School")
-                            .foregroundStyle(.secondary)
-                    }
-                } header: {
-                    Text("About")
-                }
+            List {
+                appearanceSection
+                sessionSection
+                studyPlanSection
+                backupSection
+                importSection
+                doeSection
+                aboutSection
             }
             .navigationTitle("Settings")
             .largeNavigationBarTitle()
+            #if os(macOS)
+            .listStyle(.inset(alternatesRowBackgrounds: true))
+            #endif
             .fileExporter(
                 isPresented: $showBackupExporter,
                 document: exportDocument,
@@ -172,7 +63,145 @@ struct SettingsView: View {
                 Text(backupAlertMessage)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
+
+    // MARK: - Sections
+
+    private var appearanceSection: some View {
+        Section {
+            Picker("Appearance", selection: Bindable(appState).appAppearance) {
+                ForEach(AppAppearance.allCases) { appearance in
+                    Text(appearance.label).tag(appearance)
+                }
+            }
+            #if os(macOS)
+            .pickerStyle(.menu)
+            #endif
+        } footer: {
+            Text("Dark (One Bee) uses large type and warm accents — the style from your original Science Bowl app.")
+        }
+    }
+
+    private var sessionSection: some View {
+        Section {
+            Toggle("Show countdown timer during Study Session", isOn: Bindable(appState).showSessionTimer)
+            Toggle("Parent reads toss-ups aloud", isOn: Bindable(appState).parentReadsAloud)
+        } footer: {
+            Text("When enabled, answers stay hidden until you tap Reveal — for verbal practice with a parent.")
+        }
+    }
+
+    private var studyPlanSection: some View {
+        Section {
+            Toggle("Follow summer calendar", isOn: Bindable(appState).autoSyncScheduleFromCalendar)
+                .onChange(of: appState.autoSyncScheduleFromCalendar) { _, enabled in
+                    if enabled {
+                        appState.resetScheduleToCalendar()
+                    }
+                }
+            Picker("Study week", selection: Binding(
+                get: { appState.currentWeek },
+                set: { appState.userDidSetWeek($0) }
+            )) {
+                ForEach(1...10, id: \.self) { w in
+                    Text("Week \(w) · \(SeedData.topics(for: w)[.chemistry] ?? "")").tag(w)
+                }
+            }
+            .disabled(appState.autoSyncScheduleFromCalendar)
+            #if os(macOS)
+            .pickerStyle(.menu)
+            #endif
+            Picker("Current pass", selection: Binding(
+                get: { appState.currentPass },
+                set: { appState.userDidSetPass($0) }
+            )) {
+                ForEach(StudyPass.allCases) { p in
+                    Text(p.label).tag(p)
+                }
+            }
+            .disabled(appState.autoSyncScheduleFromCalendar)
+            #if os(macOS)
+            .pickerStyle(.menu)
+            #endif
+            if appState.autoSyncScheduleFromCalendar {
+                Button("Reset week & pass to today's date") {
+                    appState.resetScheduleToCalendar()
+                }
+            }
+        } header: {
+            Text("Study plan")
+        } footer: {
+            Text("With calendar sync on: Jun–Jul 3 = Pass 1 · Jul 6–Jul 31 = Pass 2 · Aug 3–14 = Pass 3. Turn off to set week and pass manually.")
+        }
+    }
+
+    private var backupSection: some View {
+        Section {
+            Button {
+                prepareExport()
+            } label: {
+                Label("Export progress backup", systemImage: "square.and.arrow.up")
+            }
+
+            Button {
+                showBackupImporter = true
+            } label: {
+                Label("Import progress backup", systemImage: "square.and.arrow.down")
+            }
+        } header: {
+            Text("Backup & restore")
+        } footer: {
+            Text("Exports all progress to a JSON file — share via AirDrop, Files, or email. Import replaces current progress on this device. DOE PDFs are not included.")
+        }
+    }
+
+    private var importSection: some View {
+        Section {
+            Text("Import PDF, CSV, or JSON files into your local question bank.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        } header: {
+            Text("Import questions")
+        }
+    }
+
+    private var doeSection: some View {
+        Section {
+            doeStatusView
+
+            Button("Download all DOE PDFs") {
+                Task { await appState.downloadDOEQuestions(fullCatalog: true) }
+            }
+            .disabled(appState.doeStore.isDownloading || appState.isDOELoading)
+
+            Button("Download Set 1 + samples only") {
+                Task { await appState.downloadDOEQuestions(fullCatalog: false) }
+            }
+            .font(.caption)
+            .disabled(appState.doeStore.isDownloading || appState.isDOELoading)
+
+            Button("Re-parse downloaded PDFs") {
+                Task { await appState.loadDOEQuestions(forceReload: true) }
+            }
+            .disabled(appState.doeStore.isDownloading || appState.isDOELoading)
+        } header: {
+            Text("DOE question bank")
+        } footer: {
+            Text("PDFs save to the device. First launch auto-downloads all sets when none are present (~200 PDFs). Pass 2 plan quizzes lead with DOE questions.")
+        }
+    }
+
+    private var aboutSection: some View {
+        Section {
+            LabeledContent("Version", value: "1.1.0")
+            LabeledContent("Built for", value: "Soha · NSB Middle School")
+        } header: {
+            Text("About")
+        }
+    }
+
+    // MARK: - Backup helpers
 
     private func prepareExport() {
         do {

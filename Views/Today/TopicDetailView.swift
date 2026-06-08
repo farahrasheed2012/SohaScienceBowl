@@ -30,9 +30,6 @@ struct TopicDetailView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                    Text(block.bookLine(for: appState.currentPass))
-                        .font(.subheadline)
-
                     if let theme = DeepDiveContent.weekTheme(week: block.week, pass: appState.currentPass) {
                         Text(theme)
                             .font(.caption.weight(.semibold))
@@ -40,6 +37,16 @@ struct TopicDetailView: View {
                     }
                 }
                 .padding(.vertical, 4)
+            }
+
+            Section("Reading & optional videos") {
+                StudyBlockReadingAndVideos(
+                    block: block,
+                    activePass: appState.currentPass,
+                    compact: true
+                )
+                .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
+                .listRowBackground(Color.clear)
             }
 
             Section("Focus preview") {

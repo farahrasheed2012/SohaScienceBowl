@@ -34,6 +34,7 @@ enum SeedData {
     static func block(week: Int, day: Weekday, subject: Subject, pass: StudyPass,
                       book: String, chapter: String, title: String,
                       pass2Book: String? = nil, pass2Chapter: String? = nil, pass2Title: String? = nil,
+                      backupBookLine: String? = nil,
                       focus: String, formulas: String, knowCold: [String],
                       topic: String, tossups: [(String, String)],
                       flashOnly: Bool = false) -> StudyBlock {
@@ -56,6 +57,7 @@ enum SeedData {
             pass2BookCode: pass2Book,
             pass2Chapter: pass2Chapter,
             pass2ChapterTitle: pass2Title,
+            backupBookLine: backupBookLine,
             isFlashCardOnly: flashOnly
         )
     }

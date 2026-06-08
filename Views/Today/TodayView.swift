@@ -22,31 +22,67 @@ struct TodayView: View {
                     .padding(.vertical, 4)
                 }
 
-                if let block = appState.todayBlocks().first {
-                    Section("Study today") {
-                        studyActionRow(
-                            title: "Read today's topic",
-                            systemImage: "book.fill",
-                            prominent: true
-                        ) {
-                            navigationPath.append(StudyNavigationRoute.studyMaterial(block))
-                        } subtitle: {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("\(block.subject.rawValue) · \(block.primaryTopic)")
-                                Text(block.bookLine(for: appState.currentPass))
-                            }
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        }
+                if let weekday = Weekday.from(Date()) {
+                    ForEach(appState.todayBlocks()) { block in
+                        Section("\(block.subject.rawValue) · \(block.primaryTopic)") {
+                            StudyBlockReadingAndVideos(
+                                block: block,
+                                activePass: appState.currentPass,
+                                compact: true
+                            )
+                            .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
+                            .listRowBackground(Color.clear)
 
-                        studyActionRow(
-                            title: "Full study session (Read → Know cold → Quiz)",
-                            systemImage: "text.book.closed.fill",
-                            prominent: false
-                        ) {
-                            navigationPath.append(StudyNavigationRoute.fullSession(block))
+                            Button {
+                                navigationPath.append(StudyNavigationRoute.studyMaterial(block))
+                            } label: {
+                                Label("Open full study material", systemImage: "book.fill")
+                                    .font(.subheadline.weight(.semibold))
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+
+                            HStack(spacing: 12) {
+                                Button {
+                                    navigationPath.append(StudyNavigationRoute.fullSession(block))
+                                } label: {
+                                    Text("Full session")
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
+
+                                Button {
+                                    navigationPath.append(
+                                        StudyNavigationRoute.planDrill(
+                                            .todayBlock(block, week: appState.currentWeek)
+                                        )
+                                    )
+                                } label: {
+                                    Text("Quiz only")
+                                        .frame(maxWidth: .infinity)
+                                }
+                                .buttonStyle(.bordered)
+                            }
                         }
                     }
+
+                    if let mathReading = ScheduleOpenStaxCatalog.mathReading(
+                        week: appState.currentWeek,
+                        day: weekday
+                    ) {
+                        Section("Math · \(mathReading.title)") {
+                            StudyMathReadingAndVideos(
+                                reading: mathReading,
+                                week: appState.currentWeek,
+                                day: weekday
+                            )
+                            .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
+                            .listRowBackground(Color.clear)
+                        }
+                    }
+                } else {
+                    Text("Weekend — use Browse all topics for books, chapters, and videos.")
+                        .foregroundStyle(.secondary)
                 }
 
                 if ElementData.shouldPromoteElementPractice(
@@ -84,62 +120,6 @@ struct TodayView: View {
                     }
                 }
 
-                Section("Today's blocks") {
-                    if appState.todayBlocks().isEmpty {
-                        Text("No science blocks scheduled for today.")
-                            .foregroundStyle(.secondary)
-                    } else {
-                        ForEach(appState.todayBlocks()) { block in
-                            VStack(alignment: .leading, spacing: 12) {
-                                StudyBlockCard(
-                                    block: block,
-                                    pass: appState.currentPass,
-                                    timeLabel: ScheduleConstants.blockTimeLabel(day: block.day, subject: block.subject)
-                                )
-
-                                Button {
-                                    navigationPath.append(StudyNavigationRoute.studyMaterial(block))
-                                } label: {
-                                    Text("Read study material")
-                                        .font(.subheadline.weight(.semibold))
-                                        .frame(maxWidth: .infinity)
-                                        .padding(.vertical, 10)
-                                }
-                                .buttonStyle(.borderedProminent)
-
-                                HStack(spacing: 12) {
-                                    Button {
-                                        navigationPath.append(StudyNavigationRoute.fullSession(block))
-                                    } label: {
-                                        Text("Full session")
-                                            .font(.subheadline.weight(.semibold))
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 10)
-                                    }
-                                    .buttonStyle(.bordered)
-
-                                    Button {
-                                        navigationPath.append(
-                                            StudyNavigationRoute.planDrill(
-                                                .todayBlock(block, week: appState.currentWeek)
-                                            )
-                                        )
-                                    } label: {
-                                        Text("Quiz only")
-                                            .font(.subheadline.weight(.semibold))
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 10)
-                                    }
-                                    .buttonStyle(.bordered)
-                                }
-                            }
-                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                            .listRowBackground(Color.clear)
-                            .listRowSeparator(.hidden)
-                        }
-                    }
-                }
-
                 Section {
                     studyActionRow(
                         title: "Browse all topics",
@@ -148,7 +128,7 @@ struct TodayView: View {
                     ) {
                         navigationPath.append(StudyNavigationRoute.topicBrowser(initialWeek: nil))
                     } subtitle: {
-                        Text("Weeks 1–10 · Biology, Chemistry, Physics · read or quiz any topic")
+                        Text("Weeks 1–10 · every book, chapter, and optional video")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -181,14 +161,6 @@ struct TodayView: View {
                         navigationPath.append(
                             StudyNavigationRoute.planDrill(.thisWeek(week: appState.currentWeek))
                         )
-                    }
-
-                    studyActionRow(
-                        title: "Browse all topics",
-                        systemImage: "books.vertical.fill",
-                        prominent: false
-                    ) {
-                        navigationPath.append(StudyNavigationRoute.topicBrowser(initialWeek: nil))
                     }
                 }
 

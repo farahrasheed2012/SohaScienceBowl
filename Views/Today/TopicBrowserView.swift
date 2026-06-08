@@ -50,7 +50,7 @@ struct TopicBrowserView: View {
                 }
             }
 
-            Section("\(filteredBlocks.count) topics") {
+            Section("\(filteredBlocks.count) topics — books & chapters") {
                 if filteredBlocks.isEmpty {
                     Text("No topics for this filter.")
                         .foregroundStyle(.secondary)
@@ -58,6 +58,32 @@ struct TopicBrowserView: View {
                     ForEach(filteredBlocks) { block in
                         NavigationLink(value: StudyNavigationRoute.topicDetail(block)) {
                             TopicBrowserRow(block: block, pass: appState.currentPass)
+                        }
+                    }
+                }
+            }
+
+            let weekVideos = ScheduleVideoCatalog.dayBlocks(for: selectedWeek)
+            if !weekVideos.isEmpty {
+                Section("Week \(selectedWeek) optional videos") {
+                    Text("Read the book chapters above first — videos are extra.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    ForEach(weekVideos) { block in
+                        if !block.links.isEmpty {
+                            DisclosureGroup {
+                                ForEach(block.links) { link in
+                                    ScheduleVideoLinkRow(link: link, subtitle: link.note)
+                                }
+                            } label: {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("\(block.day.shortName) · \(block.label)")
+                                        .font(.subheadline.weight(.medium))
+                                    Text("\(block.links.count) video\(block.links.count == 1 ? "" : "s")")
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
                         }
                     }
                 }
@@ -86,9 +112,19 @@ private struct TopicBrowserRow: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Text(block.bookLine(for: pass))
-                    .font(.caption2)
+                    .font(.caption2.weight(.medium))
                     .foregroundStyle(.secondary)
-                    .lineLimit(2)
+                if !block.allBookOptions(activePass: pass).isEmpty {
+                    Text("+\(block.allBookOptions(activePass: pass).count) reading options")
+                        .font(.caption2)
+                        .foregroundStyle(PlatformColor.systemBlue)
+                }
+                let videoCount = ScheduleVideoCatalog.scienceLinks(for: block).count
+                if videoCount > 0 {
+                    Label("\(videoCount) optional video\(videoCount == 1 ? "" : "s")", systemImage: "play.circle")
+                        .font(.caption2)
+                        .foregroundStyle(PlatformColor.systemRed)
+                }
             }
         }
         .padding(.vertical, 4)

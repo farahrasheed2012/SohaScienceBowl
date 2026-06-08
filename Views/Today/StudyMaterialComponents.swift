@@ -61,15 +61,192 @@ struct StudyMaterialHeader: View {
                     .foregroundStyle(PlatformColor.systemBlue)
             }
 
-            Label(block.bookLine(for: pass), systemImage: "book.closed.fill")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            if block.isFlashCardOnly {
+                Label("Pass 3 flash-card review — open any listed book if stuck", systemImage: "rectangle.on.rectangle")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
         }
         .padding(20)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(PlatformColor.secondaryGroupedBackground)
         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    }
+}
+
+struct StudyBookOptionsCard: View {
+    let block: StudyBlock
+    let activePass: StudyPass
+    var compact: Bool = false
+
+    private var options: [StudyBookOption] {
+        block.allBookOptions(activePass: activePass)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: compact ? 8 : 12) {
+            Label("Reading options", systemImage: "books.vertical.fill")
+                .font(compact ? .subheadline.weight(.semibold) : .headline)
+
+            Text("Primary · Also OK · Backup — same as summer-2026-calendar")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            ForEach(options) { option in
+                StudyBookOptionRow(option: option, compact: compact)
+            }
+        }
+    }
+}
+
+struct StudyBookOptionRow: View {
+    let option: StudyBookOption
+    var compact: Bool = false
+
+    private var roleColor: Color {
+        switch option.role {
+        case .pass1Primary, .pass2Primary: return PlatformColor.systemBlue
+        case .alsoOK: return PlatformColor.systemTeal
+        case .backup: return PlatformColor.systemOrange
+        }
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 8) {
+                Text(option.role.rawValue)
+                    .font(.caption2.weight(.bold))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(roleColor.opacity(0.14))
+                    .foregroundStyle(roleColor)
+                    .clipShape(Capsule())
+
+                if option.isRecommended {
+                    Text("Recommended now")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(PlatformColor.systemGreen)
+                }
+            }
+
+            Text(option.text)
+                .font(compact ? .caption.weight(.medium) : .subheadline.weight(.medium))
+                .fixedSize(horizontal: false, vertical: true)
+
+            ForEach(option.links) { link in
+                Link(destination: link.url) {
+                    Label(link.label, systemImage: "safari")
+                        .font(.caption.weight(.medium))
+                }
+            }
+        }
+        .padding(compact ? 10 : 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(PlatformColor.tertiaryGroupedBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+    }
+}
+
+struct StudyMathBookOptionsCard: View {
+    let reading: ScheduleOpenStaxCatalog.MathReading
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label("Math reading options", systemImage: "books.vertical.fill")
+                .font(.headline)
+
+            StudyBookOptionRow(
+                option: StudyBookOption(
+                    id: "osa-primary",
+                    role: .pass1Primary,
+                    text: "OSA — \(reading.title)",
+                    links: Array(zip(reading.sectionKeys, reading.urls)).map { key, url in
+                        StudyBookLink(
+                            label: key == "home" ? "OpenStax book overview" : "OpenStax §\(key)",
+                            url: url
+                        )
+                    },
+                    isRecommended: true
+                )
+            )
+
+            if !reading.backup.isEmpty {
+                StudyBookOptionRow(
+                    option: StudyBookOption(
+                        id: "osa-backup",
+                        role: .alsoOK,
+                        text: reading.backup,
+                        links: [],
+                        isRecommended: false
+                    )
+                )
+            }
+        }
+    }
+}
+
+/// Books/chapters first, optional videos second — one combined block for Today & topic screens.
+struct StudyBlockReadingAndVideos: View {
+    let block: StudyBlock
+    let activePass: StudyPass
+    var compact: Bool = false
+
+    private var videos: [ScheduleVideoLink] {
+        ScheduleVideoCatalog.scienceLinks(for: block)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: compact ? 12 : 16) {
+            StudyBookOptionsCard(block: block, activePass: activePass, compact: compact)
+
+            if !videos.isEmpty {
+                Divider()
+
+                Label("Optional videos", systemImage: "play.rectangle.fill")
+                    .font(compact ? .subheadline.weight(.semibold) : .headline)
+                    .foregroundStyle(PlatformColor.systemRed)
+
+                Text("~5–12 min each · read your book chapter first")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                ForEach(videos) { link in
+                    ScheduleVideoLinkRow(link: link)
+                }
+            }
+        }
+    }
+}
+
+struct StudyMathReadingAndVideos: View {
+    let reading: ScheduleOpenStaxCatalog.MathReading
+    let week: Int
+    let day: Weekday
+
+    private var videos: [ScheduleVideoLink] {
+        ScheduleVideoCatalog.mathLinks(week: week, day: day)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            StudyMathBookOptionsCard(reading: reading)
+
+            if !videos.isEmpty {
+                Divider()
+
+                Label("Optional math videos", systemImage: "play.rectangle.fill")
+                    .font(.headline)
+                    .foregroundStyle(PlatformColor.systemRed)
+
+                Text("~5–12 min each · read OpenStax first")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                ForEach(videos) { link in
+                    ScheduleVideoLinkRow(link: link)
+                }
+            }
+        }
     }
 }
 
@@ -184,6 +361,80 @@ struct StudyDeepDiveSections: View {
     }
 }
 
+// MARK: - Optional YouTube links
+
+struct ScheduleVideoLinkRow: View {
+    let link: ScheduleVideoLink
+    var subtitle: String? = nil
+    var accent: Color = PlatformColor.systemRed
+
+    var body: some View {
+        Link(destination: link.url) {
+            HStack(alignment: .top, spacing: 10) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(link.title)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.primary)
+                    if let subtitle {
+                        Text(subtitle)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Text(link.note)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "play.circle.fill")
+                    .foregroundStyle(accent)
+            }
+        }
+    }
+}
+
+struct StudyVideoLinksCard: View {
+    let title: String
+    let links: [ScheduleVideoLink]
+    var accent: Color = PlatformColor.systemRed
+
+    var body: some View {
+        if !links.isEmpty {
+            StudyMaterialCard(title: title, systemImage: "play.rectangle.fill", accent: accent) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Optional ~5–12 min previews. Read your book chapter first.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    ForEach(links) { link in
+                        Link(destination: link.url) {
+                            HStack(alignment: .top, spacing: 10) {
+                                Image(systemName: "play.circle.fill")
+                                    .font(.body)
+                                    .foregroundStyle(accent)
+                                    .padding(.top, 1)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(link.title)
+                                        .font(.subheadline.weight(.medium))
+                                        .foregroundStyle(.primary)
+                                    Text(link.note)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                                Spacer(minLength: 0)
+                                Image(systemName: "arrow.up.right")
+                                    .font(.caption)
+                                    .foregroundStyle(.tertiary)
+                            }
+                            .padding(.vertical, 6)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 // MARK: - Shared scroll content
 
 struct StudyMaterialScrollContent: View {
@@ -193,6 +444,12 @@ struct StudyMaterialScrollContent: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
             StudyMaterialHeader(block: block, pass: appState.currentPass)
+
+            StudyBlockReadingAndVideos(
+                block: block,
+                activePass: appState.currentPass,
+                compact: false
+            )
 
             if let workflow = DeepDiveContent.passWorkflow(week: block.week, pass: appState.currentPass) {
                 StudyMaterialCard(title: "How to use this block", systemImage: "clock.fill", accent: PlatformColor.systemIndigo) {
