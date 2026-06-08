@@ -176,6 +176,14 @@ enum ScheduleOpenStaxCatalog {
         let sectionKeys: [String]
         let backup: String
         let urls: [URL]
+
+        /// Larson backup line without the BFN-A suffix (e.g. `Lar Ch 1`).
+        var larBackupLine: String {
+            backup
+                .components(separatedBy: " · BFN")
+                .first?
+                .trimmingCharacters(in: .whitespaces) ?? backup
+        }
     }
 
     private static let sectionURLs: [String: URL] = [

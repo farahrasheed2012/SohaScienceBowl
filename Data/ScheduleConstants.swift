@@ -46,6 +46,16 @@ enum ScheduleConstants {
         }
     }
 
+    static func mathBlockTimeLabel(day: Weekday) -> String {
+        switch day {
+        case .monday: return "10:45 – 11:15 AM"
+        case .tuesday: return "11:50 AM – 12:20 PM"
+        case .wednesday: return "11:25 – 11:55 AM"
+        case .thursday: return "11:30 AM – 12:00 PM"
+        case .friday: return "3:45 – 4:15 PM"
+        }
+    }
+
     static func weekNumber(for date: Date, calendar: Calendar = .current) -> Int {
         let start = calendar.startOfDay(for: studyStartDate)
         let target = calendar.startOfDay(for: date)

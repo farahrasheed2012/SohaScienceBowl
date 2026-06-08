@@ -80,6 +80,17 @@ enum ScheduleVideoCatalog {
         }
     }
 
+    static func scienceSubject(for label: String) -> Subject? {
+        if label.hasPrefix("Chem") { return .chemistry }
+        if label.hasPrefix("Bio") { return .biology }
+        if label.hasPrefix("Phys") { return .physics }
+        return nil
+    }
+
+    static func isMathBlock(_ label: String) -> Bool {
+        label.hasPrefix("Math")
+    }
+
     static func scienceAndMathLinks(for week: Int, day: Weekday) -> [ScheduleVideoLink] {
         allLinks(week: week, day: day)
     }

@@ -1,8 +1,15 @@
 import Foundation
 
+/// Week + weekday for daily math reading (OpenStax + Lar + BFN-A).
+struct MathTopicRef: Hashable {
+    let week: Int
+    let day: Weekday
+}
+
 /// Typed routes for Today-tab navigation (avoids multiple NavigationLinks in one List row).
 enum StudyNavigationRoute: Hashable {
     case topicDetail(StudyBlock)
+    case mathTopicDetail(MathTopicRef)
     case studyMaterial(StudyBlock)
     case fullSession(StudyBlock)
     case planDrill(PlanDrillRequest)

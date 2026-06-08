@@ -1,6 +1,6 @@
 import Foundation
 
-/// Big Fat Notebook reading citations — optional for chem, bio, and phys blocks.
+/// Big Fat Notebook reading citations — optional for chem, bio, phys, and math blocks.
 enum ScheduleBFNCatalog {
     static let scienceTitle = "Big Fat Notebook: Science"
     static let scienceCode = "BFN-Sci"
@@ -9,6 +9,10 @@ enum ScheduleBFNCatalog {
     static let biologyTitle = "Big Fat Notebook: Biology"
     static let biologyCode = "BFN-Bio"
     static let biologyISBN = "9781523504367"
+
+    static let algebraTitle = "Big Fat Notebook: Pre-Algebra & Algebra"
+    static let algebraCode = "BFN-A"
+    static let algebraISBN = "9781523504382"
 
     struct Citation: Hashable {
         let unit: String
@@ -305,5 +309,139 @@ enum ScheduleBFNCatalog {
             return "\(biologyCode) — \(biologyTitle) · \(c.shortLine)"
         }
         return "\(biologyCode) — \(biologyTitle) (ISBN \(biologyISBN)) · Fri review · quick bio recall"
+    }
+
+    // MARK: - BFN-A (Pre-Algebra & Algebra · Units 1–13)
+
+    private static let algebraByMathTitle: [String: Citation] = [
+        "Scientific notation": Citation(
+            unit: "Unit 4",
+            chapters: "Ch 19 Exponents · Ch 20 Scientific Notation",
+            pages: "p141"
+        ),
+        "Ratios": Citation(
+            unit: "Unit 3",
+            chapters: "Ch 11–18 Ratios · Unit Rates · Proportions",
+            pages: "p75"
+        ),
+        "Graphs & slope": Citation(
+            unit: "Unit 6",
+            chapters: "Ch 31–38 Slope · Slope-Intercept · Read Graphs",
+            pages: "p247"
+        ),
+        "Graphs": Citation(
+            unit: "Unit 6",
+            chapters: "Ch 31–38 Graphing Linear Equations",
+            pages: "p247"
+        ),
+        "Graph reading": Citation(
+            unit: "Unit 6",
+            chapters: "Ch 31–38 Read Graphs · Slope as Rate",
+            pages: "p247"
+        ),
+        "Unit conversion": Citation(
+            unit: "Unit 2",
+            chapters: "Ch 4–10 The Number System · Decimals",
+            pages: "p23"
+        ),
+        "Unit conversion review": Citation(
+            unit: "Unit 2",
+            chapters: "Ch 4–10 Fractions · Decimals · Metric",
+            pages: "p23"
+        ),
+        "PEMDAS & estimation": Citation(
+            unit: "Unit 1",
+            chapters: "Ch 1–3 Types of Numbers · Order of Operations",
+            pages: "p1"
+        ),
+        "Percent": Citation(
+            unit: "Unit 3",
+            chapters: "Ch 11–18 Percent · Proportions",
+            pages: "p75"
+        ),
+        "Proportions": Citation(
+            unit: "Unit 3",
+            chapters: "Ch 11–18 Proportions · Cross-Multiply",
+            pages: "p75"
+        ),
+        "F = ma": Citation(
+            unit: "Unit 5",
+            chapters: "Ch 24–30 Linear Equations · Plug-In",
+            pages: "p175"
+        ),
+        "Exponents": Citation(
+            unit: "Unit 4",
+            chapters: "Ch 19 Exponents · Ch 20 Scientific Notation",
+            pages: "p141"
+        ),
+        "Body-scale ratios": Citation(
+            unit: "Unit 3",
+            chapters: "Ch 11–18 Ratios · Unit Rates",
+            pages: "p75"
+        ),
+        "Formula substitution": Citation(
+            unit: "Unit 5",
+            chapters: "Ch 24–30 Solve Equations · Rearrange Formulas",
+            pages: "p175"
+        ),
+        "Formula plug-in": Citation(
+            unit: "Unit 5",
+            chapters: "Ch 24–30 Linear Equations · Substitution",
+            pages: "p175"
+        ),
+        "W = Fd": Citation(
+            unit: "Unit 5",
+            chapters: "Ch 24–30 Equations · Formula Rearranging",
+            pages: "p175"
+        ),
+        "Concentration ratios": Citation(
+            unit: "Unit 3",
+            chapters: "Ch 11–18 Proportions · Percent",
+            pages: "p75"
+        ),
+        "Mixed review": Citation(
+            unit: "Units 1–7",
+            chapters: "Pick weakest unit · Check Your Knowledge",
+            pages: "p1"
+        ),
+        "Number review": Citation(
+            unit: "Unit 2",
+            chapters: "Ch 4–10 Negatives · Fractions · Decimals",
+            pages: "p23"
+        ),
+        "Logic & probability": Citation(
+            unit: "Unit 7",
+            chapters: "Ch 39–44 Data · Probability · Logic",
+            pages: "p325"
+        ),
+        "v = fλ": Citation(
+            unit: "Unit 11",
+            chapters: "Ch 57–60 Square Roots · Simplify Radicals",
+            pages: "p505"
+        ),
+        "Flash review": Citation(
+            unit: "Units 1–6",
+            chapters: "Mixed CYK · sci notation · ratios · graphs",
+            pages: "p1"
+        ),
+        "Final review": Citation(
+            unit: "Units 1–7",
+            chapters: "All summer units · Check Your Knowledge",
+            pages: "p1"
+        ),
+    ]
+
+    static func algebraCitation(for mathTitle: String) -> Citation {
+        if let hit = algebraByMathTitle[mathTitle] { return hit }
+        return Citation(
+            unit: "See index",
+            chapters: "Match today's math topic in BFN-A",
+            pages: "p1"
+        )
+    }
+
+    static func algebraOptionText(for mathTitle: String) -> String {
+        let c = algebraCitation(for: mathTitle)
+        return "\(algebraCode) — \(algebraTitle) · \(c.shortLine)"
     }
 }

@@ -170,17 +170,27 @@ struct StudyMathBookOptionsCard: View {
                 )
             )
 
-            if !reading.backup.isEmpty {
+            if !reading.larBackupLine.isEmpty {
                 StudyBookOptionRow(
                     option: StudyBookOption(
-                        id: "osa-backup",
+                        id: "lar-backup",
                         role: .alsoOK,
-                        text: reading.backup,
+                        text: reading.larBackupLine,
                         links: [],
                         isRecommended: false
                     )
                 )
             }
+
+            StudyBookOptionRow(
+                option: StudyBookOption(
+                    id: "bfn-a-backup",
+                    role: .backup,
+                    text: ScheduleBFNCatalog.algebraOptionText(for: reading.title),
+                    links: [],
+                    isRecommended: false
+                )
+            )
         }
     }
 }

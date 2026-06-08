@@ -130,3 +130,59 @@ struct TopicDetailView: View {
         .studyNavigationDestinations()
     }
 }
+
+// MARK: - Math topic detail
+
+struct MathTopicDetailView: View {
+    let week: Int
+    let day: Weekday
+
+    private var reading: ScheduleOpenStaxCatalog.MathReading? {
+        ScheduleOpenStaxCatalog.mathReading(week: week, day: day)
+    }
+
+    var body: some View {
+        List {
+            if let reading {
+                Section {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Math")
+                            .font(.caption.weight(.semibold))
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(PlatformColor.systemPurple.opacity(0.15))
+                            .foregroundStyle(PlatformColor.systemPurple)
+                            .clipShape(Capsule())
+
+                        Text(reading.title)
+                            .font(.title2.weight(.semibold))
+
+                        Label(
+                            "\(day.fullName) · \(ScheduleConstants.mathBlockTimeLabel(day: day))",
+                            systemImage: "clock"
+                        )
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    }
+                    .padding(.vertical, 4)
+                }
+
+                Section("Reading & optional videos") {
+                    StudyMathReadingAndVideos(
+                        reading: reading,
+                        week: week,
+                        day: day
+                    )
+                    .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
+                    .listRowBackground(Color.clear)
+                }
+            } else {
+                Text("No math reading for this day.")
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .navigationTitle(reading?.title ?? "Math")
+        .inlineNavigationBarTitle()
+        .studyNavigationDestinations()
+    }
+}

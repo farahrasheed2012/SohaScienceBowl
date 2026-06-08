@@ -6,6 +6,8 @@ extension View {
             switch route {
             case .topicDetail(let block):
                 TopicDetailView(block: block)
+            case .mathTopicDetail(let ref):
+                MathTopicDetailView(week: ref.week, day: ref.day)
             case .studyMaterial(let block):
                 BlockStudyMaterialView(block: block)
             case .fullSession(let block):
