@@ -125,7 +125,7 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                     StudyBookOption(
                         id: "expl-\(week)-\(day.rawValue)",
                         role: .alsoOK,
-                        text: "\(ConceptualPhysicalScienceExplorationsCatalog.editionTitle) — \(ConceptualPhysicalScienceExplorationsCatalog.formatReference("17–24")) (optional skim after Mod/Tro)",
+                        text: ChemistryTextbookCatalog.explAlsoOKLine(for: self),
                         links: [],
                         isRecommended: false
                     )

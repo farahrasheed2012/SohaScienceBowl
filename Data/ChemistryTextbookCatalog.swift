@@ -30,4 +30,41 @@ enum ChemistryTextbookCatalog {
         default: return "\(bookCode) \(chapter) — \(title)"
         }
     }
+
+    /// Expl Part Three chapter(s) that parallel this chemistry block (from summer Mod/Tro rotation).
+    static func explChapterReference(for block: StudyBlock) -> String {
+        let mod = block.chapter.lowercased()
+        let title = block.chapterTitle.lowercased()
+
+        if mod.contains("ch 2") || title.contains("measurement") {
+            return "App. A"
+        }
+        if mod.contains("ch 3") || title.contains("atom") {
+            return "17"
+        }
+        if mod.contains("ch 10") || title.contains("states of matter") || title.contains("states") {
+            return "17"
+        }
+        if mod.contains("ch 8") || title.contains("reaction") {
+            return "20–21"
+        }
+        if mod.contains("ch 14") || title.contains("acid") || title.contains("base") {
+            return "21"
+        }
+        if mod.contains("ch 12") || title.contains("solution") {
+            return "19"
+        }
+        if mod.contains("ch 5") && mod.contains("ch 7") || title.contains("ion") || title.contains("formula") {
+            return "17–18"
+        }
+        if mod.contains("ch 5") || title.contains("periodic") {
+            return "17"
+        }
+        return "17"
+    }
+
+    static func explAlsoOKLine(for block: StudyBlock) -> String {
+        let ref = explChapterReference(for: block)
+        return "\(explTitle) — \(ConceptualPhysicalScienceExplorationsCatalog.formatReference(ref)) (optional skim after Mod/Tro)"
+    }
 }
