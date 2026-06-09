@@ -6,12 +6,15 @@ struct SettingsView: View {
 
     @State private var showBackupImporter = false
     @State private var showBackupExporter = false
+    @State private var showCoachSummaryExporter = false
     @State private var exportDocument: ProgressBackupFileDocument?
+    @State private var coachSummaryDocument: CoachSummaryFileDocument?
     @State private var pendingBackup: ProgressBackup?
     @State private var showImportConfirm = false
     @State private var showBackupAlert = false
     @State private var backupAlertTitle = ""
     @State private var backupAlertMessage = ""
+    @State private var showClearProgressConfirm = false
 
     var body: some View {
         NavigationStack {
@@ -20,6 +23,8 @@ struct SettingsView: View {
                 sessionSection
                 studyPlanSection
                 backupSection
+                clearProgressSection
+                coachSummarySection
                 importSection
                 doeSection
                 aboutSection
@@ -34,6 +39,16 @@ struct SettingsView: View {
                 document: exportDocument,
                 contentType: .json,
                 defaultFilename: ProgressBackupService.defaultFilename()
+            ) { result in
+                if case .failure(let error) = result {
+                    presentBackupAlert(title: "Export failed", message: error.localizedDescription)
+                }
+            }
+            .fileExporter(
+                isPresented: $showCoachSummaryExporter,
+                document: coachSummaryDocument,
+                contentType: .plainText,
+                defaultFilename: CoachSummaryService.defaultFilename()
             ) { result in
                 if case .failure(let error) = result {
                     presentBackupAlert(title: "Export failed", message: error.localizedDescription)
@@ -61,6 +76,18 @@ struct SettingsView: View {
                 Button("OK", role: .cancel) {}
             } message: {
                 Text(backupAlertMessage)
+            }
+            .alert("Clear all progress?", isPresented: $showClearProgressConfirm) {
+                Button("Clear everything", role: .destructive) {
+                    appState.clearAllProgress()
+                    presentBackupAlert(
+                        title: "Progress cleared",
+                        message: "Drills, checklist, flash cards, notebook, encyclopedia history, and imported questions were reset. Your appearance and study-plan settings were kept."
+                    )
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("This cannot be undone. Export a backup first if you want to keep a copy.\n\nKeeps: appearance, session timer, parent-reads-aloud, and calendar sync settings. Resets week & pass to today's date.")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -156,6 +183,35 @@ struct SettingsView: View {
         }
     }
 
+    private var clearProgressSection: some View {
+        Section {
+            Button(role: .destructive) {
+                showClearProgressConfirm = true
+            } label: {
+                Label("Clear all progress", systemImage: "trash")
+            }
+        } header: {
+            Text("Reset")
+        } footer: {
+            Text("Removes drill scores, checklist checks, flash cards, notebook entries, encyclopedia review history, weak-topic stats, badges, and imported questions. Does not delete DOE PDFs or bundled content.")
+        }
+    }
+
+    private var coachSummarySection: some View {
+        Section {
+            Button {
+                coachSummaryDocument = CoachSummaryFileDocument(text: CoachSummaryService.generate(from: appState))
+                showCoachSummaryExporter = true
+            } label: {
+                Label("Export coach summary", systemImage: "doc.text")
+            }
+        } header: {
+            Text("Parent / coach")
+        } footer: {
+            Text("Plain-text snapshot: week theme, accuracy by subject, checklist progress, weak topics, and badges.")
+        }
+    }
+
     private var importSection: some View {
         Section {
             Text("Import PDF, CSV, or JSON files into your local question bank.")
@@ -188,7 +244,7 @@ struct SettingsView: View {
         } header: {
             Text("DOE question bank")
         } footer: {
-            Text("PDFs save to the device. First launch auto-downloads all sets when none are present (~200 PDFs). Pass 2 plan quizzes lead with DOE questions.")
+            Text("Bundled starter cache works offline immediately. First launch downloads Set 0 + Set 1 only; use Download all for the full bank. Pass 2 plan quizzes lead with DOE questions.")
         }
     }
 
@@ -270,7 +326,21 @@ struct SettingsView: View {
             }
         } else if appState.doeStore.isLoaded {
             VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Image(systemName: appState.doeStore.isDrillReady ? "checkmark.circle.fill" : "exclamationmark.circle")
+                        .foregroundStyle(appState.doeStore.isDrillReady ? .green : .orange)
+                    Text(appState.doeStore.drillReadinessLabel)
+                        .font(.subheadline.weight(.medium))
+                }
                 Text("\(appState.doeStore.doeQuestions.count) total questions loaded")
+                if appState.doeStore.usesBundledStarter {
+                    Text("Bundled starter cache — download PDFs for the full bank")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Text("PDFs: \(appState.doeStore.downloadedPDFCount)/\(max(appState.doeStore.totalPDFCount, appState.doeStore.downloadedPDFCount))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
                 ForEach(appState.doeStore.categoryCounts(), id: \.category) { item in
                     HStack {
                         Text(item.category.rawValue)

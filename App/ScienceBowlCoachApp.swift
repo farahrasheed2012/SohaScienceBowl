@@ -11,12 +11,13 @@ struct ScienceBowlCoachApp: App {
                 .task {
                     await appState.loadDOEQuestions()
                 }
-                #if os(macOS)
-                .frame(minWidth: 820, minHeight: 640)
-                #endif
         }
         #if os(macOS)
-        .defaultSize(width: 960, height: 720)
+        .defaultSize(width: 1280, height: 840)
+        .windowResizability(.contentMinSize)
+        .commands {
+            CommandGroup(replacing: .newItem) {}
+        }
         #endif
     }
 }

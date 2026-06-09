@@ -251,6 +251,30 @@ final class DOEQuestionStore {
     private(set) var downloadedPDFCount = 0
     private(set) var totalPDFCount = 0
     private(set) var loadError: String?
+    private(set) var usesBundledStarter = false
+
+    var studyCategoryQuestionCount: Int {
+        doeQuestions.filter { $0.category.isStudyCategory }.count
+    }
+
+    var isDrillReady: Bool {
+        studyCategoryQuestionCount >= 15
+    }
+
+    var drillReadinessLabel: String {
+        if isDownloading {
+            return "Downloading PDFs… \(downloadedPDFCount)/\(totalPDFCount)"
+        }
+        if isDrillReady {
+            return usesBundledStarter
+                ? "Ready to drill (bundled starter — download full PDFs for more)"
+                : "Ready to drill"
+        }
+        if usesBundledStarter {
+            return "Starter cache loaded — expanding bank in background"
+        }
+        return "Need more questions — download DOE PDFs in Settings"
+    }
 
     private var documentsPDFRoot: URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -266,6 +290,15 @@ final class DOEQuestionStore {
         if let cached = loadCache(), !cached.isEmpty {
             doeQuestions = cached
             isLoaded = true
+            usesBundledStarter = false
+            return
+        }
+        if let bundled = loadBundledStarter(), !bundled.isEmpty {
+            doeQuestions = bundled
+            isLoaded = true
+            usesBundledStarter = true
+            saveCache(bundled)
+            Task { await loadFromPDFs(autoDownloadStarter: true, mergeWithExisting: true) }
             return
         }
         await loadFromPDFs(autoDownloadStarter: true)
@@ -325,30 +358,61 @@ final class DOEQuestionStore {
     }
 
     @MainActor
-    private func loadFromPDFs(autoDownloadStarter: Bool) async {
+    private func loadFromPDFs(autoDownloadStarter: Bool, mergeWithExisting: Bool = false) async {
         var all = parseLocalPDFs()
 
         if all.isEmpty && autoDownloadStarter {
             let hasAnyPDF = pdfFilesExist()
             if !hasAnyPDF {
-                await downloadPDFs(starterOnly: false)
+                await downloadPDFs(starterOnly: true)
                 all = parseLocalPDFs()
             }
         }
 
-        doeQuestions = all
+        if mergeWithExisting, !all.isEmpty {
+            let merged = dedupeQuestions(doeQuestions + all)
+            doeQuestions = merged
+            usesBundledStarter = false
+        } else if !all.isEmpty {
+            doeQuestions = all
+            usesBundledStarter = false
+        }
+
         isLoaded = true
 
-        if !all.isEmpty {
-            saveCache(all)
+        if !doeQuestions.isEmpty {
+            saveCache(doeQuestions)
             loadError = nil
         } else if isDownloading {
             loadError = "Downloading DOE PDFs…"
         } else if pdfFilesExist() {
             loadError = "PDFs found but no questions parsed — try Re-parse in Settings."
         } else {
-            loadError = "No DOE PDFs yet. Tap Download all DOE PDFs in Settings or Quiz."
+            loadError = "No DOE PDFs yet. Tap Download starter or full set in Settings."
         }
+    }
+
+    private func dedupeQuestions(_ questions: [DOEQuestion]) -> [DOEQuestion] {
+        var seen = Set<String>()
+        var result: [DOEQuestion] = []
+        for q in questions {
+            let key = q.questionText
+                .lowercased()
+                .components(separatedBy: CharacterSet.alphanumerics.inverted)
+                .joined()
+            if seen.contains(key) { continue }
+            seen.insert(key)
+            result.append(q)
+        }
+        return result
+    }
+
+    private func loadBundledStarter() -> [DOEQuestion]? {
+        let url = Bundle.main.url(forResource: "doe_starter_cache", withExtension: "json", subdirectory: "StudyContent")
+            ?? Bundle.main.url(forResource: "doe_starter_cache", withExtension: "json")
+        guard let url, let data = try? Data(contentsOf: url),
+              let questions = try? JSONDecoder().decode([DOEQuestion].self, from: data) else { return nil }
+        return questions
     }
 
     private func pdfFilesExist() -> Bool {

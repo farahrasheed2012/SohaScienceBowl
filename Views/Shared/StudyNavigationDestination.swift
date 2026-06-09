@@ -30,6 +30,16 @@ extension View {
                 PeriodicTableReferenceView()
             case .elementFlashCards:
                 ElementFlashCardDeckView()
+            case .weakAreaReview:
+                PlanDrillView(request: .weakAreaReview())
+            case .buzzerRemote:
+                BuzzerRemoteView()
+            case .regionalSprint:
+                RegionalSprintRootView()
+            case .regionalSprintPack(let packId):
+                RegionalSprintPackDetailView(packId: packId)
+            case .regionalSprintMixed(let track):
+                PlanDrillView(request: track.map { .regionalSprint(track: $0) } ?? .regionalSprintMixed())
             }
         }
     }

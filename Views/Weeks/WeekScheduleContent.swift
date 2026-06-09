@@ -48,6 +48,10 @@ struct WeekScheduleContent: View {
                         if let reading = ScheduleOpenStaxCatalog.mathReading(week: week, day: day) {
                             dayMathBlock(reading: reading, day: day)
                         }
+
+                        if let cross = ScheduleCrossCategory.block(for: week, day: day) {
+                            crossCategoryBlock(cross)
+                        }
                     }
                 }
             }
@@ -96,6 +100,7 @@ struct WeekScheduleContent: View {
     private func dayHasContent(_ day: Weekday) -> Bool {
         scienceBlocks.contains { $0.day == day }
             || ScheduleOpenStaxCatalog.mathReading(week: week, day: day) != nil
+            || ScheduleCrossCategory.block(for: week, day: day) != nil
     }
 
     @ViewBuilder
@@ -169,6 +174,55 @@ struct WeekScheduleContent: View {
             HStack(spacing: 12) {
                 NavigationLink(value: StudyNavigationRoute.mathTopicDetail(MathTopicRef(week: week, day: day))) {
                     Text("Topic")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+
+                NavigationLink(value: StudyNavigationRoute.planDrill(.mathQuiz(week: week, day: day))) {
+                    Text("Math quiz")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+        .padding(.vertical, 4)
+        .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
+        .listRowBackground(Color.clear)
+    }
+
+    @ViewBuilder
+    private func crossCategoryBlock(_ cross: ScheduleCrossCategory.Block) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            HStack {
+                Text("\(cross.emoji) \(cross.nsbSubject.rawValue)")
+                    .font(.caption2.weight(.bold))
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
+                    .background(PlatformColor.systemTeal.opacity(0.15))
+                    .foregroundStyle(PlatformColor.systemTeal)
+                    .clipShape(Capsule())
+                Text("Cross-category · even week")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            Text(cross.title)
+                .font(.subheadline.weight(.semibold))
+            Text(cross.subtitle)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 12) {
+                NavigationLink(value: StudyNavigationRoute.encyclopediaTopic(id: cross.encyclopediaTopicId)) {
+                    Text("Read")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+
+                NavigationLink(
+                    value: StudyNavigationRoute.encyclopediaPractice(.tossUpBonus, topicIds: cross.topicIds)
+                ) {
+                    Text("Quiz")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(.borderedProminent)

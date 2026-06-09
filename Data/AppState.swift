@@ -159,6 +159,7 @@ final class AppState {
         let result = DrillResult(id: UUID(), date: Date(), subject: subject, week: week, total: total, correct: correct, mode: mode)
         drillResults.append(result)
         PersistenceService.saveDrillResults(drillResults)
+        recordStudyActivity()
     }
 
     func recordAttempt(topic: String, subject: Subject, correct: Bool) {
@@ -202,6 +203,7 @@ final class AppState {
         let entry = NotebookEntry(id: UUID(), date: Date(), subject: subject, week: week, threeFacts: facts, oneMiss: miss, blockTopic: topic)
         notebookEntries.append(entry)
         PersistenceService.saveNotebook(notebookEntries)
+        recordStudyActivity()
     }
 
     func weekAccuracy(subject: Subject) -> Double {

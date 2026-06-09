@@ -132,6 +132,12 @@ struct StudySessionView: View {
 
     private var readStage: some View {
         ScrollView {
+            if block.isFlashCardOnly || appState.currentPass == .pass3 {
+                Pass3BookLinksCard(block: block, activePass: appState.currentPass)
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
+            }
+
             StudyMaterialScrollContent(block: block)
                 .padding(.horizontal, 20)
                 .padding(.vertical, 20)
@@ -146,6 +152,12 @@ struct StudySessionView: View {
 
     private var knowColdStage: some View {
         List {
+            if block.isFlashCardOnly || appState.currentPass == .pass3 {
+                Section {
+                    Pass3BookLinksCard(block: block, activePass: appState.currentPass)
+                }
+            }
+
             Section("Know cold — close the book") {
                 ForEach(Array(knowColdItems.enumerated()), id: \.offset) { index, item in
                     VStack(alignment: .leading, spacing: 8) {

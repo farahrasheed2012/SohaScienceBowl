@@ -38,9 +38,17 @@ enum SeedData {
                       focus: String, formulas: String, knowCold: [String],
                       topic: String, tossups: [(String, String)],
                       flashOnly: Bool = false) -> StudyBlock {
-        let questions = tossups.map { q, a in
+        var questions = tossups.map { q, a in
             TossupQuestion(id: UUID(), question: q, answer: a, subject: subject, week: week, topic: topic)
         }
+        questions = expandTossups(
+            questions: questions,
+            knowCold: knowCold,
+            subject: subject,
+            week: week,
+            topic: topic,
+            targetCount: 8
+        )
         return StudyBlock(
             id: UUID(),
             week: week,
@@ -60,6 +68,39 @@ enum SeedData {
             backupBookLine: backupBookLine,
             isFlashCardOnly: flashOnly
         )
+    }
+
+    /// Fills out 5–8 toss-ups per block using explicit toss-ups plus know-cold prompts.
+    private static func expandTossups(
+        questions: [TossupQuestion],
+        knowCold: [String],
+        subject: Subject,
+        week: Int,
+        topic: String,
+        targetCount: Int
+    ) -> [TossupQuestion] {
+        let minimum = 5
+        let goal = min(targetCount, max(minimum, questions.count + knowCold.count))
+        guard questions.count < goal else { return Array(questions.prefix(targetCount)) }
+
+        var result = questions
+        var seen = Set(result.map { $0.question.lowercased() })
+
+        for line in knowCold where result.count < goal {
+            guard line.hasSuffix(")"), let open = line.lastIndex(of: "(") else { continue }
+            let prompt = String(line[..<open]).trimmingCharacters(in: .whitespaces)
+            let answerStart = line.index(after: open)
+            let answerEnd = line.index(before: line.endIndex)
+            let answer = String(line[answerStart..<answerEnd])
+            let key = prompt.lowercased()
+            guard !seen.contains(key), !prompt.isEmpty else { continue }
+            seen.insert(key)
+            result.append(
+                TossupQuestion(id: UUID(), question: prompt, answer: answer, subject: subject, week: week, topic: topic)
+            )
+        }
+
+        return Array(result.prefix(targetCount))
     }
 
     static func topics(for week: Int) -> [Subject: String] {

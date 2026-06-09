@@ -17,6 +17,27 @@ struct QuizRootView: View {
                     .pickerStyle(.segmented)
                 }
 
+                Section("Texas Regional Sprint") {
+                    NavigationLink(value: StudyNavigationRoute.regionalSprint) {
+                        Label("Regional Sprint packs", systemImage: "flag.fill")
+                    }
+                    Text("11 fast-recall packs — phyla, IUPAC, gas laws, pedigrees, centripetal, and more")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    NavigationLink(value: StudyNavigationRoute.regionalSprintMixed(nil)) {
+                        Label("Mixed regional drill", systemImage: "bolt.horizontal.fill")
+                    }
+                }
+
+                Section("Buzzer") {
+                    NavigationLink(value: StudyNavigationRoute.buzzerRemote) {
+                        Label("iPhone buzzer remote", systemImage: "iphone.gen3.radiowaves.left.and.right")
+                    }
+                    Text("Use during a buzzer drill on Mac — same Wi‑Fi network")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("This week's plan") {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Week \(appState.currentWeek) · \(appState.weekTheme(for: appState.currentWeek))")
@@ -204,6 +225,7 @@ struct QuizRootView: View {
                     }
                 }
             }
+            .platformListStyle()
             .navigationTitle("Quiz")
             .largeNavigationBarTitle()
             .studyNavigationDestinations()

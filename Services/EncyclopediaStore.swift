@@ -187,4 +187,17 @@ final class EncyclopediaStore {
         lastStudyDate = snapshot.lastStudyDate
         saveProgress()
     }
+
+    func resetProgress() {
+        reviewedTopicIds = []
+        sessionHistory = []
+        wrongCountPerTopicId = [:]
+        currentStreak = 0
+        lastStudyDate = nil
+        UserDefaults.standard.removeObject(forKey: reviewedKey)
+        UserDefaults.standard.removeObject(forKey: sessionsKey)
+        UserDefaults.standard.removeObject(forKey: lastStudyDateKey)
+        UserDefaults.standard.removeObject(forKey: streakKey)
+        UserDefaults.standard.removeObject(forKey: wrongKey)
+    }
 }

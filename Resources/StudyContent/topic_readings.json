@@ -2,1111 +2,1111 @@
   "ls-photosynthesis": [
     {
       "bookCode": "OSB",
-      "label": "Ch 5 — Photosynthesis",
+      "label": "Ch 5 \u2014 Photosynthesis",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 1 — Cell Biology and Genetics · Ch 2 — Cell Processes and Energy",
+      "label": "Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 2 \u2014 Cell Processes and Energy",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit I — The Life of the Cell · Ch 6 — How Cells Harvest Chemical Energy · Unit I — The Life of the Cell · Ch 7 — Photosynthesis: Using Light to Make Food",
+      "label": "Unit I \u2014 The Life of the Cell \u00b7 Ch 6 \u2014 How Cells Harvest Chemical Energy \u00b7 Unit I \u2014 The Life of the Cell \u00b7 Ch 7 \u2014 Photosynthesis: Using Light to Make Food",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U3 · Ch 11 Photosynthesis · p103",
+      "label": "U3 \u00b7 Ch 11 Photosynthesis \u00b7 p103",
       "role": "backup"
     }
   ],
   "ls-cell-organelles": [
     {
       "bookCode": "OSB",
-      "label": "Ch 3 — Cell Structure and Function",
+      "label": "Ch 3 \u2014 Cell Structure and Function",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 1 — Cell Biology and Genetics · Ch 1 — Cell Structure and Function",
+      "label": "Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 1 \u2014 Cell Structure and Function",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit I — The Life of the Cell · Ch 4 — A Tour of the Cell",
+      "label": "Unit I \u2014 The Life of the Cell \u00b7 Ch 4 \u2014 A Tour of the Cell",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U3 · Ch 9 Cell Structure · p84",
+      "label": "U3 \u00b7 Ch 9 Cell Structure \u00b7 p84",
       "role": "backup"
     }
   ],
   "ls-cell-processes": [
     {
       "bookCode": "OSB",
-      "label": "Ch 3 — Cell membrane · transport",
+      "label": "Ch 3 \u2014 Cell membrane \u00b7 transport",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 1 — Cell Biology and Genetics · Ch 1 — Cell Structure and Function",
+      "label": "Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 1 \u2014 Cell Structure and Function",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit I — The Life of the Cell · Ch 5 — The Working Cell",
+      "label": "Unit I \u2014 The Life of the Cell \u00b7 Ch 5 \u2014 The Working Cell",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U3 · Ch 9–10 Cell structure · ATP · p84",
+      "label": "U3 \u00b7 Ch 9\u201310 Cell structure \u00b7 ATP \u00b7 p84",
       "role": "backup"
     }
   ],
   "ls-cell-division": [
     {
       "bookCode": "OSB",
-      "label": "Ch 10 — Cell division (mitosis/meiosis intro)",
+      "label": "Ch 10 \u2014 Cell division (mitosis/meiosis intro)",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 1 — Cell Biology and Genetics · Ch 2 — Cell Processes and Energy",
+      "label": "Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 2 \u2014 Cell Processes and Energy",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit II — Cellular Reproduction and Genetics · Ch 8 — The Cellular Basis of Reproduction and Inheritance",
+      "label": "Unit II \u2014 Cellular Reproduction and Genetics \u00b7 Ch 8 \u2014 The Cellular Basis of Reproduction and Inheritance",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U3 · Ch 13–14 Mitosis · Meiosis · p115",
+      "label": "U3 \u00b7 Ch 13\u201314 Mitosis \u00b7 Meiosis \u00b7 p115",
       "role": "backup"
     }
   ],
   "ls-cellular-respiration": [
     {
       "bookCode": "OSB",
-      "label": "Ch 4–5 — Cellular respiration",
+      "label": "Ch 4\u20135 \u2014 Cellular respiration",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 1 — Cell Biology and Genetics · Ch 2 — Cell Processes and Energy",
+      "label": "Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 2 \u2014 Cell Processes and Energy",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit I — The Life of the Cell · Ch 6 — How Cells Harvest Chemical Energy",
+      "label": "Unit I \u2014 The Life of the Cell \u00b7 Ch 6 \u2014 How Cells Harvest Chemical Energy",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U3 · Ch 12 Cellular Respiration · p103",
+      "label": "U3 \u00b7 Ch 12 Cellular Respiration \u00b7 p103",
       "role": "backup"
     }
   ],
   "ls-dna-rna": [
     {
       "bookCode": "OSB",
-      "label": "Ch 8 — DNA structure and replication",
+      "label": "Ch 8 \u2014 DNA structure and replication",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 1 — Cell Biology and Genetics · Ch 3 — Genetics: The Science of Heredity",
+      "label": "Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 3 \u2014 Genetics: The Science of Heredity",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit II — Cellular Reproduction and Genetics · Ch 10 — Molecular Biology of the Gene",
+      "label": "Unit II \u2014 Cellular Reproduction and Genetics \u00b7 Ch 10 \u2014 Molecular Biology of the Gene",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U10 · Ch 45 DNA and RNA · p413",
+      "label": "U10 \u00b7 Ch 45 DNA and RNA \u00b7 p413",
       "role": "backup"
     }
   ],
   "ls-genetics": [
     {
       "bookCode": "OSB",
-      "label": "Ch 7–8 — Genetics · inheritance",
+      "label": "Ch 7\u20138 \u2014 Genetics \u00b7 inheritance",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 1 — Cell Biology and Genetics · Ch 3 — Genetics: The Science of Heredity · Unit 1 — Cell Biology and Genetics · Ch 4 — Modern Genetics",
+      "label": "Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 3 \u2014 Genetics: The Science of Heredity \u00b7 Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 4 \u2014 Modern Genetics",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit II — Cellular Reproduction and Genetics · Ch 9 — Patterns of Inheritance",
+      "label": "Unit II \u2014 Cellular Reproduction and Genetics \u00b7 Ch 9 \u2014 Patterns of Inheritance",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U10 · Ch 44 Introduction to Genetics · p413",
+      "label": "U10 \u00b7 Ch 44 Introduction to Genetics \u00b7 p413",
       "role": "backup"
     }
   ],
   "ls-mutations": [
     {
       "bookCode": "FLS",
-      "label": "Unit 1 — Cell Biology and Genetics · Ch 4 — Modern Genetics",
+      "label": "Unit 1 \u2014 Cell Biology and Genetics \u00b7 Ch 4 \u2014 Modern Genetics",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit II — Cellular Reproduction and Genetics · Ch 10 — Molecular Biology of the Gene",
+      "label": "Unit II \u2014 Cellular Reproduction and Genetics \u00b7 Ch 10 \u2014 Molecular Biology of the Gene",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U10 · Ch 46 Genetic engineering · p413",
+      "label": "U10 \u00b7 Ch 46 Genetic engineering \u00b7 p413",
       "role": "backup"
     }
   ],
   "ls-evolution": [
     {
       "bookCode": "OSB",
-      "label": "Ch 11–12 — Evolution",
+      "label": "Ch 11\u201312 \u2014 Evolution",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 2 — Evolution and Earth's History · Ch 5 — Evolution · Unit 2 — Evolution and Earth's History · Ch 6 — Earth's History",
+      "label": "Unit 2 \u2014 Evolution and Earth's History \u00b7 Ch 5 \u2014 Evolution \u00b7 Unit 2 \u2014 Evolution and Earth's History \u00b7 Ch 6 \u2014 Earth's History",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit III — Concepts of Evolution · Ch 13 — How Populations Evolve · Unit III — Concepts of Evolution · Ch 14 — The Origin of Species",
+      "label": "Unit III \u2014 Concepts of Evolution \u00b7 Ch 13 \u2014 How Populations Evolve \u00b7 Unit III \u2014 Concepts of Evolution \u00b7 Ch 14 \u2014 The Origin of Species",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U11 · Ch 47 Evolution · p451",
+      "label": "U11 \u00b7 Ch 47 Evolution \u00b7 p451",
       "role": "backup"
     }
   ],
   "ls-classification": [
     {
       "bookCode": "OSB",
-      "label": "Ch 11 — Classification",
+      "label": "Ch 11 \u2014 Classification",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 7 — Living Things",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 7 \u2014 Living Things",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit III — Concepts of Evolution · Ch 15 — Tracing Evolutionary History · Unit IV — The Evolution of Biological Diversity · Ch 18 — The Evolution of Invertebrate Diversity",
+      "label": "Unit III \u2014 Concepts of Evolution \u00b7 Ch 15 \u2014 Tracing Evolutionary History \u00b7 Unit IV \u2014 The Evolution of Biological Diversity \u00b7 Ch 18 \u2014 The Evolution of Invertebrate Diversity",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U11 · Ch 47–48 History of Life · p451",
+      "label": "U11 \u00b7 Ch 47\u201348 History of Life \u00b7 p451",
       "role": "backup"
     }
   ],
   "ls-bacteria-viruses": [
     {
       "bookCode": "OSB",
-      "label": "Ch 13 — Microorganisms",
+      "label": "Ch 13 \u2014 Microorganisms",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 8 — Viruses and Bacteria",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 8 \u2014 Viruses and Bacteria",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit IV — The Evolution of Biological Diversity · Ch 16 — Microbial Life: Prokaryotes and Protists",
+      "label": "Unit IV \u2014 The Evolution of Biological Diversity \u00b7 Ch 16 \u2014 Microbial Life: Prokaryotes and Protists",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U4 · Ch 15 Bacteria · Ch 16 Viruses · p141",
+      "label": "U4 \u00b7 Ch 15 Bacteria \u00b7 Ch 16 Viruses \u00b7 p141",
       "role": "backup"
     }
   ],
   "ls-fungi-protists": [
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 9 — Protists and Fungi",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 9 \u2014 Protists and Fungi",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit IV — The Evolution of Biological Diversity · Ch 16 — Microbial Life: Prokaryotes and Protists · Unit IV — The Evolution of Biological Diversity · Ch 17 — The Evolution of Plant and Fungal Diversity",
+      "label": "Unit IV \u2014 The Evolution of Biological Diversity \u00b7 Ch 16 \u2014 Microbial Life: Prokaryotes and Protists \u00b7 Unit IV \u2014 The Evolution of Biological Diversity \u00b7 Ch 17 \u2014 The Evolution of Plant and Fungal Diversity",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U4–6 · Protists · Fungi · p141",
+      "label": "U4\u20136 \u00b7 Protists \u00b7 Fungi \u00b7 p141",
       "role": "backup"
     }
   ],
   "ls-plant-biology": [
     {
       "bookCode": "OSB",
-      "label": "Ch 14–15 — Plants",
+      "label": "Ch 14\u201315 \u2014 Plants",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 10 — Introduction to Plants · Unit 3 — Structure and Function in Living Things · Ch 11 — Seed Plants",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 10 \u2014 Introduction to Plants \u00b7 Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 11 \u2014 Seed Plants",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit VI — Plants: Form and Function · Ch 31 — Plant Structure, Growth, and Reproduction",
+      "label": "Unit VI \u2014 Plants: Form and Function \u00b7 Ch 31 \u2014 Plant Structure, Growth, and Reproduction",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U7 · Ch 26–28 Plant kingdom · p229",
+      "label": "U7 \u00b7 Ch 26\u201328 Plant kingdom \u00b7 p229",
       "role": "backup"
     }
   ],
   "ls-circulatory": [
     {
       "bookCode": "FLS",
-      "label": "Unit 4 — Human Body Systems · Ch 19 — Circulation",
+      "label": "Unit 4 \u2014 Human Body Systems \u00b7 Ch 19 \u2014 Circulation",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit V — Animals: Form and Function · Ch 23 — Circulation",
+      "label": "Unit V \u2014 Animals: Form and Function \u00b7 Ch 23 \u2014 Circulation",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U9 · Ch 40 Respiratory/Circulatory · p325",
+      "label": "U9 \u00b7 Ch 40 Respiratory/Circulatory \u00b7 p325",
       "role": "backup"
     }
   ],
   "ls-respiratory": [
     {
       "bookCode": "FLS",
-      "label": "Unit 4 — Human Body Systems · Ch 20 — Respiration and Excretion",
+      "label": "Unit 4 \u2014 Human Body Systems \u00b7 Ch 20 \u2014 Respiration and Excretion",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit V — Animals: Form and Function · Ch 22 — Gas Exchange",
+      "label": "Unit V \u2014 Animals: Form and Function \u00b7 Ch 22 \u2014 Gas Exchange",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U9 · Ch 40 Respiratory · p325",
+      "label": "U9 \u00b7 Ch 40 Respiratory \u00b7 p325",
       "role": "backup"
     }
   ],
   "ls-digestive": [
     {
       "bookCode": "FLS",
-      "label": "Unit 4 — Human Body Systems · Ch 18 — Food and Digestion",
+      "label": "Unit 4 \u2014 Human Body Systems \u00b7 Ch 18 \u2014 Food and Digestion",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit V — Animals: Form and Function · Ch 21 — Nutrition and Digestion",
+      "label": "Unit V \u2014 Animals: Form and Function \u00b7 Ch 21 \u2014 Nutrition and Digestion",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U9 · Ch 41 Digestive · p325",
+      "label": "U9 \u00b7 Ch 41 Digestive \u00b7 p325",
       "role": "backup"
     }
   ],
   "ls-nervous": [
     {
       "bookCode": "FLS",
-      "label": "Unit 4 — Human Body Systems · Ch 22 — The Nervous System",
+      "label": "Unit 4 \u2014 Human Body Systems \u00b7 Ch 22 \u2014 The Nervous System",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit V — Animals: Form and Function · Ch 28 — Nervous Systems",
+      "label": "Unit V \u2014 Animals: Form and Function \u00b7 Ch 28 \u2014 Nervous Systems",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U9 · Ch 36 Body Systems · p325",
+      "label": "U9 \u00b7 Ch 36 Body Systems \u00b7 p325",
       "role": "backup"
     }
   ],
   "ls-endocrine": [
     {
       "bookCode": "FLS",
-      "label": "Unit 4 — Human Body Systems · Ch 23 — The Endocrine System and Reproduction",
+      "label": "Unit 4 \u2014 Human Body Systems \u00b7 Ch 23 \u2014 The Endocrine System and Reproduction",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit V — Animals: Form and Function · Ch 26 — Hormones and the Endocrine System",
+      "label": "Unit V \u2014 Animals: Form and Function \u00b7 Ch 26 \u2014 Hormones and the Endocrine System",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U9 · Ch 36–43 Body systems · p325",
+      "label": "U9 \u00b7 Ch 36\u201343 Body systems \u00b7 p325",
       "role": "backup"
     }
   ],
   "ls-immune": [
     {
       "bookCode": "FLS",
-      "label": "Unit 4 — Human Body Systems · Ch 21 — Fighting Disease",
+      "label": "Unit 4 \u2014 Human Body Systems \u00b7 Ch 21 \u2014 Fighting Disease",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit V — Animals: Form and Function · Ch 24 — The Immune System",
+      "label": "Unit V \u2014 Animals: Form and Function \u00b7 Ch 24 \u2014 The Immune System",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U4 · Ch 18 Disease · p141",
+      "label": "U4 \u00b7 Ch 18 Disease \u00b7 p141",
       "role": "backup"
     }
   ],
   "ls-skeletal-muscular": [
     {
       "bookCode": "FLS",
-      "label": "Unit 4 — Human Body Systems · Ch 17 — Bones, Muscles, and Skin",
+      "label": "Unit 4 \u2014 Human Body Systems \u00b7 Ch 17 \u2014 Bones, Muscles, and Skin",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit V — Animals: Form and Function · Ch 20 — Unifying Concepts of Animal Structure and Function · Unit V — Animals: Form and Function · Ch 30 — How Animals Move",
+      "label": "Unit V \u2014 Animals: Form and Function \u00b7 Ch 20 \u2014 Unifying Concepts of Animal Structure and Function \u00b7 Unit V \u2014 Animals: Form and Function \u00b7 Ch 30 \u2014 How Animals Move",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U9 · Ch 36 Body Systems · p325",
+      "label": "U9 \u00b7 Ch 36 Body Systems \u00b7 p325",
       "role": "backup"
     }
   ],
   "ls-reproductive": [
     {
       "bookCode": "FLS",
-      "label": "Unit 4 — Human Body Systems · Ch 23 — The Endocrine System and Reproduction",
+      "label": "Unit 4 \u2014 Human Body Systems \u00b7 Ch 23 \u2014 The Endocrine System and Reproduction",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit V — Animals: Form and Function · Ch 27 — Reproduction and Embryonic Development",
+      "label": "Unit V \u2014 Animals: Form and Function \u00b7 Ch 27 \u2014 Reproduction and Embryonic Development",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U9 · Ch 43 Reproductive · p325",
+      "label": "U9 \u00b7 Ch 43 Reproductive \u00b7 p325",
       "role": "backup"
     }
   ],
   "ls-ecology": [
     {
       "bookCode": "OSB",
-      "label": "Ch 19–20 — Ecology · ecosystems",
+      "label": "Ch 19\u201320 \u2014 Ecology \u00b7 ecosystems",
       "role": "primary"
     },
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 7 — Living Things",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 7 \u2014 Living Things",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit VII — Ecology · Ch 36 — Population Ecology · Unit VII — Ecology · Ch 37 — Communities and Ecosystems",
+      "label": "Unit VII \u2014 Ecology \u00b7 Ch 36 \u2014 Population Ecology \u00b7 Unit VII \u2014 Ecology \u00b7 Ch 37 \u2014 Communities and Ecosystems",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U12 · Ch 49 The Ecosystem · p483",
+      "label": "U12 \u00b7 Ch 49 The Ecosystem \u00b7 p483",
       "role": "backup"
     }
   ],
   "ls-biomes": [
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 7 — Living Things",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 7 \u2014 Living Things",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit VII — Ecology · Ch 34 — The Biosphere: An Introduction to Earth's Diverse Environments",
+      "label": "Unit VII \u2014 Ecology \u00b7 Ch 34 \u2014 The Biosphere: An Introduction to Earth's Diverse Environments",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U12 · Ch 49–50 Ecosystems · p483",
+      "label": "U12 \u00b7 Ch 49\u201350 Ecosystems \u00b7 p483",
       "role": "backup"
     }
   ],
   "ls-population-ecology": [
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 7 — Living Things",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 7 \u2014 Living Things",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit VII — Ecology · Ch 36 — Population Ecology",
+      "label": "Unit VII \u2014 Ecology \u00b7 Ch 36 \u2014 Population Ecology",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U12 · Ch 50 Populations · p483",
+      "label": "U12 \u00b7 Ch 50 Populations \u00b7 p483",
       "role": "backup"
     }
   ],
   "ls-symbiosis": [
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 7 — Living Things",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 7 \u2014 Living Things",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit VII — Ecology · Ch 37 — Communities and Ecosystems",
+      "label": "Unit VII \u2014 Ecology \u00b7 Ch 37 \u2014 Communities and Ecosystems",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U12 · Ch 49 Ecosystem interactions · p483",
+      "label": "U12 \u00b7 Ch 49 Ecosystem interactions \u00b7 p483",
       "role": "backup"
     }
   ],
   "ls-biodiversity": [
     {
       "bookCode": "FLS",
-      "label": "Unit 3 — Structure and Function in Living Things · Ch 7 — Living Things",
+      "label": "Unit 3 \u2014 Structure and Function in Living Things \u00b7 Ch 7 \u2014 Living Things",
       "role": "pass1"
     },
     {
       "bookCode": "CB",
-      "label": "Unit VII — Ecology · Ch 38 — Conservation Biology",
+      "label": "Unit VII \u2014 Ecology \u00b7 Ch 38 \u2014 Conservation Biology",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
-      "label": "U12 · Ch 49–50 · p483",
+      "label": "U12 \u00b7 Ch 49\u201350 \u00b7 p483",
       "role": "backup"
     }
   ],
   "ch-atomic-structure": [
     {
       "bookCode": "Mod",
-      "label": "Ch 3 — Atoms: The Building Blocks of Matter",
+      "label": "Ch 3 \u2014 Atoms: The Building Blocks of Matter",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 4 §4.3–4.6 — Atoms · atomic structure",
+      "label": "Ch 4 \u00a74.3\u20134.6 \u2014 Atoms \u00b7 atomic structure",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 17 \u2014 Elements of Chemistry",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U2 · Ch 7 Periodic Table · p59",
+      "label": "U2 \u00b7 Ch 7 Periodic Table \u00b7 p59",
       "role": "backup"
     }
   ],
   "ch-periodic-table": [
     {
       "bookCode": "Mod",
-      "label": "Ch 5 — The Periodic Law",
+      "label": "Ch 5 \u2014 The Periodic Law",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 4 · Ch 9 §9.7 · §9.9 — Periodic table · trends",
+      "label": "Ch 4 \u00b7 Ch 9 \u00a79.7 \u00b7 \u00a79.9 \u2014 Periodic table \u00b7 trends",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 17 \u2014 Elements of Chemistry",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U2 · Ch 7 · p59",
+      "label": "U2 \u00b7 Ch 7 \u00b7 p59",
       "role": "backup"
     }
   ],
   "ch-elements-compounds": [
     {
       "bookCode": "Mod",
-      "label": "Ch 5 + Ch 7 intro — Periodic law · formulas",
+      "label": "Ch 5 + Ch 7 intro \u2014 Periodic law \u00b7 formulas",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 4 §4.7–4.8 + Ch 5 — Ions · compounds",
+      "label": "Ch 4 \u00a74.7\u20134.8 + Ch 5 \u2014 Ions \u00b7 compounds",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry · Part Three — Chemistry · Ch 18 — How Atoms Bond and Molecules Attract",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 17 \u2014 Elements of Chemistry \u00b7 Part Three \u2014 Chemistry \u00b7 Ch 18 \u2014 How Atoms Bond and Molecules Attract",
       "role": "alsoOK"
     }
   ],
   "ch-chemical-bonds": [
     {
       "bookCode": "Mod",
-      "label": "Ch 7 — Chemical formulas · bonding intro",
+      "label": "Ch 7 \u2014 Chemical formulas \u00b7 bonding intro",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 5 — Chemical bonding",
+      "label": "Ch 5 \u2014 Chemical bonding",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 18 — How Atoms Bond and Molecules Attract",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 18 \u2014 How Atoms Bond and Molecules Attract",
       "role": "alsoOK"
     }
   ],
   "ch-chemical-reactions": [
     {
       "bookCode": "Mod",
-      "label": "Ch 8 — Chemical Equations and Reactions",
+      "label": "Ch 8 \u2014 Chemical Equations and Reactions",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 7 §7.1–7.4 — Chemical reactions",
+      "label": "Ch 7 \u00a77.1\u20137.4 \u2014 Chemical reactions",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 20 — How Chemicals React · Part Three — Chemistry · Ch 21 — Two Types of Chemical Reactions",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 20 \u2014 How Chemicals React \u00b7 Part Three \u2014 Chemistry \u00b7 Ch 21 \u2014 Two Types of Chemical Reactions",
       "role": "alsoOK"
     }
   ],
   "ch-reaction-types": [
     {
       "bookCode": "Mod",
-      "label": "Ch 8 — Reaction types",
+      "label": "Ch 8 \u2014 Reaction types",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 7 — Reaction types",
+      "label": "Ch 7 \u2014 Reaction types",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 21 — Two Types of Chemical Reactions",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 21 \u2014 Two Types of Chemical Reactions",
       "role": "alsoOK"
     }
   ],
   "ch-acids-bases": [
     {
       "bookCode": "Mod",
-      "label": "Ch 14 — Acids and Bases",
+      "label": "Ch 14 \u2014 Acids and Bases",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 14 — Acids and bases",
+      "label": "Ch 14 \u2014 Acids and bases",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 21 — Two Types of Chemical Reactions",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 21 \u2014 Two Types of Chemical Reactions",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U2 · Ch 6–8 Matter · Solutions · p59",
+      "label": "U2 \u00b7 Ch 6\u20138 Matter \u00b7 Solutions \u00b7 p59",
       "role": "backup"
     }
   ],
   "ch-solutions": [
     {
       "bookCode": "Mod",
-      "label": "Ch 12 — Solutions",
+      "label": "Ch 12 \u2014 Solutions",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 13 — Solutions",
+      "label": "Ch 13 \u2014 Solutions",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 19 — How Chemicals Mix",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 19 \u2014 How Chemicals Mix",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U2 · Ch 8 Solutions · p59",
+      "label": "U2 \u00b7 Ch 8 Solutions \u00b7 p59",
       "role": "backup"
     }
   ],
   "ch-states-matter": [
     {
       "bookCode": "Mod",
-      "label": "Ch 10 — States of Matter",
+      "label": "Ch 10 \u2014 States of Matter",
       "role": "pass1"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 3 — Matter and Energy",
+      "label": "Ch 3 \u2014 Matter and Energy",
       "role": "pass2"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry · Part Three — Chemistry · Ch 18 — How Atoms Bond and Molecules Attract · Part Three — Chemistry · Ch 19 — How Chemicals Mix",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 17 \u2014 Elements of Chemistry \u00b7 Part Three \u2014 Chemistry \u00b7 Ch 18 \u2014 How Atoms Bond and Molecules Attract \u00b7 Part Three \u2014 Chemistry \u00b7 Ch 19 \u2014 How Chemicals Mix",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U2 · Ch 6 Matter · Phases · p59",
+      "label": "U2 \u00b7 Ch 6 Matter \u00b7 Phases \u00b7 p59",
       "role": "backup"
     }
   ],
   "ch-mole": [
     {
       "bookCode": "Tro",
-      "label": "Ch 9 · Ch 13 — Moles · molarity",
+      "label": "Ch 9 \u00b7 Ch 13 \u2014 Moles \u00b7 molarity",
       "role": "pass2"
     },
     {
       "bookCode": "Mod",
-      "label": "Ch 12 — Solutions (concentration)",
+      "label": "Ch 12 \u2014 Solutions (concentration)",
       "role": "pass1"
     }
   ],
   "ch-redox": [
     {
       "bookCode": "Tro",
-      "label": "Ch 7 — Oxidation-reduction (intro)",
+      "label": "Ch 7 \u2014 Oxidation-reduction (intro)",
       "role": "pass2"
     },
     {
       "bookCode": "Mod",
-      "label": "Ch 8 — Redox (if in edition)",
+      "label": "Ch 8 \u2014 Redox (if in edition)",
       "role": "pass1"
     }
   ],
   "ch-organic": [
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 22 — Organic Compounds",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 22 \u2014 Organic Compounds",
       "role": "alsoOK"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 22 — Organic (stretch)",
+      "label": "Ch 22 \u2014 Organic (stretch)",
       "role": "pass2"
     }
   ],
   "ch-nuclear-chem": [
     {
       "bookCode": "Tro",
-      "label": "Ch 3 — Nuclear (intro if covered)",
+      "label": "Ch 3 \u2014 Nuclear (intro if covered)",
       "role": "pass2"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U2 · Ch 6–7 · p59",
+      "label": "U2 \u00b7 Ch 6\u20137 \u00b7 p59",
       "role": "backup"
     }
   ],
   "ps-scientific-method": [
     {
       "bookCode": "Expl",
-      "label": "Front Matter · Ch 1 — About Science",
+      "label": "Front Matter \u00b7 Ch 1 \u2014 About Science",
       "role": "primary"
     },
     {
       "bookCode": "Mod",
-      "label": "Ch 2 — Measurements (lab skills)",
+      "label": "Ch 2 \u2014 Measurements (lab skills)",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U1 · Ch 1–5 Scientific thinking · lab tools · p1",
+      "label": "U1 \u00b7 Ch 1\u20135 Scientific thinking \u00b7 lab tools \u00b7 p1",
       "role": "backup"
     }
   ],
   "ps-motion": [
     {
       "bookCode": "Expl",
-      "label": "Front Matter · Ch 1 — About Science · Appendix B — Linear and Rotational Motion",
+      "label": "Front Matter \u00b7 Ch 1 \u2014 About Science \u00b7 Appendix B \u2014 Linear and Rotational Motion",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U3 · Ch 9 Motion · p91",
+      "label": "U3 \u00b7 Ch 9 Motion \u00b7 p91",
       "role": "backup"
     }
   ],
   "ps-newtons-laws": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 2 — Newton's First Law of Motion—The Law of Inertia · Part One — Mechanics · Ch 4 — Newton's Third Law of Motion—Action and Reaction",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 2 \u2014 Newton's First Law of Motion\u2014The Law of Inertia \u00b7 Part One \u2014 Mechanics \u00b7 Ch 4 \u2014 Newton's Third Law of Motion\u2014Action and Reaction",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U3 · Ch 10–11 Forces · p91",
+      "label": "U3 \u00b7 Ch 10\u201311 Forces \u00b7 p91",
       "role": "backup"
     }
   ],
   "ps-forces": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 2 — Newton's First Law of Motion—The Law of Inertia · Part One — Mechanics · Ch 4 — Newton's Third Law of Motion—Action and Reaction",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 2 \u2014 Newton's First Law of Motion\u2014The Law of Inertia \u00b7 Part One \u2014 Mechanics \u00b7 Ch 4 \u2014 Newton's Third Law of Motion\u2014Action and Reaction",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U3 · Ch 10 Force · p91",
+      "label": "U3 \u00b7 Ch 10 Force \u00b7 p91",
       "role": "backup"
     }
   ],
   "ps-momentum": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 5 — Momentum",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 5 \u2014 Momentum",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U3 · Ch 10–11 · p91",
+      "label": "U3 \u00b7 Ch 10\u201311 \u00b7 p91",
       "role": "backup"
     }
   ],
   "ps-work-energy-power": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U3–4 · Ch 12 Work · Ch 13 Energy · p91",
+      "label": "U3\u20134 \u00b7 Ch 12 Work \u00b7 Ch 13 Energy \u00b7 p91",
       "role": "backup"
     }
   ],
   "ps-kinetic-potential": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 13 Forms of Energy · p129",
+      "label": "U4 \u00b7 Ch 13 Forms of Energy \u00b7 p129",
       "role": "backup"
     }
   ],
   "ps-simple-machines": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U3 · Ch 12 Work and Machines · p91",
+      "label": "U3 \u00b7 Ch 12 Work and Machines \u00b7 p91",
       "role": "backup"
     }
   ],
   "ps-waves": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 12 — Waves and Sound",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 12 \u2014 Waves and Sound",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 15 Light and Sound · p129",
+      "label": "U4 \u00b7 Ch 15 Light and Sound \u00b7 p129",
       "role": "backup"
     }
   ],
   "ps-sound": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 12 — Waves and Sound",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 12 \u2014 Waves and Sound",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 15 · p129",
+      "label": "U4 \u00b7 Ch 15 \u00b7 p129",
       "role": "backup"
     }
   ],
   "ps-light": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 13 — Light, Reflection, and Color",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 13 \u2014 Light, Reflection, and Color",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 15 · p129",
+      "label": "U4 \u00b7 Ch 15 \u00b7 p129",
       "role": "backup"
     }
   ],
   "ps-reflection-refraction": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 13 — Light, Reflection, and Color",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 13 \u2014 Light, Reflection, and Color",
       "role": "primary"
     }
   ],
   "ps-optics": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 14 — Properties of Light",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 14 \u2014 Properties of Light",
       "role": "primary"
     }
   ],
   "ps-electricity": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 10 — Electricity",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 10 \u2014 Electricity",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 16 Electricity · p129",
+      "label": "U4 \u00b7 Ch 16 Electricity \u00b7 p129",
       "role": "backup"
     }
   ],
   "ps-circuits": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 10 — Electricity",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 10 \u2014 Electricity",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 16 · p129",
+      "label": "U4 \u00b7 Ch 16 \u00b7 p129",
       "role": "backup"
     }
   ],
   "ps-magnetism": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 11 — Magnetism",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 11 \u2014 Magnetism",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 16 Electricity and Magnetism · p129",
+      "label": "U4 \u00b7 Ch 16 Electricity and Magnetism \u00b7 p129",
       "role": "backup"
     }
   ],
   "ps-thermodynamics": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 9 — Heat",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 9 \u2014 Heat",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 14 Heat · p129",
+      "label": "U4 \u00b7 Ch 14 Heat \u00b7 p129",
       "role": "backup"
     }
   ],
   "ps-states-of-matter": [
     {
       "bookCode": "Mod",
-      "label": "Ch 10 — States of Matter",
+      "label": "Ch 10 \u2014 States of Matter",
       "role": "alsoOK"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry",
+      "label": "Part Three \u2014 Chemistry \u00b7 Ch 17 \u2014 Elements of Chemistry",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U2 · Ch 6 · p59",
+      "label": "U2 \u00b7 Ch 6 \u00b7 p59",
       "role": "backup"
     }
   ],
   "ps-pressure-fluids": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 8 — Fluid Mechanics",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 8 \u2014 Fluid Mechanics",
       "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U2 · Ch 8 Solutions and Fluids · p59",
+      "label": "U2 \u00b7 Ch 8 Solutions and Fluids \u00b7 p59",
       "role": "backup"
     }
   ],
   "ps-nuclear": [
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 16 — Nuclear Energy",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 16 \u2014 Nuclear Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "Tro",
-      "label": "Ch 3 — Nuclear (stretch)",
+      "label": "Ch 3 \u2014 Nuclear (stretch)",
       "role": "alsoOK"
     }
   ],
   "math-pemdas": [
     {
       "bookCode": "OSA",
-      "label": "§1.1 — Real numbers · order of operations",
+      "label": "\u00a71.1 \u2014 Real numbers \u00b7 order of operations",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 2 — Estimation · PEMDAS",
+      "label": "Ch 2 \u2014 Estimation \u00b7 PEMDAS",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U1 · Ch 1–3 Order of Operations · p1",
+      "label": "U1 \u00b7 Ch 1\u20133 Order of Operations \u00b7 p1",
       "role": "backup"
     }
   ],
   "math-fractions": [
     {
       "bookCode": "OSA",
-      "label": "§1.1 — Fractions · decimals · percent",
+      "label": "\u00a71.1 \u2014 Fractions \u00b7 decimals \u00b7 percent",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 2 — Percent · decimals",
+      "label": "Ch 2 \u2014 Percent \u00b7 decimals",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U2–U3 · p23",
+      "label": "U2\u2013U3 \u00b7 p23",
       "role": "backup"
     }
   ],
   "math-ratios": [
     {
       "bookCode": "OSA",
-      "label": "§5.8 — Ratios · proportions",
+      "label": "\u00a75.8 \u2014 Ratios \u00b7 proportions",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 2–3 — Ratios · proportions",
+      "label": "Ch 2\u20133 \u2014 Ratios \u00b7 proportions",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U3 · Ch 11–18 · p75",
+      "label": "U3 \u00b7 Ch 11\u201318 \u00b7 p75",
       "role": "backup"
     }
   ],
   "math-exponents": [
     {
       "bookCode": "OSA",
-      "label": "§1.2 · §6.1 — Exponents · scientific notation",
+      "label": "\u00a71.2 \u00b7 \u00a76.1 \u2014 Exponents \u00b7 scientific notation",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 8 §8.1–8.4",
+      "label": "Ch 8 \u00a78.1\u20138.4",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U4 · Ch 19–20 · p141",
+      "label": "U4 \u00b7 Ch 19\u201320 \u00b7 p141",
       "role": "backup"
     }
   ],
   "math-word-problems": [
     {
       "bookCode": "OSA",
-      "label": "§2.3 — Models and applications",
+      "label": "\u00a72.3 \u2014 Models and applications",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 1–2 — Unit conversion",
+      "label": "Ch 1\u20132 \u2014 Unit conversion",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U2–U3 · p23",
+      "label": "U2\u2013U3 \u00b7 p23",
       "role": "backup"
     }
   ],
   "math-linear-eq": [
     {
       "bookCode": "OSA",
-      "label": "§2.3 · §4.1 — Linear equations",
+      "label": "\u00a72.3 \u00b7 \u00a74.1 \u2014 Linear equations",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 3 — Solving linear equations",
+      "label": "Ch 3 \u2014 Solving linear equations",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U5 · Ch 24–30 · p175",
+      "label": "U5 \u00b7 Ch 24\u201330 \u00b7 p175",
       "role": "backup"
     }
   ],
   "math-functions": [
     {
       "bookCode": "OSA",
-      "label": "§4.1 — Linear functions",
+      "label": "\u00a74.1 \u2014 Linear functions",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 4 — Graphing functions",
+      "label": "Ch 4 \u2014 Graphing functions",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U8 · Ch 45–47 · p395",
+      "label": "U8 \u00b7 Ch 45\u201347 \u00b7 p395",
       "role": "backup"
     }
   ],
   "math-data-graphs": [
     {
       "bookCode": "OSA",
-      "label": "§2.1 · §3.3 — Graphs · slope",
+      "label": "\u00a72.1 \u00b7 \u00a73.3 \u2014 Graphs \u00b7 slope",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 4 — Graph reading",
+      "label": "Ch 4 \u2014 Graph reading",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U6 · Ch 31–38 · p247",
+      "label": "U6 \u00b7 Ch 31\u201338 \u00b7 p247",
       "role": "backup"
     }
   ],
   "math-coordinate": [
     {
       "bookCode": "OSA",
-      "label": "§2.1 — Coordinate systems",
+      "label": "\u00a72.1 \u2014 Coordinate systems",
       "role": "primary"
     },
     {
@@ -1116,31 +1116,31 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U6 · p247",
+      "label": "U6 \u00b7 p247",
       "role": "backup"
     }
   ],
   "math-probability": [
     {
       "bookCode": "OSA",
-      "label": "§13.7 — Probability",
+      "label": "\u00a713.7 \u2014 Probability",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 13 — Probability · logic",
+      "label": "Ch 13 \u2014 Probability \u00b7 logic",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U7 · Ch 39–44 · p325",
+      "label": "U7 \u00b7 Ch 39\u201344 \u00b7 p325",
       "role": "backup"
     }
   ],
   "math-statistics": [
     {
       "bookCode": "OSA",
-      "label": "§13.7 — Statistics intro",
+      "label": "\u00a713.7 \u2014 Statistics intro",
       "role": "primary"
     },
     {
@@ -1150,26 +1150,26 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U7 · p325",
+      "label": "U7 \u00b7 p325",
       "role": "backup"
     }
   ],
   "math-geom-angles": [
     {
       "bookCode": "OSA",
-      "label": "§7.1 — Angles · triangles (intro)",
+      "label": "\u00a77.1 \u2014 Angles \u00b7 triangles (intro)",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 11 — Geometry connections",
+      "label": "Ch 11 \u2014 Geometry connections",
       "role": "alsoOK"
     }
   ],
   "math-pythagorean": [
     {
       "bookCode": "OSA",
-      "label": "§7.3 — Pythagorean theorem",
+      "label": "\u00a77.3 \u2014 Pythagorean theorem",
       "role": "primary"
     },
     {
@@ -1181,48 +1181,48 @@
   "math-roots": [
     {
       "bookCode": "OSA",
-      "label": "§1.3 — Radicals",
+      "label": "\u00a71.3 \u2014 Radicals",
       "role": "primary"
     },
     {
       "bookCode": "Lar",
-      "label": "Ch 11 §11.1 — Square roots",
+      "label": "Ch 11 \u00a711.1 \u2014 Square roots",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U11 · Ch 57–60 · p505",
+      "label": "U11 \u00b7 Ch 57\u201360 \u00b7 p505",
       "role": "backup"
     }
   ],
   "math-systems": [
     {
       "bookCode": "OSA",
-      "label": "§7.1 — Systems (intro)",
+      "label": "\u00a77.1 \u2014 Systems (intro)",
       "role": "primary"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U5 · systems · p175",
+      "label": "U5 \u00b7 systems \u00b7 p175",
       "role": "backup"
     }
   ],
   "math-algebra-expressions": [
     {
       "bookCode": "OSA",
-      "label": "§1.1 — Expressions",
+      "label": "\u00a71.1 \u2014 Expressions",
       "role": "primary"
     },
     {
       "bookCode": "BFN-A",
-      "label": "U4 · Ch 21–23 · p141",
+      "label": "U4 \u00b7 Ch 21\u201323 \u00b7 p141",
       "role": "backup"
     }
   ],
   "math-number-theory": [
     {
       "bookCode": "OSA",
-      "label": "§1.1 — Integers · real numbers",
+      "label": "\u00a71.1 \u2014 Integers \u00b7 real numbers",
       "role": "primary"
     },
     {
@@ -1232,375 +1232,375 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U2 · p23",
+      "label": "U2 \u00b7 p23",
       "role": "backup"
     }
   ],
   "math-geom-polygons": [
     {
       "bookCode": "OSA",
-      "label": "§7.1 — Area · polygons",
+      "label": "\u00a77.1 \u2014 Area \u00b7 polygons",
       "role": "primary"
     }
   ],
   "math-geom-circles": [
     {
       "bookCode": "OSA",
-      "label": "§7.1 — Circles",
+      "label": "\u00a77.1 \u2014 Circles",
       "role": "primary"
     }
   ],
   "math-geom-3d": [
     {
       "bookCode": "OSA",
-      "label": "§7.1 — 3D shapes · volume",
+      "label": "\u00a77.1 \u2014 3D shapes \u00b7 volume",
       "role": "primary"
     }
   ],
   "math-sequences": [
     {
       "bookCode": "OSA",
-      "label": "§9.1 — Sequences (intro)",
+      "label": "\u00a79.1 \u2014 Sequences (intro)",
       "role": "primary"
     }
   ],
   "es-earths-layers": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Earth's interior · layers",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Earth's interior \u00b7 layers",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 26 — The Architecture of Earth",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 26 \u2014 The Architecture of Earth",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · Ch 21–24 Earth structure · p219",
+      "label": "U6 \u00b7 Ch 21\u201324 Earth structure \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-plate-tectonics": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Plate tectonics",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Plate tectonics",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 27 — Plate Tectonics—A Unifying Theory",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 27 \u2014 Plate Tectonics\u2014A Unifying Theory",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · geology · p219",
+      "label": "U6 \u00b7 geology \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-earthquakes": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Earthquakes · seismic waves",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Earthquakes \u00b7 seismic waves",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 26 — The Architecture of Earth",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 26 \u2014 The Architecture of Earth",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · p219",
+      "label": "U6 \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-volcanoes": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Volcanoes",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Volcanoes",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 27 — Plate Tectonics—A Unifying Theory",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 27 \u2014 Plate Tectonics\u2014A Unifying Theory",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · p219",
+      "label": "U6 \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-rock-cycle": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Rocks · rock cycle",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Rocks \u00b7 rock cycle",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 25 — Rocks and Minerals",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 25 \u2014 Rocks and Minerals",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · p219",
+      "label": "U6 \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-minerals": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Minerals",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Minerals",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 25 — Rocks and Minerals",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 25 \u2014 Rocks and Minerals",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · p219",
+      "label": "U6 \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-weathering": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Weathering · erosion",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Weathering \u00b7 erosion",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 28 — Shaping Earth's Surface",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 28 \u2014 Shaping Earth's Surface",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · p219",
+      "label": "U6 \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-soil": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Soil formation",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Soil formation",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 28 — Shaping Earth's Surface",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 28 \u2014 Shaping Earth's Surface",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · p219",
+      "label": "U6 \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-water-cycle": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Water cycle",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Water cycle",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 28 — Shaping Earth's Surface · Part Four — Earth Science · Ch 30 — The Atmosphere, the Oceans, and Their Interactions",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 28 \u2014 Shaping Earth's Surface \u00b7 Part Four \u2014 Earth Science \u00b7 Ch 30 \u2014 The Atmosphere, the Oceans, and Their Interactions",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · Ch 25–27 Weather · p259",
+      "label": "U6 \u00b7 Ch 25\u201327 Weather \u00b7 p259",
       "role": "backup"
     }
   ],
   "es-oceans": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Oceans",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Oceans",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 30 — The Atmosphere, the Oceans, and Their Interactions",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 30 \u2014 The Atmosphere, the Oceans, and Their Interactions",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · p219",
+      "label": "U6 \u00b7 p219",
       "role": "backup"
     }
   ],
   "es-weather": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Weather · atmosphere",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Weather \u00b7 atmosphere",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 30 — The Atmosphere, the Oceans, and Their Interactions · Part Four — Earth Science · Ch 31 — Weather",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 30 \u2014 The Atmosphere, the Oceans, and Their Interactions \u00b7 Part Four \u2014 Earth Science \u00b7 Ch 31 \u2014 Weather",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · Ch 25–27 · p259",
+      "label": "U6 \u00b7 Ch 25\u201327 \u00b7 p259",
       "role": "backup"
     }
   ],
   "es-weather-systems": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Weather systems",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Weather systems",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 31 — Weather",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 31 \u2014 Weather",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · Ch 25–27 · p259",
+      "label": "U6 \u00b7 Ch 25\u201327 \u00b7 p259",
       "role": "backup"
     }
   ],
   "es-climate": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Climate · climate change",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Climate \u00b7 climate change",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 30 — The Atmosphere, the Oceans, and Their Interactions",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 30 \u2014 The Atmosphere, the Oceans, and Their Interactions",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · Ch 27 Climate · p259",
+      "label": "U6 \u00b7 Ch 27 Climate \u00b7 p259",
       "role": "backup"
     }
   ],
   "es-solar-system": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Solar system",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Solar system",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Five — Astronomy · Ch 32 — The Solar System",
+      "label": "Part Five \u2014 Astronomy \u00b7 Ch 32 \u2014 The Solar System",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U5 · Ch 17–20 · p179",
+      "label": "U5 \u00b7 Ch 17\u201320 \u00b7 p179",
       "role": "backup"
     }
   ],
   "es-sun": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: The Sun",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: The Sun",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Five — Astronomy · Ch 32 — The Solar System",
+      "label": "Part Five \u2014 Astronomy \u00b7 Ch 32 \u2014 The Solar System",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U5 · Ch 18 The Sun · p179",
+      "label": "U5 \u00b7 Ch 18 The Sun \u00b7 p179",
       "role": "backup"
     }
   ],
   "es-stars": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Stars · life cycles",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Stars \u00b7 life cycles",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Five — Astronomy · Ch 33 — Stars",
+      "label": "Part Five \u2014 Astronomy \u00b7 Ch 33 \u2014 Stars",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U5 · Ch 19 Stars · p179",
+      "label": "U5 \u00b7 Ch 19 Stars \u00b7 p179",
       "role": "backup"
     }
   ],
   "es-galaxies": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Galaxies · universe",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Galaxies \u00b7 universe",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Five — Astronomy · Ch 34 — Galaxies and the Cosmos",
+      "label": "Part Five \u2014 Astronomy \u00b7 Ch 34 \u2014 Galaxies and the Cosmos",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U5 · Ch 20 Galaxies · p179",
+      "label": "U5 \u00b7 Ch 20 Galaxies \u00b7 p179",
       "role": "backup"
     }
   ],
   "es-moon": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Earth's Moon",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Earth's Moon",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Five — Astronomy · Ch 32 — The Solar System",
+      "label": "Part Five \u2014 Astronomy \u00b7 Ch 32 \u2014 The Solar System",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U5 · Ch 17 Solar system · p179",
+      "label": "U5 \u00b7 Ch 17 Solar system \u00b7 p179",
       "role": "backup"
     }
   ],
   "es-space-exploration": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Space exploration",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Space exploration",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Five — Astronomy · Ch 32 — The Solar System",
+      "label": "Part Five \u2014 Astronomy \u00b7 Ch 32 \u2014 The Solar System",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U5 · space units · p179",
+      "label": "U5 \u00b7 space units \u00b7 p179",
       "role": "backup"
     }
   ],
   "es-time-seasons": [
     {
       "bookCode": "DOE-ESS",
-      "label": "Heath Earth Science · Glencoe Earth Science · Tarbuck & Lutgens Foundations of Earth Science — index: Earth rotation · seasons",
+      "label": "Heath Earth Science \u00b7 Glencoe Earth Science \u00b7 Tarbuck & Lutgens Foundations of Earth Science \u2014 index: Earth rotation \u00b7 seasons",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Part Five — Astronomy · Ch 32 — The Solar System",
+      "label": "Part Five \u2014 Astronomy \u00b7 Ch 32 \u2014 The Solar System",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U5–U6 · Earth in space · p179",
+      "label": "U5\u2013U6 \u00b7 Earth in space \u00b7 p179",
       "role": "backup"
     }
   ],
@@ -1612,12 +1612,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 13 · p129",
+      "label": "U4 \u00b7 Ch 13 \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1629,12 +1629,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 13 · p129",
+      "label": "U4 \u00b7 Ch 13 \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1646,12 +1646,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · energy sources · p129",
+      "label": "U4 \u00b7 energy sources \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1663,12 +1663,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 16 — Nuclear Energy",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 16 \u2014 Nuclear Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · p129",
+      "label": "U4 \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1680,12 +1680,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · p129",
+      "label": "U4 \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1697,12 +1697,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · p129",
+      "label": "U4 \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1714,12 +1714,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · p129",
+      "label": "U4 \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1731,12 +1731,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · p129",
+      "label": "U4 \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1748,12 +1748,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U7 · metabolism tie-in · p291",
+      "label": "U7 \u00b7 metabolism tie-in \u00b7 p291",
       "role": "backup"
     }
   ],
@@ -1765,12 +1765,12 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 6 — Energy",
+      "label": "Part One \u2014 Mechanics \u00b7 Ch 6 \u2014 Energy",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · p129",
+      "label": "U4 \u00b7 p129",
       "role": "backup"
     }
   ],
@@ -1782,19 +1782,19 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part Two — Forms of Energy · Ch 10 — Electricity",
+      "label": "Part Two \u2014 Forms of Energy \u00b7 Ch 10 \u2014 Electricity",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U4 · Ch 16 · p129",
+      "label": "U4 \u00b7 Ch 16 \u00b7 p129",
       "role": "backup"
     }
   ],
   "en-doe-policy": [
     {
       "bookCode": "DOE-Energy",
-      "label": "energy.gov · DOE National Laboratory websites",
+      "label": "energy.gov \u00b7 DOE National Laboratory websites",
       "role": "primary"
     }
   ],
@@ -1806,13 +1806,150 @@
     },
     {
       "bookCode": "Expl",
-      "label": "Part Four — Earth Science · Ch 30 — The Atmosphere, the Oceans, and Their Interactions",
+      "label": "Part Four \u2014 Earth Science \u00b7 Ch 30 \u2014 The Atmosphere, the Oceans, and Their Interactions",
       "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Sci",
-      "label": "U6 · climate · p259",
+      "label": "U6 \u00b7 climate \u00b7 p259",
       "role": "backup"
+    }
+  ],
+  "ls-reg-resp-photosyn": [
+    {
+      "bookCode": "CB",
+      "label": "Ch 6\u20137 \u2014 Harvesting energy \u00b7 Photosynthesis",
+      "role": "primary"
+    },
+    {
+      "bookCode": "FLS",
+      "label": "Ch 4 \u2014 Cell energy",
+      "role": "alsoOK"
+    },
+    {
+      "bookCode": "OSB",
+      "label": "Ch 5 \u2014 Photosynthesis",
+      "role": "alsoOK"
+    }
+  ],
+  "ls-reg-genetics": [
+    {
+      "bookCode": "CB",
+      "label": "Ch 10\u201311 \u2014 Molecular biology \u00b7 Gene control",
+      "role": "primary"
+    },
+    {
+      "bookCode": "FLS",
+      "label": "Ch 4 \u2014 Genetics",
+      "role": "alsoOK"
+    }
+  ],
+  "ls-reg-anatomy": [
+    {
+      "bookCode": "CB",
+      "label": "Ch 20\u201328 \u2014 Animal structure & systems",
+      "role": "primary"
+    },
+    {
+      "bookCode": "FLS",
+      "label": "Ch 16\u201320 \u2014 Body systems",
+      "role": "alsoOK"
+    }
+  ],
+  "ls-reg-phyla": [
+    {
+      "bookCode": "CB",
+      "label": "Ch 18\u201319 \u2014 Invertebrate & vertebrate diversity",
+      "role": "primary"
+    },
+    {
+      "bookCode": "FLS",
+      "label": "Ch 12 \u2014 Sponges, Cnidarians, Worms",
+      "role": "alsoOK"
+    }
+  ],
+  "ch-reg-nomenclature": [
+    {
+      "bookCode": "Tro",
+      "label": "Ch 5 \u2014 Nomenclature \u00b7 ions",
+      "role": "primary"
+    },
+    {
+      "bookCode": "Mod",
+      "label": "Ch 7 \u2014 Chemical formulas",
+      "role": "alsoOK"
+    }
+  ],
+  "ch-reg-trends": [
+    {
+      "bookCode": "Mod",
+      "label": "Ch 5 \u2014 Periodic law & trends",
+      "role": "primary"
+    },
+    {
+      "bookCode": "Tro",
+      "label": "Ch 4 \u2014 Periodic properties",
+      "role": "alsoOK"
+    }
+  ],
+  "ch-reg-gas-laws": [
+    {
+      "bookCode": "Tro",
+      "label": "Ch 9 \u2014 Gases",
+      "role": "primary"
+    },
+    {
+      "bookCode": "Mod",
+      "label": "Ch 10 \u2014 States of matter",
+      "role": "alsoOK"
+    }
+  ],
+  "ch-reg-acids": [
+    {
+      "bookCode": "Tro",
+      "label": "Ch 14 \u2014 Acids & bases",
+      "role": "primary"
+    },
+    {
+      "bookCode": "Mod",
+      "label": "Ch 14 \u2014 Acids & bases",
+      "role": "alsoOK"
+    }
+  ],
+  "ps-reg-kinematics": [
+    {
+      "bookCode": "Expl",
+      "label": "App. B \u2014 Motion",
+      "role": "primary"
+    },
+    {
+      "bookCode": "Expl",
+      "label": "Ch 2 \u2014 Newton's laws intro",
+      "role": "alsoOK"
+    }
+  ],
+  "ps-reg-forces": [
+    {
+      "bookCode": "Expl",
+      "label": "Ch 2 \u2014 Newton's laws",
+      "role": "primary"
+    },
+    {
+      "bookCode": "Expl",
+      "label": "Ch 3 \u2014 Momentum",
+      "role": "alsoOK"
+    }
+  ],
+  "ps-reg-waves": [
+    {
+      "bookCode": "Expl",
+      "label": "Ch 13 \u2014 Light & color",
+      "role": "primary"
+    },
+    {
+      "bookCode": "Expl",
+      "label": "Ch 12 \u2014 Sound",
+      "role": "alsoOK"
     }
   ]
 }

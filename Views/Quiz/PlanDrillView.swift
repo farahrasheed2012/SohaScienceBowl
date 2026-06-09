@@ -12,6 +12,11 @@ struct PlanDrillView: View {
     @State private var revealed = false
     @State private var correctCount = 0
     @State private var finished = false
+    @State private var buzzer = BuzzerNetworkService.shared
+    @State private var countdown = 5
+    @State private var countdownActive = false
+
+    private var isBuzzerMode: Bool { request.mode == "Buzzer drill" }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -21,7 +26,7 @@ struct PlanDrillView: View {
                 ContentUnavailableView(
                     "No questions yet",
                     systemImage: "calendar",
-                    description: Text("Complete a study session first, or add DOE PDFs for more drills.")
+                    description: Text(emptyMessage)
                 )
             } else {
                 ProgressView(value: Double(index), total: Double(questions.count))
@@ -37,6 +42,9 @@ struct PlanDrillView: View {
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 16)
+                    if isBuzzerMode {
+                        buzzerStatusRow
+                    }
                     if let subject = questions[index].subject {
                         SubjectBadge(subject: subject)
                     } else {
@@ -65,17 +73,25 @@ struct PlanDrillView: View {
                         logButton(correct: false)
                     }
                     .padding(.horizontal, 16)
+                } else if isBuzzerMode && countdownActive && countdown > 0 {
+                    Text("\(countdown)")
+                        .font(.system(size: 56, weight: .bold, design: .rounded))
+                        .foregroundStyle(.secondary)
+                    Text("Get ready to buzz…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 } else {
                     Button {
-                        revealed = true
+                        revealAnswer()
                     } label: {
-                        Label("Buzz", systemImage: "bolt.fill")
+                        Label(isBuzzerMode ? "Buzz (B)" : "Buzz", systemImage: "bolt.fill")
                             .font(.title2.weight(.semibold))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 20)
                     }
                     .buttonStyle(.borderedProminent)
                     .padding(.horizontal, 16)
+                    .keyboardShortcut("b", modifiers: [])
                     .accessibilityLabel("Buzz to reveal answer")
                 }
             }
@@ -85,7 +101,44 @@ struct PlanDrillView: View {
         .inlineNavigationBarTitle()
         .onAppear {
             questions = appState.questions(for: request)
+            if isBuzzerMode {
+                buzzer.onRemoteBuzz = { revealAnswer() }
+                buzzer.startHosting()
+                startCountdownIfNeeded()
+            }
         }
+        .onDisappear {
+            if isBuzzerMode {
+                buzzer.stopAll()
+            }
+        }
+        .onKeyPress(.space) {
+            if !revealed && !finished && !questions.isEmpty && (!countdownActive || countdown == 0) {
+                revealAnswer()
+                return .handled
+            }
+            return .ignored
+        }
+    }
+
+    private var buzzerStatusRow: some View {
+        HStack(spacing: 8) {
+            Image(systemName: buzzer.isConnected ? "iphone.gen3.radiowaves.left.and.right" : "iphone.gen3")
+                .foregroundStyle(buzzer.isConnected ? .green : .secondary)
+            Text(buzzer.isConnected ? "Remote connected" : "Host ready — open Buzzer remote on iPhone")
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var emptyMessage: String {
+        if request.mode == "Math quiz" {
+            return "No math questions mapped for this day yet."
+        }
+        if request.weakAreaReview {
+            return "Complete a drill or add flash cards — weak-area review fills in as you practice."
+        }
+        return "Complete a study session first, or add DOE PDFs for more drills."
     }
 
     private var endScreen: some View {
@@ -100,10 +153,37 @@ struct PlanDrillView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 16)
 
+            if !request.weakAreaReview, correctCount < questions.count {
+                Text("Misses were added to flash cards and today's review.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 16)
+            }
+
             Button("Done") { dismiss() }
                 .buttonStyle(.borderedProminent)
         }
         .padding(16)
+    }
+
+    private func startCountdownIfNeeded() {
+        countdown = 5
+        countdownActive = true
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            if countdown > 0 {
+                countdown -= 1
+            } else {
+                countdownActive = false
+                timer.invalidate()
+            }
+        }
+    }
+
+    private func revealAnswer() {
+        guard !revealed else { return }
+        revealed = true
+        HapticFeedback.impact(.medium)
     }
 
     private func logButton(correct: Bool) -> some View {
@@ -117,7 +197,7 @@ struct PlanDrillView: View {
             if index + 1 >= questions.count {
                 appState.recordDrill(
                     subject: request.subject,
-                    week: request.week,
+                    week: request.week > 0 ? request.week : appState.currentWeek,
                     total: questions.count,
                     correct: correctCount,
                     mode: request.mode
@@ -126,6 +206,9 @@ struct PlanDrillView: View {
             } else {
                 index += 1
                 revealed = false
+                if isBuzzerMode {
+                    startCountdownIfNeeded()
+                }
             }
         } label: {
             Label(correct ? "Correct" : "Incorrect", systemImage: correct ? "checkmark.circle.fill" : "xmark.circle.fill")

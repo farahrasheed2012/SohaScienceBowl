@@ -30,6 +30,68 @@ struct NSBQuestion: Codable, Identifiable, Hashable {
     var topicId: String
 }
 
+extension NSBQuestion {
+    func toUnified() -> UnifiedQuestion {
+        let category: DOECategory = switch subject {
+        case "Life Science": .biology
+        case "Chemistry": .chemistry
+        case "Physical Science": .physics
+        case "Earth & Space Science": .earthSpace
+        case "Energy": .energy
+        case "Math": .math
+        default: .generalScience
+        }
+
+        var choices: [String] = []
+        var answer = correctAnswer
+        if let answerChoices {
+            choices = answerChoices.keys.sorted().map { key in
+                "\(key)) \(answerChoices[key] ?? "")"
+            }
+            answer = answerChoices[correctAnswer] ?? correctAnswer
+        }
+
+        let questionType: QuestionType = type == "bonus" ? .bonus : .tossUp
+        let format: QuestionFormat = choices.isEmpty ? .shortAnswer : .multipleChoice
+
+        return UnifiedQuestion(
+            id: UUID(uuidString: id.stableUUIDString) ?? UUID(),
+            source: .customCurriculum,
+            category: category,
+            questionType: questionType,
+            format: format,
+            topic: subtopic,
+            questionText: questionText,
+            choices: choices,
+            answer: answer,
+            sourceFile: "questions.json",
+            sourceDescription: "Encyclopedia · \(subject)",
+            setNumber: nil,
+            roundNumber: nil,
+            sourceYear: nil
+        )
+    }
+}
+
+private extension String {
+    /// Deterministic UUID string from encyclopedia question ids (e.g. math-001).
+    var stableUUIDString: String {
+        var bytes = [UInt8](repeating: 0, count: 16)
+        let data = Array(utf8)
+        for (index, byte) in data.enumerated() {
+            bytes[index % 16] ^= byte
+        }
+        bytes[6] = (bytes[6] & 0x0F) | 0x40
+        bytes[8] = (bytes[8] & 0x3F) | 0x80
+        let hex = bytes.map { String(format: "%02X", $0) }.joined()
+        let idx = hex.index(hex.startIndex, offsetBy: 8)
+        let idx2 = hex.index(idx, offsetBy: 4)
+        let idx3 = hex.index(idx2, offsetBy: 4)
+        let idx4 = hex.index(idx3, offsetBy: 4)
+        return "\(hex[..<idx])-\(hex[idx..<idx2])-\(hex[idx2..<idx3])-\(hex[idx3..<idx4])-\(hex[idx4...])"
+    }
+}
+
 enum NSBSubject: String, CaseIterable, Identifiable, Hashable {
     case lifeScience = "Life Science"
     case physicalScience = "Physical Science"

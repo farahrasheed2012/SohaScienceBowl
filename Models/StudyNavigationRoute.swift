@@ -21,4 +21,9 @@ enum StudyNavigationRoute: Hashable {
     case periodicTableDrill
     case periodicTableReference
     case elementFlashCards
+    case weakAreaReview
+    case buzzerRemote
+    case regionalSprint
+    case regionalSprintPack(String)
+    case regionalSprintMixed(RegionalSprintCatalog.Track?)
 }

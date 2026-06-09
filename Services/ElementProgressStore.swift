@@ -55,6 +55,11 @@ enum ElementProgressStore {
         correctCounts = counts
     }
 
+    static func reset() {
+        UserDefaults.standard.removeObject(forKey: countsKey)
+        UserDefaults.standard.removeObject(forKey: seededKey)
+    }
+
     static func updateChecklistIfNeeded(appState: AppState) {
         let mastered = masteredCount(flashCards: appState.flashCards)
         guard mastered >= ElementData.checklistMasteredCount else { return }

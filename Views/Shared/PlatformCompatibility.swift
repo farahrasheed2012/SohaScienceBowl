@@ -99,4 +99,24 @@ extension View {
         self
         #endif
     }
+
+    /// Wider readable column on Mac; full width on iPhone.
+    @ViewBuilder
+    func macReadableWidth(_ maxWidth: CGFloat = 900) -> some View {
+        #if os(macOS)
+        frame(maxWidth: maxWidth)
+        .frame(maxWidth: .infinity)
+        #else
+        self
+        #endif
+    }
+
+    @ViewBuilder
+    func platformListStyle() -> some View {
+        #if os(macOS)
+        listStyle(.inset(alternatesRowBackgrounds: true))
+        #else
+        self
+        #endif
+    }
 }
