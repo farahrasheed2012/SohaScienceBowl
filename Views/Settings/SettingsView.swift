@@ -82,7 +82,7 @@ struct SettingsView: View {
                     appState.clearAllProgress()
                     presentBackupAlert(
                         title: "Progress cleared",
-                        message: "Drills, checklist, flash cards, notebook, encyclopedia history, and imported questions were reset. Your appearance and study-plan settings were kept."
+                        message: "Drills, checklist, flash cards, notebook, encyclopedia history, textbook reading checkmarks, and imported questions were reset. Your appearance and study-plan settings were kept."
                     )
                 }
                 Button("Cancel", role: .cancel) {}
@@ -193,7 +193,7 @@ struct SettingsView: View {
         } header: {
             Text("Reset")
         } footer: {
-            Text("Removes drill scores, checklist checks, flash cards, notebook entries, encyclopedia review history, weak-topic stats, badges, and imported questions. Does not delete DOE PDFs or bundled content.")
+            Text("Removes drill scores, checklist checks, flash cards, notebook entries, encyclopedia review history, weak-topic stats, badges, imported questions, and textbook reading checkmarks. Does not delete DOE PDFs or bundled content.")
         }
     }
 

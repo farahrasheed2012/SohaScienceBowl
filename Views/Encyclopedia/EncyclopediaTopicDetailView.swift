@@ -9,6 +9,14 @@ struct EncyclopediaTopicDetailView: View {
         appState.encyclopedia.topic(byId: topicId)
     }
 
+    private var coverage: EncyclopediaPracticeCoverage {
+        appState.encyclopedia.practiceCoverage(for: topicId)
+    }
+
+    private var questionCount: Int {
+        appState.encyclopedia.questionCount(for: topicId)
+    }
+
     var body: some View {
         Group {
             if let topic {
@@ -92,24 +100,10 @@ struct EncyclopediaTopicDetailView: View {
                     }
                 }
 
-                LearnSectionCard(title: "Practice this topic", systemImage: "bolt.fill", accent: theme.accent) {
-                    VStack(spacing: 4) {
-                        ForEach([EncyclopediaPracticeMode.multipleChoice, .tossUpBonus, .freeResponse], id: \.self) { mode in
-                            NavigationLink(value: StudyNavigationRoute.encyclopediaPractice(mode, topicIds: [topic.id])) {
-                                HStack {
-                                    Label(mode.title, systemImage: practiceIcon(mode))
-                                        .font(.system(size: ThemePalette.bodySize, weight: .medium))
-                                        .foregroundStyle(theme.primaryText)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .font(.system(size: 14, weight: .semibold))
-                                        .foregroundStyle(theme.secondaryText.opacity(0.7))
-                                }
-                                .padding(.vertical, 12)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
+                practiceSection(for: topic)
+
+                if coverage != .ready {
+                    supplementalPracticeSection(for: topic)
                 }
             }
             .padding(20)
@@ -150,6 +144,86 @@ struct EncyclopediaTopicDetailView: View {
         case .multipleChoice: return "list.bullet.rectangle"
         case .tossUpBonus: return "timer"
         case .freeResponse: return "keyboard"
+        }
+    }
+
+    @ViewBuilder
+    private func practiceSection(for topic: NSBTopic) -> some View {
+        LearnSectionCard(title: "Practice this topic", systemImage: "bolt.fill", accent: theme.accent) {
+            VStack(alignment: .leading, spacing: 12) {
+                if coverage == .ready {
+                    Text("\(questionCount) built-in practice questions")
+                        .font(.system(size: ThemePalette.captionSize))
+                        .foregroundStyle(theme.secondaryText)
+                } else {
+                    HStack(spacing: 8) {
+                        EncyclopediaPracticeCoverageBadge(coverage: coverage)
+                        Text(coverage == .none
+                             ? "Read the article above — use supplemental drills below."
+                             : "Only \(questionCount) question — more coming; try supplemental drills.")
+                            .font(.system(size: ThemePalette.captionSize))
+                            .foregroundStyle(theme.secondaryText)
+                    }
+                }
+
+                if coverage != .none {
+                    VStack(spacing: 4) {
+                        ForEach([EncyclopediaPracticeMode.multipleChoice, .tossUpBonus, .freeResponse], id: \.self) { mode in
+                            NavigationLink(value: StudyNavigationRoute.encyclopediaPractice(mode, topicIds: [topic.id])) {
+                                HStack {
+                                    Label(mode.title, systemImage: practiceIcon(mode))
+                                        .font(.system(size: ThemePalette.bodySize, weight: .medium))
+                                        .foregroundStyle(theme.primaryText)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.system(size: 14, weight: .semibold))
+                                        .foregroundStyle(theme.secondaryText.opacity(0.7))
+                                }
+                                .padding(.vertical, 12)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func supplementalPracticeSection(for topic: NSBTopic) -> some View {
+        LearnSectionCard(title: "Supplemental drills", systemImage: "flag.checkered", accent: theme.accent) {
+            VStack(alignment: .leading, spacing: 12) {
+                if let pack = RegionalSprintCatalog.pack(forTopicId: topic.id) {
+                    NavigationLink(value: StudyNavigationRoute.regionalSprintPack(pack.id)) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Texas Regional Sprint")
+                                    .font(.system(size: ThemePalette.bodySize, weight: .semibold))
+                                Text("\(pack.title) · \(pack.knowColdCount) know-cold · \(pack.tossupCount) toss-ups")
+                                    .font(.system(size: ThemePalette.captionSize))
+                                    .foregroundStyle(theme.secondaryText)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundStyle(theme.secondaryText.opacity(0.7))
+                        }
+                        .padding(.vertical, 8)
+                    }
+                    .buttonStyle(.plain)
+                }
+
+                NavigationLink(value: StudyNavigationRoute.regionalSprint) {
+                    Label("Browse all Regional Sprint packs", systemImage: "list.bullet.rectangle")
+                        .font(.system(size: ThemePalette.bodySize, weight: .medium))
+                        .padding(.vertical, 8)
+                }
+                .buttonStyle(.plain)
+
+                Text("Quiz → DOE browse also has competition-style questions for this subject area.")
+                    .font(.system(size: ThemePalette.captionSize))
+                    .foregroundStyle(theme.secondaryText)
+            }
         }
     }
 }

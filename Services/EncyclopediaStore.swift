@@ -17,6 +17,8 @@ final class EncyclopediaStore {
     private let streakKey = "encyclopedia_current_streak"
     private let wrongKey = "encyclopedia_wrong_topic_count"
 
+    private var questionCountByTopicId: [String: Int] = [:]
+
     init() {
         loadContent()
         loadProgress()
@@ -25,6 +27,46 @@ final class EncyclopediaStore {
     func loadContent() {
         topics = loadJSON(named: "topics", as: [NSBTopic].self) ?? []
         questions = loadJSON(named: "questions", as: [NSBQuestion].self) ?? []
+        rebuildQuestionCounts()
+    }
+
+    private func rebuildQuestionCounts() {
+        questionCountByTopicId = Dictionary(grouping: questions, by: \.topicId).mapValues(\.count)
+    }
+
+    func questionCount(for topicId: String) -> Int {
+        questionCountByTopicId[topicId] ?? 0
+    }
+
+    func practiceCoverage(for topicId: String) -> EncyclopediaPracticeCoverage {
+        EncyclopediaPracticeCoverage(questionCount: questionCount(for: topicId))
+    }
+
+    var topicsWithAdequatePractice: Int {
+        topics.filter { practiceCoverage(for: $0.id) == .ready }.count
+    }
+
+    var topicsMissingPractice: Int {
+        topics.filter { practiceCoverage(for: $0.id) == .none }.count
+    }
+
+    var topicsWithThinPractice: Int {
+        topics.filter { practiceCoverage(for: $0.id) == .thin }.count
+    }
+
+    func practiceCoverageSummary(for subject: NSBSubject) -> (ready: Int, thin: Int, none: Int, total: Int) {
+        let subjectTopics = topics(for: subject)
+        var ready = 0
+        var thin = 0
+        var none = 0
+        for topic in subjectTopics {
+            switch practiceCoverage(for: topic.id) {
+            case .ready: ready += 1
+            case .thin: thin += 1
+            case .none: none += 1
+            }
+        }
+        return (ready, thin, none, subjectTopics.count)
     }
 
     private func loadJSON<T: Decodable>(named name: String, as type: T.Type) -> T? {

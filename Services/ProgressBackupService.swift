@@ -56,7 +56,9 @@ enum ProgressBackupService {
                 lastStudyDate: encyclopedia.lastStudyDate
             ),
             elementCorrectCounts: ElementProgressStore.correctCounts,
-            elementFlashCardsSeeded: ElementProgressStore.flashCardsSeeded
+            elementFlashCardsSeeded: ElementProgressStore.flashCardsSeeded,
+            textbookCompletedChapterIds: Array(appState.textbookReading.completedChapterIds),
+            textbookCompletedSectionIds: Array(appState.textbookReading.completedSectionIds)
         )
     }
 
@@ -126,6 +128,12 @@ enum ProgressBackupService {
         if let seeded = backup.elementFlashCardsSeeded {
             ElementProgressStore.flashCardsSeeded = seeded
         }
+        if let chapters = backup.textbookCompletedChapterIds,
+           let sections = backup.textbookCompletedSectionIds {
+            appState.textbookReading.importSnapshot(chapters: chapters, sections: sections)
+        } else if let chapters = backup.textbookCompletedChapterIds {
+            appState.textbookReading.importSnapshot(chapters: chapters, sections: [])
+        }
 
         PersistenceService.saveChecklist(appState.checklistItems)
         PersistenceService.saveDrillResults(appState.drillResults)
@@ -142,6 +150,7 @@ enum ProgressBackupService {
         let sessions = backup.encyclopedia.sessionHistory.count
         let cards = backup.flashCards.count
         let elements = backup.elementCorrectCounts?.count ?? 0
+        let textbookChapters = backup.textbookCompletedChapterIds?.count ?? 0
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .short
@@ -154,6 +163,9 @@ enum ProgressBackupService {
         ]
         if elements > 0 {
             parts.append("\(elements) element drill scores")
+        }
+        if textbookChapters > 0 {
+            parts.append("\(textbookChapters) textbook chapters checked")
         }
         return parts.joined(separator: " · ")
     }

@@ -2,7 +2,7 @@ import Foundation
 
 /// Full progress snapshot for export/import via JSON file.
 struct ProgressBackup: Codable {
-    static let currentVersion = 2
+    static let currentVersion = 3
     static let fileExtension = "json"
     static let contentTypeIdentifier = "public.json"
 
@@ -21,6 +21,8 @@ struct ProgressBackup: Codable {
     var encyclopedia: EncyclopediaSnapshot
     var elementCorrectCounts: [String: Int]?
     var elementFlashCardsSeeded: Bool?
+    var textbookCompletedChapterIds: [String]?
+    var textbookCompletedSectionIds: [String]?
 
     struct SettingsSnapshot: Codable {
         var currentWeek: Int

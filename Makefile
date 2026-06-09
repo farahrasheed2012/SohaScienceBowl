@@ -1,6 +1,6 @@
-.PHONY: content doe-starter regional-sprint xcode verify build
+.PHONY: content doe-starter regional-sprint fls xcode verify build
 
-content: doe-starter regional-sprint verify xcode
+content: doe-starter regional-sprint fls verify xcode
 	@echo "Content pipeline complete."
 
 doe-starter:
@@ -9,8 +9,12 @@ doe-starter:
 regional-sprint:
 	python3 Scripts/build_regional_sprint.py
 
+fls:
+	python3 Scripts/build_fls_catalog.py
+
 verify:
 	python3 Scripts/verify_topic_readings.py
+	python3 Scripts/verify_question_coverage.py
 
 xcode:
 	python3 Scripts/generate_xcode_project.py

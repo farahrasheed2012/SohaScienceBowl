@@ -71,6 +71,7 @@ extension AppState {
 
         encyclopedia.resetProgress()
         ElementProgressStore.reset()
+        textbookReading.reset()
 
         UserDefaults.standard.removeObject(forKey: Self.lastStudyDateKey)
         UserDefaults.standard.removeObject(forKey: Self.streakDaysKey)

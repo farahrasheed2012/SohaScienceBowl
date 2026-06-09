@@ -293,6 +293,10 @@ enum RegionalSprintCatalog {
         ),
     ]
 
+    static func pack(forTopicId topicId: String) -> Pack? {
+        packs.first { $0.topicId == topicId }
+    }
+
     static func pack(id: String) -> Pack? {
         packs.first { $0.id == id }
     }

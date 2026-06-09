@@ -39,6 +39,7 @@ final class AppState {
 
     var doeStore = DOEQuestionStore.shared
     var encyclopedia = EncyclopediaStore()
+    var textbookReading = TextbookReadingProgressStore()
     var isDOELoading = false
 
     init() {

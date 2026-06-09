@@ -40,7 +40,7 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 ## Features
 
 - **Today** — daily study blocks, 4-stage study session (Recall → Read → Know Cold → Toss-ups), buzzer drill schedule, Friday review
-- **Learn** — 124 NSB encyclopedia topics (6 categories) with full articles, related topics, MC/Toss-up/Free-response practice
+- **Learn** — 124 NSB encyclopedia topics (6 categories) with full articles, related topics, MC/Toss-up/Free-response practice; badges show topics missing drills; `make verify` checks reading + question coverage
 - **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill, encyclopedia practice, **Texas Regional Sprint** (11 packs), search, weak-area practice
 - **Progress** — weekly/lifetime accuracy, checklist, flash cards, spaced repetition
 - **Settings** — pass/week picker, parent-reads-aloud mode, session timer
@@ -54,4 +54,4 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 
 ## Books referenced
 
-FLS · CB · Mod · Tro · Expl — aligned with Soha's summer 2026 schedule.
+FLS · Expl (Hewitt) · Mod · Tro · CB — summer schedule books; **reading checkboxes** track **Hewitt + Focus on Life Science** only.

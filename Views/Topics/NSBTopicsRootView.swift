@@ -67,6 +67,10 @@ struct NSBTopicsRootView: View {
 
     private func categoryRow(_ category: MSNSBOfficialCatalog.Category) -> some View {
         let studyCount = topicCount(for: category)
+        let reading = TextbookReadingCatalog.progressSummary(
+            forCategoryId: category.id,
+            store: appState.textbookReading
+        )
         return HStack(spacing: 12) {
             Text(category.emoji)
                 .font(.title2)
@@ -81,6 +85,14 @@ struct NSBTopicsRootView: View {
                 Text("\(studyCount) in-app study guide\(studyCount == 1 ? "" : "s")")
                     .font(.caption2)
                     .foregroundStyle(PlatformColor.systemBlue)
+                if reading.total > 0, let label = TextbookReadingCatalog.progressLabel(
+                    forCategoryId: category.id,
+                    store: appState.textbookReading
+                ) {
+                    Text(label)
+                        .font(.caption2)
+                        .foregroundStyle(reading.completed == reading.total ? PlatformColor.systemGreen : .secondary)
+                }
             }
         }
         .padding(.vertical, 2)
@@ -108,6 +120,19 @@ struct NSBCategoryDetailView: View {
             .sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
     }
 
+    private var readingProgress: (completed: Int, total: Int) {
+        TextbookReadingCatalog.progressSummary(forCategoryId: category.id, store: appState.textbookReading)
+    }
+
+    private var readingProgressHint: String {
+        switch category.id {
+        case "biology":
+            return "Reading checkboxes track Focus on Life Science. Expand a chapter to check off sections (1.1, 1.2, …)."
+        default:
+            return "Reading checkboxes track Hewitt (Conceptual Physical Science Explorations). Expand a chapter to check off individual sections."
+        }
+    }
+
     var body: some View {
         List {
             Section {
@@ -122,6 +147,16 @@ struct NSBCategoryDetailView: View {
                     Text("Official competition category — DOE National Science Bowl Rules 2026, Rule 3-1.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+
+                    if readingProgress.total > 0 {
+                        TextbookReadingProgressHeader(
+                            completed: readingProgress.completed,
+                            total: readingProgress.total
+                        )
+                        Text(readingProgressHint)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
                 }
                 .padding(.vertical, 4)
             }
@@ -159,71 +194,25 @@ struct NSBCategoryDetailView: View {
             }
 
             if category.id == "chemistry" {
-                Section(ChemistryTextbookCatalog.modTitle) {
-                    Text("Pass 1 chemistry primary — summer schedule rotation.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("Ch 2 Measurements · Ch 3 Atoms · Ch 5 Periodic Law · Ch 7 Formulas · Ch 8 Reactions · Ch 10 States · Ch 12 Solutions · Ch 14 Acids & Bases")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section(ChemistryTextbookCatalog.troTitle) {
-                    Text("Pass 2 chemistry primary — deeper review on the same topics.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text("Ch 2 Measurement · Ch 3 Matter · Ch 4 Atoms · Ch 5 Bonding · Ch 7 Reactions · Ch 9 Periodic trends · Ch 13–14 Solutions & acids/bases")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                explTextbookSection(partIDs: ["p3"])
+                chemistryReferenceSection
+                explTextbookSection(partIDs: ["p3"], footerNote: "Hewitt Part Three — optional chemistry skim after Mod/Tro on the summer schedule.")
             }
 
             if category.id == "physics" {
-                explTextbookSection(partIDs: ["intro", "p1", "p2"])
+                explTextbookSection(
+                    partIDs: ["intro", "p1", "p2"],
+                    includeAppendices: true,
+                    footerNote: "Hewitt — summer physics primary (Parts One–Two + appendices)."
+                )
             }
 
             if category.id == "earth-space" {
-                explTextbookSection(partIDs: ["p4", "p5"])
+                explTextbookSection(partIDs: ["p4", "p5"], footerNote: "Hewitt Parts Four–Five — earth and astronomy.")
             }
 
             if category.id == "biology" {
-                Section("Focus on Life Science (Prentice Hall)") {
-                    Text("Pass 1 biology alternate — California Science Explorer edition.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    ForEach(FocusOnLifeScienceCatalog.chaptersGroupedByUnit, id: \.unit.id) { group in
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(group.unit.name)
-                                .font(.subheadline.weight(.semibold))
-                            ForEach(group.chapters, id: \.number) { chapter in
-                                Text("Ch \(chapter.number) — \(chapter.title)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .padding(.vertical, 4)
-                    }
-                }
-
-                Section("Campbell Concepts & Connections 7e") {
-                    Text("Pass 2 biology alternate — units and chapters from your 7th edition table of contents.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    ForEach(CampbellBiologyCatalog.chaptersGroupedByUnit, id: \.unit.id) { group in
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text(group.unit.name)
-                                .font(.subheadline.weight(.semibold))
-                            ForEach(group.chapters, id: \.number) { chapter in
-                                Text("Ch \(chapter.number) — \(chapter.title)")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .padding(.vertical, 4)
-                    }
-                }
+                flsTextbookSection
+                biologyReferenceSection
             }
 
             Section {
@@ -276,45 +265,102 @@ struct NSBCategoryDetailView: View {
     }
 
     @ViewBuilder
-    private func explTextbookSection(partIDs: [String]) -> some View {
+    private var chemistryReferenceSection: some View {
+        Section("Also on the summer schedule (no checkboxes)") {
+            Text("Pass 1 primary: \(ChemistryTextbookCatalog.modTitle)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text("Ch 2 Measurements · Ch 3 Atoms · Ch 5 Periodic Law · Ch 7 Formulas · Ch 8 Reactions · Ch 10 States · Ch 12 Solutions · Ch 14 Acids & Bases")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text("Pass 2 primary: \(ChemistryTextbookCatalog.troTitle)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 4)
+            Text("Ch 2 Measurement · Ch 3 Matter · Ch 4 Atoms · Ch 5 Bonding · Ch 7 Reactions · Ch 9 Periodic trends · Ch 13–14 Solutions & acids/bases")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var biologyReferenceSection: some View {
+        Section("Pass 2 alternate (no checkboxes)") {
+            Text("\(CampbellBiologyCatalog.editionTitle) — deeper biology reference for Pass 2; reading progress is tracked in Focus on Life Science above.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    @ViewBuilder
+    private var flsTextbookSection: some View {
+        let completed = FocusOnLifeScienceCatalog.chapters.filter {
+            appState.textbookReading.isChapterComplete(
+                chapterId: TextbookReadingCatalog.flsChapterID(number: $0.number),
+                sectionIds: $0.sections.map { TextbookReadingCatalog.flsSectionID($0.id) }
+            )
+        }.count
+        Section {
+            ForEach(FocusOnLifeScienceCatalog.chaptersGroupedByUnit, id: \.unit.id) { group in
+                Section {
+                    ForEach(group.chapters, id: \.number) { chapter in
+                        TextbookExpandableChapterRow(chapter: chapter)
+                    }
+                } header: {
+                    Text(group.unit.name)
+                }
+            }
+        } header: {
+            Text(FocusOnLifeScienceCatalog.editionTitle)
+        } footer: {
+            Text("Pass 1 biology — California Science Explorer edition. Expand chapters for section checkboxes. \(completed)/\(FocusOnLifeScienceCatalog.chapters.count) chapters read.")
+        }
+    }
+
+    @ViewBuilder
+    private func explTextbookSection(
+        partIDs: [String],
+        includeAppendices: Bool = false,
+        footerNote: String
+    ) -> some View {
         let groups = ConceptualPhysicalScienceExplorationsCatalog.chaptersGroupedByPart(
             filterPartIDs: Set(partIDs)
         )
-        Section(ConceptualPhysicalScienceExplorationsCatalog.editionTitle) {
-            Text("Summer physics primary and also-OK chemistry/earth/space reference — parts, chapters, and sections from your table of contents.")
-                .font(.caption)
-                .foregroundStyle(.secondary)
+        let trackable = TextbookReadingCatalog.chapters(forCategoryId: category.id)
+            .filter { $0.id.hasPrefix("Expl-") }
+        let completed = trackable.filter {
+            appState.textbookReading.isChapterComplete(chapterId: $0.id, sectionIds: $0.sectionIds)
+        }.count
+
+        Section {
             ForEach(groups, id: \.part.id) { group in
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(group.part.name)
-                        .font(.subheadline.weight(.semibold))
+                Section {
                     ForEach(group.chapters, id: \.number) { chapter in
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Ch \(chapter.number) — \(chapter.title)")
-                                .font(.caption.weight(.medium))
-                            ForEach(chapter.sections, id: \.id) { section in
-                                Text("\(section.id) \(section.title)")
-                                    .font(.caption2)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .padding(.vertical, 2)
+                        TextbookExplChapterRow(
+                            chapterNumber: chapter.number,
+                            chapterTitle: chapter.title,
+                            sections: chapter.sections
+                        )
                     }
+                } header: {
+                    Text(group.part.name)
                 }
-                .padding(.vertical, 4)
             }
-            if partIDs.contains("intro") || partIDs.contains("p1") {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Appendices")
-                        .font(.subheadline.weight(.semibold))
+
+            if includeAppendices {
+                Section("Appendices") {
                     ForEach(ConceptualPhysicalScienceExplorationsCatalog.appendices, id: \.letter) { appendix in
-                        Text("Appendix \(appendix.letter) — \(appendix.title)")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
+                        TextbookSimpleChapterRow(
+                            chapterId: TextbookReadingCatalog.explAppendixID(letter: appendix.letter),
+                            label: "Appendix \(appendix.letter) — \(appendix.title)"
+                        )
                     }
                 }
-                .padding(.vertical, 4)
             }
+        } header: {
+            Text(ConceptualPhysicalScienceExplorationsCatalog.editionTitle)
+        } footer: {
+            Text("\(footerNote) Expand a chapter to check off sections. \(completed)/\(trackable.count) Hewitt chapters read.")
         }
     }
 }

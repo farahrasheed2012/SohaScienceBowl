@@ -123,6 +123,40 @@ enum NSBSubject: String, CaseIterable, Identifiable, Hashable {
     }
 }
 
+enum EncyclopediaPracticeCoverage: Hashable {
+    case none
+    case thin
+    case ready
+
+    static let minimumQuestions = 2
+
+    init(questionCount: Int) {
+        if questionCount == 0 {
+            self = .none
+        } else if questionCount < Self.minimumQuestions {
+            self = .thin
+        } else {
+            self = .ready
+        }
+    }
+
+    var badgeTitle: String? {
+        switch self {
+        case .none: return "No practice"
+        case .thin: return "Needs more"
+        case .ready: return nil
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .none: return "questionmark.circle"
+        case .thin: return "exclamationmark.circle"
+        case .ready: return "checkmark.circle"
+        }
+    }
+}
+
 enum EncyclopediaPracticeMode: String, Hashable {
     case multipleChoice
     case tossUpBonus
