@@ -138,9 +138,11 @@ final class AppState {
 
     func knowColdItems(for block: StudyBlock) -> [KnowColdItem] {
         block.knowCold.map { line in
-            if let range = line.range(of: "("), line.hasSuffix(")") {
-                let prompt = String(line[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
-                let answer = String(line[range.upperBound..<line.index(before: line.endIndex)])
+            if line.hasSuffix(")"), let open = line.lastIndex(of: "(") {
+                let prompt = String(line[..<open]).trimmingCharacters(in: .whitespaces)
+                let answerStart = line.index(after: open)
+                let answerEnd = line.index(before: line.endIndex)
+                let answer = String(line[answerStart..<answerEnd])
                 return KnowColdItem(id: UUID(), prompt: prompt, answer: answer)
             }
             return KnowColdItem(id: UUID(), prompt: line, answer: "")

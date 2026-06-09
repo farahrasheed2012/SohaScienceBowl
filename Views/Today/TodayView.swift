@@ -128,7 +128,7 @@ struct TodayView: View {
                     ) {
                         navigationPath.append(StudyNavigationRoute.topicBrowser(initialWeek: nil))
                     } subtitle: {
-                        Text("Weeks 1–10 · every book, chapter, and optional video")
+                        Text("Same as Weeks tab · filter by subject")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }

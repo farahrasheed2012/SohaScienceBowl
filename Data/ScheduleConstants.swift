@@ -65,6 +65,35 @@ enum ScheduleConstants {
         return min(10, max(1, (days / 7) + 1))
     }
 
+    static func weekStartDate(for week: Int, calendar: Calendar = .current) -> Date? {
+        guard (1...10).contains(week) else { return nil }
+        return calendar.date(byAdding: .day, value: (week - 1) * 7, to: studyStartDate)
+    }
+
+    static func weekDateRangeLabel(for week: Int, calendar: Calendar = .current) -> String {
+        guard let start = weekStartDate(for: week, calendar: calendar),
+              let end = calendar.date(byAdding: .day, value: 6, to: start)
+        else { return "Week \(week)" }
+
+        let formatter = DateFormatter()
+        formatter.calendar = calendar
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "MMM d"
+
+        let startText = formatter.string(from: start)
+        let endText = formatter.string(from: end)
+        if calendar.component(.month, from: start) == calendar.component(.month, from: end) {
+            formatter.dateFormat = "d"
+            return "\(startText) – \(formatter.string(from: end))"
+        }
+        return "\(startText) – \(endText)"
+    }
+
+    static func studyPass(forWeek week: Int, calendar: Calendar = .current) -> StudyPass {
+        guard let start = weekStartDate(for: week, calendar: calendar) else { return .pass1 }
+        return studyPass(for: start, calendar: calendar)
+    }
+
     /// Pass 1: Jun 8 – Jul 3 · Pass 2: Jul 6 – Jul 31 · Pass 3: Aug 3 – Aug 14
     static func studyPass(for date: Date, calendar: Calendar = .current) -> StudyPass {
         func make(_ y: Int, _ m: Int, _ d: Int) -> Date {
@@ -80,8 +109,8 @@ enum ScheduleConstants {
 
     static func passLabel(for pass: StudyPass) -> String {
         switch pass {
-        case .pass1: return "Pass 1 · Mod + FLS"
-        case .pass2: return "Pass 2 · Tro + CB"
+        case .pass1: return "Pass 1 · Modern Chemistry (Sarquis) + Focus on Life Science"
+        case .pass2: return "Pass 2 · Introductory Chemistry (Tro) + Campbell Concepts & Connections 7e"
         case .pass3: return "Pass 3 · Flash cards"
         }
     }

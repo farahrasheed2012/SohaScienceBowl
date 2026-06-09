@@ -28,6 +28,13 @@ struct EncyclopediaTopicDetailView: View {
             VStack(alignment: .leading, spacing: 20) {
                 LearnTopicHeaderCard(title: topic.title, subject: topic.subject)
 
+                let readings = NSBTopicReadingCatalog.readings(for: topic.id)
+                if !readings.isEmpty {
+                    LearnSectionCard(title: "Books & chapters", systemImage: "books.vertical.fill") {
+                        NSBTopicReadingLinesView(lines: readings, compact: true)
+                    }
+                }
+
                 LearnSectionCard(title: "What Is It?", systemImage: "lightbulb.fill", accent: theme.accent) {
                     LearnBodyText(text: topic.whatIsIt)
                 }

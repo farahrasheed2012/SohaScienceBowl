@@ -1,7 +1,7 @@
 import SwiftUI
 
 private enum MainTab: Hashable {
-    case today, learn, quiz, progress, settings
+    case today, weeks, topics, learn, quiz, progress, settings
 }
 
 struct ContentView: View {
@@ -20,6 +20,18 @@ struct ContentView: View {
                     Label("Today", systemImage: "calendar")
                 }
                 .tag(MainTab.today)
+
+            WeeksRootView()
+                .tabItem {
+                    Label("Weeks", systemImage: "calendar.badge.clock")
+                }
+                .tag(MainTab.weeks)
+
+            NSBTopicsRootView()
+                .tabItem {
+                    Label("Topics", systemImage: "list.bullet.rectangle")
+                }
+                .tag(MainTab.topics)
 
             EncyclopediaRootView()
                 .tabItem {

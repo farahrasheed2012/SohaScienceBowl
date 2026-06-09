@@ -48,9 +48,21 @@
 		A1B2C3D4E5F6478990ABCD01 /* Data/ScheduleVideoCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6478990ABCD02 /* Data/ScheduleVideoCatalog.swift */; };
 		B2C3D4E5F6A7488990ABCD03 /* Data/ScheduleOpenStaxCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7488990ABCD04 /* Data/ScheduleOpenStaxCatalog.swift */; };
 		C3D4E5F6A7488990ABCD05 /* Data/ScheduleBFNCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D4E5F6A7488990ABCD06 /* Data/ScheduleBFNCatalog.swift */; };
+		D4E5F6A7488990ABCD07 /* Data/MSNSBOfficialCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7488990ABCD08 /* Data/MSNSBOfficialCatalog.swift */; };
+		E5F6A7488990ABCD09 /* Views/Topics/NSBTopicsRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F6A7488990ABCD0A /* Views/Topics/NSBTopicsRootView.swift */; };
+		F6A7488990ABCD0C /* Data/NSBTopicReadingCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A7488990ABCD0B /* Data/NSBTopicReadingCatalog.swift */; };
+		F6A7488990ABCD0E /* Views/Topics/NSBTopicReadingViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A7488990ABCD0D /* Views/Topics/NSBTopicReadingViews.swift */; };
+		F7A7488990ABCD11 /* Views/Weeks/WeeksRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7488990ABCD12 /* Views/Weeks/WeeksRootView.swift */; };
+		F7A7488990ABCD13 /* Views/Weeks/WeekScheduleContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7A7488990ABCD14 /* Views/Weeks/WeekScheduleContent.swift */; };
+		F8A7488990ABCD15 /* Data/BiologyTextbookCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A7488990ABCD16 /* Data/BiologyTextbookCatalog.swift */; };
+		FC7488990ABCD1D /* Data/ConceptualPhysicalScienceExplorationsCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC7488990ABCD1E /* Data/ConceptualPhysicalScienceExplorationsCatalog.swift */; };
+		FB7488990ABCD1B /* Data/ChemistryTextbookCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB7488990ABCD1C /* Data/ChemistryTextbookCatalog.swift */; };
+		F9A7488990ABCD17 /* Data/CampbellBiologyCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A7488990ABCD18 /* Data/CampbellBiologyCatalog.swift */; };
+		FA7488990ABCD19 /* Data/FocusOnLifeScienceCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7488990ABCD1A /* Data/FocusOnLifeScienceCatalog.swift */; };
 		A35082A87A7D4AB882A515CA /* Services/QuestionImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D07785EC19F48FFB68B8983 /* Services/QuestionImportService.swift */; };
 		A68E3FCDFA2E4C1B99426C71 /* Views/Quiz/QuizRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAA38D27F38444BBB92B7378 /* Views/Quiz/QuizRootView.swift */; };
 		AA314887FE194E18AD0CF5DB /* Resources/StudyContent/topics.json in Resources */ = {isa = PBXBuildFile; fileRef = E1D8FAB40C5245E1B80EA7FD /* Resources/StudyContent/topics.json */; };
+		F6A7488990ABCD10 /* Resources/StudyContent/topic_readings.json in Resources */ = {isa = PBXBuildFile; fileRef = F6A7488990ABCD0F /* Resources/StudyContent/topic_readings.json */; };
 		ABB38927D0844A7DA8174365 /* Views/Shared/StudyNavigationDestination.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15D8D67AE2F472CBD7AFFE0 /* Views/Shared/StudyNavigationDestination.swift */; };
 		B5403BA3498D45EEAD1FB54F /* Data/AppState+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF34FE65629C4C57B593E5D6 /* Data/AppState+Schedule.swift */; };
 		BA341863BAAB483A99E3C1E7 /* App/ScienceBowlCoachApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB3E0D3D03A549C0908F9BC3 /* App/ScienceBowlCoachApp.swift */; };
@@ -80,6 +92,17 @@
 		A1B2C3D4E5F6478990ABCD02 /* Data/ScheduleVideoCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/ScheduleVideoCatalog.swift; sourceTree = "<group>"; };
 		B2C3D4E5F6A7488990ABCD04 /* Data/ScheduleOpenStaxCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/ScheduleOpenStaxCatalog.swift; sourceTree = "<group>"; };
 		C3D4E5F6A7488990ABCD06 /* Data/ScheduleBFNCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/ScheduleBFNCatalog.swift; sourceTree = "<group>"; };
+		D4E5F6A7488990ABCD08 /* Data/MSNSBOfficialCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/MSNSBOfficialCatalog.swift; sourceTree = "<group>"; };
+		F6A7488990ABCD0B /* Data/NSBTopicReadingCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/NSBTopicReadingCatalog.swift; sourceTree = "<group>"; };
+		E5F6A7488990ABCD0A /* Views/Topics/NSBTopicsRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Topics/NSBTopicsRootView.swift; sourceTree = "<group>"; };
+		F6A7488990ABCD0D /* Views/Topics/NSBTopicReadingViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Topics/NSBTopicReadingViews.swift; sourceTree = "<group>"; };
+		F7A7488990ABCD12 /* Views/Weeks/WeeksRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Weeks/WeeksRootView.swift; sourceTree = "<group>"; };
+		F7A7488990ABCD14 /* Views/Weeks/WeekScheduleContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Weeks/WeekScheduleContent.swift; sourceTree = "<group>"; };
+		F8A7488990ABCD16 /* Data/BiologyTextbookCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/BiologyTextbookCatalog.swift; sourceTree = "<group>"; };
+		FC7488990ABCD1E /* Data/ConceptualPhysicalScienceExplorationsCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/ConceptualPhysicalScienceExplorationsCatalog.swift; sourceTree = "<group>"; };
+		FB7488990ABCD1C /* Data/ChemistryTextbookCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/ChemistryTextbookCatalog.swift; sourceTree = "<group>"; };
+		F9A7488990ABCD18 /* Data/CampbellBiologyCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/CampbellBiologyCatalog.swift; sourceTree = "<group>"; };
+		FA7488990ABCD1A /* Data/FocusOnLifeScienceCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/FocusOnLifeScienceCatalog.swift; sourceTree = "<group>"; };
 		255D4108A4844C25A9539807 /* Data/Pass2ReadingContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/Pass2ReadingContent.swift; sourceTree = "<group>"; };
 		25DDFF9BF09D425292ECBF3C /* Data/SeedDataWeeks1_4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/SeedDataWeeks1_4.swift; sourceTree = "<group>"; };
 		2D07785EC19F48FFB68B8983 /* Services/QuestionImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/QuestionImportService.swift; sourceTree = "<group>"; };
@@ -131,6 +154,7 @@
 		DF3EBC9DF8AD43359927944E /* Data/SeedDataWeeks5_10.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/SeedDataWeeks5_10.swift; sourceTree = "<group>"; };
 		E0977ABECC4C41919B7162CB /* Views/Settings/SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Settings/SettingsView.swift; sourceTree = "<group>"; };
 		E1D8FAB40C5245E1B80EA7FD /* Resources/StudyContent/topics.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Resources/StudyContent/topics.json; sourceTree = "<group>"; };
+		F6A7488990ABCD0F /* Resources/StudyContent/topic_readings.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Resources/StudyContent/topic_readings.json; sourceTree = "<group>"; };
 		E445FD20D6544F91A9EE1AFB /* Services/EncyclopediaStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/EncyclopediaStore.swift; sourceTree = "<group>"; };
 		E5A4B5314C284DAEB515BD60 /* Views/Quiz/DOEViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Quiz/DOEViews.swift; sourceTree = "<group>"; };
 		E749C5BBD7384E38984F0D03 /* Views/Quiz/TossupDrillView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Quiz/TossupDrillView.swift; sourceTree = "<group>"; };
@@ -174,6 +198,13 @@
 				A1B2C3D4E5F6478990ABCD02 /* Data/ScheduleVideoCatalog.swift */,
 				B2C3D4E5F6A7488990ABCD04 /* Data/ScheduleOpenStaxCatalog.swift */,
 				C3D4E5F6A7488990ABCD06 /* Data/ScheduleBFNCatalog.swift */,
+				D4E5F6A7488990ABCD08 /* Data/MSNSBOfficialCatalog.swift */,
+				F6A7488990ABCD0B /* Data/NSBTopicReadingCatalog.swift */,
+				F8A7488990ABCD16 /* Data/BiologyTextbookCatalog.swift */,
+				FB7488990ABCD1C /* Data/ChemistryTextbookCatalog.swift */,
+				FC7488990ABCD1E /* Data/ConceptualPhysicalScienceExplorationsCatalog.swift */,
+				F9A7488990ABCD18 /* Data/CampbellBiologyCatalog.swift */,
+				FA7488990ABCD1A /* Data/FocusOnLifeScienceCatalog.swift */,
 				67670C56073F4BF788DAF7A2 /* Data/SeedData.swift */,
 				25DDFF9BF09D425292ECBF3C /* Data/SeedDataWeeks1_4.swift */,
 				DF3EBC9DF8AD43359927944E /* Data/SeedDataWeeks5_10.swift */,
@@ -213,6 +244,10 @@
 				BAA38D27F38444BBB92B7378 /* Views/Quiz/QuizRootView.swift */,
 				E749C5BBD7384E38984F0D03 /* Views/Quiz/TossupDrillView.swift */,
 				E0977ABECC4C41919B7162CB /* Views/Settings/SettingsView.swift */,
+				E5F6A7488990ABCD0A /* Views/Topics/NSBTopicsRootView.swift */,
+				F6A7488990ABCD0D /* Views/Topics/NSBTopicReadingViews.swift */,
+				F7A7488990ABCD12 /* Views/Weeks/WeeksRootView.swift */,
+				F7A7488990ABCD14 /* Views/Weeks/WeekScheduleContent.swift */,
 				1085037D7D634FE1B84D5565 /* Views/Shared/SharedComponents.swift */,
 				B7A6C5D4E3F2419081726354 /* Views/Shared/PlatformCompatibility.swift */,
 				D15D8D67AE2F472CBD7AFFE0 /* Views/Shared/StudyNavigationDestination.swift */,
@@ -240,6 +275,7 @@
 				B13E42CF183B4C42AB4EC669 /* Resources/Assets.xcassets */,
 				47343E6B34504AA9943EB29D /* Resources/StudyContent/questions.json */,
 				E1D8FAB40C5245E1B80EA7FD /* Resources/StudyContent/topics.json */,
+				F6A7488990ABCD0F /* Resources/StudyContent/topic_readings.json */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -300,6 +336,7 @@
 				7DC6D34C744849E490F37844 /* Resources/Assets.xcassets in Resources */,
 				002A6B1C72F94820B69D0088 /* Resources/StudyContent/questions.json in Resources */,
 				AA314887FE194E18AD0CF5DB /* Resources/StudyContent/topics.json in Resources */,
+				F6A7488990ABCD10 /* Resources/StudyContent/topic_readings.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +359,8 @@
 				A1B2C3D4E5F6478990ABCD01 /* Data/ScheduleVideoCatalog.swift in Sources */,
 				B2C3D4E5F6A7488990ABCD03 /* Data/ScheduleOpenStaxCatalog.swift in Sources */,
 				C3D4E5F6A7488990ABCD05 /* Data/ScheduleBFNCatalog.swift in Sources */,
+				D4E5F6A7488990ABCD07 /* Data/MSNSBOfficialCatalog.swift in Sources */,
+				F6A7488990ABCD0C /* Data/NSBTopicReadingCatalog.swift in Sources */,
 				406209E09EF64D079D70B3C0 /* Data/SeedData.swift in Sources */,
 				D5ACDB7871CD47078E2FB7F3 /* Data/SeedDataWeeks1_4.swift in Sources */,
 				5DF1C221F0544B568FB01DD6 /* Data/SeedDataWeeks5_10.swift in Sources */,
@@ -364,6 +403,15 @@
 				3CD6A030DBA44585AC5E5AA4 /* Views/Shared/SharedComponents.swift in Sources */,
 				C4D8E2F1A9B6432087654321 /* Views/Shared/PlatformCompatibility.swift in Sources */,
 				ABB38927D0844A7DA8174365 /* Views/Shared/StudyNavigationDestination.swift in Sources */,
+				E5F6A7488990ABCD09 /* Views/Topics/NSBTopicsRootView.swift in Sources */,
+				F6A7488990ABCD0E /* Views/Topics/NSBTopicReadingViews.swift in Sources */,
+				F7A7488990ABCD11 /* Views/Weeks/WeeksRootView.swift in Sources */,
+				F7A7488990ABCD13 /* Views/Weeks/WeekScheduleContent.swift in Sources */,
+				F8A7488990ABCD15 /* Data/BiologyTextbookCatalog.swift in Sources */,
+				FB7488990ABCD1B /* Data/ChemistryTextbookCatalog.swift in Sources */,
+				FC7488990ABCD1D /* Data/ConceptualPhysicalScienceExplorationsCatalog.swift in Sources */,
+				F9A7488990ABCD17 /* Data/CampbellBiologyCatalog.swift in Sources */,
+				FA7488990ABCD19 /* Data/FocusOnLifeScienceCatalog.swift in Sources */,
 				0FC3AD27BDA24A1AB52AA28C /* Views/Today/BlockStudyMaterialView.swift in Sources */,
 				88B9BE823C94429DB41D9A68 /* Views/Today/StudyMaterialComponents.swift in Sources */,
 				51CFF48286EE4757902BF085 /* Views/Today/StudySessionView.swift in Sources */,

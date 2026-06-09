@@ -49,22 +49,22 @@ enum ScheduleOpenStaxCatalog {
             backup: "FLS Ch 4 · CB Ch 9",
             urls: [chapterURLs[7]!, chapterURLs[8]!]
         ),
-        "FLS Ch 9–10": BiologyReading(
+        "FLS Ch 16–20": BiologyReading(
             chapters: [16],
             title: "Body systems",
-            backup: "FLS Ch 9–10 · CB Ch 21–23",
+            backup: "FLS Ch 16–20 · CB Ch 21–23",
             urls: [chapterURLs[16]!]
         ),
         "FLS Ch 2 + CB Ch 37 skim": BiologyReading(
             chapters: [19, 20],
             title: "Ecology",
-            backup: "FLS Ch 2 · CB Ch 36–37",
+            backup: "FLS Ch 7 · CB Ch 36–37",
             urls: [chapterURLs[19]!, chapterURLs[20]!]
         ),
         "CB Ch 16 + Ch 24": BiologyReading(
             chapters: [13, 17],
             title: "Microbes · immunity",
-            backup: "FLS · CB Ch 16 · 24",
+            backup: "FLS Ch 8 · 21 · CB Ch 16 · 24",
             urls: [chapterURLs[13]!, chapterURLs[17]!]
         ),
         "FLS Ch 5–6": BiologyReading(
@@ -76,7 +76,7 @@ enum ScheduleOpenStaxCatalog {
         "FLS Ch 2 + CB Ch 31 skim": BiologyReading(
             chapters: [14, 15],
             title: "Plants · animals",
-            backup: "FLS Ch 2 · CB Ch 31 · 20",
+            backup: "FLS Ch 10–11 · CB Ch 31 · 20",
             urls: [chapterURLs[14]!, chapterURLs[15]!]
         ),
         "CB Ch 4": BiologyReading(
@@ -88,7 +88,7 @@ enum ScheduleOpenStaxCatalog {
         "CB Ch 6–7": BiologyReading(
             chapters: [4, 5],
             title: "Energy · photosynthesis",
-            backup: "FLS · CB Ch 6–7",
+            backup: "FLS Ch 2 · CB Ch 6–7",
             urls: [chapterURLs[4]!, chapterURLs[5]!]
         ),
         "CB Ch 9": BiologyReading(
@@ -100,13 +100,13 @@ enum ScheduleOpenStaxCatalog {
         "CB Ch 21–23": BiologyReading(
             chapters: [16],
             title: "Body systems",
-            backup: "FLS Ch 9–10 · CB Ch 21–23",
+            backup: "FLS Ch 16–20 · CB Ch 21–23",
             urls: [chapterURLs[16]!]
         ),
         "CB Ch 36–37": BiologyReading(
             chapters: [19, 20],
             title: "Ecology",
-            backup: "FLS Ch 2 · CB Ch 36–37",
+            backup: "FLS Ch 7 · CB Ch 36–37",
             urls: [chapterURLs[19]!, chapterURLs[20]!]
         ),
         "CB Ch 13–14": BiologyReading(
@@ -130,13 +130,13 @@ enum ScheduleOpenStaxCatalog {
         "CB Ch 6–7 · FLS Ch 2": BiologyReading(
             chapters: [4, 5],
             title: "Energy · organization",
-            backup: "FLS · CB Ch 6–7",
+            backup: "FLS Ch 2 · CB Ch 6–7",
             urls: [chapterURLs[4]!, chapterURLs[5]!]
         ),
         "CB Ch 36–37 · FLS Ch 2": BiologyReading(
             chapters: [19, 20],
             title: "Ecology review",
-            backup: "FLS Ch 2 · CB Ch 36–37",
+            backup: "FLS Ch 7 · CB Ch 36–37",
             urls: [chapterURLs[19]!, chapterURLs[20]!]
         ),
         "CB Ch 16 · 24 · FLS Ch 4": BiologyReading(
