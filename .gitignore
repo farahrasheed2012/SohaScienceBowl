@@ -15,3 +15,8 @@ xcuserdata/
 # Swift Package Manager
 .build/
 .swiftpm/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
