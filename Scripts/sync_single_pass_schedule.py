@@ -206,7 +206,7 @@ SCIENCE_WEEKS: dict[int, list[tuple]] = {
          "small intestine · artery · vein", "Most absorption where? · Veins toward heart?", "Most nutrient absorption organ?"),
     ],
     10: [
-        ("chem", "Mod Review", "Chemistry capstone", "pick 2 weak Mod topics · know-cold · 8 toss-ups · Tro/BFN if stuck",
+        ("chem", "Mod Review", "Chemistry capstone", "pick 2 weak Hewitt chem topics · know-cold · 8 toss-ups · Mod/Tro/BFN if stuck",
          "Z · pH · balance · M = mol/L", "pH water? · Symbol K?", "pH of neutral solution?"),
         ("bio", "OSB Review", "Biology capstone", "organelles · genetics · ecology · immunity · weak areas",
          "ATP · Punnett · symbiosis", "ATP organelle? · Tt×Tt ratio?", "Organelle producing most ATP?"),
@@ -285,9 +285,78 @@ COMMON_PASS_REPLACEMENTS = [
     ("Campbell Biology (CB) — Pass 2–3", "Campbell Biology (CB) — backup"),
     ("Introductory Chemistry (Tro) — Pass 2–3", "Introductory Chemistry (Tro) — backup"),
     ("OSB/FLS primary", "FLS primary"),
+    ("**OSB/FLS** primary", "**FLS** primary"),
+    ("**OSB/FLS** (+ CB backup)", "**FLS** (+ OSB/CB backup)"),
+    ("**OSB/FLS** primary · **CB** backup", "**FLS** primary · **OSB/CB** backup"),
     ("Mod primary · Mon &amp; Thu", "Hewitt primary · Mon/Thu chem"),
     ("OSB/FLS primary · Tue &amp; Fri", "FLS primary · Tue &amp; Fri"),
+    ("OpenStax Biology (OSB) + FLS — primary", "Focus on Life Science (FLS) — primary"),
+    ("Modern Chemistry (Mod) — primary", "Modern Chemistry (Mod) — backup"),
+    ("**Mod** primary · **Tro** backup", "**Hewitt** primary · **Mod/Tro** backup"),
+    ("**FLS/OSB** primary · **CB** backup", "**FLS** primary · **OSB/CB** backup"),
+    ("**Mod** primary", "**Hewitt** primary"),
+    ("| **Mod** primary |", "| **Hewitt** primary |"),
+    ("Mod/Tro · Expl opt · BFN-Sci", "Hewitt · Mod/Tro backup · BFN-Sci"),
+    ("**Mod + OSB/FLS + Expl**", "**Hewitt + FLS**"),
+    ("pick 2 weak Mod topics", "pick 2 weak Hewitt chem topics"),
+    ("**Mod (primary)** | **Tro (backup)** | **Expl opt**", "**Hewitt (primary)** | **Mod (backup)** | **Tro (backup)**"),
+    ("| **Mod (primary)** | **Tro (backup)** | **Optional Expl** *(parallel)* |", "| **Hewitt (primary)** | **Mod (backup)** | **Tro (backup)** |"),
+    ("| **Mod (primary)** | **Tro (backup)** |", "| **Hewitt (primary)** | **Mod (backup)** |"),
+    ("**Mod** primary (+ optional Expl chem)", "**Hewitt** primary (+ **Mod** backup)"),
+    ("**Expl** Ch 17–24 *(optional parallel skim)*", "—"),
+    ("**Expl** Ch 17–24 *(optional 10-min skim)*", "—"),
+    ("**Expl** Ch 17–24 *(optional skim)*", "—"),
+    ("| **Wed** | Physics | **Expl**", "| **Wed** | Physics | **Hewitt**"),
+    ("| **Wed** | Physics | **Expl** *(physics chapters + App. B)*", "| **Wed** | Physics | **Hewitt** *(Ch 1 · App. B · 2–13)*"),
+    ("Chem (optional Mon/Thu):", "Chem (Hewitt primary Mon/Thu):"),
 ]
+
+BOOK_PICKER_REPLACEMENTS = [
+    (
+        "> **Chemistry note:** **Mod** is **primary** chemistry · **Tro** is **backup**. Optional **Expl Ch 17–24** is a second explanation of the same week\u2019s topic — pick it if Mod/Tro feels dense, or skip if primary reading is enough.",
+        "> **Chemistry note:** **Hewitt** (Expl Ch 17–24) is **primary** chemistry · **Mod/Tro** are **backups** — use only if a Hewitt § section feels dense.",
+    ),
+    (
+        "**Chemistry** in Expl (Part Three, Ch 17–24) is **optional parallel reading** alongside **Mod/Tro** — same topics, Hewitt\u2019s conceptual style.",
+        "**Chemistry** in Expl (Part Three, Ch 17–24) is **primary** Mon/Thu reading — assigned **§ sections** only. **Mod/Tro** cover the same topics if Hewitt feels dense.",
+    ),
+    (
+        "**Rules:** One **primary** book per **1-hr** block — assigned **§ section** only. **Expl chem** is extra — 10-min skim after Mod/Tro if helpful, or skip. **BFN** books are for Friday review and \"stuck on a fact\" — not daily reading unless Lar/Mod/Tro runs long.",
+        "**Rules:** One **primary** book per **1-hr** block — assigned **§ section** only. **Mod/Tro** are backups — use only if Hewitt/FLS feels dense. **BFN** books are for Friday review and \"stuck on a fact\" — not daily reading unless Lar runs long.",
+    ),
+    (
+        "**Expl chem** is parallel, not required — 10 min after Mod/Tro if the primary chapter feels dense.",
+        "**Mod/Tro** are backups — use only if a Hewitt § section feels dense.",
+    ),
+    (
+        "### Three-book chemistry map *(Mod + Tro + optional Expl)*",
+        "### Three-book chemistry map *(Hewitt + Mod + Tro)*",
+    ),
+    (
+        "NSB chemistry topics rotate every 4 weeks. **Mod** teaches in June; **Tro** revisits the same topics in July with DOE questions first. **Expl** optional chapters match by **topic**, not by identical chapter numbers.",
+        "NSB chemistry topics rotate every 4 weeks. **Hewitt** (Expl Ch 17–24) is primary Mon/Thu — assigned **§ sections** only. **Mod/Tro** are backups for the same topics.",
+    ),
+    (
+        "### Expl chapters — chemistry *(optional Mon/Thu parallel)*",
+        "### Expl chapters — chemistry *(Hewitt primary Mon/Thu)*",
+    ),
+    (
+        "| Maps to rotation week |",
+        "| Summer weeks |",
+    ),
+]
+
+HEWITT_CHEM_INDEX_HTML = """      <h3>Conceptual Physical Science Explorations (Hewitt) — primary chem</h3>
+      <table>
+        <tr><th>Ch</th><th>Title</th><th>Weeks</th></tr>
+        <tr><td>17</td><td>Elements of Chemistry</td><td>1, 4, 8–10</td></tr>
+        <tr><td>18</td><td>How Atoms Bond and Molecules Attract</td><td>1, 4, 5, 9</td></tr>
+        <tr><td>19</td><td>How Chemicals Mix</td><td>3, 6, 7</td></tr>
+        <tr><td>20</td><td>How Chemicals React</td><td>2, 7</td></tr>
+        <tr><td>21</td><td>Two Types of Chemical Reactions</td><td>3, 6</td></tr>
+        <tr><td>22</td><td>Organic Compounds</td><td>stretch</td></tr>
+      </table>
+"""
 
 
 def esc(s: str) -> str:
@@ -317,6 +386,92 @@ def apply_common_replacements(text: str) -> str:
     for old, new in COMMON_PASS_REPLACEMENTS:
         text = text.replace(old, new)
     return text
+
+
+def apply_book_picker_replacements(text: str) -> str:
+    for old, new in BOOK_PICKER_REPLACEMENTS:
+        text = text.replace(old, new)
+    text = apply_common_replacements(text)
+    return text
+
+
+def patch_index_sections(text: str) -> str:
+    if "Hewitt) — primary chem" not in text:
+        text = text.replace(
+            "<h3>Modern Chemistry (Mod) — primary</h3>",
+            HEWITT_CHEM_INDEX_HTML + "      <h3>Modern Chemistry (Mod) — backup</h3>",
+            1,
+        )
+        text = text.replace(
+            "<h3>Modern Chemistry (Mod) — backup</h3>",
+            HEWITT_CHEM_INDEX_HTML + "      <h3>Modern Chemistry (Mod) — backup</h3>",
+            1,
+        )
+    text = text.replace(
+        "<h3>Conceptual Physical Science Explorations (Expl)</h3>",
+        "<h3>Conceptual Physical Science Explorations (Hewitt) — primary physics</h3>",
+    )
+    return apply_common_replacements(text)
+
+
+def generate_chemistry_map_rows() -> list[tuple[str, str, str, str, str]]:
+    rows: list[tuple[str, str, str, str, str]] = []
+    for week in range(1, 5):
+        for day_idx in (0, 3):
+            _, mod_book, title, *_ = SCIENCE_WEEKS[week][day_idx]
+            hewitt = HEWITT_CHEM_PRIMARY[(week, day_idx)].replace("Hewitt ", "")
+            mod = format_mod_reading(week, day_idx, mod_book).replace("Mod ", "")
+            tro = TRO_BACKUP.get((week, day_idx), "—")
+            day = "Mon" if day_idx == 0 else "Thu"
+            rows.append((f"{week} {day}", title, hewitt, mod, tro))
+    return rows
+
+
+def generate_chemistry_map_html() -> str:
+    rows = []
+    for wk_day, title, hewitt, mod, tro in generate_chemistry_map_rows():
+        rows.append(
+            f"        <tr><td>{esc(wk_day)}</td><td>{esc(title)}</td>"
+            f"<td>{esc(hewitt)}</td><td>{esc(mod)}</td><td>{esc(tro)}</td></tr>"
+        )
+    return (
+        "      <h3>Three-book chemistry map</h3>\n"
+        "      <table style=\"font-size:7pt\">\n"
+        "        <tr><th>Wk</th><th>Topic</th><th>Hewitt (primary)</th>"
+        "<th>Mod (backup)</th><th>Tro (backup)</th></tr>\n"
+        + "\n".join(rows)
+        + "\n      </table>"
+    )
+
+
+def generate_chemistry_map_md() -> str:
+    lines = [
+        "| Rotation week | NSB topic | **Hewitt (primary)** | **Mod (backup)** | **Tro (backup)** |",
+        "|---------------|-----------|---------------------|------------------|------------------|",
+    ]
+    for wk_day, title, hewitt, mod, tro in generate_chemistry_map_rows():
+        lines.append(f"| **{wk_day}** | {title} | {hewitt} | {mod} | {tro} |")
+    return "\n".join(lines)
+
+
+def patch_chemistry_map_html(text: str) -> str:
+    return re.sub(
+        r"<h3>Three-book chemistry map</h3>\s*<table style=\"font-size:7pt\">.*?</table>",
+        generate_chemistry_map_html(),
+        text,
+        count=1,
+        flags=re.DOTALL,
+    )
+
+
+def patch_chemistry_map_md(text: str) -> str:
+    return re.sub(
+        r"\| Rotation week \| NSB topic \| \*\*(?:Mod|Hewitt) \(primary\)\*\*.*?\n\n\*\*Not scheduled",
+        generate_chemistry_map_md() + "\n\n**Not scheduled",
+        text,
+        count=1,
+        flags=re.DOTALL,
+    )
 
 
 def coach_cell(week: int, day: str) -> str:
@@ -530,7 +685,8 @@ def patch_whiteboard_legend(text: str) -> str:
 
 
 def patch_whiteboard_master_index(text: str) -> str:
-    return text.replace("(Pass 2)", "(wk 6–7)")
+    text = text.replace("(Pass 2)", "(wk 6–7)")
+    return patch_index_sections(text)
 
 
 def patch_whiteboard(path: Path) -> None:
@@ -630,7 +786,7 @@ def patch_calendar_md(path: Path) -> None:
     text = text.replace("*(Pass 2)*", "*(wk 6–7)*")
     text = text.replace("*(stretch Pass 1 wk 4)*", "*(wk 4, 8)*")
     text = text.replace("— Pass 1 biology", "— primary biology")
-    text = apply_common_replacements(text)
+    text = apply_book_picker_replacements(text)
     path.write_text(text)
 
 
@@ -652,7 +808,7 @@ def patch_weekly_timetable(path: Path) -> None:
     ]
     for old, new in reps:
         text = text.replace(old, new)
-    text = apply_common_replacements(text)
+    text = apply_book_picker_replacements(text)
     path.write_text(text)
 
 
@@ -677,7 +833,7 @@ def patch_weekly_html(path: Path) -> None:
     ]
     for old, new in reps:
         text = text.replace(old, new)
-    text = apply_common_replacements(text)
+    text = apply_book_picker_replacements(text)
     path.write_text(text)
 
 
@@ -1087,7 +1243,7 @@ def patch_prep_md(path: Path) -> None:
          "Backup: re-read Tro/CB/Expl section only if stuck on a topic"),
         ("**Pass 2 level-up on Expl:**", "**Expl physics stretch topics:**"),
         ("| **Pass 1 — Mod** | **Pass 2 — Tro** |",
-         "| **Mod (primary)** | **Tro (backup)** |"),
+         "| **Hewitt (primary)** | **Mod (backup)** |"),
         ("*Expl chapters *(all passes — your student text)*",
          "*Expl chapters *(summer pass — your student text)*"),
         ("One **primary** book per 30-min block.",
@@ -1098,7 +1254,8 @@ def patch_prep_md(path: Path) -> None:
     for old, new in prep_reps:
         text = text.replace(old, new)
 
-    text = apply_common_replacements(text)
+    text = patch_chemistry_map_md(text)
+    text = apply_book_picker_replacements(text)
     text = patch_prep_reading_guide_md(text)
     text = patch_all_week_titles(text)
     path.write_text(text)
@@ -1178,10 +1335,7 @@ def patch_prep_html(path: Path) -> None:
         "<tr><th>Physics stage</th><th>Book</th><th>Pass 2 change</th></tr>\n        <tr><td>Primary (§)</td><td class=\"phys\"><strong>Expl</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td><td>Learn concepts</td></tr>\n        <tr><td>Backup</td><td class=\"phys\">Same + Ch 5 · 7 · 14</td><td>DOE first, re-read</td></tr>\n        <tr><td>Pass 3 (Aug)</td><td class=\"phys\">Flash cards → book if stuck</td><td>Review only</td></tr>",
         "<tr><th>Stage</th><th>Book</th><th>Notes</th></tr>\n        <tr><td>Primary (§)</td><td class=\"phys\"><strong>Hewitt</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td><td>Section splits · stop at Focus</td></tr>\n        <tr><td>Backup</td><td class=\"phys\"><strong>BFN-Sci</strong> · flash cards</td><td>If Hewitt section feels dense</td></tr>\n        <tr><td>School meetings</td><td class=\"phys\">Flash cards → book if stuck</td><td>Fall review</td></tr>",
     )
-    text = text.replace(
-        "<tr><th>Wk</th><th>Topic</th><th>Mod (P1)</th><th>Tro (P2)</th><th>Expl opt</th></tr>",
-        "<tr><th>Wk</th><th>Topic</th><th>Mod (primary)</th><th>Tro (backup)</th><th>Expl opt</th></tr>",
-    )
+    text = patch_chemistry_map_html(text)
     text = text.replace(
         "Pass 1 chem · Mon &amp; Thu",
         "Hewitt primary · Mon/Thu chem",
@@ -1222,6 +1376,18 @@ def patch_prep_html(path: Path) -> None:
     ]
     for old, new in html_reps:
         text = text.replace(old, new)
+    text = text.replace(
+        "<tr><td>Primary (§)</td><td class=\"phys\"><strong>Expl</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td>",
+        "<tr><td>Primary (§)</td><td class=\"phys\"><strong>Hewitt</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td>",
+    )
+    text = text.replace(
+        "<tr><td><strong>Backup</strong></td><td class=\"bio\"><strong>CB</strong> · <strong>BFN-Bio</strong></td>",
+        "<tr><td><strong>Backup</strong></td><td class=\"bio\"><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td>",
+    )
+    text = text.replace(
+        "<h3>Expl chapters — what you learn</h3>",
+        "<h3>Hewitt chapters — what you learn</h3>",
+    )
     # Fix prep book table rows after broad pass/replace substitutions.
     text = text.replace(
         '<tr class="chem"><td><strong>Mod</strong></td><td><em>Modern Chemistry</em> — 2012</td>'
@@ -1255,7 +1421,8 @@ def patch_prep_html(path: Path) -> None:
             rf'\1 {theme}',
             text,
         )
-    text = apply_common_replacements(text)
+    text = apply_book_picker_replacements(text)
+    text = patch_index_sections(text)
     path.write_text(text)
 
 
@@ -1276,7 +1443,7 @@ def patch_readme(path: Path) -> None:
 Regenerate bundled HTML in the Mac app:
 
 ```bash
-python3 /Users/farah/Documents/FarahRasheed/ScienceBowlCoach/Scripts/sync_schedule_html.py
+python3 /Users/farah/Documents/FarahRasheed/ScienceBowlCoach/Scripts/sync_single_pass_schedule.py
 ```
 """)
 

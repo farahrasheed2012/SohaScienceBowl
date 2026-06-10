@@ -170,9 +170,9 @@ set_topic("ls-dna-rna",
     R("BFN-Bio", "U10 · Ch 45 DNA and RNA · p413", "backup"),
 )
 set_topic("ls-genetics",
-    R("OSB", "Ch 7–8 — Genetics · inheritance", "primary"),
-    R("FLS", fls("3", "4"), "pass1"),
-    R("CB", cb("9"), "pass2"),
+    R("FLS", fls("3", "4"), "primary"),
+    R("OSB", "Ch 7–8 — Genetics · inheritance", "alsoOK"),
+    R("CB", cb("9"), "alsoOK"),
     R("BFN-Bio", "U10 · Ch 44 Introduction to Genetics · p413", "backup"),
 )
 set_topic("ls-mutations",
@@ -181,9 +181,9 @@ set_topic("ls-mutations",
     R("BFN-Bio", "U10 · Ch 46 Genetic engineering · p413", "backup"),
 )
 set_topic("ls-evolution",
-    R("OSB", "Ch 11–12 — Evolution", "primary"),
-    R("FLS", fls("5", "6"), "pass1"),
-    R("CB", cb("13", "14"), "pass2"),
+    R("FLS", fls("5", "6"), "primary"),
+    R("OSB", "Ch 11–12 — Evolution", "alsoOK"),
+    R("CB", cb("13", "14"), "alsoOK"),
     R("BFN-Bio", "U11 · Ch 47 Evolution · p451", "backup"),
 )
 set_topic("ls-classification",
@@ -204,9 +204,9 @@ set_topic("ls-fungi-protists",
     R("BFN-Bio", "U4–6 · Protists · Fungi · p141", "backup"),
 )
 set_topic("ls-plant-biology",
-    R("OSB", "Ch 14–15 — Plants", "primary"),
-    R("FLS", fls("10", "11"), "pass1"),
-    R("CB", cb("31"), "pass2"),
+    R("FLS", fls("10", "11"), "primary"),
+    R("OSB", "Ch 14–15 — Plants", "alsoOK"),
+    R("CB", cb("31"), "alsoOK"),
     R("BFN-Bio", "U7 · Ch 26–28 Plant kingdom · p229", "backup"),
 )
 for tid, fls_label, cb_label, bfn in [
@@ -485,6 +485,56 @@ for tid, (hint, expl_label, bfn) in energy_topics.items():
     if tid == "en-doe-policy":
         lines = [R("DOE-Energy", "energy.gov · DOE National Laboratory websites", "primary")]
     set_topic(tid, *lines)
+
+# --- Texas Regional Sprint (Quiz tab packs) ---
+set_topic("ls-reg-resp-photosyn",
+    R("FLS", fls("2"), "primary"),
+    R("OSB", "Ch 5 — Photosynthesis", "alsoOK"),
+    R("CB", cb("6", "7"), "alsoOK"),
+)
+set_topic("ls-reg-genetics",
+    R("FLS", fls("3", "4"), "primary"),
+    R("CB", cb("10", "11"), "alsoOK"),
+)
+set_topic("ls-reg-anatomy",
+    R("FLS", fls("16", "17", "18", "19", "20"), "primary"),
+    R("CB", cb("20", "28"), "alsoOK"),
+)
+set_topic("ls-reg-phyla",
+    R("FLS", fls("12", "13", "14", "15"), "primary"),
+    R("CB", cb("18", "19"), "alsoOK"),
+)
+set_topic("ch-reg-nomenclature",
+    R("Expl", expl("17–18"), "primary"),
+    R("Mod", "Ch 7 — Chemical formulas", "alsoOK"),
+    R("Tro", "Ch 5 — Nomenclature · ions", "alsoOK"),
+)
+set_topic("ch-reg-trends",
+    R("Expl", expl("17"), "primary"),
+    R("Mod", "Ch 5 — Periodic law & trends", "alsoOK"),
+    R("Tro", "Ch 4 — Periodic properties", "alsoOK"),
+)
+set_topic("ch-reg-gas-laws",
+    R("Expl", expl("17–19"), "primary"),
+    R("Tro", "Ch 9 — Gases", "alsoOK"),
+    R("Mod", "Ch 10 — States of matter", "alsoOK"),
+)
+set_topic("ch-reg-acids",
+    R("Expl", expl("21"), "primary"),
+    R("Tro", "Ch 14 — Acids & bases", "alsoOK"),
+    R("Mod", "Ch 14 — Acids & bases", "alsoOK"),
+)
+set_topic("ps-reg-kinematics",
+    R("Expl", expl("1 + App. B"), "primary"),
+    R("Expl", expl("2"), "alsoOK"),
+)
+set_topic("ps-reg-forces",
+    R("Expl", expl("2–4"), "primary"),
+    R("Expl", expl("5"), "alsoOK"),
+)
+set_topic("ps-reg-waves",
+    R("Expl", expl("12", "13"), "primary"),
+)
 
 def main():
     import json

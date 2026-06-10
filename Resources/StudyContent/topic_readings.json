@@ -1,19 +1,19 @@
 {
   "ls-photosynthesis": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 5 — Photosynthesis",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 1 — Cell Biology and Genetics · Ch 2 — Cell Processes and Energy",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 5 — Photosynthesis",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit I — The Life of the Cell · Ch 6 — How Cells Harvest Chemical Energy · Unit I — The Life of the Cell · Ch 7 — Photosynthesis: Using Light to Make Food",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -23,19 +23,19 @@
   ],
   "ls-cell-organelles": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 3 — Cell Structure and Function",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 1 — Cell Biology and Genetics · Ch 1 — Cell Structure and Function",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 3 — Cell Structure and Function",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit I — The Life of the Cell · Ch 4 — A Tour of the Cell",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -45,19 +45,19 @@
   ],
   "ls-cell-processes": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 3 — Cell membrane · transport",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 1 — Cell Biology and Genetics · Ch 1 — Cell Structure and Function",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 3 — Cell membrane · transport",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit I — The Life of the Cell · Ch 5 — The Working Cell",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -67,19 +67,19 @@
   ],
   "ls-cell-division": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 10 — Cell division (mitosis/meiosis intro)",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 1 — Cell Biology and Genetics · Ch 2 — Cell Processes and Energy",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 10 — Cell division (mitosis/meiosis intro)",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit II — Cellular Reproduction and Genetics · Ch 8 — The Cellular Basis of Reproduction and Inheritance",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -89,19 +89,19 @@
   ],
   "ls-cellular-respiration": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 4–5 — Cellular respiration",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 1 — Cell Biology and Genetics · Ch 2 — Cell Processes and Energy",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 4–5 — Cellular respiration",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit I — The Life of the Cell · Ch 6 — How Cells Harvest Chemical Energy",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -111,19 +111,19 @@
   ],
   "ls-dna-rna": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 8 — DNA structure and replication",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 1 — Cell Biology and Genetics · Ch 3 — Genetics: The Science of Heredity",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 8 — DNA structure and replication",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit II — Cellular Reproduction and Genetics · Ch 10 — Molecular Biology of the Gene",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -133,19 +133,19 @@
   ],
   "ls-genetics": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 7–8 — Genetics · inheritance",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 1 — Cell Biology and Genetics · Ch 3 — Genetics: The Science of Heredity · Unit 1 — Cell Biology and Genetics · Ch 4 — Modern Genetics",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 7–8 — Genetics · inheritance",
+      "role": "alsoOK"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit II — Cellular Reproduction and Genetics · Ch 9 — Patterns of Inheritance",
-      "role": "backup"
+      "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Bio",
@@ -162,7 +162,7 @@
     {
       "bookCode": "CB",
       "label": "Unit II — Cellular Reproduction and Genetics · Ch 10 — Molecular Biology of the Gene",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -172,19 +172,19 @@
   ],
   "ls-evolution": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 11–12 — Evolution",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 2 — Evolution and Earth's History · Ch 5 — Evolution · Unit 2 — Evolution and Earth's History · Ch 6 — Earth's History",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 11–12 — Evolution",
+      "role": "alsoOK"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit III — Concepts of Evolution · Ch 13 — How Populations Evolve · Unit III — Concepts of Evolution · Ch 14 — The Origin of Species",
-      "role": "backup"
+      "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Bio",
@@ -194,19 +194,19 @@
   ],
   "ls-classification": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 11 — Classification",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 3 — Structure and Function in Living Things · Ch 7 — Living Things",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 11 — Classification",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit III — Concepts of Evolution · Ch 15 — Tracing Evolutionary History · Unit IV — The Evolution of Biological Diversity · Ch 18 — The Evolution of Invertebrate Diversity",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -216,19 +216,19 @@
   ],
   "ls-bacteria-viruses": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 13 — Microorganisms",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 3 — Structure and Function in Living Things · Ch 8 — Viruses and Bacteria",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 13 — Microorganisms",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit IV — The Evolution of Biological Diversity · Ch 16 — Microbial Life: Prokaryotes and Protists",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -245,7 +245,7 @@
     {
       "bookCode": "CB",
       "label": "Unit IV — The Evolution of Biological Diversity · Ch 16 — Microbial Life: Prokaryotes and Protists · Unit IV — The Evolution of Biological Diversity · Ch 17 — The Evolution of Plant and Fungal Diversity",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -255,19 +255,19 @@
   ],
   "ls-plant-biology": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 14–15 — Plants",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 3 — Structure and Function in Living Things · Ch 10 — Introduction to Plants · Unit 3 — Structure and Function in Living Things · Ch 11 — Seed Plants",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 14–15 — Plants",
+      "role": "alsoOK"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit VI — Plants: Form and Function · Ch 31 — Plant Structure, Growth, and Reproduction",
-      "role": "backup"
+      "role": "alsoOK"
     },
     {
       "bookCode": "BFN-Bio",
@@ -284,7 +284,7 @@
     {
       "bookCode": "CB",
       "label": "Unit V — Animals: Form and Function · Ch 23 — Circulation",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -301,7 +301,7 @@
     {
       "bookCode": "CB",
       "label": "Unit V — Animals: Form and Function · Ch 22 — Gas Exchange",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -318,7 +318,7 @@
     {
       "bookCode": "CB",
       "label": "Unit V — Animals: Form and Function · Ch 21 — Nutrition and Digestion",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -335,7 +335,7 @@
     {
       "bookCode": "CB",
       "label": "Unit V — Animals: Form and Function · Ch 28 — Nervous Systems",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -352,7 +352,7 @@
     {
       "bookCode": "CB",
       "label": "Unit V — Animals: Form and Function · Ch 26 — Hormones and the Endocrine System",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -369,7 +369,7 @@
     {
       "bookCode": "CB",
       "label": "Unit V — Animals: Form and Function · Ch 24 — The Immune System",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -386,7 +386,7 @@
     {
       "bookCode": "CB",
       "label": "Unit V — Animals: Form and Function · Ch 20 — Unifying Concepts of Animal Structure and Function · Unit V — Animals: Form and Function · Ch 30 — How Animals Move",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -403,7 +403,7 @@
     {
       "bookCode": "CB",
       "label": "Unit V — Animals: Form and Function · Ch 27 — Reproduction and Embryonic Development",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -413,19 +413,19 @@
   ],
   "ls-ecology": [
     {
-      "bookCode": "OSB",
-      "label": "Ch 19–20 — Ecology · ecosystems",
-      "role": "pass2"
-    },
-    {
       "bookCode": "FLS",
       "label": "Unit 3 — Structure and Function in Living Things · Ch 7 — Living Things",
       "role": "primary"
     },
     {
+      "bookCode": "OSB",
+      "label": "Ch 19–20 — Ecology · ecosystems",
+      "role": "pass2"
+    },
+    {
       "bookCode": "CB",
       "label": "Unit VII — Ecology · Ch 36 — Population Ecology · Unit VII — Ecology · Ch 37 — Communities and Ecosystems",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -442,7 +442,7 @@
     {
       "bookCode": "CB",
       "label": "Unit VII — Ecology · Ch 34 — The Biosphere: An Introduction to Earth's Diverse Environments",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -459,7 +459,7 @@
     {
       "bookCode": "CB",
       "label": "Unit VII — Ecology · Ch 36 — Population Ecology",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -476,7 +476,7 @@
     {
       "bookCode": "CB",
       "label": "Unit VII — Ecology · Ch 37 — Communities and Ecosystems",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -493,7 +493,7 @@
     {
       "bookCode": "CB",
       "label": "Unit VII — Ecology · Ch 38 — Conservation Biology",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Bio",
@@ -510,7 +510,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 4 §4.3–4.6 — Atoms · atomic structure",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -532,7 +532,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 4 · Ch 9 §9.7 · §9.9 — Periodic table · trends",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -554,7 +554,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 4 §4.7–4.8 + Ch 5 — Ions · compounds",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -571,7 +571,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 5 — Chemical bonding",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -588,7 +588,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 7 §7.1–7.4 — Chemical reactions",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -605,7 +605,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 7 — Reaction types",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -622,7 +622,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 14 — Acids and bases",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -644,7 +644,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 13 — Solutions",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -666,7 +666,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 3 — Matter and Energy",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Expl",
@@ -683,7 +683,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 9 · Ch 13 — Moles · molarity",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Mod",
@@ -695,7 +695,7 @@
     {
       "bookCode": "Tro",
       "label": "Ch 7 — Oxidation-reduction (intro)",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "Mod",
@@ -712,14 +712,14 @@
     {
       "bookCode": "Tro",
       "label": "Ch 22 — Organic (stretch)",
-      "role": "backup"
+      "role": "pass2"
     }
   ],
   "ch-nuclear-chem": [
     {
       "bookCode": "Tro",
       "label": "Ch 3 — Nuclear (intro if covered)",
-      "role": "backup"
+      "role": "pass2"
     },
     {
       "bookCode": "BFN-Sci",
@@ -759,7 +759,7 @@
   "ps-newtons-laws": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 2 — Newton's First Law of Motion—The Law of Inertia · Part One — Mechanics · Ch 4 — Newton's Third Law of Motion—Action and Reaction",
+      "label": "Part One — Mechanics · Ch 2 — Newton's First Law of Motion—The Law of Inertia · Part One — Mechanics · Ch 3 — Newton's Second Law of Motion—Force and Acceleration · Part One — Mechanics · Ch 4 — Newton's Third Law of Motion—Action and Reaction",
       "role": "primary"
     },
     {
@@ -771,7 +771,7 @@
   "ps-forces": [
     {
       "bookCode": "Expl",
-      "label": "Part One — Mechanics · Ch 2 — Newton's First Law of Motion—The Law of Inertia · Part One — Mechanics · Ch 4 — Newton's Third Law of Motion—Action and Reaction",
+      "label": "Part One — Mechanics · Ch 2 — Newton's First Law of Motion—The Law of Inertia · Part One — Mechanics · Ch 3 — Newton's Second Law of Motion—Force and Acceleration · Part One — Mechanics · Ch 4 — Newton's Third Law of Motion—Action and Reaction",
       "role": "primary"
     },
     {
@@ -1817,74 +1817,84 @@
   ],
   "ls-reg-resp-photosyn": [
     {
-      "bookCode": "CB",
-      "label": "Ch 6–7 — Harvesting energy · Photosynthesis",
-      "role": "primary"
-    },
-    {
       "bookCode": "FLS",
-      "label": "Ch 4 — Cell energy",
-      "role": "alsoOK"
+      "label": "Unit 1 — Cell Biology and Genetics · Ch 2 — Cell Processes and Energy",
+      "role": "primary"
     },
     {
       "bookCode": "OSB",
       "label": "Ch 5 — Photosynthesis",
       "role": "alsoOK"
+    },
+    {
+      "bookCode": "CB",
+      "label": "Unit I — The Life of the Cell · Ch 6 — How Cells Harvest Chemical Energy · Unit I — The Life of the Cell · Ch 7 — Photosynthesis: Using Light to Make Food",
+      "role": "alsoOK"
     }
   ],
   "ls-reg-genetics": [
     {
-      "bookCode": "CB",
-      "label": "Ch 10–11 — Molecular biology · Gene control",
+      "bookCode": "FLS",
+      "label": "Unit 1 — Cell Biology and Genetics · Ch 3 — Genetics: The Science of Heredity · Unit 1 — Cell Biology and Genetics · Ch 4 — Modern Genetics",
       "role": "primary"
     },
     {
-      "bookCode": "FLS",
-      "label": "Ch 4 — Genetics",
+      "bookCode": "CB",
+      "label": "Unit II — Cellular Reproduction and Genetics · Ch 10 — Molecular Biology of the Gene · Unit II — Cellular Reproduction and Genetics · Ch 11 — How Genes Are Controlled",
       "role": "alsoOK"
     }
   ],
   "ls-reg-anatomy": [
     {
-      "bookCode": "CB",
-      "label": "Ch 20–28 — Animal structure & systems",
+      "bookCode": "FLS",
+      "label": "Unit 4 — Human Body Systems · Ch 16 — Healthy Body Systems · Unit 4 — Human Body Systems · Ch 17 — Bones, Muscles, and Skin · Unit 4 — Human Body Systems · Ch 18 — Food and Digestion · Unit 4 — Human Body Systems · Ch 19 — Circulation · Unit 4 — Human Body Systems · Ch 20 — Respiration and Excretion",
       "role": "primary"
     },
     {
-      "bookCode": "FLS",
-      "label": "Ch 16–20 — Body systems",
+      "bookCode": "CB",
+      "label": "Unit V — Animals: Form and Function · Ch 20 — Unifying Concepts of Animal Structure and Function · Unit V — Animals: Form and Function · Ch 28 — Nervous Systems",
       "role": "alsoOK"
     }
   ],
   "ls-reg-phyla": [
     {
-      "bookCode": "CB",
-      "label": "Ch 18–19 — Invertebrate & vertebrate diversity",
+      "bookCode": "FLS",
+      "label": "Unit 3 — Structure and Function in Living Things · Ch 12 — Sponges, Cnidarians, and Worms · Unit 3 — Structure and Function in Living Things · Ch 13 — Mollusks, Arthropods, and Echinoderms · Unit 3 — Structure and Function in Living Things · Ch 14 — Fishes, Amphibians, and Reptiles · Unit 3 — Structure and Function in Living Things · Ch 15 — Birds and Mammals",
       "role": "primary"
     },
     {
-      "bookCode": "FLS",
-      "label": "Ch 12 — Sponges, Cnidarians, Worms",
+      "bookCode": "CB",
+      "label": "Unit IV — The Evolution of Biological Diversity · Ch 18 — The Evolution of Invertebrate Diversity · Unit IV — The Evolution of Biological Diversity · Ch 19 — The Evolution of Vertebrate Diversity",
       "role": "alsoOK"
     }
   ],
   "ch-reg-nomenclature": [
     {
-      "bookCode": "Tro",
-      "label": "Ch 5 — Nomenclature · ions",
+      "bookCode": "Expl",
+      "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry · Part Three — Chemistry · Ch 18 — How Atoms Bond and Molecules Attract",
       "role": "primary"
     },
     {
       "bookCode": "Mod",
       "label": "Ch 7 — Chemical formulas",
       "role": "alsoOK"
+    },
+    {
+      "bookCode": "Tro",
+      "label": "Ch 5 — Nomenclature · ions",
+      "role": "alsoOK"
     }
   ],
   "ch-reg-trends": [
     {
+      "bookCode": "Expl",
+      "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry",
+      "role": "primary"
+    },
+    {
       "bookCode": "Mod",
       "label": "Ch 5 — Periodic law & trends",
-      "role": "pass2"
+      "role": "alsoOK"
     },
     {
       "bookCode": "Tro",
@@ -1894,9 +1904,14 @@
   ],
   "ch-reg-gas-laws": [
     {
+      "bookCode": "Expl",
+      "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry · Part Three — Chemistry · Ch 18 — How Atoms Bond and Molecules Attract · Part Three — Chemistry · Ch 19 — How Chemicals Mix",
+      "role": "primary"
+    },
+    {
       "bookCode": "Tro",
       "label": "Ch 9 — Gases",
-      "role": "primary"
+      "role": "alsoOK"
     },
     {
       "bookCode": "Mod",
@@ -1906,9 +1921,14 @@
   ],
   "ch-reg-acids": [
     {
+      "bookCode": "Expl",
+      "label": "Part Three — Chemistry · Ch 21 — Two Types of Chemical Reactions",
+      "role": "primary"
+    },
+    {
       "bookCode": "Tro",
       "label": "Ch 14 — Acids & bases",
-      "role": "primary"
+      "role": "alsoOK"
     },
     {
       "bookCode": "Mod",
@@ -1919,37 +1939,32 @@
   "ps-reg-kinematics": [
     {
       "bookCode": "Expl",
-      "label": "App. B — Motion",
+      "label": "Front Matter · Ch 1 — About Science · Appendix B — Linear and Rotational Motion",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Ch 2 — Newton's laws intro",
+      "label": "Part One — Mechanics · Ch 2 — Newton's First Law of Motion—The Law of Inertia",
       "role": "alsoOK"
     }
   ],
   "ps-reg-forces": [
     {
       "bookCode": "Expl",
-      "label": "Ch 2 — Newton's laws",
+      "label": "Part One — Mechanics · Ch 2 — Newton's First Law of Motion—The Law of Inertia · Part One — Mechanics · Ch 3 — Newton's Second Law of Motion—Force and Acceleration · Part One — Mechanics · Ch 4 — Newton's Third Law of Motion—Action and Reaction",
       "role": "primary"
     },
     {
       "bookCode": "Expl",
-      "label": "Ch 3 — Momentum",
+      "label": "Part One — Mechanics · Ch 5 — Momentum",
       "role": "alsoOK"
     }
   ],
   "ps-reg-waves": [
     {
       "bookCode": "Expl",
-      "label": "Ch 13 — Light & color",
+      "label": "Part Two — Forms of Energy · Ch 12 — Waves and Sound · Part Two — Forms of Energy · Ch 13 — Light, Reflection, and Color",
       "role": "primary"
-    },
-    {
-      "bookCode": "Expl",
-      "label": "Ch 12 — Sound",
-      "role": "alsoOK"
     }
   ]
 }

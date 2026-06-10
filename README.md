@@ -40,7 +40,7 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 ## Features
 
 - **Today** — daily study blocks, 4-stage study session (Recall → Read → Know Cold → Toss-ups), **1 hr science + 1 hr algebra**, buzzer drill schedule, Friday review
-- **Calendar** — weekly timetable, 10-week whiteboard, prep guide, and periodic table (bundled HTML; sync with `python3 Scripts/sync_schedule_html.py`)
+- **Calendar** — weekly timetable, 10-week whiteboard, prep guide, and periodic table (bundled HTML; sync with `python3 Scripts/sync_single_pass_schedule.py`)
 - **Learn** — 124 NSB encyclopedia topics (6 categories) with full articles, related topics, MC/Toss-up/Free-response practice; badges show topics missing drills; `make verify` checks reading + question coverage
 - **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill, encyclopedia practice, **Texas Regional Sprint** (11 packs), search, weak-area practice
 - **Progress** — weekly/lifetime accuracy, checklist, flash cards, spaced repetition
