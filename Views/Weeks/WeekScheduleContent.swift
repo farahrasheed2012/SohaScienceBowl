@@ -59,7 +59,7 @@ struct WeekScheduleContent: View {
             let weekVideos = ScheduleVideoCatalog.dayBlocks(for: week)
             if !weekVideos.isEmpty {
                 Section("Reading & optional videos") {
-                    Text("Books and chapters first; videos are extra.")
+                    Text("Assigned § sections first; videos are extra.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
@@ -115,6 +115,11 @@ struct WeekScheduleContent: View {
 
             Text(block.primaryTopic)
                 .font(.subheadline.weight(.semibold))
+
+            Text(block.readingPaceLabel)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
 
             StudyBlockReadingAndVideos(
                 block: block,
@@ -257,7 +262,7 @@ struct WeekVideoBlockLabel: View {
         }
         if let subject = ScheduleVideoCatalog.scienceSubject(for: block.label),
            let studyBlock = scienceBlocks.first(where: { $0.day == block.day && $0.subject == subject }) {
-            return studyBlock.bookLine(for: .pass1)
+            return studyBlock.primaryReadingLine
         }
         return block.label
     }
@@ -308,7 +313,7 @@ struct WeekTopicBrowserRow: View {
                 Text("\(block.day.fullName) · \(ScheduleConstants.blockTimeLabel(day: block.day, subject: block.subject))")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text(block.bookLine(for: pass))
+                Text(block.primaryReadingLine)
                     .font(.caption2.weight(.medium))
                     .foregroundStyle(.secondary)
                 if !block.allBookOptions(activePass: pass).isEmpty {

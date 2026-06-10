@@ -19,6 +19,11 @@ extension StudyBlock {
         if ch.contains("§") {
             return "Read only the listed section (§) — not the entire chapter. Stop when the Focus bullets make sense."
         }
+        if ch.hasPrefix("Ch ") || ch.hasPrefix("ch ") {
+            if !ch.contains("+") && !title.contains("part") {
+                return "Read only the assigned § sections for today's Focus — not the whole chapter. See Reading options for the section range."
+            }
+        }
         if ch.contains("–") || (ch.contains("-") && ch.contains("ch")) {
             return "Read only today's page range — not the full chapter span. Take the full hour if you need it."
         }
@@ -38,6 +43,7 @@ extension StudyBlock {
         if title.contains("part 1") || focusLower.contains("part 1") { return "section · part 1" }
         if title.contains("part 2") || focusLower.contains("part 2") { return "section · part 2" }
         if ch.contains("§") { return "one section" }
+        if ch.hasPrefix("Ch ") || ch.hasPrefix("ch ") { return "assigned § sections" }
         return "assigned section"
     }
 }

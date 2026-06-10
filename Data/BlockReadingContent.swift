@@ -12,7 +12,11 @@ enum BlockReadingContent {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
         var sections: [ReadingSection] = []
 
-        if pass == .pass1, let custom = pass1[key] {
+        if block.week <= 4, let custom = weeks1Through4[key] {
+            sections = custom
+        } else if block.week <= 8, let custom = weeks5Through8[key] {
+            sections = custom
+        } else if let custom = weeks9Through10[key] {
             sections = custom
         } else {
             sections = defaultSections(for: block, pass: pass)
@@ -34,7 +38,7 @@ enum BlockReadingContent {
             ReadingSection(
                 title: "While you read",
                 body: """
-                Open \(block.bookLine(for: pass)).
+                Open \(block.primaryReadingLine).
 
                 **Reading pace:** \(block.readingPaceLabel)
 
@@ -59,9 +63,9 @@ enum BlockReadingContent {
         ReadingSection(title: title, body: body)
     }
 
-    // MARK: - Pass 1 (Weeks 1–4)
+    // MARK: - Week-band reading guides (single summer pass)
 
-    static let pass1: [Key: [ReadingSection]] = Pass1ReadingContent.map
-    static let pass2: [Key: [ReadingSection]] = Pass2ReadingContent.map
-    static let pass3: [Key: [ReadingSection]] = Pass3ReadingContent.map
+    static let weeks1Through4: [Key: [ReadingSection]] = Pass1ReadingContent.map
+    static let weeks5Through8: [Key: [ReadingSection]] = Pass2ReadingContent.map
+    static let weeks9Through10: [Key: [ReadingSection]] = Pass3ReadingContent.map
 }

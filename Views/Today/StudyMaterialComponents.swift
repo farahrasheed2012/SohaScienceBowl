@@ -93,7 +93,7 @@ struct StudyBookOptionsCard: View {
             Label("Reading options", systemImage: "books.vertical.fill")
                 .font(compact ? .subheadline.weight(.semibold) : .headline)
 
-            Text("Primary · Also OK · Backup — assigned § sections only (stop when Focus is covered)")
+            Text("Primary · Also OK · Backup — read assigned § sections only (stop when Focus is covered)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -110,7 +110,7 @@ struct StudyBookOptionRow: View {
 
     private var roleColor: Color {
         switch option.role {
-        case .pass1Primary, .pass2Primary: return PlatformColor.systemBlue
+        case .primary, .alternate: return PlatformColor.systemBlue
         case .alsoOK: return PlatformColor.systemTeal
         case .backup: return PlatformColor.systemOrange
         }
@@ -163,7 +163,7 @@ struct StudyMathBookOptionsCard: View {
             StudyBookOptionRow(
                 option: StudyBookOption(
                     id: "osa-primary",
-                    role: .pass1Primary,
+                    role: .primary,
                     text: "OSA — \(reading.title)",
                     links: Array(zip(reading.sectionKeys, reading.urls)).map { key, url in
                         StudyBookLink(
@@ -171,7 +171,7 @@ struct StudyMathBookOptionsCard: View {
                             url: url
                         )
                     },
-                    isRecommended: true
+                    isRecommended: false
                 )
             )
 

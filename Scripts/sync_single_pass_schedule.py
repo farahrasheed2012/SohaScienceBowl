@@ -649,6 +649,240 @@ def patch_calendar_week_titles(path: Path) -> None:
     path.write_text(text)
 
 
+MOD_SECTION_APPEND: dict[tuple[int, int], str] = {
+    (1, 0): "§3.1–3.3",
+    (1, 3): "§5.1–5.2",
+    (2, 0): "§10.1–10.2",
+    (2, 3): "§8.1–8.3",
+    (3, 0): "§14.1–14.2",
+    (3, 3): "§12.1–12.2",
+    (4, 3): "§2.1–2.3",
+    (5, 0): "§7.1–7.2",
+    (5, 3): "§6.1–6.2",
+    (6, 0): "§12.2–12.3",
+    (6, 3): "§14.3–14.4",
+    (7, 0): "§8.2–8.4",
+    (7, 3): "§12.1–12.2",
+    (8, 0): "§5.3–5.4",
+    (8, 3): "§2.3–2.4",
+    (9, 0): "§3.2–3.3",
+    (9, 3): "§5.1 + §7.1",
+}
+
+TRO_BACKUP: dict[tuple[int, int], str] = {
+    (1, 0): "Ch 4 §4.3–4.6",
+    (1, 3): "Ch 4 §4.7–4.8 + Ch 5",
+    (2, 0): "Ch 3",
+    (2, 3): "Ch 7 §7.1–7.4",
+    (3, 0): "Ch 14",
+    (3, 3): "Ch 13",
+    (4, 0): "Ch 9 §9.7 · §9.9",
+    (4, 3): "Ch 2",
+    (5, 0): "Ch 5",
+    (5, 3): "Ch 6",
+    (6, 0): "Ch 13",
+    (6, 3): "Ch 14",
+    (7, 0): "Ch 7",
+    (7, 3): "Ch 9",
+    (8, 0): "Ch 2",
+    (8, 3): "Ch 3",
+    (9, 0): "Ch 4",
+    (9, 3): "Ch 4–5",
+}
+
+BIO_BACKUP: dict[tuple[int, int], str] = {
+    (1, 1): "FLS Ch 1 · CB Ch 4",
+    (1, 4): "FLS Ch 2 · CB Ch 6–7",
+    (2, 1): "FLS Ch 4 · CB Ch 9",
+    (2, 4): "FLS Ch 4 · CB Ch 9",
+    (3, 1): "FLS Ch 7 · CB Ch 36–37",
+    (3, 4): "FLS Ch 16–20 · CB Ch 21–23",
+    (4, 1): "FLS Ch 5–6 · CB Ch 13–14",
+    (4, 4): "FLS Ch 5–6 · CB Ch 13–14",
+    (5, 1): "FLS Ch 3 · CB Ch 8",
+    (5, 4): "FLS Ch 3 · CB Ch 9",
+    (6, 1): "FLS Ch 7 · CB Ch 36",
+    (6, 4): "FLS Ch 8 · CB Ch 16",
+    (7, 1): "FLS Ch 21 · CB Ch 24",
+    (7, 4): "FLS Ch 10 · CB Ch 31",
+    (8, 1): "FLS Ch 11 · CB Ch 31",
+    (8, 4): "FLS Ch 16 · CB Ch 20",
+    (9, 1): "FLS Ch 4 · CB Ch 8",
+    (9, 4): "FLS Ch 16–20 · CB Ch 21–23",
+    (10, 1): "FLS · CB · BFN-Bio",
+    (10, 4): "BFN-Bio",
+}
+
+EXPL_CHEM_OPT: dict[tuple[int, int], str] = {
+    (1, 0): "Ch 17",
+    (1, 3): "Ch 17–18",
+    (2, 0): "Ch 17–19",
+    (2, 3): "Ch 20–21",
+    (3, 0): "Ch 21",
+    (3, 3): "Ch 19",
+    (4, 0): "Ch 17–18",
+    (4, 3): "Ch 17",
+}
+
+PREP_BLOCK_ROWS = [
+    (0, "Mon Chem", "chem"),
+    (1, "Tue Bio", "bio"),
+    (2, "Wed Phys", "phys"),
+    (3, "Thu Chem", "chem"),
+    (4, "Fri Bio", "bio"),
+]
+
+
+def format_mod_reading(week: int, day_idx: int, book: str) -> str:
+    if "§" in book or "+" in book or "review" in book.lower():
+        return book
+    extra = MOD_SECTION_APPEND.get((week, day_idx), "")
+    return f"{book} {extra}".strip() if extra else book
+
+
+def format_primary_md(week: int, day_idx: int, kind: str, book: str, title: str) -> str:
+    if kind == "chem" and book.startswith("Mod"):
+        reading = format_mod_reading(week, day_idx, book)
+        display = reading[4:] if reading.startswith("Mod ") else reading
+        return f"**Mod** {display} — *{title}*"
+    if kind == "bio":
+        return f"**{book}** — *{title}*"
+    return f"**{book}** — *{title}*"
+
+
+def format_backup_md(week: int, day_idx: int, kind: str) -> str:
+    if kind == "chem":
+        tro = TRO_BACKUP.get((week, day_idx))
+        return f"**Tro** {tro}" if tro else "**Tro** / BFN-Sci if stuck"
+    if kind == "bio":
+        return BIO_BACKUP.get((week, day_idx), "FLS/CB backup")
+    return "—"
+
+
+def format_expl_opt(week: int, day_idx: int, kind: str) -> str:
+    if kind != "chem":
+        return "—"
+    return EXPL_CHEM_OPT.get((week, day_idx), "Ch 17–24 optional")
+
+
+def format_primary_html(week: int, day_idx: int, kind: str, book: str) -> str:
+    if kind == "chem" and book.startswith("Mod"):
+        reading = format_mod_reading(week, day_idx, book)
+        display = reading[4:] if reading.startswith("Mod ") else reading
+        return f"<strong>Mod</strong> {esc(display)}"
+    if kind == "bio" and book.startswith("OSB"):
+        return f"<strong>OSB</strong> {esc(book[4:].strip())}"
+    if book.startswith("Expl"):
+        return f"<strong>Expl</strong> {esc(book[5:].strip())}"
+    return f"<strong>{esc(book.split()[0])}</strong> {esc(book)}"
+
+
+def format_backup_html(week: int, day_idx: int, kind: str) -> str:
+    if kind == "chem":
+        tro = TRO_BACKUP.get((week, day_idx))
+        if tro:
+            return f"<strong>Tro</strong> {esc(tro)}"
+        return "<strong>Tro</strong> / BFN-Sci if stuck"
+    if kind == "bio":
+        return esc(BIO_BACKUP.get((week, day_idx), "FLS/CB backup"))
+    return "—"
+
+
+def generate_prep_week_table_md(week: int) -> str:
+    _, theme = WEEK_META[week]
+    blocks = SCIENCE_WEEKS[week]
+    alg = ALGEBRA_ROWS[week]
+    lines = [
+        f"### Week {week} — {theme}",
+        "",
+        "| Block | Topic | Primary (§ sections) | Backup | Expl opt |",
+        "|-------|-------|----------------------|--------|----------|",
+    ]
+    for day_idx, label, kind in PREP_BLOCK_ROWS:
+        _, book, title, *_ = blocks[day_idx]
+        lines.append(
+            f"| **{label}** | {title} | {format_primary_md(week, day_idx, kind, book, title)} "
+            f"| {format_backup_md(week, day_idx, kind)} | {format_expl_opt(week, day_idx, kind)} |"
+        )
+    for day_idx, day_name in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri"]):
+        lines.append(
+            f"| **{day_name} Algebra** | Larson | **Lar** {alg[day_idx]} | **BFN-A** backup | — |"
+        )
+    lines.extend(["", f"**Fri review:** {REVIEW_ROWS[week]}", "", "---", ""])
+    return "\n".join(lines)
+
+
+def generate_prep_week_table_html(week: int) -> str:
+    _, theme = WEEK_META[week]
+    blocks = SCIENCE_WEEKS[week]
+    alg = ALGEBRA_ROWS[week]
+    rows = []
+    for day_idx, label, kind in PREP_BLOCK_ROWS:
+        _, book, title, *_ = blocks[day_idx]
+        rows.append(
+            f'        <tr class="{kind}"><td>{label}</td><td>{esc(title)}</td>'
+            f"<td>{format_primary_html(week, day_idx, kind, book)}</td>"
+            f"<td>{format_backup_html(week, day_idx, kind)}</td>"
+            f"<td>{esc(format_expl_opt(week, day_idx, kind))}</td></tr>"
+        )
+    for day_idx, day_name in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri"]):
+        rows.append(
+            f'        <tr class="alg"><td>{day_name} Alg</td><td>Larson</td>'
+            f"<td><strong>Lar</strong> {esc(alg[day_idx])}</td>"
+            f"<td><strong>BFN-A</strong> backup</td><td>—</td></tr>"
+        )
+    return f"""      <h4 id="week-{week}"><span class="week-tag">Week {week}</span> {theme}</h4>
+      <table>
+        <tr><th>Block</th><th>Topic</th><th>Primary (§ sections)</th><th>Backup</th><th>Expl opt</th></tr>
+{chr(10).join(rows)}
+      </table>
+      <p style="font-size:8pt"><strong>Fri review:</strong> {esc(REVIEW_ROWS[week])}</p>
+"""
+
+
+def generate_prep_reading_guide_html() -> str:
+    pages = []
+    week_pairs = [(1, 2), (3, 4), (5, 6), (7, 8), (9, 10)]
+    for i, (w_left, w_right) in enumerate(week_pairs):
+        label = "PAGE 3" if i == 0 else f"PAGE 3{chr(ord('a') + i - 1)}"
+        pages.append(
+            f"""<!-- {label} — READING GUIDE WEEKS {w_left}–{w_right} -->
+<section class="page page-guide">
+  <div class="page-header">
+    <h2>Textbook reading guide — weeks {w_left}–{w_right}</h2>
+    <div class="page-meta">One summer pass · assigned § sections only · Full detail → summer-2026-calendar.md</div>
+  </div>
+
+  <div class="two-col">
+    <div>
+{generate_prep_week_table_html(w_left)}
+    </div>
+    <div>
+{generate_prep_week_table_html(w_right)}
+    </div>
+  </div>
+
+  <p class="footer">Read assigned § sections only (stop at Focus) · Tro/CB/FLS = backup · DOE topics not whole books · Daily detail in summer-2026-calendar.md</p>
+</section>
+"""
+        )
+    return "\n".join(pages)
+
+
+def patch_prep_reading_guide_md(text: str) -> str:
+    start = text.find("## Textbook reading guide")
+    end = text.find("## Topic deep-dives")
+    if start == -1 or end == -1:
+        return text
+    new_section = (
+        "## Textbook reading guide — weeks 1–10\n\n"
+        "*One summer pass · read **assigned § sections** for each DOE topic — not whole chapters. "
+        "Stop when Focus is covered.*\n\n"
+    )
+    new_section += "\n".join(generate_prep_week_table_md(w) for w in range(1, 11))
+    return text[:start] + new_section + text[end:]
+
+
 def patch_prep_md(path: Path) -> None:
     text = path.read_text()
     if "### DOE study topics" not in text:
@@ -783,15 +1017,92 @@ def patch_prep_md(path: Path) -> None:
         text = text.replace(old, new)
 
     text = apply_common_replacements(text)
+    text = patch_prep_reading_guide_md(text)
     text = patch_all_week_titles(text)
     path.write_text(text)
 
 
 def patch_prep_html(path: Path) -> None:
     text = path.read_text()
+    start = text.find("<!-- PAGE 3 — READING GUIDE")
+    end = text.find("<!-- PAGE 4 — TOPIC DEEP-DIVES")
+    if start != -1 and end != -1:
+        text = text[:start] + generate_prep_reading_guide_html() + "\n" + text[end:]
+
+    text = re.sub(
+        r"<div class=\"page-meta\">Pass 2 · Jul 6 – Jul 17 · Tro \+ CB \+ Expl<br>15 min DOE first → 15 min re-read if missed</div>",
+        '<div class="page-meta">Weeks 5–6 · one summer pass · § sections · Full detail → summer-2026-calendar.md</div>',
+        text,
+    )
+    text = re.sub(
+        r"<div class=\"page-meta\">Pass 2 · Jul 20 – Jul 31 · regional difficulty<br>Pick 2 weak subtopics for Pass 3 after Week 8 mock</div>",
+        '<div class="page-meta">Weeks 7–8 · one summer pass · § sections</div>',
+        text,
+    )
+    text = re.sub(
+        r"<div class=\"page-meta\">Pass 3 · Aug 3 – 14 · flash cards first<br>Bonus = 10 pts · 2–4 parts after toss-up</div>",
+        '<div class="page-meta">Weeks 9–10 · capstone · flash cards at school meetings</div>',
+        text,
+    )
+    text = text.replace(
+        "<!-- PAGE 6 — TOPIC DEEP-DIVES WEEKS 5–6 (PASS 2) -->",
+        "<!-- PAGE 6 — TOPIC DEEP-DIVES WEEKS 5–6 -->",
+    )
+    text = text.replace(
+        "<!-- PAGE 7 — TOPIC DEEP-DIVES WEEKS 7–8 (PASS 2) -->",
+        "<!-- PAGE 7 — TOPIC DEEP-DIVES WEEKS 7–8 -->",
+    )
+    text = text.replace(
+        "<!-- PAGE 8 — WEEKS 9–10 + BONUS (PASS 3) -->",
+        "<!-- PAGE 8 — WEEKS 9–10 + BONUS -->",
+    )
     text = text.replace(
         "Weeks 1–4 = Pass 1 · Weeks 5–8 = Pass 2 · Weeks 9–10 = Pass 3",
         "Weeks 1–10 = one summer pass · Tro/CB backup · flash cards at school",
+    )
+    text = text.replace(
+        "Weeks 1–4 Pass 1 · Weeks 5–8 Pass 2 (DOE first) · Weeks 9–10 Pass 3 (flash cards)",
+        "Weeks 1–10 one summer pass · § sections · Tro/CB/FLS backup",
+    )
+    text = text.replace(
+        "4-week rotation · Pass 1 (Jun) vs Pass 2 (Jul)",
+        "10-week summer plan · one pass · § sections",
+    )
+    text = text.replace(
+        "Pass 1 Jun · Pass 2 Jul · Pass 3 Aug",
+        "One summer pass · Jun 8 – Aug 14",
+    )
+    text = text.replace(
+        "Pass 1 bio · Tue &amp; Fri",
+        "OSB/FLS primary · Tue &amp; Fri",
+    )
+    text = text.replace(
+        "Pass 2–3 bio",
+        "CB backup · bio",
+    )
+    text = text.replace(
+        "Pass 2–3 chem",
+        "Tro backup · chem",
+    )
+    text = text.replace(
+        "Physics all passes · Wed",
+        "Physics · Wed",
+    )
+    text = text.replace(
+        "<tr><th>Pass</th><th>Dates</th><th>Biology</th><th>Chemistry</th></tr>\n        <tr><td><strong>1 Learn</strong></td><td>Jun 8 – Jul 3</td><td class=\"bio\"><strong>FLS</strong></td><td class=\"chem\"><strong>Mod</strong> + opt <strong>Expl</strong> chem</td></tr>\n        <tr><td><strong>2 Practice</strong></td><td>Jul 6 – Jul 31</td><td class=\"bio\"><strong>CB</strong> + DOE</td><td class=\"chem\"><strong>Tro</strong> + DOE + opt <strong>Expl</strong> chem</td></tr>\n        <tr><td><strong>3 Review</strong></td><td>Aug 3 – 14</td><td class=\"bio\"><strong>CB</strong> + <strong>FLS</strong> cards</td><td class=\"chem\"><strong>Tro</strong> + <strong>Mod</strong> cards</td></tr>",
+        "<tr><th>Block</th><th>Biology</th><th>Chemistry</th><th>Physics</th></tr>\n        <tr><td><strong>Mon/Thu</strong></td><td>—</td><td class=\"chem\"><strong>Mod</strong> primary (+ opt <strong>Expl</strong> chem)</td><td>—</td></tr>\n        <tr><td><strong>Tue/Fri</strong></td><td class=\"bio\"><strong>OSB/FLS</strong> primary</td><td>—</td><td>—</td></tr>\n        <tr><td><strong>Wed</strong></td><td>—</td><td>—</td><td class=\"phys\"><strong>Expl</strong></td></tr>\n        <tr><td><strong>Backup</strong></td><td class=\"bio\"><strong>CB</strong> · <strong>BFN-Bio</strong></td><td class=\"chem\"><strong>Tro</strong> · <strong>BFN-Sci</strong></td><td class=\"phys\">Flash cards at school</td></tr>",
+    )
+    text = text.replace(
+        "<tr><th>Physics stage</th><th>Book</th><th>Pass 2 change</th></tr>\n        <tr><td>Primary (§)</td><td class=\"phys\"><strong>Expl</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td><td>Learn concepts</td></tr>\n        <tr><td>Backup</td><td class=\"phys\">Same + Ch 5 · 7 · 14</td><td>DOE first, re-read</td></tr>\n        <tr><td>Pass 3 (Aug)</td><td class=\"phys\">Flash cards → book if stuck</td><td>Review only</td></tr>",
+        "<tr><th>Stage</th><th>Book</th><th>Notes</th></tr>\n        <tr><td>Primary (§)</td><td class=\"phys\"><strong>Expl</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td><td>Section splits · stop at Focus</td></tr>\n        <tr><td>Backup</td><td class=\"phys\"><strong>BFN-Sci</strong> · flash cards</td><td>If Expl section feels dense</td></tr>\n        <tr><td>School meetings</td><td class=\"phys\">Flash cards → book if stuck</td><td>Fall review</td></tr>",
+    )
+    text = text.replace(
+        "<tr><th>Wk</th><th>Topic</th><th>Mod (P1)</th><th>Tro (P2)</th><th>Expl opt</th></tr>",
+        "<tr><th>Wk</th><th>Topic</th><th>Mod (primary)</th><th>Tro (backup)</th><th>Expl opt</th></tr>",
+    )
+    text = text.replace(
+        "Pass 1 chem · Mon &amp; Thu",
+        "Mod primary · Mon &amp; Thu",
     )
     html_reps = [
         ("30-min science block", "1-hr science block"),
@@ -799,12 +1110,19 @@ def patch_prep_html(path: Path) -> None:
         ("Pass 1 = learn", "One summer pass — DOE topics"),
         ("Pass 2 = DOE", "Extra DOE → Quiz tab"),
         ("Pass 3 = flash", "Flash cards at school"),
+        ("Pass 1 = textbook", "Primary = § sections"),
         ("whole chapter", "assigned § section"),
         ("one chapter in one day", "assigned § section per block"),
         ("FLS (Pass 1)", "OSB/FLS primary"),
         ("CB (Pass 2–3)", "CB backup"),
         ("Mod (Pass 1)", "Mod primary"),
         ("Tro (Pass 2–3)", "Tro backup"),
+        ("Pass 1 (Jun)", "Primary (§)"),
+        ("Pass 2 (Jul)", "Backup"),
+        ("Weeks 1–4 = Pass 1 (Mod+FLS)", "Weeks 1–10 = one pass (Mod+OSB)"),
+        ("Weeks 5–8 = Pass 2 (Tro+CB, DOE first)", "Tro/CB backup · DOE in Quiz tab"),
+        ("Weeks 9–10 = Pass 3 (flash cards)", "Weeks 9–10 capstone · flash cards at school"),
+        ("review Pass 1 gaps", "review weak § sections"),
     ]
     for old, new in html_reps:
         text = text.replace(old, new)

@@ -133,7 +133,7 @@ struct StudySessionView: View {
     private var readStage: some View {
         ScrollView {
             if block.isFlashCardOnly {
-                Pass3BookLinksCard(block: block, activePass: appState.currentPass)
+                StuckBookLinksCard(block: block, activePass: appState.currentPass)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
             }
@@ -174,7 +174,7 @@ struct StudySessionView: View {
         List {
             if block.isFlashCardOnly {
                 Section {
-                    Pass3BookLinksCard(block: block, activePass: appState.currentPass)
+                    StuckBookLinksCard(block: block, activePass: appState.currentPass)
                 }
             }
 

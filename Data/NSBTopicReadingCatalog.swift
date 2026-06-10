@@ -37,7 +37,7 @@ enum NSBTopicReadingCatalog {
         switch role {
         case "primary": return "Primary"
         case "pass1": return "Primary"
-        case "pass2": return "Alternate"
+        case "pass2": return "Backup"
         case "alsoOK": return "Also OK"
         case "backup": return "Backup"
         case "doe": return "DOE"

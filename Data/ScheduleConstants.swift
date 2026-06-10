@@ -104,7 +104,7 @@ enum ScheduleConstants {
     static func studyPass(for date: Date, calendar: Calendar = .current) -> StudyPass { .pass1 }
 
     static func passLabel(for pass: StudyPass) -> String {
-        "Summer · Modern Chemistry + Focus on Life Science + Explorations"
+        "Summer · Mod + OSB + Expl · assigned § sections"
     }
 
     static func summerPlanLabel() -> String {

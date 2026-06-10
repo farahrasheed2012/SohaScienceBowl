@@ -79,7 +79,7 @@ struct StudyBlockCard: View {
             Text(block.primaryTopic)
                 .font(.subheadline.weight(.semibold))
 
-            Text(block.bookLine(for: pass))
+            Text(block.primaryReadingLine)
                 .font(.caption.weight(.medium))
 
             Text(block.focus)
@@ -88,11 +88,7 @@ struct StudyBlockCard: View {
                 .lineLimit(3)
 
             if block.isFlashCardOnly {
-                Label("Flash card mode", systemImage: "rectangle.on.rectangle")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            } else if pass == .pass2 {
-                Text("Try DOE question first, then read.")
+                Label("Review block — open books only if stuck", systemImage: "rectangle.on.rectangle")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

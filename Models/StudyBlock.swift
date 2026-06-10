@@ -19,32 +19,23 @@ struct StudyBlock: Identifiable, Codable, Hashable {
     var backupBookLine: String?
     var isFlashCardOnly: Bool
 
-    var displayBookCode: String {
-        if bookCode == "OSB" { return bookCode }
-        return pass == .pass2 ? (pass2BookCode ?? bookCode) : bookCode
-    }
+    var displayBookCode: String { bookCode }
 
-    var displayChapter: String {
-        if bookCode == "OSB" { return chapter }
-        return pass == .pass2 ? (pass2Chapter ?? chapter) : chapter
-    }
+    var displayChapter: String { chapter }
 
-    var displayChapterTitle: String {
-        if bookCode == "OSB" { return chapterTitle }
-        return pass == .pass2 ? (pass2ChapterTitle ?? chapterTitle) : chapterTitle
-    }
+    var displayChapterTitle: String { chapterTitle }
 
     var blockLabel: String {
         "\(day.shortName) · \(subject.rawValue)"
     }
 
-    func bookLine(for pass: StudyPass) -> String {
-        if bookCode == "Expl" || pass2BookCode == "Expl" {
-            let ch = pass == .pass2 && pass2BookCode == "Expl" ? (pass2Chapter ?? chapter) : chapter
-            let title = pass == .pass2 && pass2BookCode == "Expl" ? (pass2ChapterTitle ?? chapterTitle) : chapterTitle
-            return ConceptualPhysicalScienceExplorationsCatalog.formattedLine(chapter: ch, title: title)
-        }
-        if subject == .chemistry {
+    /// Primary reading line with assigned § sections when the catalog defines them.
+    var primaryReadingLine: String {
+        switch subject {
+        case .chemistry:
+            if let mod = BlockAssignedReadingCatalog.modAssignment(for: self) {
+                return mod.displayText
+            }
             if bookCode.contains("/") {
                 let names = bookCode
                     .split(separator: "/")
@@ -52,17 +43,22 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                     .joined(separator: " · ")
                 return "\(names) — \(chapter) — \(chapterTitle)"
             }
-            let code = pass == .pass2 ? (pass2BookCode ?? bookCode) : bookCode
-            let ch = pass == .pass2 ? (pass2Chapter ?? chapter) : chapter
-            let title = pass == .pass2 ? (pass2ChapterTitle ?? chapterTitle) : chapterTitle
-            if code == "Mod" || code == "Tro" {
-                return ChemistryTextbookCatalog.formattedLine(bookCode: code, chapter: ch, title: title)
+            return ChemistryTextbookCatalog.formattedLine(bookCode: bookCode, chapter: chapter, title: chapterTitle)
+        case .biology:
+            if let osb = BlockAssignedReadingCatalog.osbAssignment(for: self) {
+                return osb.displayText
             }
+            return "\(bookCode) \(chapter) — \(chapterTitle)"
+        case .physics:
+            if let expl = BlockAssignedReadingCatalog.explSectionAssignment(for: self) {
+                return expl.displayText
+            }
+            return ConceptualPhysicalScienceExplorationsCatalog.formattedLine(chapter: chapter, title: chapterTitle)
         }
-        let code = bookCode == "OSB" ? bookCode : (pass == .pass2 ? (pass2BookCode ?? bookCode) : bookCode)
-        let ch = bookCode == "OSB" ? chapter : (pass == .pass2 ? (pass2Chapter ?? chapter) : chapter)
-        let title = bookCode == "OSB" ? chapterTitle : (pass == .pass2 ? (pass2ChapterTitle ?? chapterTitle) : chapterTitle)
-        return "\(code) \(ch) — \(title)"
+    }
+
+    func bookLine(for pass: StudyPass) -> String {
+        primaryReadingLine
     }
 
     func pass1BookLine() -> String {
@@ -80,29 +76,49 @@ struct StudyBlock: Identifiable, Codable, Hashable {
 
         switch subject {
         case .chemistry:
-            if !bookCode.contains("/") {
+            if let mod = BlockAssignedReadingCatalog.modAssignment(for: self) {
+                options.append(
+                    StudyBookOption(
+                        id: "mod-\(week)-\(day.rawValue)",
+                        role: .primary,
+                        text: mod.displayText,
+                        links: mod.links,
+                        isRecommended: false
+                    )
+                )
+            } else if !bookCode.contains("/") {
                 options.append(
                     StudyBookOption(
                         id: "pass1-\(week)-\(day.rawValue)",
-                        role: .pass1Primary,
+                        role: .primary,
                         text: ChemistryTextbookCatalog.modLine(chapter: chapter, title: chapterTitle),
                         links: [],
-                        isRecommended: activePass == .pass1
+                        isRecommended: false
                     )
                 )
             }
-            if let pass2BookCode, let pass2Chapter, let pass2ChapterTitle {
+            if let tro = BlockAssignedReadingCatalog.troAssignment(for: self) {
+                options.append(
+                    StudyBookOption(
+                        id: "tro-\(week)-\(day.rawValue)",
+                        role: .backup,
+                        text: tro.displayText,
+                        links: tro.links,
+                        isRecommended: false
+                    )
+                )
+            } else if let pass2BookCode, let pass2Chapter, let pass2ChapterTitle {
                 options.append(
                     StudyBookOption(
                         id: "pass2-\(week)-\(day.rawValue)",
-                        role: .pass2Primary,
+                        role: .backup,
                         text: ChemistryTextbookCatalog.formattedLine(
                             bookCode: pass2BookCode,
                             chapter: pass2Chapter,
                             title: pass2ChapterTitle
                         ),
                         links: [],
-                        isRecommended: activePass == .pass2
+                        isRecommended: false
                     )
                 )
             } else if bookCode.contains("/") {
@@ -113,10 +129,10 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                 options.append(
                     StudyBookOption(
                         id: "pass3-\(week)-\(day.rawValue)",
-                        role: .pass2Primary,
+                        role: .primary,
                         text: "\(names) — \(chapter) — \(chapterTitle)",
                         links: [],
-                        isRecommended: activePass == .pass3
+                        isRecommended: false
                     )
                 )
             }
@@ -146,10 +162,10 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                 options.append(
                     StudyBookOption(
                         id: "osb-\(week)-\(day.rawValue)",
-                        role: .pass1Primary,
+                        role: .primary,
                         text: assigned.displayText,
                         links: assigned.links,
-                        isRecommended: true
+                        isRecommended: false
                     )
                 )
             } else if let reading = ScheduleOpenStaxCatalog.biologyReading(for: self) {
@@ -159,20 +175,20 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                 options.append(
                     StudyBookOption(
                         id: "osb-\(week)-\(day.rawValue)",
-                        role: .pass1Primary,
+                        role: .primary,
                         text: "OSB \(chapter) — \(chapterTitle)",
                         links: osbLinks,
-                        isRecommended: true
+                        isRecommended: false
                     )
                 )
             } else {
                 options.append(
                     StudyBookOption(
                         id: "bio-primary-\(week)-\(day.rawValue)",
-                        role: .pass1Primary,
+                        role: .primary,
                         text: pass1BookLine(),
                         links: [],
-                        isRecommended: true
+                        isRecommended: false
                     )
                 )
             }
@@ -204,13 +220,13 @@ struct StudyBlock: Identifiable, Codable, Hashable {
             options.append(
                 StudyBookOption(
                     id: "expl-\(week)-\(day.rawValue)",
-                    role: .pass1Primary,
+                    role: .primary,
                     text: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
                         chapter: chapter,
                         title: chapterTitle
                     ),
                     links: [],
-                    isRecommended: true
+                    isRecommended: false
                 )
             )
             if let pass2BookCode, pass2BookCode == "Expl",
@@ -218,13 +234,13 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                 options.append(
                     StudyBookOption(
                         id: "expl-pass2-\(week)-\(day.rawValue)",
-                        role: .pass2Primary,
+                        role: .backup,
                         text: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
                             chapter: pass2Chapter,
                             title: pass2ChapterTitle
                         ),
                         links: [],
-                        isRecommended: activePass == .pass2 || activePass == .pass3
+                        isRecommended: false
                     )
                 )
             }
@@ -251,8 +267,8 @@ struct StudyBookLink: Identifiable, Hashable {
 
 struct StudyBookOption: Identifiable, Hashable {
     enum Role: String, Hashable {
-        case pass1Primary = "Primary"
-        case pass2Primary = "Alternate"
+        case primary = "Primary"
+        case alternate = "Alternate"
         case alsoOK = "Also OK"
         case backup = "Backup"
 

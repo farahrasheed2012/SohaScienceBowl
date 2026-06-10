@@ -44,7 +44,7 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 - **Learn** — 124 NSB encyclopedia topics (6 categories) with full articles, related topics, MC/Toss-up/Free-response practice; badges show topics missing drills; `make verify` checks reading + question coverage
 - **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill, encyclopedia practice, **Texas Regional Sprint** (11 packs), search, weak-area practice
 - **Progress** — weekly/lifetime accuracy, checklist, flash cards, spaced repetition
-- **Settings** — pass/week picker, parent-reads-aloud mode, session timer
+- **Settings** — week picker, parent-reads-aloud mode, session timer, DOE PDF download
 
 ## Data
 

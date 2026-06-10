@@ -260,7 +260,7 @@ struct TopicQuizView: View {
         var pool = SeedData.tossupQuestions.filter { $0.subject == subject }
         if let week { pool = pool.filter { $0.week == week } }
         var built = pool.map { $0.toUnified() }
-        let doeLimit = appState.currentPass == .pass2 ? 12 : 8
+        let doeLimit = 8
         built.append(contentsOf: appState.doeUnifiedQuestions.filter { $0.category == subject.doeCategory }.shuffled().prefix(doeLimit))
         if built.isEmpty {
             built = appState.allUnifiedQuestions.filter { $0.subject == subject }

@@ -1,13 +1,13 @@
 import SwiftUI
 
-/// Review / flash-card blocks — one-tap book links when stuck.
-struct Pass3BookLinksCard: View {
+/// Review / flash-card blocks — one-tap primary + backup book links when stuck.
+struct StuckBookLinksCard: View {
     let block: StudyBlock
     let activePass: StudyPass
 
     private var options: [StudyBookOption] {
         block.allBookOptions(activePass: activePass)
-            .filter { $0.isRecommended || $0.role == .pass2Primary }
+            .filter { $0.role == .primary || $0.role == .backup }
     }
 
     var body: some View {
@@ -16,7 +16,7 @@ struct Pass3BookLinksCard: View {
                 Label("Open book if stuck", systemImage: "book.closed.fill")
                     .font(.headline)
 
-                Text("Try from memory first — open the right chapter only when you need it.")
+                Text("Try from memory first — open the assigned § section only when you need it.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 

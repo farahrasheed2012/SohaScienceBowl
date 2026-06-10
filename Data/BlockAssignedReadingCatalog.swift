@@ -79,6 +79,52 @@ enum BlockAssignedReadingCatalog {
         Key(week: 9, day: .friday, subject: .biology): (21, ["21.2", "23.2"]),
     ]
 
+    /// Mod chapter + section range per chemistry block (when chapter line has no § yet).
+    private static let modSectionByKey: [Key: String] = [
+        Key(week: 1, day: .monday, subject: .chemistry): "§3.1–3.3",
+        Key(week: 1, day: .thursday, subject: .chemistry): "§5.1–5.2",
+        Key(week: 2, day: .monday, subject: .chemistry): "§10.1–10.2",
+        Key(week: 2, day: .thursday, subject: .chemistry): "§8.1–8.3",
+        Key(week: 3, day: .monday, subject: .chemistry): "§14.1–14.2",
+        Key(week: 3, day: .thursday, subject: .chemistry): "§12.1–12.2",
+        Key(week: 4, day: .thursday, subject: .chemistry): "§2.1–2.3",
+        Key(week: 5, day: .monday, subject: .chemistry): "§7.1–7.2",
+        Key(week: 5, day: .thursday, subject: .chemistry): "§6.1–6.2",
+        Key(week: 6, day: .monday, subject: .chemistry): "§12.2–12.3",
+        Key(week: 6, day: .thursday, subject: .chemistry): "§14.3–14.4",
+        Key(week: 7, day: .monday, subject: .chemistry): "§8.2–8.4",
+        Key(week: 7, day: .thursday, subject: .chemistry): "§12.1–12.2",
+        Key(week: 8, day: .monday, subject: .chemistry): "§5.3–5.4",
+        Key(week: 8, day: .thursday, subject: .chemistry): "§2.3–2.4",
+        Key(week: 9, day: .monday, subject: .chemistry): "§3.2–3.3",
+        Key(week: 9, day: .thursday, subject: .chemistry): "§5.1 + §7.1",
+    ]
+
+    static func modAssignment(for block: StudyBlock) -> BookAssignment? {
+        guard block.subject == .chemistry, block.bookCode == "Mod" else { return nil }
+        let key = Key(week: block.week, day: block.day, subject: block.subject)
+        let chLine = block.chapter
+        let chapterDisplay: String
+        if chLine.contains("§") || chLine.contains("+") || chLine.localizedCaseInsensitiveContains("review") {
+            chapterDisplay = chLine
+        } else if let sections = modSectionByKey[key] {
+            chapterDisplay = "\(chLine) \(sections)"
+        } else {
+            chapterDisplay = chLine
+        }
+        let text = "\(ChemistryTextbookCatalog.modTitle) — \(chapterDisplay) — \(block.chapterTitle)"
+        return BookAssignment(displayText: text, links: [])
+    }
+
+    static func troAssignment(for block: StudyBlock) -> BookAssignment? {
+        guard block.subject == .chemistry,
+              let code = block.pass2BookCode, code == "Tro",
+              let ch = block.pass2Chapter,
+              let title = block.pass2ChapterTitle else { return nil }
+        let text = ChemistryTextbookCatalog.formattedLine(bookCode: code, chapter: ch, title: title)
+        return BookAssignment(displayText: text, links: [])
+    }
+
     static func osbAssignment(for block: StudyBlock) -> BookAssignment? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
         guard block.subject == .biology, block.bookCode == "OSB",

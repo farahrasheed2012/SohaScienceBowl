@@ -59,19 +59,19 @@ enum DeepDiveContent {
 
     static func blockContent(for block: StudyBlock, pass: StudyPass) -> String? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
-        if block.week >= 1 && block.week <= 4 && pass == .pass1 {
+        if block.week >= 1 && block.week <= 4 {
             return pass1Content[key]
         }
-        if block.week >= 5 && block.week <= 8 && pass == .pass2 {
+        if block.week >= 5 && block.week <= 8 {
             return pass2Content[key]
         }
-        if block.week >= 9 && pass == .pass3 {
+        if block.week >= 9 {
             return pass3Content[key]
         }
         return nil
     }
 
-    // MARK: - Pass 1 (Weeks 1–4)
+    // MARK: - Weeks 1–4 study notes
 
     private static let pass1Content: [Key: String] = {
         var map: [Key: String] = [:]

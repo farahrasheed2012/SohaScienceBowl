@@ -13,7 +13,7 @@ struct WeeksRootView: View {
                         Text(ScheduleConstants.passLabel(for: appState.currentPass))
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text("Mon–Fri science blocks + daily math · books & chapters first, videos optional")
+                        Text("Mon–Fri science blocks + daily math · assigned § sections first, videos optional")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
