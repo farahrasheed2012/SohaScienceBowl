@@ -65,7 +65,7 @@ struct SettingsView: View {
                     confirmImport()
                 }
                 Button("Cancel", role: .cancel) {
-                    pendingBackup = nil
+                    pendingBackup = nil 
                 }
             } message: {
                 if let pendingBackup {
@@ -139,27 +139,15 @@ struct SettingsView: View {
             #if os(macOS)
             .pickerStyle(.menu)
             #endif
-            Picker("Current pass", selection: Binding(
-                get: { appState.currentPass },
-                set: { appState.userDidSetPass($0) }
-            )) {
-                ForEach(StudyPass.allCases) { p in
-                    Text(p.label).tag(p)
-                }
-            }
-            .disabled(appState.autoSyncScheduleFromCalendar)
-            #if os(macOS)
-            .pickerStyle(.menu)
-            #endif
             if appState.autoSyncScheduleFromCalendar {
-                Button("Reset week & pass to today's date") {
+                Button("Reset week to today's date") {
                     appState.resetScheduleToCalendar()
                 }
             }
         } header: {
             Text("Study plan")
         } footer: {
-            Text("With calendar sync on: Jun–Jul 3 = Pass 1 · Jul 6–Jul 31 = Pass 2 · Aug 3–14 = Pass 3. Turn off to set week and pass manually.")
+            Text("\(ScheduleConstants.summerPlanLabel()). Tro, CB, and BFN books are backups — not a second summer pass. Use Quiz tab for extra DOE practice anytime.")
         }
     }
 
@@ -244,7 +232,7 @@ struct SettingsView: View {
         } header: {
             Text("DOE question bank")
         } footer: {
-            Text("Bundled starter cache works offline immediately. First launch downloads Set 0 + Set 1 only; use Download all for the full bank. Pass 2 plan quizzes lead with DOE questions.")
+            Text("Bundled starter cache works offline immediately. First launch downloads Set 0 + Set 1 only; use Download all for the full bank. Use Quiz → DOE anytime for extra toss-up practice.")
         }
     }
 
