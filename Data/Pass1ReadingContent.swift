@@ -143,7 +143,7 @@ enum Pass1ReadingContent {
             """),
             rs("NSB tips", """
             • "Why do muscle and nerve cells look different with same DNA?" → Different genes expressed / cell specialization.
-            • FLS Ch 2 sets up energy topics for Pass 2 (photosynthesis & respiration in CB).
+            • FLS Ch 2 sets up energy topics for later weeks (photosynthesis & respiration in CB).
             • Friday deeper bio blocks often connect to body systems in Week 2.
             """)
         ]
@@ -342,7 +342,7 @@ enum Pass1ReadingContent {
             • SI unit of force = Newton (N).
             • 4 kg at 5 m/s² → F = 20 N.
             • Action-reaction: forces equal, opposite direction, different objects.
-            • Week 6 Pass 2 adds momentum p = mv.
+            • Week 6 adds momentum p = mv.
             """)
         ]
 
@@ -488,7 +488,7 @@ enum Pass1ReadingContent {
             rs("NSB tips", """
             • SI unit of work → joule (J).
             • F = 10 N, d = 5 m → 50 J.
-            • Pass 2 Week 7 adds PE = mgh and KE = ½mv² calculations.
+            • Week 7 adds PE = mgh and KE = ½mv² calculations.
             """)
         ]
 
@@ -573,7 +573,7 @@ enum Pass1ReadingContent {
             rs("NSB tips", """
             • Scientist for natural selection → Charles Darwin.
             • Most specific taxonomic rank → species.
-            • Geographic isolation can lead to speciation (Pass 2 Week 8).
+            • Geographic isolation can lead to speciation (Week 8 depth).
             """)
         ]
 
@@ -606,13 +606,13 @@ enum Pass1ReadingContent {
             rs("NSB tips", """
             • Primary root function → absorb water/minerals.
             • Most photosynthesis → leaves.
-            • Xylem = water up; phloem = sugars (Pass 2 Week 8 depth).
+            • Xylem = water up; phloem = sugars (Week 8 plant transport).
             """)
         ]
 
         m[k(4, .wednesday, .physics)] = [
             rs("Big picture", """
-            Waves, light, and electricity round out Pass 1 physics. v = fλ links wave properties; V = IR is Ohm's law for circuits.
+            Waves, light, and electricity round out early-summer physics. v = fλ links wave properties; V = IR is Ohm's law for circuits.
             """),
             rs("Wave properties", """
             Wavelength λ — distance crest to crest (m).
@@ -641,7 +641,7 @@ enum Pass1ReadingContent {
             • I = 2 A, R = 5 Ω → 10 V.
             • More resistors in series → total R increases.
             • Speed of light c ≈ 3 × 10⁸ m/s (electromagnetic waves).
-            • Pass 2 Week 8 adds Ch 14 lenses/dispersion stretch.
+            • Week 8 adds Ch 14 lenses/dispersion stretch.
             """)
         ]
 

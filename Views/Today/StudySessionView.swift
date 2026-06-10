@@ -93,7 +93,7 @@ struct StudySessionView: View {
         List {
             if block.isFlashCardOnly {
                 Section {
-                    Text("Pass 3: Review know-cold prompts with flash cards. Tap each to reveal.")
+                    Text("Review know-cold prompts from memory. Tap each to reveal.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -132,10 +132,30 @@ struct StudySessionView: View {
 
     private var readStage: some View {
         ScrollView {
-            if block.isFlashCardOnly || appState.currentPass == .pass3 {
+            if block.isFlashCardOnly {
                 Pass3BookLinksCard(block: block, activePass: appState.currentPass)
                     .padding(.horizontal, 20)
                     .padding(.top, 20)
+            }
+
+            if !block.isFlashCardOnly {
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: "book.pages")
+                        .foregroundStyle(Color.accentColor)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Reading pace · \(block.readingScopeShort)")
+                            .font(.subheadline.weight(.semibold))
+                        Text(block.readingPaceLabel)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .padding(14)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(PlatformColor.secondaryGroupedBackground)
+                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .padding(.horizontal, 20)
+                .padding(.top, 20)
             }
 
             StudyMaterialScrollContent(block: block)
@@ -152,7 +172,7 @@ struct StudySessionView: View {
 
     private var knowColdStage: some View {
         List {
-            if block.isFlashCardOnly || appState.currentPass == .pass3 {
+            if block.isFlashCardOnly {
                 Section {
                     Pass3BookLinksCard(block: block, activePass: appState.currentPass)
                 }

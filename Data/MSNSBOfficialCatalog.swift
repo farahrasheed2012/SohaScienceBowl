@@ -16,6 +16,48 @@ enum MSNSBOfficialCatalog {
     static let nationalContentLevel =
         "Middle School National — honors-level high school science and Algebra II textbooks"
 
+    /// Middle school topic areas described on DOE Tips & Resources (not a numbered chapter syllabus).
+    /// https://science.osti.gov/wdts/nsb/Regional-Competitions/Resources/Tips-and-Resources
+    struct TopicScope: Identifiable, Hashable {
+        let id: String
+        let name: String
+        let topics: String
+        /// Rule 3-1 competition category IDs this study area maps to.
+        let competitionCategoryIds: [String]
+    }
+
+    static let topicScopes: [TopicScope] = [
+        TopicScope(
+            id: "life-science",
+            name: "Life Science",
+            topics: "Cell biology, genetics, anatomy and physiology, plant biology, ecology, and animal behavior.",
+            competitionCategoryIds: ["biology"]
+        ),
+        TopicScope(
+            id: "physical-science",
+            name: "Physical Science",
+            topics: "Chemistry — reactions, periodic table, states of matter. Physics — forces, motion, waves, electromagnetism, thermodynamics.",
+            competitionCategoryIds: ["chemistry", "physics"]
+        ),
+        TopicScope(
+            id: "mathematics",
+            name: "Mathematics",
+            topics: "Algebra I and II, geometry, probability, statistics, and general number sense.",
+            competitionCategoryIds: ["mathematics"]
+        ),
+    ]
+
+    static let earthAndEnergyNote =
+        "Earth and Space Science and Energy are also official Rule 3-1 categories — prep from DOE sample questions and Tips & Resources when you specialize in those areas."
+
+    static func topicScope(forCategoryId categoryId: String) -> TopicScope? {
+        topicScopes.first { $0.competitionCategoryIds.contains(categoryId) }
+    }
+
+    static func topicScopeLabel(forCategoryId categoryId: String) -> String? {
+        topicScope(forCategoryId: categoryId)?.topics
+    }
+
     struct Category: Identifiable, Hashable {
         let id: String
         let name: String

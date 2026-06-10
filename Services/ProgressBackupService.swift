@@ -104,12 +104,12 @@ enum ProgressBackupService {
     static func apply(_ backup: ProgressBackup, to appState: AppState) {
         let settings = backup.settings
         appState.currentWeek = settings.currentWeek
-        appState.currentPass = settings.currentPass
+        appState.currentPass = .pass1
         appState.showSessionTimer = settings.showSessionTimer
         appState.parentReadsAloud = settings.parentReadsAloud
         appState.autoSyncScheduleFromCalendar = settings.autoSyncScheduleFromCalendar
         appState.weekManuallySet = settings.weekManuallySet
-        appState.passManuallySet = settings.passManuallySet
+        appState.passManuallySet = false
         appState.appAppearance = settings.appAppearance
 
         appState.checklistItems = backup.checklistItems

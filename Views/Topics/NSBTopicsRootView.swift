@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Official DOE middle school NSB categories + in-app study topic index (not an official DOE subtopic list).
+/// Official DOE middle school NSB categories + topic scope from Tips & Resources.
 struct NSBTopicsRootView: View {
     @Environment(AppState.self) private var appState
 
@@ -12,7 +12,11 @@ struct NSBTopicsRootView: View {
                         Text("Middle School NSB covers six official question categories defined by the U.S. Department of Energy.")
                             .font(.subheadline)
 
-                        Text("DOE does not publish a numbered subtopic syllabus. Questions are drawn from middle school science and math textbooks — see recommended resources under each category.")
+                        Text(MSNSBStudyScope.introShort)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Text(MSNSBStudyScope.bookUseGuidance)
                             .font(.caption)
                             .foregroundStyle(.secondary)
 
@@ -20,12 +24,33 @@ struct NSBTopicsRootView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
 
+                        Link(destination: MSNSBOfficialCatalog.tipsURL) {
+                            Label("DOE Tips & Resources — study topics", systemImage: "safari")
+                                .font(.caption.weight(.medium))
+                        }
+
                         Link(destination: MSNSBOfficialCatalog.rulesPDFURL) {
                             Label("DOE Rules 2026 (Rule 3-1)", systemImage: "doc.text")
                                 .font(.caption.weight(.medium))
                         }
                     }
                     .padding(.vertical, 4)
+                }
+
+                Section("DOE study topics (Tips & Resources)") {
+                    ForEach(MSNSBOfficialCatalog.topicScopes) { scope in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(scope.name)
+                                .font(.subheadline.weight(.semibold))
+                            Text(scope.topics)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 2)
+                    }
+                    Text(MSNSBOfficialCatalog.earthAndEnergyNote)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
                 }
 
                 Section("Official question categories (DOE Rules §3-1)") {
@@ -127,9 +152,9 @@ struct NSBCategoryDetailView: View {
     private var readingProgressHint: String {
         switch category.id {
         case "biology":
-            return "Reading checkboxes track Focus on Life Science. Expand a chapter to check off sections (1.1, 1.2, …)."
+            return "Check off FLS sections on the NSB summer schedule only — not every chapter in the book."
         default:
-            return "Reading checkboxes track Hewitt (Conceptual Physical Science Explorations). Expand a chapter to check off individual sections."
+            return "Check off Hewitt sections on the NSB summer schedule only — not the full textbook."
         }
     }
 
@@ -147,6 +172,16 @@ struct NSBCategoryDetailView: View {
                     Text("Official competition category — DOE National Science Bowl Rules 2026, Rule 3-1.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+
+                    if let scope = MSNSBOfficialCatalog.topicScope(forCategoryId: category.id) {
+                        Text("\(scope.name) topics: \(scope.topics)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    } else if category.id == "earth-space" || category.id == "energy" {
+                        Text(MSNSBOfficialCatalog.earthAndEnergyNote)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
 
                     if readingProgress.total > 0 {
                         TextbookReadingProgressHeader(
@@ -195,19 +230,18 @@ struct NSBCategoryDetailView: View {
 
             if category.id == "chemistry" {
                 chemistryReferenceSection
-                explTextbookSection(partIDs: ["p3"], footerNote: "Hewitt Part Three — optional chemistry skim after Mod/Tro on the summer schedule.")
+            }
+
+            if category.id == "earth-space" {
+                earthSpaceOptionalSection
             }
 
             if category.id == "physics" {
                 explTextbookSection(
                     partIDs: ["intro", "p1", "p2"],
                     includeAppendices: true,
-                    footerNote: "Hewitt — summer physics primary (Parts One–Two + appendices)."
+                    footerNote: "Hewitt sections on the NSB summer physics plan only — not the full book."
                 )
-            }
-
-            if category.id == "earth-space" {
-                explTextbookSection(partIDs: ["p4", "p5"], footerNote: "Hewitt Parts Four–Five — earth and astronomy.")
             }
 
             if category.id == "biology" {
@@ -267,13 +301,16 @@ struct NSBCategoryDetailView: View {
     @ViewBuilder
     private var chemistryReferenceSection: some View {
         Section("Also on the summer schedule (no checkboxes)") {
-            Text("Pass 1 primary: \(ChemistryTextbookCatalog.modTitle)")
+            Text("Mod/Tro chapters below map to NSB chemistry topics — read assigned sections only, not the full book.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text("Primary: \(ChemistryTextbookCatalog.modTitle)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
             Text("Ch 2 Measurements · Ch 3 Atoms · Ch 5 Periodic Law · Ch 7 Formulas · Ch 8 Reactions · Ch 10 States · Ch 12 Solutions · Ch 14 Acids & Bases")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Text("Pass 2 primary: \(ChemistryTextbookCatalog.troTitle)")
+            Text("Alternate: \(ChemistryTextbookCatalog.troTitle)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
@@ -285,16 +322,30 @@ struct NSBCategoryDetailView: View {
 
     @ViewBuilder
     private var biologyReferenceSection: some View {
-        Section("Pass 2 alternate (no checkboxes)") {
-            Text("\(CampbellBiologyCatalog.editionTitle) — deeper biology reference for Pass 2; reading progress is tracked in Focus on Life Science above.")
+        Section("Alternate biology reference (no checkboxes)") {
+            Text("\(CampbellBiologyCatalog.editionTitle) — deeper backup when FLS/OSB feel dense; reading progress is tracked in Focus on Life Science above.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
     }
 
     @ViewBuilder
+    private var earthSpaceOptionalSection: some View {
+        Section("Earth & Space (optional)") {
+            Text("Not on the summer Bio/Chem/Phys block schedule. Use DOE sample questions and Tips & Resources when prepping this category — read only topics that show up in drills, not whole earth-science textbooks.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Link("Open DOE Tips & Resources", destination: MSNSBOfficialCatalog.tipsURL)
+                .font(.caption.weight(.medium))
+        }
+    }
+
+    @ViewBuilder
     private var flsTextbookSection: some View {
-        let completed = FocusOnLifeScienceCatalog.chapters.filter {
+        let scheduledChapters = FocusOnLifeScienceCatalog.chapters.filter {
+            MSNSBStudyScope.includes(flsChapter: $0.number)
+        }
+        let completed = scheduledChapters.filter {
             appState.textbookReading.isChapterComplete(
                 chapterId: TextbookReadingCatalog.flsChapterID(number: $0.number),
                 sectionIds: $0.sections.map { TextbookReadingCatalog.flsSectionID($0.id) }
@@ -302,18 +353,21 @@ struct NSBCategoryDetailView: View {
         }.count
         Section {
             ForEach(FocusOnLifeScienceCatalog.chaptersGroupedByUnit, id: \.unit.id) { group in
-                Section {
-                    ForEach(group.chapters, id: \.number) { chapter in
-                        TextbookExpandableChapterRow(chapter: chapter)
+                let chapters = group.chapters.filter { MSNSBStudyScope.includes(flsChapter: $0.number) }
+                if !chapters.isEmpty {
+                    Section {
+                        ForEach(chapters, id: \.number) { chapter in
+                            TextbookExpandableChapterRow(chapter: chapter)
+                        }
+                    } header: {
+                        Text(group.unit.name)
                     }
-                } header: {
-                    Text(group.unit.name)
                 }
             }
         } header: {
             Text(FocusOnLifeScienceCatalog.editionTitle)
         } footer: {
-            Text("Pass 1 biology — California Science Explorer edition. Expand chapters for section checkboxes. \(completed)/\(FocusOnLifeScienceCatalog.chapters.count) chapters read.")
+            Text("NSB summer schedule sections only — \(completed)/\(scheduledChapters.count) of \(scheduledChapters.count) scheduled FLS chapters checked. Other FLS chapters are optional.")
         }
     }
 
@@ -327,40 +381,40 @@ struct NSBCategoryDetailView: View {
             filterPartIDs: Set(partIDs)
         )
         let trackable = TextbookReadingCatalog.chapters(forCategoryId: category.id)
-            .filter { $0.id.hasPrefix("Expl-") }
         let completed = trackable.filter {
             appState.textbookReading.isChapterComplete(chapterId: $0.id, sectionIds: $0.sectionIds)
         }.count
 
         Section {
             ForEach(groups, id: \.part.id) { group in
-                Section {
-                    ForEach(group.chapters, id: \.number) { chapter in
-                        TextbookExplChapterRow(
-                            chapterNumber: chapter.number,
-                            chapterTitle: chapter.title,
-                            sections: chapter.sections
-                        )
+                let chapters = group.chapters.filter { MSNSBStudyScope.includes(explChapter: $0.number) }
+                if !chapters.isEmpty {
+                    Section {
+                        ForEach(chapters, id: \.number) { chapter in
+                            TextbookExplChapterRow(
+                                chapterNumber: chapter.number,
+                                chapterTitle: chapter.title,
+                                sections: chapter.sections
+                            )
+                        }
+                    } header: {
+                        Text(group.part.name)
                     }
-                } header: {
-                    Text(group.part.name)
                 }
             }
 
             if includeAppendices {
                 Section("Appendices") {
-                    ForEach(ConceptualPhysicalScienceExplorationsCatalog.appendices, id: \.letter) { appendix in
-                        TextbookSimpleChapterRow(
-                            chapterId: TextbookReadingCatalog.explAppendixID(letter: appendix.letter),
-                            label: "Appendix \(appendix.letter) — \(appendix.title)"
-                        )
-                    }
+                    TextbookSimpleChapterRow(
+                        chapterId: TextbookReadingCatalog.explAppendixID(letter: "B"),
+                        label: "Appendix B — Linear and Rotational Motion (optional with Ch 1)"
+                    )
                 }
             }
         } header: {
             Text(ConceptualPhysicalScienceExplorationsCatalog.editionTitle)
         } footer: {
-            Text("\(footerNote) Expand a chapter to check off sections. \(completed)/\(trackable.count) Hewitt chapters read.")
+            Text("\(footerNote) \(completed)/\(trackable.count) NSB-scheduled sections checked.")
         }
     }
 }

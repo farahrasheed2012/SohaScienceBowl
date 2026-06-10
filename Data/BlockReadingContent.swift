@@ -12,12 +12,8 @@ enum BlockReadingContent {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
         var sections: [ReadingSection] = []
 
-        if block.week >= 1 && block.week <= 4 && pass == .pass1 {
-            sections = pass1[key] ?? defaultSections(for: block, pass: pass)
-        } else if block.week >= 5 && block.week <= 8 && pass == .pass2 {
-            sections = pass2[key] ?? defaultSections(for: block, pass: pass)
-        } else if block.week >= 9 && pass == .pass3 {
-            sections = pass3[key] ?? defaultSections(for: block, pass: pass)
+        if pass == .pass1, let custom = pass1[key] {
+            sections = custom
         } else {
             sections = defaultSections(for: block, pass: pass)
         }
@@ -38,7 +34,13 @@ enum BlockReadingContent {
             ReadingSection(
                 title: "While you read",
                 body: """
-                Open \(block.bookLine(for: pass)). Plan **~35–40 min** for today's chapter (one chapter or one part of a split topic). Copy every formula from today's block into your Science Bowl notebook.
+                Open \(block.bookLine(for: pass)).
+
+                **Reading pace:** \(block.readingPaceLabel)
+
+                Plan **~35–40 min** for that section only. Read for NSB toss-up facts — skip pages outside today's Focus.
+
+                Copy every formula from today's block into your Science Bowl notebook.
 
                 Write three facts you did not know before reading. Mark anything that could become a toss-up — definitions, numbers, organelle jobs, and formula units.
                 """

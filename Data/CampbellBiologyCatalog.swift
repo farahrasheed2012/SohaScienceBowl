@@ -76,6 +76,16 @@ enum CampbellBiologyCatalog {
         byNumber[number]
     }
 
+    static func sectionRangeLabel(_ sectionIds: [String]) -> String {
+        guard let first = sectionIds.first else { return "" }
+        if sectionIds.count == 1 { return first }
+        if let last = sectionIds.last {
+            let lastPart = last.split(separator: ".").last.map(String.init) ?? last
+            return "\(first)–\(lastPart)"
+        }
+        return sectionIds.joined(separator: ", ")
+    }
+
     /// Formats `4`, `6–7`, `21–23`, or `16 · 24` (without a leading `Ch`).
     static func formatReference(_ chapterPart: String) -> String {
         let numbers = parseChapterNumbers(chapterPart)

@@ -36,8 +36,8 @@ enum NSBTopicReadingCatalog {
     static func roleLabel(for role: String) -> String {
         switch role {
         case "primary": return "Primary"
-        case "pass1": return "Pass 1"
-        case "pass2": return "Pass 2"
+        case "pass1": return "Primary"
+        case "pass2": return "Alternate"
         case "alsoOK": return "Also OK"
         case "backup": return "Backup"
         case "doe": return "DOE"

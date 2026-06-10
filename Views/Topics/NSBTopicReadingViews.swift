@@ -82,7 +82,7 @@ struct NSBTopicReadingsDetailView: View {
             }
 
             Section {
-                Text("Mapped from Soha’s summer books (Mod/Tro/FLS/CB/OSB/Expl/OSA/Lar/BFN) and DOE Tips & Resources. Earth/Energy topics use DOE textbook names — use your book’s index when no chapter number is listed.")
+                Text("Mapped from Soha's summer books — **NSB-relevant sections only**, not whole textbooks. Use the book index when no chapter number is listed.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

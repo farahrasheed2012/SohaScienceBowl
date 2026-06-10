@@ -6,29 +6,29 @@ enum SeedData {
 
     static let checklistItems: [ChecklistItem] = [
         // Biology
-        ChecklistItem(id: UUID(), subject: .biology, category: "Life Sciences", description: "Cell structure — nucleus, mitochondria, ribosomes, chloroplast, cell wall, membrane", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .biology, category: "Life Sciences", description: "Photosynthesis & respiration — inputs/outputs · chloroplast vs mitochondria · ATP", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .biology, category: "Life Sciences", description: "DNA & heredity — gene, chromosome, allele · Punnett squares · dominant/recessive", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .biology, category: "Life Sciences", description: "Human body systems — digestive, circulatory, respiratory, nervous (organ + job)", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .biology, category: "Life Sciences", description: "Ecology — food webs · producers/consumers/decomposers · biomes · symbiosis types", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .biology, category: "Life Sciences", description: "Evolution & classification — natural selection · kingdom→species · binomial names", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .biology, category: "Life Sciences", description: "Microorganisms & disease — bacteria vs virus · vaccines · antibiotics (bacteria only)", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .biology, category: "Life Sciences", description: "Plants & animals — root/stem/leaf · tissues · basic life cycles", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .biology, category: "Cell biology", description: "Cell structure — nucleus, mitochondria, ribosomes, chloroplast, cell wall, membrane", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .biology, category: "Cell biology", description: "Photosynthesis & respiration — inputs/outputs · chloroplast vs mitochondria · ATP", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .biology, category: "Genetics", description: "DNA & heredity — gene, chromosome, allele · Punnett squares · dominant/recessive", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .biology, category: "Anatomy & physiology", description: "Human body systems — digestive, circulatory, respiratory, nervous (organ + job)", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .biology, category: "Ecology", description: "Ecology & animal behavior — food webs · biomes · symbiosis · innate vs learned behavior", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .biology, category: "Ecology", description: "Evolution & classification — natural selection · kingdom→species · binomial names", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .biology, category: "Cell biology", description: "Microorganisms & disease — bacteria vs virus · vaccines · antibiotics (bacteria only)", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .biology, category: "Plant biology", description: "Plants & animals — root/stem/leaf · tissues · basic animal groups · life cycles", isCompleted: false),
         // Chemistry
-        ChecklistItem(id: UUID(), subject: .chemistry, category: "Physical Sciences", description: "Atoms & periodic table — p/n/e · atomic # vs mass # · groups/periods · first 20 symbols", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .chemistry, category: "Physical Sciences", description: "Ions & compounds — Na⁺, Cl⁻, O²⁻ · ionic vs covalent · H₂O, CO₂, NaCl", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .chemistry, category: "Physical Sciences", description: "Chemical reactions — balance equations · reactants/products · exo/endothermic", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .chemistry, category: "Physical Sciences", description: "Acids, bases & pH — scale 0–14 · neutral = 7 · H⁺/OH⁻ · HCl, NaOH", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .chemistry, category: "Physical Sciences", description: "States of matter — particle model · phase changes · melting/boiling", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .chemistry, category: "Physical Sciences", description: "Solutions — solvent/solute · saturation · concentration · separation methods", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .chemistry, category: "Physical Sciences", description: "Lab & equipment — beaker, flask, balance, graduated cylinder · SI units · safety", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .chemistry, category: "Periodic table", description: "Atoms & periodic table — p/n/e · atomic # vs mass # · groups/periods · first 20 symbols", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .chemistry, category: "Reactions", description: "Ions & compounds — Na⁺, Cl⁻, O²⁻ · ionic vs covalent · H₂O, CO₂, NaCl", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .chemistry, category: "Reactions", description: "Chemical reactions — balance equations · reactants/products · exo/endothermic", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .chemistry, category: "Reactions", description: "Acids, bases & pH — scale 0–14 · neutral = 7 · H⁺/OH⁻ · HCl, NaOH", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .chemistry, category: "States of matter", description: "States of matter — particle model · phase changes · melting/boiling", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .chemistry, category: "Reactions", description: "Solutions — solvent/solute · saturation · concentration · separation methods", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .chemistry, category: "Lab skills", description: "Lab & equipment — beaker, flask, balance, graduated cylinder · SI units · safety", isCompleted: false),
         // Physics
-        ChecklistItem(id: UUID(), subject: .physics, category: "Physical Sciences", description: "Motion — speed, velocity, acceleration · d-t graphs · v = d/t", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .physics, category: "Physical Sciences", description: "Forces & Newton's laws — inertia · F = ma · friction · action-reaction", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .physics, category: "Physical Sciences", description: "Work & energy — W = Fd · power · KE/PE · simple machines · efficiency", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .physics, category: "Physical Sciences", description: "Waves & light — λ, f, amplitude · v = fλ · reflection/refraction", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .physics, category: "Physical Sciences", description: "Electricity — current, voltage, resistance · V = IR · series vs parallel", isCompleted: false),
-        ChecklistItem(id: UUID(), subject: .physics, category: "Physical Sciences", description: "Energy transfer — conservation · identify energy forms in a scenario", isCompleted: false)
+        ChecklistItem(id: UUID(), subject: .physics, category: "Motion", description: "Motion — speed, velocity, acceleration · d-t graphs · v = d/t", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .physics, category: "Forces", description: "Forces & Newton's laws — inertia · F = ma · friction · action-reaction", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .physics, category: "Thermodynamics", description: "Work, energy & heat — W = Fd · power · KE/PE · heat transfer · efficiency", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .physics, category: "Waves", description: "Waves & light — λ, f, amplitude · v = fλ · reflection/refraction", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .physics, category: "Electromagnetism", description: "Electricity — current, voltage, resistance · V = IR · series vs parallel", isCompleted: false),
+        ChecklistItem(id: UUID(), subject: .physics, category: "Thermodynamics", description: "Energy conservation — identify energy forms · heat vs temperature in a scenario", isCompleted: false)
     ]
 
     static func block(week: Int, day: Weekday, subject: Subject, pass: StudyPass,

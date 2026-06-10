@@ -142,13 +142,7 @@ extension AppState {
     }
 
     func weekTheme(for week: Int) -> String {
-        let index = ((week - 1) % 4) + 1
-        switch index {
-        case 1: return "Foundations"
-        case 2: return "Building depth"
-        case 3: return "Mid-level mastery"
-        default: return "Round-ready"
-        }
+        ScheduleConstants.weekThemeLabel(for: week)
     }
 
     func questions(for request: PlanDrillRequest) -> [UnifiedQuestion] {
@@ -318,9 +312,7 @@ extension AppState {
         if !weekManuallySet {
             currentWeek = ScheduleConstants.weekNumber(for: today)
         }
-        if !passManuallySet {
-            currentPass = .pass1
-        }
+        currentPass = .pass1
     }
 
     func userDidSetWeek(_ week: Int) {
@@ -329,8 +321,8 @@ extension AppState {
     }
 
     func userDidSetPass(_ pass: StudyPass) {
-        passManuallySet = true
-        currentPass = pass
+        passManuallySet = false
+        currentPass = .pass1
     }
 
     func resetScheduleToCalendar() {

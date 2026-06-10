@@ -24,11 +24,7 @@ enum StudyPass: Int, CaseIterable, Codable, Identifiable {
     var id: Int { rawValue }
 
     var label: String {
-        switch self {
-        case .pass1: return "Pass 1"
-        case .pass2: return "Pass 2"
-        case .pass3: return "Pass 3"
-        }
+        ScheduleConstants.summerPlanLabel()
     }
 }
 
@@ -168,7 +164,7 @@ enum StudySessionStage: Int, CaseIterable, Identifiable {
         let mins = ScheduleConstants.scienceSessionMinutes
         switch self {
         case .recall: return "0–10 min · 5 quick questions from last week"
-        case .read: return "10–\(mins - 20) min · Textbook + Focus + Formulas (~1 chapter)"
+        case .read: return "10–\(mins - 20) min · Textbook section + Focus + Formulas (not always a whole chapter)"
         case .knowCold: return "\(mins - 20)–\(mins - 10) min · Self-check without notes"
         case .tossups: return "\(mins - 10)–\(mins) min · Sample toss-ups + notebook"
         }

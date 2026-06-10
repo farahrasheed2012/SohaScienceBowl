@@ -62,9 +62,14 @@ struct StudyMaterialHeader: View {
             }
 
             if block.isFlashCardOnly {
-                Label("Pass 3 flash-card review — open any listed book if stuck", systemImage: "rectangle.on.rectangle")
+                Label("Review block — open books only if stuck", systemImage: "rectangle.on.rectangle")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+            } else {
+                Label(block.readingPaceLabel, systemImage: "book.pages")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
         .padding(20)
@@ -88,7 +93,7 @@ struct StudyBookOptionsCard: View {
             Label("Reading options", systemImage: "books.vertical.fill")
                 .font(compact ? .subheadline.weight(.semibold) : .headline)
 
-            Text("Primary · Also OK · Backup — same as summer-2026-calendar")
+            Text("Primary · Also OK · Backup — assigned § sections only (stop when Focus is covered)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
@@ -114,7 +119,7 @@ struct StudyBookOptionRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 8) {
-                Text(option.role.rawValue)
+                Text(option.role.displayLabel)
                     .font(.caption2.weight(.bold))
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
@@ -216,7 +221,7 @@ struct StudyBlockReadingAndVideos: View {
                     .font(compact ? .subheadline.weight(.semibold) : .headline)
                     .foregroundStyle(PlatformColor.systemRed)
 
-                Text("~5–12 min each · read your book chapter first")
+                Text("~5–12 min each · read your assigned section first")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
@@ -412,7 +417,7 @@ struct StudyVideoLinksCard: View {
         if !links.isEmpty {
             StudyMaterialCard(title: title, systemImage: "play.rectangle.fill", accent: accent) {
                 VStack(alignment: .leading, spacing: 10) {
-                    Text("Optional ~5–12 min previews. Read your book chapter first.")
+                    Text("Optional ~5–12 min previews. Read your assigned section first.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
 

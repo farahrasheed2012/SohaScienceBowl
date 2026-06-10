@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Pass 3 / flash-card blocks — one-tap book links when stuck.
+/// Review / flash-card blocks — one-tap book links when stuck.
 struct Pass3BookLinksCard: View {
     let block: StudyBlock
     let activePass: StudyPass
@@ -16,13 +16,13 @@ struct Pass3BookLinksCard: View {
                 Label("Open book if stuck", systemImage: "book.closed.fill")
                     .font(.headline)
 
-                Text("Pass 3 is from memory — open the right chapter only when you need it.")
+                Text("Try from memory first — open the right chapter only when you need it.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
                 ForEach(options) { option in
                     VStack(alignment: .leading, spacing: 6) {
-                        Text(option.role.rawValue)
+                        Text(option.role.displayLabel)
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(.secondary)
                         Text(option.text)

@@ -147,7 +147,7 @@ struct SettingsView: View {
         } header: {
             Text("Study plan")
         } footer: {
-            Text("\(ScheduleConstants.summerPlanLabel()). Tro, CB, and BFN books are backups — not a second summer pass. Use Quiz tab for extra DOE practice anytime.")
+            Text("\(ScheduleConstants.summerPlanLabel()). Tro, CB, and BFN books are backups when primary texts feel dense. Use Quiz tab for extra DOE practice anytime.")
         }
     }
 

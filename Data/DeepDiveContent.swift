@@ -19,29 +19,17 @@ enum DeepDiveContent {
             """
         }
         return """
-        Summer block workflow (Weeks 1–9) — 1 hour:
+        Summer block workflow (Weeks 1–9) — 1 hour · NSB topics only:
         • Minutes 0–10 — Quick recall (5 toss-ups from last week, same subject)
-        • Minutes 10–40 — Read today's chapter (or section) · copy Formulas & key terms
+        • Minutes 10–40 — Read today's assigned section (see Reading pace). Stop when Focus is covered — skip unrelated pages.
         • Minutes 40–50 — Know cold without notes
         • Minutes 50–60 — Sample toss-ups · 3 facts + 1 miss
-        If the block lists "part 1," finish the chapter on the next same-subject day this week.
+        If the block says "part 1," finish the chapter on the next same-subject day this week.
         """
     }
 
     static func weekTheme(week: Int, pass: StudyPass) -> String? {
-        switch week {
-        case 1: return "Week 1 — Foundations"
-        case 2: return "Week 2 — Building depth"
-        case 3: return "Week 3 — Connections"
-        case 4: return "Week 4 — First rotation complete"
-        case 5: return "Week 5 — Energy in life & physics"
-        case 6: return "Week 6 — Ecology & solutions"
-        case 7: return "Week 7 — Immunity & momentum"
-        case 8: return "Week 8 — Plants & electricity"
-        case 9: return "Week 9 — Circuits & body systems"
-        case 10: return "Week 10 — Summer capstone"
-        default: return nil
-        }
+        "Week \(week) — \(ScheduleConstants.weekThemeLabel(for: week))"
     }
 
     static func fridayReviewNote(week: Int) -> String? {

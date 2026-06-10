@@ -108,6 +108,9 @@ struct ProgressDashboardView: View {
                 }
 
                 Section("Category checklist") {
+                    Text("\(MSNSBStudyScope.checklistTopicCount) items — DOE Life Science & Physical Science topics for Bio · Chem · Phys.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                     NavigationLink("View full checklist") {
                         ChecklistView()
                     }
@@ -141,6 +144,12 @@ struct ChecklistView: View {
 
     var body: some View {
         List {
+            Section {
+                Text(MSNSBStudyScope.introLong)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
             ForEach(Subject.allCases) { subject in
                 Section(subject.rawValue) {
                     ForEach(appState.checklistItems.filter { $0.subject == subject }) { item in
@@ -148,8 +157,13 @@ struct ChecklistView: View {
                             get: { item.isCompleted },
                             set: { _ in appState.toggleChecklist(item) }
                         )) {
-                            Text(item.description)
-                                .font(.subheadline)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(item.description)
+                                    .font(.subheadline)
+                                Text(item.category)
+                                    .font(.caption2)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }

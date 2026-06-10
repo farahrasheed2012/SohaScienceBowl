@@ -1,35 +1,52 @@
-# Reading pace — 1-hour blocks, one summer pass
+# Reading pace — DOE topics, not whole books
+
+## Official MS NSB study topics
+
+From [DOE Tips & Resources](https://science.osti.gov/wdts/nsb/Regional-Competitions/Resources/Tips-and-Resources):
+
+| Area | Topics |
+|------|--------|
+| **Life Science** | Cell biology, genetics, anatomy and physiology, plant biology, ecology, animal behavior |
+| **Physical Science** | Chemistry: reactions, periodic table, states of matter · Physics: forces, motion, waves, electromagnetism, thermodynamics |
+| **Mathematics** | Algebra I & II, geometry, probability, statistics, number sense |
+
+Earth & Space and Energy are also Rule 3-1 categories — not on the summer Bio/Chem/Phys block plan.
+
+## What you're actually studying
+
+Middle School NSB questions come from textbook-level science, but **DOE does not assign a chapter syllabus**. This app scopes summer reading to **NSB-relevant topics only**:
+
+| Source | What it covers |
+|--------|----------------|
+| **Progress checklist** | 22 Bio · Chem · Phys topics (atoms, cells, genetics, forces, …) |
+| **Daily blocks** | Focus + Know cold + toss-ups for one section per hour |
+| **Learn encyclopedia** | 124 topic articles with drills |
+| **NSB Topics checkboxes** | ~11 FLS + ~11 Hewitt sections on the summer schedule — **not** every chapter in those books |
+
+Earth & Space, Energy, and Math are official NSB categories but **not** on the summer Bio/Chem/Phys block plan — prep those from DOE samples when needed.
 
 ## Summer totals
 
-| | Old (3 passes) | New (1 pass) |
-|---|----------------|--------------|
+| | Old (3 passes) | Current |
+|---|----------------|---------|
 | Science per weekday | 60 min | **60 min** |
-| Algebra per weekday | 60 min (Mon–Fri) | **60 min (Mon–Fri)** |
-| Science hours total | 50 hr (re-read same topics 2–3×) | **50 hr (each topic once, section splits)** |
-| Passes | Pass 1 learn · Pass 2 Tro/CB/DOE · Pass 3 flash | **One pass · Mod + FLS/OSB + Expl** |
+| Science hours total | 50 hr (re-read same topics) | **50 hr (each NSB topic once, section splits)** |
+| Textbooks | Felt like cover-to-cover | **Assigned sections only** |
 
-**50 science blocks** × 1 hr = **50 hours** of science. That is enough to cover the full middle-school NSB foundation **once**, carefully, when each block targets **one chapter or section**.
+**50 science blocks** × 1 hr = enough to hit the checklist **once**, carefully, when each block stops at Focus — not at the end of every chapter.
 
-## One chapter per hour?
+## One section per hour?
 
-- **Most textbook chapters:** yes, ~45–60 min of careful reading fits in one block, plus app Focus / Know cold / toss-ups.
-- **Former combo days** (e.g. `Ch 7 + Ch 8`): split across **two same-subject days in the same week** (biology Tue + Fri; chemistry Mon + Thu).
-- **Physics (Wed only):** multi-chapter ranges split across **consecutive Wednesdays** (Newton's → momentum → energy → electricity).
-- **Weeks 5–10:** new chapters that used to wait for Pass 2 — photosynthesis/respiration, microbes, immunity, plants, energy, electricity — now get their own 1-hr blocks.
+- **Most blocks:** ~45–60 min on the listed § or part, plus Focus / Know cold / toss-ups.
+- **Combo chapters:** split across two same-subject days in the same week.
+- **Physics (Wed):** multi-chapter ranges split across consecutive Wednesdays.
 
-## Still cover everything?
+## Week themes
 
-Yes. The calendar keeps **50 science slots** and **50 algebra slots**. You are **not** removing topics — you are **not re-reading** the same Mod/FLS chapters in July and August.
+| Weeks | NSB focus |
+|-------|-----------|
+| **1–4** | Atoms · cells · motion · genetics · acids · ecology · Newton's · evolution · waves |
+| **5–8** | Bonding · photosynthesis/respiration · energy · microbes · immunity · plants · electricity |
+| **9–10** | Circuits · mitosis · ions · body systems · **capstone review** |
 
-| Weeks | Focus |
-|-------|--------|
-| **1–4** | Atoms · cells · motion · genetics · acids · ecology · Newton's · evolution · waves (part 1) |
-| **5–8** | Bonding · stoichiometry · photosynthesis/respiration · energy/gravity · microbes · immunity · plants · electricity intro |
-| **9–10** | Circuits · mitosis · ions · body systems · **light capstone** (weak-topic review, not a third pass) |
-
-**Pass 3 flash-card review** → do at **school Science Bowl meetings** in the fall. **Pass 2 Tro/CB re-read** → Tro/CB/BFN stay as **backup books** when Mod/FLS/Expl feel dense; use **Quiz → DOE** for extra toss-up practice anytime.
-
-## Does two passes make sense?
-
-For Soha's goal (read carefully, don't rush, don't repeat the same chapter three times): **no**. One pass with section splits + app quizzes is the better summer plan. A second textbook pass is optional enrichment, not required to finish the curriculum.
+Tro, CB, and BFN stay as **backup books** when primary sections feel dense. Use **Quiz → DOE** for extra toss-up practice anytime.

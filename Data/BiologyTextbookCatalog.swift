@@ -6,17 +6,26 @@ enum BiologyTextbookCatalog {
     static var cbTitle: String { CampbellBiologyCatalog.editionTitle }
 
     static func studyOptions(for block: StudyBlock, activePass: StudyPass) -> [StudyBookOption] {
-        let (flsChapter, cbChapter) = chapters(for: block)
         var options: [StudyBookOption] = []
 
-        if let flsChapter {
+        if let fls = BlockAssignedReadingCatalog.flsAssignment(for: block) {
+            options.append(
+                StudyBookOption(
+                    id: "fls-\(block.week)-\(block.day.rawValue)",
+                    role: .alsoOK,
+                    text: fls.displayText,
+                    links: fls.links,
+                    isRecommended: false
+                )
+            )
+        } else if let flsChapter = chapters(for: block).fls {
             options.append(
                 StudyBookOption(
                     id: "fls-\(block.week)-\(block.day.rawValue)",
                     role: .alsoOK,
                     text: "\(flsTitle) — \(flsChapter)",
                     links: [],
-                    isRecommended: activePass == .pass1
+                    isRecommended: false
                 )
             )
         } else if block.backupBookLine?.contains("FLS") == true {
@@ -26,19 +35,29 @@ enum BiologyTextbookCatalog {
                     role: .alsoOK,
                     text: "\(flsTitle) — use index for this topic",
                     links: [],
-                    isRecommended: activePass == .pass1
+                    isRecommended: false
                 )
             )
         }
 
-        if let cbChapter {
+        if let cb = BlockAssignedReadingCatalog.cbAssignment(for: block) {
+            options.append(
+                StudyBookOption(
+                    id: "cb-\(block.week)-\(block.day.rawValue)",
+                    role: .alsoOK,
+                    text: cb.displayText,
+                    links: cb.links,
+                    isRecommended: false
+                )
+            )
+        } else if let cbChapter = chapters(for: block).cb {
             options.append(
                 StudyBookOption(
                     id: "cb-\(block.week)-\(block.day.rawValue)",
                     role: .alsoOK,
                     text: "\(cbTitle) — \(cbChapter)",
                     links: [],
-                    isRecommended: activePass == .pass2 || activePass == .pass3
+                    isRecommended: false
                 )
             )
         } else if block.bookCode.contains("CB") {
@@ -49,7 +68,7 @@ enum BiologyTextbookCatalog {
                     role: .alsoOK,
                     text: "\(cbTitle) — \(CampbellBiologyCatalog.formatReference(part))",
                     links: [],
-                    isRecommended: activePass == .pass2 || activePass == .pass3
+                    isRecommended: false
                 )
             )
         }

@@ -108,7 +108,24 @@ enum ScheduleConstants {
     }
 
     static func summerPlanLabel() -> String {
-        "One pass · 50 science blocks · 1 hr each · Jun 8 – Aug 14"
+        "10-week summer plan · 50 science blocks · 1 hr each · Jun 8 – Aug 14"
+    }
+
+    /// Short topic label for each week (one linear summer pass — not “Pass 1/2 rotation”).
+    static func weekThemeLabel(for week: Int) -> String {
+        switch week {
+        case 1: return "Atoms · cells · motion"
+        case 2: return "Matter · genetics · Newton's"
+        case 3: return "Acids · ecology · forces"
+        case 4: return "Evolution · waves · periodic trends"
+        case 5: return "Energy in life & physics"
+        case 6: return "Ecology & solutions"
+        case 7: return "Immunity & momentum"
+        case 8: return "Plants & electricity"
+        case 9: return "Circuits & body systems"
+        case 10: return "Summer capstone"
+        default: return "Week \(week)"
+        }
     }
 }
 

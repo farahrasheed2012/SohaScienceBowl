@@ -14,7 +14,7 @@ struct TextbookReadingProgressHeader: View {
             HStack(spacing: 8) {
                 Image(systemName: completed == total ? "checkmark.circle.fill" : "book.closed.fill")
                     .foregroundStyle(completed == total ? PlatformColor.systemGreen : PlatformColor.systemBlue)
-                Text("\(completed)/\(total) chapters read")
+                Text("\(completed)/\(total) NSB-scheduled sections")
                     .font(.caption.weight(.medium))
                     .foregroundStyle(.secondary)
             }

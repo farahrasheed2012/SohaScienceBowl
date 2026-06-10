@@ -45,7 +45,11 @@ final class AppState {
     init() {
         currentWeek = UserDefaults.standard.object(forKey: "currentWeek") as? Int ?? ScheduleConstants.weekNumber(for: Date())
         let passRaw = UserDefaults.standard.object(forKey: "currentPass") as? Int ?? 1
-        currentPass = StudyPass(rawValue: passRaw) ?? .pass1
+        if passRaw != StudyPass.pass1.rawValue {
+            UserDefaults.standard.set(StudyPass.pass1.rawValue, forKey: "currentPass")
+            UserDefaults.standard.set(false, forKey: "passManuallySet")
+        }
+        currentPass = .pass1
         showSessionTimer = UserDefaults.standard.object(forKey: "showSessionTimer") as? Bool ?? true
         parentReadsAloud = UserDefaults.standard.object(forKey: "parentReadsAloud") as? Bool ?? false
         autoSyncScheduleFromCalendar = UserDefaults.standard.object(forKey: "autoSyncScheduleFromCalendar") as? Bool ?? true

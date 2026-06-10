@@ -48,11 +48,11 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 
 ## Data
 
-- **One summer pass** — 50 science blocks (10 weeks × 5 days), Mod + FLS/OSB + Expl; section splits for long chapters; weeks 9–10 are light capstone (not a third re-read pass)
+- **One summer plan** — 50 science blocks; **DOE Tips & Resources topics** (Life Science · Physical Science) — not whole textbooks; algebra block covers DOE Math topics
 - Encyclopedia: 124 topics + 182 practice questions (includes 11 Regional Sprint articles)
 - DOE PDFs parsed at first launch via PDFKit → cached in Documents as `doe_questions_cache.json`
 - All progress stored locally in UserDefaults (no network, no accounts)
 
 ## Books referenced
 
-FLS · Expl (Hewitt) · Mod · Tro · CB — summer schedule books; **reading checkboxes** track **Hewitt + Focus on Life Science** only.
+FLS · Expl (Hewitt) · Mod · Tro · CB — summer schedule books; **reading checkboxes** track **NSB-scheduled FLS + Hewitt sections only** (not entire books).

@@ -1,6 +1,6 @@
 import Foundation
 
-/// Trackable textbook chapters — **Hewitt (Expl)** and **Focus on Life Science** only.
+/// Trackable textbook sections — **NSB summer schedule only** (not entire FLS / Hewitt books).
 enum TextbookReadingCatalog {
     struct ChapterTrackable: Hashable {
         var id: String
@@ -21,16 +21,28 @@ enum TextbookReadingCatalog {
     static func chapters(forCategoryId categoryId: String) -> [ChapterTrackable] {
         switch categoryId {
         case "chemistry":
-            return explChapters(partIDs: ["p3"])
+            return []
         case "physics":
-            return explChapters(partIDs: ["intro", "p1", "p2"]) + explAppendices
+            return explChapters(partIDs: ["intro", "p1", "p2"])
+                .filter { chapterNumber(from: $0.id).map(MSNSBStudyScope.includes(explChapter:)) == true }
+                + explAppendices.filter { $0.id == explAppendixID(letter: "B") }
         case "earth-space":
-            return explChapters(partIDs: ["p4", "p5"])
+            return []
         case "biology":
-            return flsChapters
+            return flsChapters.filter { chapterNumber(from: $0.id).map(MSNSBStudyScope.includes(flsChapter:)) == true }
         default:
             return []
         }
+    }
+
+    private static func chapterNumber(from chapterId: String) -> Int? {
+        if chapterId.hasPrefix("Expl-ch-") {
+            return Int(chapterId.replacingOccurrences(of: "Expl-ch-", with: ""))
+        }
+        if chapterId.hasPrefix("FLS-ch-") {
+            return Int(chapterId.replacingOccurrences(of: "FLS-ch-", with: ""))
+        }
+        return nil
     }
 
     @MainActor
@@ -52,9 +64,9 @@ enum TextbookReadingCatalog {
         guard summary.total > 0 else { return nil }
         switch categoryId {
         case "biology":
-            return "\(summary.completed)/\(summary.total) FLS chapters read"
+            return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "FLS")
         default:
-            return "\(summary.completed)/\(summary.total) Hewitt chapters read"
+            return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "Hewitt")
         }
     }
 

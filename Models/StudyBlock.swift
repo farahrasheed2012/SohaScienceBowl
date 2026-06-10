@@ -142,7 +142,17 @@ struct StudyBlock: Identifiable, Codable, Hashable {
             )
 
         case .biology:
-            if let reading = ScheduleOpenStaxCatalog.biologyReading(for: self) {
+            if let assigned = BlockAssignedReadingCatalog.osbAssignment(for: self) {
+                options.append(
+                    StudyBookOption(
+                        id: "osb-\(week)-\(day.rawValue)",
+                        role: .pass1Primary,
+                        text: assigned.displayText,
+                        links: assigned.links,
+                        isRecommended: true
+                    )
+                )
+            } else if let reading = ScheduleOpenStaxCatalog.biologyReading(for: self) {
                 let osbLinks = Array(zip(reading.chapters, reading.urls)).map { ch, url in
                     StudyBookLink(label: "OSB Ch \(ch) online", url: url)
                 }
@@ -241,10 +251,12 @@ struct StudyBookLink: Identifiable, Hashable {
 
 struct StudyBookOption: Identifiable, Hashable {
     enum Role: String, Hashable {
-        case pass1Primary = "Pass 1 primary"
-        case pass2Primary = "Pass 2–3 primary"
+        case pass1Primary = "Primary"
+        case pass2Primary = "Alternate"
         case alsoOK = "Also OK"
         case backup = "Backup"
+
+        var displayLabel: String { rawValue }
     }
 
     let id: String
