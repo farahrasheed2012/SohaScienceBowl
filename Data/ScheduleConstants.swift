@@ -1,6 +1,9 @@
 import Foundation
 
 enum ScheduleConstants {
+    /// Target number of toss-ups for a single day's topic / block quiz.
+    static let dayTopicQuizQuestionCount = 30
+
     static let studyStartDate: Date = {
         var c = DateComponents()
         c.year = 2026

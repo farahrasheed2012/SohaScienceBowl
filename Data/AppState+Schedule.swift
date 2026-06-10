@@ -196,26 +196,39 @@ extension AppState {
         return Array(dedupeQuestions(pool).shuffled().prefix(limit))
     }
 
-    func questionsForBlock(_ block: StudyBlock) -> [UnifiedQuestion] {
+    func questionsForBlock(
+        _ block: StudyBlock,
+        limit: Int = ScheduleConstants.dayTopicQuizQuestionCount
+    ) -> [UnifiedQuestion] {
         let category = block.subject.doeCategory
+        let curriculum = curriculumExtras(for: block)
+        let encyclopediaPool = encyclopediaQuestions(for: block, limit: 12)
 
+        var pool: [UnifiedQuestion]
         switch currentPass {
         case .pass2:
-            // Pass 2: DOE first — mostly official questions for today's subject.
-            var pool = doeUnified(for: category, limit: 14)
-            pool.append(contentsOf: block.sampleTossups.prefix(2).map { $0.toUnified() })
-            return dedupeQuestions(pool).shuffled()
-
+            pool = doeUnified(for: category, limit: limit)
+            pool.append(contentsOf: curriculum)
+            pool.append(contentsOf: encyclopediaPool)
         case .pass3:
-            var pool = doeUnified(for: category, limit: 12)
-            pool.append(contentsOf: curriculumExtras(for: block))
-            return dedupeQuestions(pool).shuffled()
-
+            pool = doeUnified(for: category, limit: (limit * 2) / 3)
+            pool.append(contentsOf: curriculum)
+            pool.append(contentsOf: encyclopediaPool)
         case .pass1:
-            var pool = curriculumExtras(for: block)
-            pool.append(contentsOf: doeUnified(for: category, limit: 8))
-            return dedupeQuestions(pool).shuffled()
+            pool = curriculum
+            pool.append(contentsOf: encyclopediaPool)
+            pool.append(contentsOf: doeUnified(for: category, limit: limit / 2))
         }
+
+        var deduped = dedupeQuestions(pool)
+        if deduped.count < limit {
+            var fill = pool
+            fill.append(contentsOf: weekSubjectSeed(for: block))
+            fill.append(contentsOf: doeUnified(for: category, limit: limit))
+            deduped = dedupeQuestions(fill)
+        }
+
+        return Array(deduped.shuffled().prefix(limit))
     }
 
     func questionsForWeek(_ week: Int, limit: Int = 20) -> [UnifiedQuestion] {
@@ -293,6 +306,19 @@ extension AppState {
             .map { $0.toUnified() }
         pool.append(contentsOf: seedExtra)
         return pool
+    }
+
+    private func encyclopediaQuestions(for block: StudyBlock, limit: Int) -> [UnifiedQuestion] {
+        let topicIds = encyclopedia.relatedTopics(for: block).map(\.id)
+        guard !topicIds.isEmpty else { return [] }
+        return encyclopedia.questions(forTopicIds: topicIds, limit: limit, type: "tossUp")
+            .map { $0.toUnified() }
+    }
+
+    private func weekSubjectSeed(for block: StudyBlock) -> [UnifiedQuestion] {
+        SeedData.tossupQuestions
+            .filter { $0.week == block.week && $0.subject == block.subject }
+            .map { $0.toUnified() }
     }
 
     private func doeUnified(for category: DOECategory, limit: Int) -> [UnifiedQuestion] {

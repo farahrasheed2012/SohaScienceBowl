@@ -90,7 +90,7 @@ struct TopicDetailView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Quiz this topic")
                                 .font(.headline)
-                            Text("Plan-aligned toss-ups · DOE + curriculum")
+                            Text("~\(ScheduleConstants.dayTopicQuizQuestionCount) randomized toss-ups · DOE + curriculum + Learn")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
