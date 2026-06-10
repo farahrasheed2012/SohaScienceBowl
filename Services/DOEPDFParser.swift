@@ -253,6 +253,49 @@ final class DOEQuestionStore {
     private(set) var loadError: String?
     private(set) var usesBundledStarter = false
 
+    /// Offline sample count in bundled `doe_starter_cache.json` (encyclopedia-derived, not DOE PDFs).
+    static let bundledStarterQuestionCount = 48
+
+    /// All MS sample PDFs listed on the DOE site (Sets 1–16 + sample rounds).
+    static var catalogPDFCount: Int { DOEPDFCatalog.allEntries.count }
+
+    var localPDFCount: Int {
+        DOEPDFCatalog.allEntries.reduce(0) { count, entry in
+            count + (localPDFURL(for: entry) != nil ? 1 : 0)
+        }
+    }
+
+    var hasFullDOEBank: Bool {
+        localPDFCount >= Self.catalogPDFCount
+    }
+
+    var bankStatusHeadline: String {
+        if hasFullDOEBank {
+            return "Full DOE bank loaded"
+        }
+        if localPDFCount == 0 {
+            return "\(Self.bundledStarterQuestionCount) starter questions only"
+        }
+        return "Partial DOE bank"
+    }
+
+    var bankStatusDetail: String {
+        if hasFullDOEBank {
+            return "\(doeQuestions.count) questions parsed from all \(Self.catalogPDFCount) official MS sample PDFs."
+        }
+        if localPDFCount == 0 {
+            return """
+            You can quiz offline with \(Self.bundledStarterQuestionCount) bundled starters (not the official PDF set). \
+            Tap below to download all \(Self.catalogPDFCount) PDFs from DOE for the full regional-style bank — \
+            usually a few hundred MB and a few minutes on Wi‑Fi.
+            """
+        }
+        return """
+        \(doeQuestions.count) questions from \(localPDFCount)/\(Self.catalogPDFCount) PDFs. \
+        Download the rest for every set on the DOE Middle School Sample Questions page.
+        """
+    }
+
     var studyCategoryQuestionCount: Int {
         doeQuestions.filter { $0.category.isStudyCategory }.count
     }

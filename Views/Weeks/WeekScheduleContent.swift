@@ -1,5 +1,50 @@
 import SwiftUI
 
+/// Scroll anchor ids for day sections in week detail lists.
+enum WeekScheduleDayAnchor {
+    static func id(week: Int, day: Weekday) -> String {
+        "week-schedule-\(week)-\(day.rawValue)"
+    }
+}
+
+/// Mon–Fri jump buttons — scrolls the parent `ScrollViewReader` list to that day.
+struct WeekDayJumpBar: View {
+    @Environment(AppState.self) private var appState
+
+    let week: Int
+    var onJump: (Weekday) -> Void
+
+    private var scienceBlocks: [StudyBlock] {
+        appState.scienceBlocks(for: week)
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Jump to day")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 6) {
+                ForEach(Weekday.allCases) { day in
+                    let hasContent = WeekScheduleContent.hasContent(
+                        for: day,
+                        week: week,
+                        scienceBlocks: scienceBlocks
+                    )
+                    Button(day.shortName) {
+                        onJump(day)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .frame(maxWidth: .infinity)
+                    .disabled(!hasContent)
+                    .opacity(hasContent ? 1 : 0.4)
+                }
+            }
+        }
+    }
+}
+
 /// Shared week schedule: daily blocks, books/chapters, optional videos, and quiz links.
 struct WeekScheduleContent: View {
     @Environment(AppState.self) private var appState
@@ -53,6 +98,7 @@ struct WeekScheduleContent: View {
                             crossCategoryBlock(cross)
                         }
                     }
+                    .id(WeekScheduleDayAnchor.id(week: week, day: day))
                 }
             }
 
@@ -98,6 +144,10 @@ struct WeekScheduleContent: View {
     }
 
     private func dayHasContent(_ day: Weekday) -> Bool {
+        Self.hasContent(for: day, week: week, scienceBlocks: scienceBlocks)
+    }
+
+    static func hasContent(for day: Weekday, week: Int, scienceBlocks: [StudyBlock]) -> Bool {
         scienceBlocks.contains { $0.day == day }
             || ScheduleOpenStaxCatalog.mathReading(week: week, day: day) != nil
             || ScheduleCrossCategory.block(for: week, day: day) != nil

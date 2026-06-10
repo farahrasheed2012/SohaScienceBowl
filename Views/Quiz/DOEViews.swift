@@ -476,3 +476,54 @@ struct SearchQuestionsView: View {
         .onAppear { subject = initialSubject }
     }
 }
+
+// MARK: - Quiz tab DOE bank status
+
+struct DOEQuizBankBanner: View {
+    @Environment(AppState.self) private var appState
+
+    private var store: DOEQuestionStore { appState.doeStore }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Label(store.bankStatusHeadline, systemImage: store.hasFullDOEBank ? "checkmark.seal.fill" : "arrow.down.doc.fill")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(store.hasFullDOEBank ? PlatformColor.systemGreen : PlatformColor.systemOrange)
+
+            Text(store.bankStatusDetail)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if store.isDownloading {
+                VStack(alignment: .leading, spacing: 6) {
+                    ProgressView(value: store.downloadProgress)
+                    Text("Downloading \(store.downloadedPDFCount)/\(store.totalPDFCount) PDFs…")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+            } else if appState.isDOELoading {
+                HStack(spacing: 8) {
+                    ProgressView()
+                        .controlSize(.small)
+                    Text("Parsing PDFs into questions…")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            } else if !store.hasFullDOEBank {
+                Button {
+                    Task { await appState.downloadDOEQuestions(fullCatalog: true) }
+                } label: {
+                    Label("Download all \(DOEQuestionStore.catalogPDFCount) DOE PDFs", systemImage: "arrow.down.circle.fill")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+
+                Text("Set 1 + sample rounds may download automatically in the background. Full set = every file on the DOE MS Sample Questions page.")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+        }
+        .padding(.vertical, 4)
+    }
+}

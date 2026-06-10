@@ -87,8 +87,23 @@ struct WeekDetailView: View {
     let week: Int
 
     var body: some View {
-        List {
-            WeekScheduleContent(week: week, showWeekHeader: true)
+        ScrollViewReader { proxy in
+            List {
+                WeekScheduleContent(week: week, showWeekHeader: true)
+            }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                WeekDayJumpBar(week: week) { day in
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        proxy.scrollTo(WeekScheduleDayAnchor.id(week: week, day: day), anchor: .top)
+                    }
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(PlatformColor.secondaryGroupedBackground)
+                .overlay(alignment: .bottom) {
+                    Divider()
+                }
+            }
         }
         .navigationTitle("Week \(week)")
         .inlineNavigationBarTitle()

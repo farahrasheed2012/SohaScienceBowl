@@ -7,6 +7,14 @@ struct QuizRootView: View {
     var body: some View {
         NavigationStack {
             List {
+                if !appState.doeStore.hasFullDOEBank {
+                    Section {
+                        DOEQuizBankBanner()
+                    } header: {
+                        Text("DOE official questions")
+                    }
+                }
+
                 Section {
                     Picker("Subject", selection: $subjectFilter) {
                         Text("All").tag(Optional<Subject>.none)
@@ -146,9 +154,15 @@ struct QuizRootView: View {
                     } else {
                         let count = appState.doeStore.doeQuestions.count
                         if count > 0 {
-                            Text("\(count) questions · all categories · all downloaded sets")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                            if appState.doeStore.hasFullDOEBank {
+                                Text("\(count) questions · all \(DOEQuestionStore.catalogPDFCount) PDF sets")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text("\(count) questions · \(appState.doeStore.localPDFCount)/\(DOEQuestionStore.catalogPDFCount) PDFs")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                             ForEach(appState.doeStore.categoryCounts(), id: \.category) { item in
                                 HStack {
                                     DOECategoryBadge(category: item.category)
@@ -165,7 +179,7 @@ struct QuizRootView: View {
                         }
                     }
 
-                    if appState.doeStore.doeQuestions.isEmpty && !appState.doeStore.isDownloading {
+                    if !appState.doeStore.hasFullDOEBank && !appState.doeStore.isDownloading && !appState.isDOELoading {
                         Button("Download all DOE PDFs") {
                             Task { await appState.downloadDOEQuestions(fullCatalog: true) }
                         }
@@ -231,6 +245,7 @@ struct QuizRootView: View {
             .studyNavigationDestinations()
             .onAppear {
                 appState.refreshScheduleFromCalendar()
+                Task { await appState.loadDOEQuestions() }
             }
         }
     }

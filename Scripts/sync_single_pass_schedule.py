@@ -329,7 +329,8 @@ def generate_whiteboard_week(week: int) -> str:
     rows = []
     for i, day in enumerate(DAY_NAMES):
         kind, book, title, focus, formulas, know, tossup = blocks[i]
-        cell = html_cell(kind, book, title, focus, formulas, know, tossup)
+        display_book = format_mod_reading(week, i, book) if kind == "chem" else book
+        cell = html_cell(kind, display_book, title, focus, formulas, know, tossup)
         alg_cell = (
             f'<td class="alg study-cell"><strong>{esc(alg[i])}</strong>'
             f'<span class="focus"><em>Focus:</em> 1 hr algebra · Larson · BFN-A backup</span></td>'
