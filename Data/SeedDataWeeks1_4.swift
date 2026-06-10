@@ -28,8 +28,8 @@ extension SeedData {
                   ("Name two structures found in plant cells but not in typical animal cells.", "Cell wall and chloroplast")
               ]),
         block(week: 1, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 1 + App. B", title: "Ch 1 About Science + App. B Motion",
-              focus: "Ch 1: hypothesis vs theory vs law · SI base units (meter, kilogram, second) · precision vs accuracy · App. B: speed (scalar) vs velocity (vector) · acceleration · d-t graph: slope = speed · flat line = at rest · v = d/t",
+              book: "Expl", chapter: "Ch 1", title: "About Science (+ App B optional)",
+              focus: "~1 hr: Expl Ch 1 (hypothesis, SI units, precision). Optional 10-min skim: App. B motion graphs if time remains.",
               formulas: "v = d/t · a = Δv/Δt (concept) · slope = rise/run",
               knowCold: ["Theory vs law — which is broader? (Theory)", "120 km in 2 h → speed? (60 km/h)", "Flat d-t line means? (At rest / zero speed)", "Speed vs velocity difference? (Velocity has direction)"],
               topic: "About Science + Motion",
@@ -38,9 +38,9 @@ extension SeedData {
                   ("What does a horizontal (flat) line on a distance-time graph indicate?", "The object is at rest / not moving")
               ]),
         block(week: 1, day: .thursday, subject: .chemistry, pass: .pass1,
-              book: "Mod", chapter: "Ch 5 + Ch 7 intro", title: "Periodic Law + Chemical Formulas",
+              book: "Mod", chapter: "Ch 5", title: "Periodic Law",
               pass2Book: "Tro", pass2Chapter: "Ch 4 §4.7–4.8 + Ch 5", pass2Title: "Ions · Molecules & Compounds",
-              focus: "Periods = horizontal rows · groups = vertical columns (similar properties) · metals / nonmetals / metalloids · valence electrons (intro) · subscripts in chemical formulas · ionic vs molecular compound (intro) · H₂O, CO₂, NaCl",
+              focus: "~1 hr · one chapter: periods & groups · metals/nonmetals · valence electrons (intro) · subscripts in formulas · H₂O, CO₂, NaCl",
               formulas: "Na → Na⁺ + e⁻ · Group 18 = noble gases · H₂O, CO₂, NaCl",
               knowCold: ["Noble gas group number? (18)", "CO₂ formula? (CO₂)", "Na forms Na⁺ or Na⁻? (Na⁺)"],
               topic: "Elements & ions",
@@ -49,9 +49,9 @@ extension SeedData {
                   ("What is the chemical formula for table salt?", "NaCl")
               ]),
         block(week: 1, day: .friday, subject: .biology, pass: .pass1,
-              book: "OSB", chapter: "Ch 1 + Ch 16", title: "From a Cell to an Organism",
+              book: "OSB", chapter: "Ch 1", title: "Levels of Organization",
                       backupBookLine: "FLS Ch 2 · CB Ch 6–7",
-              focus: "Cell → tissue → organ → system → organism (levels of organization) · specialization (same DNA, different expressed genes) · tissue types: muscle, nerve, epithelial, connective · structure matches function",
+              focus: "~1 hr · one chapter: cell → tissue → organ → system → organism · specialization · tissue types",
               formulas: "Levels of organization in order",
               knowCold: ["Order from simplest: organ, cell, tissue, organism? (Cell → tissue → organ → organism)", "Why do muscle cells look different from nerve cells? (Specialization / different genes expressed)"],
               topic: "Cell energy & organization",
@@ -73,20 +73,20 @@ extension SeedData {
                   ("During boiling, is energy absorbed by or released from the substance?", "Absorbed")
               ]),
         block(week: 2, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "OSB", chapter: "Ch 7 + Ch 8", title: "Genetics",
+              book: "OSB", chapter: "Ch 7", title: "Genetics — DNA & genes (part 1)",
                       backupBookLine: "FLS Ch 4 · CB Ch 9",
-              focus: "DNA double helix · gene = segment of DNA · chromosome · allele · dominant (capital letter) vs recessive (lowercase) · genotype (letters) vs phenotype (observable trait) · Punnett square (monohybrid) · heterozygous (Tt) vs homozygous (TT or tt) · Tt × Tt → 3:1 phenotype ratio",
+              focus: "~1 hr · part 1: DNA · gene · chromosome · allele · dominant vs recessive. Finish Punnett squares Friday (Ch 8).",
               formulas: "Tt × Tt → 3 dominant : 1 recessive phenotype · homozygous (TT, tt) vs heterozygous (Tt)",
               knowCold: ["Tt × Tt phenotype ratio? (3:1)", "Dominant allele: capital or lowercase? (Capital)"],
               topic: "Genetics",
               tossups: [
-                  ("In a monohybrid cross Tt × Tt, what is the expected phenotypic ratio?", "3:1 (3 dominant : 1 recessive)"),
-                  ("How is a dominant allele typically written in genetics notation?", "With a capital letter")
+                  ("What molecule carries genetic information in the cell?", "DNA"),
+                  ("What is an alternate form of a gene called?", "An allele")
               ]),
         block(week: 2, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 2–4", title: "Newton's Laws",
+              book: "Expl", chapter: "Ch 2", title: "Newton's 1st & 2nd Laws (part 1)",
               pass2Book: "Expl", pass2Chapter: "Ch 2–5", pass2Title: "Newton's Laws + Momentum",
-              focus: "Inertia (Newton's 1st law — objects resist change in motion) · F = ma (Newton's 2nd) · action-reaction pairs (Newton's 3rd) · friction (opposing motion) · net force · N = kg·m/s²",
+              focus: "~1 hr · part 1: inertia · F = ma · net force · friction (intro). Wed week 3 = Newton's 3rd; week 4 = momentum wrap-up.",
               formulas: "F = ma · a = F/m · units: Newton (N), kg, m/s²",
               knowCold: ["F=20 N, m=4 kg → a? (5 m/s²)", "Double mass, same force → acceleration? (Halves)"],
               topic: "Forces & Newton's laws",
@@ -106,15 +106,15 @@ extension SeedData {
                   ("A reaction that releases heat to the surroundings is called what?", "Exothermic")
               ]),
         block(week: 2, day: .friday, subject: .biology, pass: .pass1,
-              book: "OSB", chapter: "Ch 16", title: "Musculoskeletal · Cardiopulmonary systems",
-                      backupBookLine: "FLS Ch 16–20 · CB Ch 21–23",
-              focus: "Bones/muscles as lever systems (fulcrum, effort, load) · heart pumps blood · arteries carry blood away from heart · veins return blood to heart · lungs: O₂ in / CO₂ out · capillaries for gas exchange",
-              formulas: "Lever: fulcrum · effort · load · artery = away from heart · vein = toward heart",
-              knowCold: ["Three parts of a lever? (Fulcrum, effort, load)", "Arteries carry blood toward or away from heart? (Away from heart)"],
-              topic: "Human body systems",
+              book: "OSB", chapter: "Ch 8", title: "Genetics — Punnett squares (part 2)",
+                      backupBookLine: "FLS Ch 4 · CB Ch 9",
+              focus: "~1 hr · part 2: genotype vs phenotype · Punnett square · Tt × Tt → 3:1 · heterozygous vs homozygous",
+              formulas: "Tt × Tt → 3 dominant : 1 recessive phenotype · homozygous (TT, tt) vs heterozygous (Tt)",
+              knowCold: ["Tt × Tt phenotype ratio? (3:1)", "Dominant allele: capital or lowercase? (Capital)"],
+              topic: "Genetics",
               tossups: [
-                  ("Name the three parts of a lever system.", "Fulcrum, effort (force), and load"),
-                  ("Do arteries carry blood toward or away from the heart?", "Away from the heart")
+                  ("In a monohybrid cross Tt × Tt, what is the expected phenotypic ratio?", "3:1 (3 dominant : 1 recessive)"),
+                  ("How is a dominant allele typically written in genetics notation?", "With a capital letter")
               ]),
 
         // WEEK 3
@@ -130,9 +130,9 @@ extension SeedData {
                   ("Is a solution with pH 11 acidic or basic?", "Basic")
               ]),
         block(week: 3, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "OSB", chapter: "Ch 19 + Ch 20", title: "Organism Interactions + Ecology",
+              book: "OSB", chapter: "Ch 19", title: "Ecology — communities (part 1)",
                       backupBookLine: "FLS Ch 7 · CB Ch 36–37",
-              focus: "Producers (make own food via photosynthesis) · consumers (eat others) · decomposers (break down dead matter) · food chain vs food web · 10% rule · symbiosis types: mutualism (+/+), commensalism (+/0), parasitism (+/−) · biomes",
+              focus: "~1 hr · part 1: producers · consumers · decomposers · food chains · symbiosis types",
               formulas: "Mutualism (+/+) · commensalism (+/0) · parasitism (+/−) · 10% energy rule",
               knowCold: ["3 biomes? (tundra, desert, rainforest, grassland, taiga, temperate forest)", "Who gets sun energy first in a food chain? (Producer)"],
               topic: "Ecology",
@@ -141,15 +141,15 @@ extension SeedData {
                   ("Name the three types of symbiosis.", "Mutualism, commensalism, parasitism")
               ]),
         block(week: 3, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 6", title: "Energy",
+              book: "Expl", chapter: "Ch 3", title: "Newton's 3rd Law & friction (part 2)",
               pass2Book: "Expl", pass2Chapter: "Ch 6–7", pass2Title: "Energy · Gravity",
-              focus: "Work = force × distance · power = work/time · kinetic energy (KE = ½mv²) · potential energy (PE = mgh) · conservation of energy · simple machines · efficiency = useful output / total input",
-              formulas: "W = Fd · P = W/t · KE = ½mv² · PE = mgh · units: Joule (J) · Watt (W)",
-              knowCold: ["More height → more PE? (Yes)", "F=10 N, d=5 m → W? (50 J)"],
-              topic: "Work & energy",
+              focus: "~1 hr · part 2: action-reaction pairs · friction · net force · N = kg·m/s². Energy (Ch 6) in Pass 2.",
+              formulas: "F = ma · action-reaction pairs · friction opposes motion · N = kg·m/s²",
+              knowCold: ["Newton's 3rd law in words? (Every action has equal and opposite reaction)", "F=20 N, m=4 kg → a? (5 m/s²)"],
+              topic: "Forces & Newton's laws",
               tossups: [
-                  ("What is the SI unit of work?", "Joule (J)"),
-                  ("A force of 10 N acts over a distance of 5 m. How much work is done?", "50 J")
+                  ("Newton's 3rd law: Earth pulls you down. What do you pull on Earth?", "Up (equal and opposite force)"),
+                  ("A 4 kg object experiences an acceleration of 5 m/s². What is the net force?", "20 N (F = 4 × 5)")
               ]),
         block(week: 3, day: .thursday, subject: .chemistry, pass: .pass1,
               book: "Mod", chapter: "Ch 12", title: "Solutions",
@@ -163,15 +163,15 @@ extension SeedData {
                   ("What separation method would you use to separate sand from water?", "Filtration")
               ]),
         block(week: 3, day: .friday, subject: .biology, pass: .pass1,
-              book: "OSB", chapter: "Ch 13 + Ch 17", title: "Microbial Life + Immune System",
-                      backupBookLine: "FLS Ch 8 · 21 · CB Ch 16 · 24",
-              focus: "Bacteria (prokaryote, antibiotics) vs virus (needs host cell, no antibiotics) · pathogen · antibody · vaccine · antibiotic only works on bacteria",
-              formulas: "Virus needs host cell · antibiotic ≠ antiviral · vaccine → immunity",
-              knowCold: ["Antibiotic for flu (a virus)? (No)", "Vaccine purpose? (Train immune system to produce antibodies)"],
-              topic: "Microorganisms & disease",
+              book: "OSB", chapter: "Ch 16", title: "Body systems — musculoskeletal & cardiopulmonary",
+                      backupBookLine: "FLS Ch 16–20 · CB Ch 21–23",
+              focus: "~1 hr · one chapter: levers · heart · arteries/veins · lungs O₂/CO₂ · capillaries",
+              formulas: "Lever: fulcrum · effort · load · artery = away from heart · vein = toward heart",
+              knowCold: ["Three parts of a lever? (Fulcrum, effort, load)", "Arteries carry blood toward or away from heart? (Away from heart)"],
+              topic: "Human body systems",
               tossups: [
-                  ("Are antibiotics effective against viruses such as influenza?", "No — antibiotics only work on bacteria"),
-                  ("What does a vaccine train the body to produce?", "Antibodies (and immune memory)")
+                  ("Name the three parts of a lever system.", "Fulcrum, effort (force), and load"),
+                  ("Do arteries carry blood toward or away from the heart?", "Away from the heart")
               ]),
 
         // WEEK 4
@@ -187,9 +187,9 @@ extension SeedData {
                   ("Which is the larger atom: sodium (Na) or chlorine (Cl)?", "Sodium (Na)")
               ]),
         block(week: 4, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "OSB", chapter: "Ch 11 + Ch 12", title: "Evolution",
+              book: "OSB", chapter: "Ch 11", title: "Evolution — natural selection (part 1)",
                       backupBookLine: "FLS Ch 5–6 · CB Ch 13–14",
-              focus: "Natural selection (Charles Darwin) · variation · adaptation · evidence: fossils, anatomy, DNA · classification: Domain → Kingdom → … → Species · binomial nomenclature · Homo sapiens",
+              focus: "~1 hr · part 1: natural selection · variation · adaptation · fossil evidence. Fri = classification (Ch 12).",
               formulas: "Taxonomy mnemonic · Homo sapiens",
               knowCold: ["Scientist associated with natural selection? (Charles Darwin)", "Most specific taxonomic rank? (Species)"],
               topic: "Evolution & classification",
@@ -198,15 +198,15 @@ extension SeedData {
                   ("What is the most specific level in the classification system?", "Species")
               ]),
         block(week: 4, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 12–13", title: "Waves · Light · Electricity stretch",
+              book: "Expl", chapter: "Ch 12", title: "Waves & sound (part 1)",
               pass2Book: "Expl", pass2Chapter: "Ch 10–13", pass2Title: "Electricity · Waves · Light",
-              focus: "Wavelength (λ) · frequency (f) · amplitude · wave speed v = fλ · reflection · refraction · Ohm's Law V = IR · current · voltage · resistance · series vs parallel circuits",
-              formulas: "v = fλ · V = IR · Hz · Ω · A · V",
-              knowCold: ["Higher pitch → higher or lower frequency? (Higher)", "I=2 A, R=5 Ω → V? (10 V)"],
-              topic: "Waves & electricity",
+              focus: "~1 hr · part 1: wavelength · frequency · amplitude · v = fλ · reflection · refraction",
+              formulas: "v = fλ · wavelength (λ) · frequency (f) · amplitude",
+              knowCold: ["Higher pitch → higher or lower frequency? (Higher)", "v = fλ relates which three quantities? (Speed, frequency, wavelength)"],
+              topic: "Waves",
               tossups: [
                   ("A higher-pitched sound corresponds to a higher or lower frequency?", "Higher frequency"),
-                  ("Using Ohm's Law, if current I = 2 A and resistance R = 5 Ω, what is the voltage?", "10 V")
+                  ("What does the amplitude of a wave relate to?", "Energy / loudness (for sound)")
               ]),
         block(week: 4, day: .thursday, subject: .chemistry, pass: .pass1,
               book: "Mod", chapter: "Ch 2", title: "Measurements and Calculations",
@@ -220,15 +220,15 @@ extension SeedData {
                   ("Which piece of lab glassware is used to measure liquid volume most precisely?", "Graduated cylinder")
               ]),
         block(week: 4, day: .friday, subject: .biology, pass: .pass1,
-              book: "OSB", chapter: "Ch 14 + Ch 15", title: "Plants & Animal Structure",
-                      backupBookLine: "FLS Ch 10–11 · CB Ch 31 · 20",
-              focus: "Root = absorbs water and minerals · stem = support/transport · leaf = photosynthesis · xylem = carries water up · phloem = carries sugars · animal tissues: muscle, nerve, epithelial, connective",
-              formulas: "Root/stem/leaf functions · xylem (water up) · phloem (sugar down)",
-              knowCold: ["Primary function of roots? (Absorb water and minerals)", "Where does most photosynthesis occur? (Leaves)"],
-              topic: "Plants & animals",
+              book: "OSB", chapter: "Ch 12", title: "Classification & taxonomy (part 2)",
+                      backupBookLine: "FLS Ch 5–6 · CB Ch 13–14",
+              focus: "~1 hr · part 2: Domain → Kingdom → … → Species · binomial nomenclature · Homo sapiens",
+              formulas: "Taxonomy mnemonic · Homo sapiens",
+              knowCold: ["Scientist associated with natural selection? (Charles Darwin)", "Most specific taxonomic rank? (Species)"],
+              topic: "Evolution & classification",
               tossups: [
-                  ("What is the primary function of plant roots?", "Absorb water and minerals from the soil"),
-                  ("In which plant organ does most photosynthesis occur?", "Leaves")
-              ])
+                  ("What scientist is most closely associated with the theory of natural selection?", "Charles Darwin"),
+                  ("What is the most specific level in the classification system?", "Species")
+              ]),
     ]
 }

@@ -165,11 +165,12 @@ enum StudySessionStage: Int, CaseIterable, Identifiable {
     }
 
     var subtitle: String {
+        let mins = ScheduleConstants.scienceSessionMinutes
         switch self {
-        case .recall: return "0–5 min · 5 quick questions from last week"
-        case .read: return "5–20 min · Reading, Focus, Formulas"
-        case .knowCold: return "20–25 min · Self-check without notes"
-        case .tossups: return "25–30 min · Sample toss-ups + notebook"
+        case .recall: return "0–10 min · 5 quick questions from last week"
+        case .read: return "10–\(mins - 20) min · Textbook + Focus + Formulas (~1 chapter)"
+        case .knowCold: return "\(mins - 20)–\(mins - 10) min · Self-check without notes"
+        case .tossups: return "\(mins - 10)–\(mins) min · Sample toss-ups + notebook"
         }
     }
 }

@@ -39,7 +39,7 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 
 ## Features
 
-- **Today** — daily study blocks, 4-stage study session (Recall → Read → Know Cold → Toss-ups), buzzer drill schedule, Friday review
+- **Today** — daily study blocks, 4-stage study session (Recall → Read → Know Cold → Toss-ups), **1 hr science + 1 hr algebra**, buzzer drill schedule, Friday review
 - **Learn** — 124 NSB encyclopedia topics (6 categories) with full articles, related topics, MC/Toss-up/Free-response practice; badges show topics missing drills; `make verify` checks reading + question coverage
 - **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill, encyclopedia practice, **Texas Regional Sprint** (11 packs), search, weak-area practice
 - **Progress** — weekly/lifetime accuracy, checklist, flash cards, spaced repetition

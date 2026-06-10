@@ -133,7 +133,7 @@ extension AppState {
                 return NextUpItem(
                     title: "Next: \(block.day.shortName) \(block.subject.rawValue)",
                     subtitle: "\(block.displayChapter) · \(block.primaryTopic)",
-                    duration: "30 min",
+                    duration: "\(ScheduleConstants.scienceSessionMinutes) min",
                     route: .fullSession(block)
                 )
             }
@@ -142,7 +142,7 @@ extension AppState {
                 return NextUpItem(
                     title: "Next: Math · \(math.title)",
                     subtitle: math.larBackupLine,
-                    duration: "30 min",
+                    duration: "\(ScheduleConstants.algebraSessionMinutes) min",
                     route: .mathTopicDetail(MathTopicRef(week: currentWeek, day: weekday))
                 )
             }

@@ -15,7 +15,7 @@ struct StudySessionView: View {
     @State private var facts: [String] = ["", "", ""]
     @State private var miss = ""
     @State private var readingDone = false
-    @State private var secondsRemaining = 30 * 60
+    @State private var secondsRemaining = ScheduleConstants.scienceSessionMinutes * 60
     @State private var timerActive = false
 
     private var recallQuestions: [TossupQuestion] {

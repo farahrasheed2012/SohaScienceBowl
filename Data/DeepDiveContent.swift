@@ -12,25 +12,26 @@ enum DeepDiveContent {
         switch pass {
         case .pass1 where week >= 1 && week <= 4:
             return """
-            Pass 1 block workflow (Weeks 1–4):
-            • Minutes 0–5 — Quick recall (5 toss-ups from last week, same subject)
-            • Minutes 5–20 — Read for Focus · copy Formulas & key terms into notebook
-            • Minutes 20–25 — Know cold without notes
-            • Minutes 25–30 — Sample toss-ups · 3 facts + 1 miss
+            Pass 1 block workflow (Weeks 1–4) — 1 hour:
+            • Minutes 0–10 — Quick recall (5 toss-ups from last week, same subject)
+            • Minutes 10–40 — Read today’s chapter (or section) · copy Formulas & key terms
+            • Minutes 40–50 — Know cold without notes
+            • Minutes 50–60 — Sample toss-ups · 3 facts + 1 miss
+            If the block lists “part 1,” finish the chapter on the next same-subject day this week.
             """
         case .pass2 where week >= 5 && week <= 8:
             return """
-            Pass 2 block workflow (Weeks 5–8):
-            • First 15 min — DOE toss-ups on today’s topic
-            • Next 15 min — re-read the Tro/CB/Expl section for any miss
-            • Use harder regional wording; take fewer notes than Pass 1
+            Pass 2 block workflow (Weeks 5–8) — 1 hour:
+            • First 30 min — DOE toss-ups on today’s topic · log misses
+            • Next 30 min — re-read the Tro/CB/Expl section for misses · know-cold check
+            • Use harder regional wording; one chapter (or section) per block when reading
             """
         case .pass3 where week >= 9:
             return """
-            Pass 3 block workflow (Weeks 9–10):
-            • Flash cards first on today’s topic
-            • Open Tro/Mod/CB/FLS/Expl only if stuck
-            • Finish with 5 DOE-style toss-ups per science block
+            Pass 3 block workflow (Weeks 9–10) — 1 hour:
+            • Flash cards first on today’s topic (~20 min)
+            • Open Tro/Mod/CB/FLS/Expl only if stuck (~20 min)
+            • Finish with 5–10 DOE-style toss-ups per science block (~20 min)
             • No new reading — review only
             """
         default:

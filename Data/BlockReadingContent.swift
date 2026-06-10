@@ -38,7 +38,7 @@ enum BlockReadingContent {
             ReadingSection(
                 title: "While you read",
                 body: """
-                Open \(block.bookLine(for: pass)). Copy every formula from today's block into your Science Bowl notebook.
+                Open \(block.bookLine(for: pass)). Plan **~35–40 min** for today's chapter (one chapter or one part of a split topic). Copy every formula from today's block into your Science Bowl notebook.
 
                 Write three facts you did not know before reading. Mark anything that could become a toss-up — definitions, numbers, organelle jobs, and formula units.
                 """

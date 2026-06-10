@@ -4,6 +4,12 @@ enum ScheduleConstants {
     /// Target number of toss-ups for a single day's topic / block quiz.
     static let dayTopicQuizQuestionCount = 30
 
+    /// Science Bowl study session length (matches summer timetable science block).
+    static let scienceSessionMinutes = 60
+
+    /// Algebra block length on the summer timetable (Mon–Fri).
+    static let algebraSessionMinutes = 60
+
     static let studyStartDate: Date = {
         var c = DateComponents()
         c.year = 2026
@@ -40,22 +46,22 @@ enum ScheduleConstants {
 
     static func blockTimeLabel(day: Weekday, subject: Subject) -> String {
         switch (day, subject) {
-        case (.monday, .chemistry): return "10:00 – 10:30 AM"
-        case (.tuesday, .biology): return "10:00 – 10:30 AM"
-        case (.wednesday, .physics): return "3:00 – 3:30 PM"
-        case (.thursday, .chemistry): return "11:00 – 11:30 AM"
-        case (.friday, .biology): return "3:00 – 3:30 PM"
-        default: return "30 min block"
+        case (.monday, .chemistry): return "10:00 – 11:00 AM"
+        case (.tuesday, .biology): return "10:00 – 11:00 AM"
+        case (.wednesday, .physics): return "3:00 – 4:00 PM"
+        case (.thursday, .chemistry): return "11:00 AM – 12:00 PM"
+        case (.friday, .biology): return "3:00 – 4:00 PM"
+        default: return "1 hr block"
         }
     }
 
     static func mathBlockTimeLabel(day: Weekday) -> String {
         switch day {
-        case .monday: return "10:45 – 11:15 AM"
-        case .tuesday: return "11:50 AM – 12:20 PM"
-        case .wednesday: return "11:25 – 11:55 AM"
-        case .thursday: return "11:30 AM – 12:00 PM"
-        case .friday: return "3:45 – 4:15 PM"
+        case .monday: return "11:15 AM – 12:15 PM"
+        case .tuesday: return "11:15 AM – 12:15 PM"
+        case .wednesday: return "1:15 – 2:15 PM"
+        case .thursday: return "12:15 – 1:15 PM"
+        case .friday: return "4:00 – 5:00 PM"
         }
     }
 
