@@ -94,6 +94,114 @@ ALGEBRA_ROWS = {
     10: ["Lar Review", "Lar Review", "Lar Ch 13", "Lar Review", "Lar Review"],
 }
 
+# Mirrors ScheduleOpenStaxCatalog.mathByWeekDay — (title, section_keys, lar_backup)
+OSA_MATH: dict[int, list[tuple[str, list[str], str]]] = {
+    1: [
+        ("Scientific notation", ["1.1", "1.2"], "Lar Ch 1 · BFN-A U4"),
+        ("Ratios", ["5.8"], "Lar Ch 2 · BFN-A U3"),
+        ("Graphs & slope", ["2.1", "4.1", "3.3"], "Lar Ch 4 · BFN-A U6"),
+        ("Unit conversion", ["1.1", "1.2"], "Lar Ch 1–2 · BFN-A U2"),
+        ("PEMDAS & estimation", ["1.1"], "Lar Ch 2 · BFN-A U1"),
+    ],
+    2: [
+        ("Percent", ["1.1"], "Lar Ch 2 · BFN-A U3"),
+        ("Proportions", ["5.8"], "Lar Ch 3 · BFN-A U3"),
+        ("F = ma", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+        ("Exponents", ["1.2", "6.1"], "Lar Ch 8 · BFN-A U4"),
+        ("Body-scale ratios", ["5.8"], "Lar Ch 3 · BFN-A U3"),
+    ],
+    3: [
+        ("Formula substitution", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+        ("Graph reading", ["2.1", "3.3"], "Lar Ch 4 · BFN-A U6"),
+        ("W = Fd", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+        ("Concentration ratios", ["5.8"], "Lar Ch 2 · BFN-A U3"),
+        ("Mixed review", ["1.2", "5.8", "2.3"], "Lar Ch 1–4 · BFN-A"),
+    ],
+    4: [
+        ("Number review", ["1.1"], "Lar Ch 2 · BFN-A U2"),
+        ("Logic & probability", ["13.7"], "Lar Ch 13 · BFN-A U7"),
+        ("v = fλ", ["2.3", "1.3"], "Lar Ch 3 + Ch 11 · BFN-A U11"),
+        ("Unit conversion review", ["1.1", "1.2"], "Lar Ch 1–2 · BFN-A U2"),
+        ("Formula plug-in", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+    ],
+    5: [
+        ("Scientific notation", ["1.1", "1.2"], "Lar Ch 1 · BFN-A U4"),
+        ("Ratios", ["5.8"], "Lar Ch 2 · BFN-A U3"),
+        ("Graphs & slope", ["2.1", "4.1", "3.3"], "Lar Ch 4 · BFN-A U6"),
+        ("Unit conversion", ["1.1", "1.2"], "Lar Ch 1–2 · BFN-A U2"),
+        ("PEMDAS & estimation", ["1.1"], "Lar Ch 2 · BFN-A U1"),
+    ],
+    6: [
+        ("Percent", ["1.1"], "Lar Ch 2 · BFN-A U3"),
+        ("Proportions", ["5.8"], "Lar Ch 3 · BFN-A U3"),
+        ("F = ma", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+        ("Exponents", ["1.2", "6.1"], "Lar Ch 8 · BFN-A U4"),
+        ("Body-scale ratios", ["5.8"], "Lar Ch 3 · BFN-A U3"),
+    ],
+    7: [
+        ("Formula substitution", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+        ("Graph reading", ["2.1", "3.3"], "Lar Ch 4 · BFN-A U6"),
+        ("W = Fd", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+        ("Concentration ratios", ["5.8"], "Lar Ch 2 · BFN-A U3"),
+        ("Mixed review", ["1.2", "5.8", "2.3"], "Lar Ch 1–4 · BFN-A"),
+    ],
+    8: [
+        ("Number review", ["1.1"], "Lar Ch 2 · BFN-A U2"),
+        ("Logic & probability", ["13.7"], "Lar Ch 13 · BFN-A U7"),
+        ("v = fλ", ["2.3", "1.3"], "Lar Ch 3 + Ch 11 · BFN-A U11"),
+        ("Unit conversion review", ["1.1", "1.2"], "Lar Ch 1–2 · BFN-A U2"),
+        ("Formula plug-in", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+    ],
+    9: [
+        ("Scientific notation", ["1.2"], "Lar Ch 1 · BFN-A U4"),
+        ("Ratios", ["5.8"], "Lar Ch 2 · BFN-A U3"),
+        ("Graphs", ["2.1", "3.3"], "Lar Ch 4 · BFN-A U6"),
+        ("Unit conversion", ["1.1", "1.2"], "Lar Ch 1–2 · BFN-A U2"),
+        ("Flash review", ["1.2", "5.8"], "Lar Ch 1–4 · BFN-A"),
+    ],
+    10: [
+        ("Formula substitution", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+        ("Graph reading", ["2.1", "3.3"], "Lar Ch 4 · BFN-A U6"),
+        ("W = Fd", ["2.3"], "Lar Ch 3 · BFN-A U5"),
+        ("Concentration ratios", ["5.8"], "Lar Ch 2 · BFN-A U3"),
+        ("Final review", ["home"], "Lar Ch 1–13 · BFN-A"),
+    ],
+}
+
+
+def format_osa_sections(section_keys: list[str]) -> str:
+    if section_keys == ["home"]:
+        return "review"
+    if len(section_keys) == 1:
+        return f"§{section_keys[0]}"
+    if len(section_keys) == 2:
+        ch0, sub0 = section_keys[0].split(".", 1)
+        ch1, sub1 = section_keys[1].split(".", 1)
+        if ch0 == ch1:
+            return f"§{ch0}.{sub0}–{sub1}"
+    return " · ".join(f"§{key}" for key in section_keys)
+
+
+def osa_math_reading(week: int, day_idx: int) -> tuple[str, list[str], str]:
+    return OSA_MATH[week][day_idx]
+
+
+def format_osa_algebra_primary(week: int, day_idx: int) -> str:
+    title, sections, _ = osa_math_reading(week, day_idx)
+    return f"OSA {format_osa_sections(sections)} — {title}"
+
+
+def algebra_html_cell(week: int, day_idx: int) -> str:
+    primary = format_osa_algebra_primary(week, day_idx)
+    _, _, lar_backup = osa_math_reading(week, day_idx)
+    return (
+        f'<td class="alg study-cell">'
+        f"<strong>{esc(primary)}</strong>"
+        f'<span class="optional-book"><em>Backup:</em> {esc(lar_backup)}</span>'
+        f'<span class="focus"><em>Focus:</em> 1 hr algebra · assigned § only</span>'
+        f"</td>"
+    )
+
 # Science blocks Mon–Fri per week (kind, book, title, focus, formulas, know, tossup)
 # Weeks 1–4 aligned with ScienceBowlCoach SeedDataWeeks1_4.swift (OSB biology + section splits)
 SCIENCE_WEEKS: dict[int, list[tuple]] = {
@@ -529,6 +637,19 @@ FLS_PRIMARY: dict[tuple[int, int], str] = {
     (10, 4): "FLS Review",
 }
 
+HEWITT_PHYS_PRIMARY: dict[tuple[int, int], str] = {
+    (1, 2): "Hewitt Ch 1 §1.2–1.5 + App. B",
+    (2, 2): "Hewitt Ch 2 §2.2–2.6 + Ch 3 §3.1–3.3",
+    (3, 2): "Hewitt Ch 3 §3.4–3.6 + Ch 4 §4.1–4.3",
+    (4, 2): "Hewitt Ch 12 §12.1–12.6",
+    (5, 2): "Hewitt Ch 6 §6.1–6.5",
+    (6, 2): "Hewitt Ch 7 §7.1–7.4 + §7.7",
+    (7, 2): "Hewitt Ch 5 §5.1–5.5",
+    (8, 2): "Hewitt Ch 10 §10.1–10.7 + §10.11",
+    (9, 2): "Hewitt Ch 10 §10.11 + Ch 12 §12.1–12.3 + Ch 13 §13.1",
+    (10, 2): "Hewitt Ch 11 §11.1–11.5 + Ch 13 §13.3–13.4",
+}
+
 
 def primary_display_book(week: int, day_idx: int, kind: str, book: str) -> str:
     key = (week, day_idx)
@@ -536,15 +657,14 @@ def primary_display_book(week: int, day_idx: int, kind: str, book: str) -> str:
         return HEWITT_CHEM_PRIMARY.get(key, book.replace("Mod", "Hewitt", 1))
     if kind == "bio":
         return FLS_PRIMARY.get(key, book.replace("OSB", "FLS", 1))
-    if kind == "phys" and book.startswith("Expl"):
-        return book.replace("Expl", "Hewitt", 1)
+    if kind == "phys":
+        return HEWITT_PHYS_PRIMARY.get(key, book.replace("Expl", "Hewitt", 1))
     return book
 
 
 def generate_whiteboard_week(week: int) -> str:
     dates, theme = WEEK_META[week]
     blocks = SCIENCE_WEEKS[week]
-    alg = ALGEBRA_ROWS[week]
     date_list = DATES[week]
 
     rows = []
@@ -552,10 +672,7 @@ def generate_whiteboard_week(week: int) -> str:
         kind, book, title, focus, formulas, know, tossup = blocks[i]
         display_book = primary_display_book(week, i, kind, book)
         cell = html_cell(kind, display_book, title, focus, formulas, know, tossup)
-        alg_cell = (
-            f'<td class="alg study-cell"><strong>{esc(alg[i])}</strong>'
-            f'<span class="focus"><em>Focus:</em> 1 hr algebra · Larson · BFN-A backup</span></td>'
-        )
+        alg_cell = algebra_html_cell(week, i)
 
         if day == "Mon":
             rows.append(
@@ -602,7 +719,7 @@ def generate_whiteboard_week(week: int) -> str:
     <div class="week-meta"><span class="pass-tag">SUMMER · ONE PASS</span><br>Hewitt + FLS + assigned §</div>
   </div>
 {note}  <table>
-    <tr><th>Date</th><th>Day</th><th>Chemistry · Hewitt (+ Mod backup)</th><th>Biology · FLS</th><th>Physics · Hewitt</th><th>Algebra · Lar</th><th>Python · Coach<br><span style="font-weight:normal;text-transform:none">Tue/Thu 4:45–5:15</span></th><th>Fri review</th></tr>
+    <tr><th>Date</th><th>Day</th><th>Chemistry · Hewitt (+ Mod backup)</th><th>Biology · FLS</th><th>Physics · Hewitt</th><th>Algebra · OSA (+ Lar backup)</th><th>Python · Coach<br><span style="font-weight:normal;text-transform:none">Tue/Thu 4:45–5:15</span></th><th>Fri review</th></tr>
 {chr(10).join(rows)}
   </table>{footer}
 </section>
@@ -612,7 +729,6 @@ def generate_whiteboard_week(week: int) -> str:
 def generate_calendar_week_md(week: int) -> str:
     dates, theme = WEEK_META[week]
     blocks = SCIENCE_WEEKS[week]
-    alg = ALGEBRA_ROWS[week]
     date_list = DATES[week]
     full_days = [
         f"Monday, {date_list[0]}",
@@ -638,7 +754,8 @@ def generate_calendar_week_md(week: int) -> str:
             f"| **{subj} · {book}** | *{title}* · backup Tro/CB/BFN | {focus} | {formulas} | {know} | 1. {tossup} |"
         )
         lines.append(
-            f"| **Algebra · {alg[idx]}** | *Larson* · BFN-A backup | 1 hr algebra block | — | — | — |"
+            f"| **Algebra · OSA** | *{format_osa_algebra_primary(week, idx)}* · "
+            f"backup {osa_math_reading(week, idx)[2]} | 1 hr algebra block | — | — | — |"
         )
         if idx == 1:
             label, focus_txt = COACH_ROWS[week]["tue"]
@@ -670,13 +787,14 @@ def patch_whiteboard_legend(text: str) -> str:
     <tr><td><strong>Mod</strong></td><td>Modern Chemistry 2012 — Sarquis (ISBN 9780547586632)</td><td>Chemistry backup · Mon &amp; Thu</td></tr>
     <tr><td><strong>Tro</strong></td><td>Introductory Chemistry — Tro 4th ed. (ISBN 9780321687937)</td><td>Chemistry backup</td></tr>
     <tr><td><strong>Hewitt</strong></td><td>Conceptual Physical Science Explorations — Hewitt student text (ISBN 9780321567918)</td><td>Primary chem (Ch 17–24) · Wed physics</td></tr>
-    <tr><td><strong>Lar</strong></td><td>Holt McDougal Larson Algebra 1 2011 (ISBN 9780547315157)</td><td>Algebra Mon–Fri · Ch 1–13</td></tr>
+    <tr><td><strong>OSA</strong></td><td>OpenStax Algebra &amp; Trigonometry 2e — free online (openstax.org)</td><td>Primary algebra · Mon–Fri · assigned §</td></tr>
+    <tr><td><strong>Lar</strong></td><td>Holt McDougal Larson Algebra 1 2011 (ISBN 9780547315157)</td><td>Algebra backup · Ch 1–13</td></tr>
     <tr><td><strong>BFN-A/Bio/Sci</strong></td><td>Big Fat Notebooks — Algebra · Biology · Science</td><td>Backup quizzes · Fri review</td></tr>
     <tr><td><strong>Coach</strong></td><td>Soha Python Coach — Mac app (Outschool L1–4 + portfolio)</td><td>Tue/Thu 4:45–5:15 PM · Journey tab</td></tr>
   </table>"""
     text = re.sub(
         r"<section class=\"week legend-page\">.*?<!-- WEEK 1 -->",
-        f"<section class=\"week legend-page\">\n  <div class=\"week-header\">\n    <h2>Book key &amp; DOE topic scope</h2>\n    <div class=\"week-meta\">Summer 2026 · Soha<br>Jun 8 – Aug 19</div>\n  </div>\n{legend_table}\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">DOE study topics (not whole textbooks)</h3>\n  <p style=\"font-size:8pt;margin:0 0 0.1in\">Life: cell biology, genetics, anatomy &amp; physiology, plant biology, ecology, animal behavior · Physical: chem reactions/periodic table/states of matter + physics forces/motion/waves/electromagnetism/thermo · Math: algebra, geometry, probability, statistics (Lar block).</p>\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">Pick your book *(Soha)*</h3>\n  <table style=\"font-size:8pt\">\n    <tr><th>When</th><th>Primary</th><th>Also OK</th><th>Backup</th></tr>\n    <tr><td>Mon/Thu Chem</td><td><strong>Hewitt</strong> Ch 17–24</td><td>—</td><td><strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td></tr>\n    <tr><td>Tue/Fri Bio</td><td><strong>FLS</strong></td><td>—</td><td><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td></tr>\n    <tr><td>Wed Phys</td><td><strong>Hewitt</strong></td><td>—</td><td><strong>BFN-Sci</strong></td></tr>\n    <tr><td>Mon–Fri Algebra</td><td><strong>Lar</strong></td><td>—</td><td><strong>BFN-A</strong></td></tr>\n    <tr><td>Tue/Thu Python</td><td><strong>Coach</strong> Journey week</td><td>—</td><td>Playground + live notes</td></tr>\n  </table>\n  <table style=\"margin-top:0.2in\">\n    <tr><th>Plan</th><th>Dates</th><th>Chemistry</th><th>Biology</th><th>Physics</th><th>Python</th></tr>\n    <tr><td><strong>One summer pass</strong></td><td>Jun 8 – Aug 14</td><td><strong>Hewitt</strong> chem</td><td><strong>FLS</strong> (+ OSB/CB backup)</td><td><strong>Hewitt</strong></td><td><strong>Coach</strong> wk 1–10</td></tr>\n    <tr><td><strong>Backups</strong></td><td>anytime</td><td><strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong> · <strong>CB</strong> · BFN-Bio</td><td>BFN-Sci</td><td>Quiz → DOE in app</td></tr>\n    <tr><td><strong>Bridge</strong></td><td>Aug 15 – 18</td><td colspan=\"4\">Optional flash cards · school meetings in fall · Aug 19 = first day of school</td></tr>\n  </table>\n  <p class=\"footer\">Each cell: read assigned <strong>§ section</strong> only · <strong>Formulas</strong> · <strong>Focus</strong> · <strong>Know</strong> · <strong>Toss-up</strong> · Full detail + answers in summer-2026-calendar.md · Daily times → weekly-timetable.md</p>\n</section>\n\n<!-- WEEK 1 -->",
+        f"<section class=\"week legend-page\">\n  <div class=\"week-header\">\n    <h2>Book key &amp; DOE topic scope</h2>\n    <div class=\"week-meta\">Summer 2026 · Soha<br>Jun 8 – Aug 19</div>\n  </div>\n{legend_table}\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">DOE study topics (not whole textbooks)</h3>\n  <p style=\"font-size:8pt;margin:0 0 0.1in\">Life: cell biology, genetics, anatomy &amp; physiology, plant biology, ecology, animal behavior · Physical: chem reactions/periodic table/states of matter + physics forces/motion/waves/electromagnetism/thermo · Math: algebra, geometry, probability, statistics (OSA § block).</p>\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">Pick your book *(Soha)*</h3>\n  <table style=\"font-size:8pt\">\n    <tr><th>When</th><th>Primary</th><th>Also OK</th><th>Backup</th></tr>\n    <tr><td>Mon/Thu Chem</td><td><strong>Hewitt</strong> Ch 17–24</td><td>—</td><td><strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td></tr>\n    <tr><td>Tue/Fri Bio</td><td><strong>FLS</strong></td><td>—</td><td><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td></tr>\n    <tr><td>Wed Phys</td><td><strong>Hewitt</strong></td><td>—</td><td><strong>BFN-Sci</strong></td></tr>\n    <tr><td>Mon–Fri Algebra</td><td><strong>OSA</strong> assigned §</td><td>—</td><td><strong>Lar</strong> · <strong>BFN-A</strong></td></tr>\n    <tr><td>Tue/Thu Python</td><td><strong>Coach</strong> Journey week</td><td>—</td><td>Playground + live notes</td></tr>\n  </table>\n  <table style=\"margin-top:0.2in\">\n    <tr><th>Plan</th><th>Dates</th><th>Chemistry</th><th>Biology</th><th>Physics</th><th>Python</th></tr>\n    <tr><td><strong>One summer pass</strong></td><td>Jun 8 – Aug 14</td><td><strong>Hewitt</strong> chem</td><td><strong>FLS</strong> (+ OSB/CB backup)</td><td><strong>Hewitt</strong></td><td><strong>Coach</strong> wk 1–10</td></tr>\n    <tr><td><strong>Backups</strong></td><td>anytime</td><td><strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong> · <strong>CB</strong> · BFN-Bio</td><td>BFN-Sci</td><td>Quiz → DOE in app</td></tr>\n    <tr><td><strong>Bridge</strong></td><td>Aug 15 – 18</td><td colspan=\"4\">Optional flash cards · school meetings in fall · Aug 19 = first day of school</td></tr>\n  </table>\n  <p class=\"footer\">Each cell: read assigned <strong>§ section</strong> only · <strong>Formulas</strong> · <strong>Focus</strong> · <strong>Know</strong> · <strong>Toss-up</strong> · Full detail + answers in summer-2026-calendar.md · Daily times → weekly-timetable.md</p>\n</section>\n\n<!-- WEEK 1 -->",
         text,
         count=1,
         flags=re.DOTALL,
@@ -717,7 +835,8 @@ def patch_calendar_books_section(text: str) -> str:
 | **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Chemistry backup · Mon & Thu |
 | **Tro** | *Introductory Chemistry* — Tro **4th ed.** | 9780321687937 | Chemistry backup · anytime |
 | **ExplLab** | *Explorations: Laboratory Manual* *(optional hands-on)* | 9780321051837 | Wed labs when you want |
-| **Lar** | *Holt McDougal Larson Algebra 1* — **2011** | 9780547315157 | Algebra Mon–Fri |
+| **OSA** | *OpenStax Algebra & Trigonometry 2e* — free online | openstax.org | **Primary** algebra · Mon–Fri · assigned § |
+| **Lar** | *Holt McDougal Larson Algebra 1* — **2011** | 9780547315157 | Algebra **backup** · Ch 1–13 |
 | **BFN-A** | *Big Fat Notebook: Pre-Algebra & Algebra* | 9781523504382 | Algebra backup · CYK quizzes |
 | **BFN-Bio** | *Big Fat Notebook: Biology* (HS) | 9781523504367 | Fri review · quick bio recall |
 | **BFN-Sci** | *Big Fat Notebook: Science* (MS) | 9780761160957 | Fri review · chem/phys recall |
@@ -744,7 +863,7 @@ def patch_calendar_books_section(text: str) -> str:
         ("| **Fri** | Biology | **FLS** (P1) · **CB** (P2–3) | — | **BFN-Bio** |",
          "| **Fri** | Biology | **FLS** primary | — | **OSB** · **CB** · **BFN-Bio** |"),
         ("| **Mon–Thu** | Algebra | **Lar** | — | **BFN-A** |",
-         "| **Mon–Fri** | Algebra | **Lar** | — | **BFN-A** |"),
+         "| **Mon–Fri** | Algebra | **OSA** assigned § | — | **Lar** · **BFN-A** |"),
     ]:
         text = text.replace(old, new)
     text = re.sub(
@@ -756,7 +875,7 @@ def patch_calendar_books_section(text: str) -> str:
 | **Mon/Thu** | **Hewitt** chem (Ch 17–24) | — | — | — |
 | **Tue/Fri** | — | **FLS** (+ OSB/CB backup) | — | — |
 | **Wed** | — | — | **Hewitt** physics | — |
-| **Mon–Fri** | — | — | — | **Lar** algebra |
+| **Mon–Fri** | — | — | — | **OSA** algebra (+ Lar backup) |
 | **Tue/Thu PM** | — | — | — | **Coach** Journey wk 1–10 |
 
 Study **DOE Tips & Resources topics** only — assigned **§ sections**, not whole textbooks. Tro/CB/BFN = backups. Extra DOE → Science Bowl Coach **Quiz** tab. Flash cards → school meetings in fall.
@@ -802,7 +921,7 @@ def patch_weekly_timetable(path: Path) -> None:
         ("**FLS** (Pass 1) · **CB** (Pass 2–3)", "**FLS** primary · **OSB/CB** backup"),
         ("Pass 1–3", "one summer pass"),
         ("| **Mon–Thu** | Algebra | **Lar** | — | **BFN-A** |",
-         "| **Mon–Fri** | Algebra | **Lar** | — | **BFN-A** |"),
+         "| **Mon–Fri** | Algebra | **OSA** assigned § | — | **Lar** · **BFN-A** |"),
         ("**All books on shelf:** FLS · CB · Mod",
          "**All books on shelf:** OSB · FLS · CB · Mod"),
     ]
@@ -1029,7 +1148,6 @@ def format_backup_html(week: int, day_idx: int, kind: str) -> str:
 def generate_prep_week_table_md(week: int) -> str:
     _, theme = WEEK_META[week]
     blocks = SCIENCE_WEEKS[week]
-    alg = ALGEBRA_ROWS[week]
     lines = [
         f"### Week {week} — {theme}",
         "",
@@ -1043,8 +1161,10 @@ def generate_prep_week_table_md(week: int) -> str:
             f"| {format_backup_md(week, day_idx, kind)} | {format_mod_backup(week, day_idx, kind)} |"
         )
     for day_idx, day_name in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri"]):
+        title, _, lar_backup = osa_math_reading(week, day_idx)
         lines.append(
-            f"| **{day_name} Algebra** | Larson | **Lar** {alg[day_idx]} | **BFN-A** backup | — |"
+            f"| **{day_name} Algebra** | {title} | **{format_osa_algebra_primary(week, day_idx)}** "
+            f"| {lar_backup} | — |"
         )
     lines.extend(["", f"**Fri review:** {REVIEW_ROWS[week]}", "", "---", ""])
     return "\n".join(lines)
@@ -1053,7 +1173,6 @@ def generate_prep_week_table_md(week: int) -> str:
 def generate_prep_week_table_html(week: int) -> str:
     _, theme = WEEK_META[week]
     blocks = SCIENCE_WEEKS[week]
-    alg = ALGEBRA_ROWS[week]
     rows = []
     for day_idx, label, kind in PREP_BLOCK_ROWS:
         _, book, title, *_ = blocks[day_idx]
@@ -1064,10 +1183,11 @@ def generate_prep_week_table_html(week: int) -> str:
             f"<td>{esc(format_mod_backup(week, day_idx, kind))}</td></tr>"
         )
     for day_idx, day_name in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri"]):
+        title, _, lar_backup = osa_math_reading(week, day_idx)
         rows.append(
-            f'        <tr class="alg"><td>{day_name} Alg</td><td>Larson</td>'
-            f"<td><strong>Lar</strong> {esc(alg[day_idx])}</td>"
-            f"<td><strong>BFN-A</strong> backup</td><td>—</td></tr>"
+            f'        <tr class="alg"><td>{day_name} Alg</td><td>{esc(title)}</td>'
+            f"<td>{esc(format_osa_algebra_primary(week, day_idx))}</td>"
+            f"<td>{esc(lar_backup)}</td><td>—</td></tr>"
         )
     return f"""      <h4 id="week-{week}"><span class="week-tag">Week {week}</span> {theme}</h4>
       <table>
@@ -1167,7 +1287,8 @@ def patch_prep_md(path: Path) -> None:
 | **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Chemistry **backup** · Mon & Thu |
 | **Tro** | *Introductory Chemistry* — Nivaldo Tro **4th ed.** | 9780321687937 | Chemistry **backup** |
 | **ExplLab** | *Explorations: Laboratory Manual* | 9780321051837 | Optional Wed labs |
-| **Lar** | *Holt McDougal Larson Algebra 1* — **2011** | 9780547315157 | Mon–Fri Algebra · 1 hr |
+| **OSA** | *OpenStax Algebra & Trigonometry 2e* — free online | openstax.org | **Primary** algebra · Mon–Fri · assigned § |
+| **Lar** | *Holt McDougal Larson Algebra 1* — **2011** | 9780547315157 | Algebra **backup** · Ch 1–13 |
 | **BFN-A** | *Big Fat Notebook: Pre-Algebra & Algebra* | 9781523504382 | Algebra backup · CYK |
 | **BFN-Bio** | *Big Fat Notebook: Biology* (HS) | 9781523504367 | Fri review · bio recall |
 | **BFN-Sci** | *Big Fat Notebook: Science* (MS) | 9780761160957 | Fri review · chem/phys recall |

@@ -122,6 +122,102 @@ enum BlockAssignedReadingCatalog {
         Key(week: 9, day: .thursday, subject: .chemistry): (18, ["18.2", "18.3", "18.4"]),
     ]
 
+    /// Hewitt physics — primary § per Wednesday block (NSB mechanics · energy · waves · electricity).
+    private struct PhysReadingSpec {
+        var chapterSections: [(chapter: Int, sections: [String])]
+        var includeAppB: Bool = false
+    }
+
+    private static let explPhysByKey: [Key: PhysReadingSpec] = [
+        Key(week: 1, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(1, ["1.2", "1.3", "1.4", "1.5"])],
+            includeAppB: true
+        ),
+        Key(week: 2, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(2, ["2.2", "2.3", "2.4", "2.5", "2.6"]), (3, ["3.1", "3.2", "3.3"])]
+        ),
+        Key(week: 3, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(3, ["3.4", "3.5", "3.6"]), (4, ["4.1", "4.2", "4.3"])]
+        ),
+        Key(week: 4, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(12, ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6"])]
+        ),
+        Key(week: 5, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(6, ["6.1", "6.2", "6.3", "6.4", "6.5"])]
+        ),
+        Key(week: 6, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(7, ["7.1", "7.2", "7.3", "7.4"]), (7, ["7.7"])]
+        ),
+        Key(week: 7, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(5, ["5.1", "5.2", "5.3", "5.4", "5.5"])]
+        ),
+        Key(week: 8, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(10, ["10.1", "10.2", "10.3", "10.4", "10.5", "10.6", "10.7"]), (10, ["10.11"])]
+        ),
+        Key(week: 9, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(10, ["10.11"]), (12, ["12.1", "12.2", "12.3"]), (13, ["13.1"])]
+        ),
+        Key(week: 10, day: .wednesday, subject: .physics): PhysReadingSpec(
+            chapterSections: [(11, ["11.1", "11.2", "11.3", "11.4", "11.5"]), (13, ["13.3", "13.4"])]
+        ),
+    ]
+
+    private static func sectionRangeLabel(_ sections: [String]) -> String {
+        guard let first = sections.first else { return "" }
+        guard sections.count > 1, let last = sections.last else { return "§\(first)" }
+        return "§\(first)–\(last)"
+    }
+
+    private static func formatPhysReadingLine(_ spec: PhysReadingSpec) -> String {
+        var parts: [String] = []
+        var index = 0
+        while index < spec.chapterSections.count {
+            let chapter = spec.chapterSections[index].chapter
+            var sectionParts: [String] = []
+            while index < spec.chapterSections.count, spec.chapterSections[index].chapter == chapter {
+                sectionParts.append(sectionRangeLabel(spec.chapterSections[index].sections))
+                index += 1
+            }
+            parts.append("Ch \(chapter) \(sectionParts.joined(separator: " + "))")
+        }
+        if spec.includeAppB {
+            parts.append("App. B")
+        }
+        return parts.joined(separator: " + ")
+    }
+
+    static func hewittPhysAssignment(for block: StudyBlock) -> BookAssignment? {
+        let key = Key(week: block.week, day: block.day, subject: block.subject)
+        guard block.subject == .physics, block.bookCode == "Expl" else { return nil }
+        if block.chapter.localizedCaseInsensitiveContains("review") {
+            return BookAssignment(
+                displayText: "\(ConceptualPhysicalScienceExplorationsCatalog.shortName) — Ch 1–13 review — \(block.chapterTitle)",
+                links: []
+            )
+        }
+        if let spec = explPhysByKey[key] {
+            let chapters = formatPhysReadingLine(spec)
+            let text = "\(ConceptualPhysicalScienceExplorationsCatalog.shortName) — \(chapters) — \(block.chapterTitle)"
+            return BookAssignment(displayText: text, links: [])
+        }
+        if block.chapter.contains("§") {
+            return BookAssignment(
+                displayText: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
+                    chapter: block.chapter,
+                    title: block.chapterTitle
+                ),
+                links: []
+            )
+        }
+        return BookAssignment(
+            displayText: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
+                chapter: block.chapter,
+                title: block.chapterTitle
+            ),
+            links: []
+        )
+    }
+
     static func hewittChemAssignment(for block: StudyBlock) -> BookAssignment? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
         guard block.subject == .chemistry, block.bookCode == "Expl" else { return nil }

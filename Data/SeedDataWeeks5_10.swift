@@ -29,7 +29,7 @@ extension SeedData {
                   ("What gas is released as a product of photosynthesis?", "Oxygen/O₂")
               ]),
         block(week: 5, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 6", title: "Work & Energy (part 1)",
+              book: "Expl", chapter: "Ch 6 §6.1–6.5", title: "Work & Energy (part 1)",
               focus: "~1 hr · part 1: work W = Fd · joule · KE = ½mv² · energy conservation (intro). Wed week 6 = gravity.",
               formulas: "W = Fd · KE = ½mv² · joule (J)",
               knowCold: ["10 N for 4 m — work? (40 J)", "Double speed — KE multiplied by? (4×)"],
@@ -87,7 +87,7 @@ extension SeedData {
                   ("Is sunlight biotic or abiotic?", "Abiotic")
               ]),
         block(week: 6, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 7", title: "Gravity & Projectile Motion",
+              book: "Expl", chapter: "Ch 7 §7.1–7.4 + §7.7", title: "Gravity & Projectile Motion",
               focus: "~1 hr · weight W = mg · mass vs weight · free fall · PE = mgh · projectile motion (qualitative)",
               formulas: "W = mg · PE = mgh · weight ≠ mass",
               knowCold: ["On Moon — mass, weight, or both change? (Weight only)", "Ball rises — PE up or down? (Increases)"],
@@ -145,7 +145,7 @@ extension SeedData {
                   ("Name one innate immune barrier.", "Skin/mucous membranes")
               ]),
         block(week: 7, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 4–5", title: "Momentum & Collisions",
+              book: "Expl", chapter: "Ch 5 §5.1–5.5", title: "Momentum & Collisions",
               focus: "~1 hr · momentum p = mv · conservation of momentum · elastic vs inelastic · impulse (intro)",
               formulas: "p = mv · conservation of momentum · F = ma",
               knowCold: ["2 kg at 3 m/s — momentum? (6 kg·m/s)", "Same v — truck or bike more momentum? (Truck)"],
@@ -203,7 +203,7 @@ extension SeedData {
                   ("Does xylem transport water upward or downward?", "Upward")
               ]),
         block(week: 8, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 10", title: "Electricity — Charge & Current",
+              book: "Expl", chapter: "Ch 10 §10.1–10.7 + §10.11", title: "Electricity — Charge & Current",
               focus: "~1 hr · charge · current · voltage · resistance · V = IR · conductors vs insulators · series vs parallel (intro)",
               formulas: "V = IR · current (A) · voltage (V) · resistance (Ω)",
               knowCold: ["SI unit of current? (Ampere/A)", "More resistors in series — R up or down? (Up)"],
@@ -261,7 +261,7 @@ extension SeedData {
                   ("Mitosis is used primarily for what purpose in the body?", "Growth and repair")
               ]),
         block(week: 9, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 11–12", title: "Circuits & Waves (part 2)",
+              book: "Expl", chapter: "Ch 10 §10.11 + Ch 12 §12.1–12.3 + Ch 13 §13.1", title: "Circuits & Waves (part 2)",
               focus: "~1 hr · series vs parallel circuits · v = fλ · electromagnetic spectrum · sound vs light (intro)",
               formulas: "V = IR · series R_total ↑ · v = fλ · ROYGBIV",
               knowCold: ["Higher pitch → higher or lower frequency? (Higher)", "v = fλ relates? (Speed, frequency, wavelength)"],
@@ -319,7 +319,7 @@ extension SeedData {
                   ("In a monohybrid cross Tt × Tt, what is the expected phenotypic ratio?", "3:1")
               ]),
         block(week: 10, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 13", title: "Electricity & Magnetism (wrap-up)",
+              book: "Expl", chapter: "Ch 11 §11.1–11.5 + Ch 13 §13.3–13.4", title: "Electricity & Magnetism (wrap-up)",
               focus: "~1 hr · magnets · electromagnetism (intro) · review V = IR · circuits · energy forms in a scenario",
               formulas: "V = IR · W = Fd · PE = mgh · KE = ½mv² · v = fλ",
               knowCold: ["SI unit of resistance? (Ohm/Ω)", "Ball falls — PE converts to? (Kinetic energy)"],

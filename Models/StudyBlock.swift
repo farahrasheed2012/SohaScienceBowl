@@ -56,6 +56,9 @@ struct StudyBlock: Identifiable, Codable, Hashable {
             }
             return "\(bookCode) \(chapter) — \(chapterTitle)"
         case .physics:
+            if let hewitt = BlockAssignedReadingCatalog.hewittPhysAssignment(for: self) {
+                return hewitt.displayText
+            }
             if let expl = BlockAssignedReadingCatalog.explSectionAssignment(for: self) {
                 return expl.displayText
             }
@@ -243,18 +246,30 @@ struct StudyBlock: Identifiable, Codable, Hashable {
             )
 
         case .physics:
-            options.append(
-                StudyBookOption(
-                    id: "hewitt-\(week)-\(day.rawValue)",
-                    role: .primary,
-                    text: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
-                        chapter: chapter,
-                        title: chapterTitle
-                    ),
-                    links: [],
-                    isRecommended: false
+            if let hewitt = BlockAssignedReadingCatalog.hewittPhysAssignment(for: self) {
+                options.append(
+                    StudyBookOption(
+                        id: "hewitt-\(week)-\(day.rawValue)",
+                        role: .primary,
+                        text: hewitt.displayText,
+                        links: hewitt.links,
+                        isRecommended: false
+                    )
                 )
-            )
+            } else {
+                options.append(
+                    StudyBookOption(
+                        id: "hewitt-\(week)-\(day.rawValue)",
+                        role: .primary,
+                        text: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
+                            chapter: chapter,
+                            title: chapterTitle
+                        ),
+                        links: [],
+                        isRecommended: false
+                    )
+                )
+            }
             if let pass2BookCode, pass2BookCode == "Expl",
                let pass2Chapter, let pass2ChapterTitle {
                 options.append(

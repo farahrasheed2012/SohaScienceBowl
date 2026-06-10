@@ -29,7 +29,7 @@ extension SeedData {
                   ("Name two structures found in plant cells but not in typical animal cells.", "Cell wall and chloroplast")
               ]),
         block(week: 1, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 1", title: "About Science (+ App B optional)",
+              book: "Expl", chapter: "Ch 1 §1.2–1.5 + App. B", title: "About Science (+ App B optional)",
               focus: "~1 hr: Hewitt Ch 1 (hypothesis, SI units, precision). Optional 10-min skim: App. B motion graphs if time remains.",
               formulas: "v = d/t · a = Δv/Δt (concept) · slope = rise/run",
               knowCold: ["Theory vs law — which is broader? (Theory)", "120 km in 2 h → speed? (60 km/h)", "Flat d-t line means? (At rest / zero speed)", "Speed vs velocity difference? (Velocity has direction)"],
@@ -87,7 +87,7 @@ extension SeedData {
                   ("What is an alternate form of a gene called?", "An allele")
               ]),
         block(week: 2, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 2", title: "Newton's 1st & 2nd Laws (part 1)",
+              book: "Expl", chapter: "Ch 2 §2.2–2.6 + Ch 3 §3.1–3.3", title: "Newton's 1st & 2nd Laws (part 1)",
               pass2Book: "Expl", pass2Chapter: "Ch 2–5", pass2Title: "Newton's Laws + Momentum",
               focus: "~1 hr · part 1: inertia · F = ma · net force · friction (intro). Wed week 3 = Newton's 3rd; week 4 = momentum wrap-up.",
               formulas: "F = ma · a = F/m · units: Newton (N), kg, m/s²",
@@ -146,7 +146,7 @@ extension SeedData {
                   ("Name the three types of symbiosis.", "Mutualism, commensalism, parasitism")
               ]),
         block(week: 3, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 3", title: "Newton's 3rd Law & friction (part 2)",
+              book: "Expl", chapter: "Ch 3 §3.4–3.6 + Ch 4 §4.1–4.3", title: "Newton's 3rd Law & friction (part 2)",
               pass2Book: "Expl", pass2Chapter: "Ch 6–7", pass2Title: "Energy · Gravity",
               focus: "~1 hr · part 2: action-reaction pairs · friction · net force · N = kg·m/s². Wed week 7 = momentum.",
               formulas: "F = ma · action-reaction pairs · friction opposes motion · N = kg·m/s²",
@@ -205,7 +205,7 @@ extension SeedData {
                   ("What is the most specific level in the classification system?", "Species")
               ]),
         block(week: 4, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 12", title: "Waves & sound (part 1)",
+              book: "Expl", chapter: "Ch 12 §12.1–12.6", title: "Waves & sound (part 1)",
               pass2Book: "Expl", pass2Chapter: "Ch 10–13", pass2Title: "Electricity · Waves · Light",
               focus: "~1 hr · part 1: wavelength · frequency · amplitude · v = fλ · reflection · refraction",
               formulas: "v = fλ · wavelength (λ) · frequency (f) · amplitude",
