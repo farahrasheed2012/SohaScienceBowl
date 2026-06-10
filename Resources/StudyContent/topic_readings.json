@@ -3,7 +3,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 5 — Photosynthesis",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -25,7 +25,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 3 — Cell Structure and Function",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -47,7 +47,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 3 — Cell membrane · transport",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -69,7 +69,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 10 — Cell division (mitosis/meiosis intro)",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -91,7 +91,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 4–5 — Cellular respiration",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -113,7 +113,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 8 — DNA structure and replication",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -135,7 +135,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 7–8 — Genetics · inheritance",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -174,7 +174,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 11–12 — Evolution",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -196,7 +196,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 11 — Classification",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -218,7 +218,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 13 — Microorganisms",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -257,7 +257,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 14–15 — Plants",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -415,7 +415,7 @@
     {
       "bookCode": "OSB",
       "label": "Ch 19–20 — Ecology · ecosystems",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "FLS",
@@ -505,7 +505,7 @@
     {
       "bookCode": "Mod",
       "label": "Ch 3 — Atoms: The Building Blocks of Matter",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -515,7 +515,7 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry",
-      "role": "alsoOK"
+      "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
@@ -527,7 +527,7 @@
     {
       "bookCode": "Mod",
       "label": "Ch 5 — The Periodic Law",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -537,7 +537,7 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry",
-      "role": "alsoOK"
+      "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
@@ -549,7 +549,7 @@
     {
       "bookCode": "Mod",
       "label": "Ch 5 + Ch 7 intro — Periodic law · formulas",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -559,14 +559,14 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry · Part Three — Chemistry · Ch 18 — How Atoms Bond and Molecules Attract",
-      "role": "alsoOK"
+      "role": "primary"
     }
   ],
   "ch-chemical-bonds": [
     {
       "bookCode": "Mod",
       "label": "Ch 7 — Chemical formulas · bonding intro",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -576,14 +576,14 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 18 — How Atoms Bond and Molecules Attract",
-      "role": "alsoOK"
+      "role": "primary"
     }
   ],
   "ch-chemical-reactions": [
     {
       "bookCode": "Mod",
       "label": "Ch 8 — Chemical Equations and Reactions",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -593,14 +593,14 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 20 — How Chemicals React · Part Three — Chemistry · Ch 21 — Two Types of Chemical Reactions",
-      "role": "alsoOK"
+      "role": "primary"
     }
   ],
   "ch-reaction-types": [
     {
       "bookCode": "Mod",
       "label": "Ch 8 — Reaction types",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -610,14 +610,14 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 21 — Two Types of Chemical Reactions",
-      "role": "alsoOK"
+      "role": "primary"
     }
   ],
   "ch-acids-bases": [
     {
       "bookCode": "Mod",
       "label": "Ch 14 — Acids and Bases",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -627,7 +627,7 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 21 — Two Types of Chemical Reactions",
-      "role": "alsoOK"
+      "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
@@ -639,7 +639,7 @@
     {
       "bookCode": "Mod",
       "label": "Ch 12 — Solutions",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -649,7 +649,7 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 19 — How Chemicals Mix",
-      "role": "alsoOK"
+      "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
@@ -661,7 +661,7 @@
     {
       "bookCode": "Mod",
       "label": "Ch 10 — States of Matter",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",
@@ -671,7 +671,7 @@
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 17 — Elements of Chemistry · Part Three — Chemistry · Ch 18 — How Atoms Bond and Molecules Attract · Part Three — Chemistry · Ch 19 — How Chemicals Mix",
-      "role": "alsoOK"
+      "role": "primary"
     },
     {
       "bookCode": "BFN-Sci",
@@ -688,7 +688,7 @@
     {
       "bookCode": "Mod",
       "label": "Ch 12 — Solutions (concentration)",
-      "role": "primary"
+      "role": "pass2"
     }
   ],
   "ch-redox": [
@@ -700,14 +700,14 @@
     {
       "bookCode": "Mod",
       "label": "Ch 8 — Redox (if in edition)",
-      "role": "primary"
+      "role": "pass2"
     }
   ],
   "ch-organic": [
     {
       "bookCode": "Expl",
       "label": "Part Three — Chemistry · Ch 22 — Organic Compounds",
-      "role": "alsoOK"
+      "role": "primary"
     },
     {
       "bookCode": "Tro",
@@ -1884,7 +1884,7 @@
     {
       "bookCode": "Mod",
       "label": "Ch 5 — Periodic law & trends",
-      "role": "primary"
+      "role": "pass2"
     },
     {
       "bookCode": "Tro",

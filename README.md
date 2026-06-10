@@ -55,4 +55,4 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 
 ## Books referenced
 
-FLS · Expl (Hewitt) · Mod · Tro · CB — summer schedule books; **reading checkboxes** track **NSB-scheduled FLS + Hewitt sections only** (not entire books).
+FLS · Hewitt (Expl) · Mod · Tro · OSB · CB — summer schedule books; **reading checkboxes** track **NSB-scheduled FLS + Hewitt sections only** (not entire books).

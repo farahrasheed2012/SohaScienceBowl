@@ -1,6 +1,6 @@
 import Foundation
 
-/// Modern Chemistry (Sarquis) and Introductory Chemistry (Tro) — summer chemistry primaries.
+/// Hewitt (Expl Part 3) primary chemistry; Modern Chemistry (Mod) and Tro backups.
 enum ChemistryTextbookCatalog {
     static let modTitle = "Modern Chemistry (Sarquis, Student Edition 2012)"
     static let troTitle = "Introductory Chemistry (Nivaldo Tro, 4th Edition)"
@@ -63,8 +63,19 @@ enum ChemistryTextbookCatalog {
         return "17"
     }
 
-    static func explAlsoOKLine(for block: StudyBlock) -> String {
-        let ref = explChapterReference(for: block)
-        return "\(explTitle) — \(ConceptualPhysicalScienceExplorationsCatalog.formatReference(ref)) (optional skim after Mod/Tro)"
+    static func modBackupLine(for block: StudyBlock) -> String {
+        if let mod = BlockAssignedReadingCatalog.modAssignment(for: block) {
+            return mod.displayText
+        }
+        guard let code = block.pass2BookCode, code == "Mod",
+              let ch = block.pass2Chapter else { return modTitle }
+        return modLine(chapter: ch, title: block.pass2ChapterTitle ?? block.chapterTitle)
+    }
+
+    static func troBackupLine(for block: StudyBlock) -> String {
+        if let tro = BlockAssignedReadingCatalog.troAssignment(for: block) {
+            return tro.displayText
+        }
+        return troTitle
     }
 }

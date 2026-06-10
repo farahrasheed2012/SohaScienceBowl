@@ -28,6 +28,8 @@ enum ConceptualPhysicalScienceExplorationsCatalog {
     }
 
     static let editionTitle = "Conceptual Physical Science Explorations (Hewitt et al.)"
+    /// Short label used in schedules and reading lines.
+    static let shortName = "Hewitt"
 
     private static let parts: [PartInfo] = [
         PartInfo(id: "intro", name: "Front Matter", startPage: 0),
@@ -172,7 +174,7 @@ enum ConceptualPhysicalScienceExplorationsCatalog {
     }
 
     static func formattedLine(chapter: String, title: String) -> String {
-        "\(editionTitle) — \(formatReference(chapter)) — \(title)"
+        "\(shortName) — \(formatReference(chapter)) — \(title)"
     }
 
     /// Chapters grouped by part (for Topics reference).

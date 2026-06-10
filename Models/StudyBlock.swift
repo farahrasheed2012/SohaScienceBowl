@@ -33,6 +33,9 @@ struct StudyBlock: Identifiable, Codable, Hashable {
     var primaryReadingLine: String {
         switch subject {
         case .chemistry:
+            if let hewitt = BlockAssignedReadingCatalog.hewittChemAssignment(for: self) {
+                return hewitt.displayText
+            }
             if let mod = BlockAssignedReadingCatalog.modAssignment(for: self) {
                 return mod.displayText
             }
@@ -45,6 +48,9 @@ struct StudyBlock: Identifiable, Codable, Hashable {
             }
             return ChemistryTextbookCatalog.formattedLine(bookCode: bookCode, chapter: chapter, title: chapterTitle)
         case .biology:
+            if let fls = BlockAssignedReadingCatalog.flsAssignment(for: self) {
+                return fls.displayText
+            }
             if let osb = BlockAssignedReadingCatalog.osbAssignment(for: self) {
                 return osb.displayText
             }
@@ -76,7 +82,17 @@ struct StudyBlock: Identifiable, Codable, Hashable {
 
         switch subject {
         case .chemistry:
-            if let mod = BlockAssignedReadingCatalog.modAssignment(for: self) {
+            if let hewitt = BlockAssignedReadingCatalog.hewittChemAssignment(for: self) {
+                options.append(
+                    StudyBookOption(
+                        id: "hewitt-\(week)-\(day.rawValue)",
+                        role: .primary,
+                        text: hewitt.displayText,
+                        links: hewitt.links,
+                        isRecommended: false
+                    )
+                )
+            } else if let mod = BlockAssignedReadingCatalog.modAssignment(for: self), bookCode == "Mod" {
                 options.append(
                     StudyBookOption(
                         id: "mod-\(week)-\(day.rawValue)",
@@ -91,8 +107,22 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                     StudyBookOption(
                         id: "pass1-\(week)-\(day.rawValue)",
                         role: .primary,
-                        text: ChemistryTextbookCatalog.modLine(chapter: chapter, title: chapterTitle),
+                        text: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
+                            chapter: chapter,
+                            title: chapterTitle
+                        ),
                         links: [],
+                        isRecommended: false
+                    )
+                )
+            }
+            if let mod = BlockAssignedReadingCatalog.modAssignment(for: self), pass2BookCode == "Mod" {
+                options.append(
+                    StudyBookOption(
+                        id: "mod-backup-\(week)-\(day.rawValue)",
+                        role: .backup,
+                        text: mod.displayText,
+                        links: mod.links,
                         isRecommended: false
                     )
                 )
@@ -104,20 +134,6 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                         role: .backup,
                         text: tro.displayText,
                         links: tro.links,
-                        isRecommended: false
-                    )
-                )
-            } else if let pass2BookCode, let pass2Chapter, let pass2ChapterTitle {
-                options.append(
-                    StudyBookOption(
-                        id: "pass2-\(week)-\(day.rawValue)",
-                        role: .backup,
-                        text: ChemistryTextbookCatalog.formattedLine(
-                            bookCode: pass2BookCode,
-                            chapter: pass2Chapter,
-                            title: pass2ChapterTitle
-                        ),
-                        links: [],
                         isRecommended: false
                     )
                 )
@@ -136,17 +152,6 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                     )
                 )
             }
-            if day == .monday || day == .thursday {
-                options.append(
-                    StudyBookOption(
-                        id: "expl-\(week)-\(day.rawValue)",
-                        role: .alsoOK,
-                        text: ChemistryTextbookCatalog.explAlsoOKLine(for: self),
-                        links: [],
-                        isRecommended: false
-                    )
-                )
-            }
             options.append(
                 StudyBookOption(
                     id: "bfn-sci-\(week)-\(day.rawValue)",
@@ -158,7 +163,17 @@ struct StudyBlock: Identifiable, Codable, Hashable {
             )
 
         case .biology:
-            if let assigned = BlockAssignedReadingCatalog.osbAssignment(for: self) {
+            if let fls = BlockAssignedReadingCatalog.flsAssignment(for: self) {
+                options.append(
+                    StudyBookOption(
+                        id: "fls-\(week)-\(day.rawValue)",
+                        role: .primary,
+                        text: fls.displayText,
+                        links: fls.links,
+                        isRecommended: false
+                    )
+                )
+            } else if let assigned = BlockAssignedReadingCatalog.osbAssignment(for: self), bookCode == "OSB" {
                 options.append(
                     StudyBookOption(
                         id: "osb-\(week)-\(day.rawValue)",
@@ -192,6 +207,17 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                     )
                 )
             }
+            if let osb = BlockAssignedReadingCatalog.osbAssignment(for: self), bookCode == "FLS" {
+                options.append(
+                    StudyBookOption(
+                        id: "osb-backup-\(week)-\(day.rawValue)",
+                        role: .backup,
+                        text: osb.displayText,
+                        links: osb.links,
+                        isRecommended: false
+                    )
+                )
+            }
             if let backup = backupBookLine, !backup.isEmpty {
                 options.append(contentsOf: BiologyTextbookCatalog.studyOptions(for: self, activePass: activePass))
             } else if bookCode.contains("FLS") || bookCode.contains("CB") {
@@ -219,7 +245,7 @@ struct StudyBlock: Identifiable, Codable, Hashable {
         case .physics:
             options.append(
                 StudyBookOption(
-                    id: "expl-\(week)-\(day.rawValue)",
+                    id: "hewitt-\(week)-\(day.rawValue)",
                     role: .primary,
                     text: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
                         chapter: chapter,

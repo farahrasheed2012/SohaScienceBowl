@@ -100,11 +100,11 @@ enum ScheduleConstants {
 
     static func studyPass(forWeek week: Int, calendar: Calendar = .current) -> StudyPass { .pass1 }
 
-    /// Single summer pass — one careful read through Mod + FLS/OSB + Expl across 10 weeks.
+    /// Single summer pass — one careful read through Hewitt + FLS + Mod/Tro backup across 10 weeks.
     static func studyPass(for date: Date, calendar: Calendar = .current) -> StudyPass { .pass1 }
 
     static func passLabel(for pass: StudyPass) -> String {
-        "Summer · Mod + OSB + Expl · assigned § sections"
+        "Summer · Hewitt + FLS + assigned § sections"
     }
 
     static func summerPlanLabel() -> String {

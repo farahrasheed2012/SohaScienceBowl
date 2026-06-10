@@ -1,6 +1,6 @@
 import Foundation
 
-/// Prentice Hall FLS (California) and Campbell Concepts & Connections 7e — summer biology alternates.
+/// Prentice Hall FLS (California) primary; OpenStax OSB and Campbell CB backups.
 enum BiologyTextbookCatalog {
     static var flsTitle: String { FocusOnLifeScienceCatalog.editionTitle }
     static var cbTitle: String { CampbellBiologyCatalog.editionTitle }
@@ -8,36 +8,38 @@ enum BiologyTextbookCatalog {
     static func studyOptions(for block: StudyBlock, activePass: StudyPass) -> [StudyBookOption] {
         var options: [StudyBookOption] = []
 
-        if let fls = BlockAssignedReadingCatalog.flsAssignment(for: block) {
-            options.append(
-                StudyBookOption(
-                    id: "fls-\(block.week)-\(block.day.rawValue)",
-                    role: .alsoOK,
-                    text: fls.displayText,
-                    links: fls.links,
-                    isRecommended: false
+        if block.bookCode != "FLS" {
+            if let fls = BlockAssignedReadingCatalog.flsAssignment(for: block) {
+                options.append(
+                    StudyBookOption(
+                        id: "fls-\(block.week)-\(block.day.rawValue)",
+                        role: .alsoOK,
+                        text: fls.displayText,
+                        links: fls.links,
+                        isRecommended: false
+                    )
                 )
-            )
-        } else if let flsChapter = chapters(for: block).fls {
-            options.append(
-                StudyBookOption(
-                    id: "fls-\(block.week)-\(block.day.rawValue)",
-                    role: .alsoOK,
-                    text: "\(flsTitle) — \(flsChapter)",
-                    links: [],
-                    isRecommended: false
+            } else if let flsChapter = chapters(for: block).fls {
+                options.append(
+                    StudyBookOption(
+                        id: "fls-\(block.week)-\(block.day.rawValue)",
+                        role: .alsoOK,
+                        text: "\(flsTitle) — \(flsChapter)",
+                        links: [],
+                        isRecommended: false
+                    )
                 )
-            )
-        } else if block.backupBookLine?.contains("FLS") == true {
-            options.append(
-                StudyBookOption(
-                    id: "fls-\(block.week)-\(block.day.rawValue)",
-                    role: .alsoOK,
-                    text: "\(flsTitle) — use index for this topic",
-                    links: [],
-                    isRecommended: false
+            } else if block.backupBookLine?.contains("FLS") == true {
+                options.append(
+                    StudyBookOption(
+                        id: "fls-\(block.week)-\(block.day.rawValue)",
+                        role: .alsoOK,
+                        text: "\(flsTitle) — use index for this topic",
+                        links: [],
+                        isRecommended: false
+                    )
                 )
-            )
+            }
         }
 
         if let cb = BlockAssignedReadingCatalog.cbAssignment(for: block) {
@@ -76,18 +78,30 @@ enum BiologyTextbookCatalog {
         return options
     }
 
-    static func chapters(for block: StudyBlock) -> (fls: String?, cb: String?) {
+    static func chapters(for block: StudyBlock) -> (fls: String?, cb: String?, osb: String?) {
         if let backup = block.backupBookLine, !backup.isEmpty {
-            return parseBackupLine(backup)
+            let parsed = parseBackupLine(backup)
+            var osb: String?
+            if let osbRange = backup.range(of: "OSB Ch ") {
+                let after = backup[osbRange.upperBound...]
+                let osbPart: String
+                if let cbSplit = after.range(of: " · CB") {
+                    osbPart = String(after[..<cbSplit.lowerBound])
+                } else {
+                    osbPart = String(after)
+                }
+                osb = "Ch \(osbPart.trimmingCharacters(in: .whitespaces))"
+            }
+            return (parsed.fls, parsed.cb, osb)
         }
         if block.bookCode.contains("CB") && block.bookCode.contains("FLS") {
             let part = block.chapter.replacingOccurrences(of: "Ch ", with: "")
-            return (FocusOnLifeScienceCatalog.formatReference("7"), CampbellBiologyCatalog.formatReference(part))
+            return (FocusOnLifeScienceCatalog.formatReference("7"), CampbellBiologyCatalog.formatReference(part), nil)
         }
-        return (nil, nil)
+        return (nil, nil, nil)
     }
 
-    /// Parses lines like `FLS Ch 1 · CB Ch 4` or `FLS Ch 8 · 21 · CB Ch 16 · 24`.
+    /// Parses lines like `OSB Ch 3 · CB Ch 4` or `FLS Ch 1 · CB Ch 4`.
     static func parseBackupLine(_ line: String) -> (fls: String?, cb: String?) {
         var fls: String?
         var cb: String?

@@ -100,10 +100,69 @@ enum BlockAssignedReadingCatalog {
         Key(week: 9, day: .thursday, subject: .chemistry): "§5.1 + §7.1",
     ]
 
-    static func modAssignment(for block: StudyBlock) -> BookAssignment? {
-        guard block.subject == .chemistry, block.bookCode == "Mod" else { return nil }
+    /// Hewitt / Expl Part 3 chemistry — primary § per block.
+    private static let explChemByKey: [Key: (chapter: Int, sections: [String])] = [
+        Key(week: 1, day: .monday, subject: .chemistry): (17, ["17.1", "17.2", "17.3"]),
+        Key(week: 1, day: .thursday, subject: .chemistry): (17, ["17.6", "17.7", "17.8"]),
+        Key(week: 2, day: .monday, subject: .chemistry): (17, ["17.3", "17.4", "17.5"]),
+        Key(week: 2, day: .thursday, subject: .chemistry): (20, ["20.1", "20.2", "20.3", "20.4"]),
+        Key(week: 3, day: .monday, subject: .chemistry): (21, ["21.1", "21.2", "21.3"]),
+        Key(week: 3, day: .thursday, subject: .chemistry): (19, ["19.1", "19.2", "19.3", "19.4"]),
+        Key(week: 4, day: .monday, subject: .chemistry): (17, ["17.6", "17.7"]),
+        Key(week: 4, day: .thursday, subject: .chemistry): (17, ["17.1", "17.4"]),
+        Key(week: 5, day: .monday, subject: .chemistry): (18, ["18.1", "18.2", "18.3", "18.4", "18.5", "18.6"]),
+        Key(week: 5, day: .thursday, subject: .chemistry): (19, ["19.3", "19.4"]),
+        Key(week: 6, day: .monday, subject: .chemistry): (19, ["19.3", "19.4", "19.5"]),
+        Key(week: 6, day: .thursday, subject: .chemistry): (21, ["21.1", "21.2", "21.3"]),
+        Key(week: 7, day: .monday, subject: .chemistry): (20, ["20.1", "20.2", "20.3", "20.4"]),
+        Key(week: 7, day: .thursday, subject: .chemistry): (17, ["17.6", "17.7"]),
+        Key(week: 8, day: .monday, subject: .chemistry): (17, ["17.4", "17.5"]),
+        Key(week: 8, day: .thursday, subject: .chemistry): (17, ["17.3", "17.4", "17.5"]),
+        Key(week: 9, day: .monday, subject: .chemistry): (17, ["17.2", "17.3"]),
+        Key(week: 9, day: .thursday, subject: .chemistry): (18, ["18.2", "18.3", "18.4"]),
+    ]
+
+    static func hewittChemAssignment(for block: StudyBlock) -> BookAssignment? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
-        let chLine = block.chapter
+        guard block.subject == .chemistry, block.bookCode == "Expl" else { return nil }
+        if block.chapter.localizedCaseInsensitiveContains("review") {
+            return BookAssignment(
+                displayText: "\(ConceptualPhysicalScienceExplorationsCatalog.shortName) — Ch 17–21 review — \(block.chapterTitle)",
+                links: []
+            )
+        }
+        if let spec = explChemByKey[key],
+           let chapter = ConceptualPhysicalScienceExplorationsCatalog.chapters.first(where: { $0.number == spec.chapter }) {
+            let range = spec.sections.joined(separator: "–")
+            let text = "\(ConceptualPhysicalScienceExplorationsCatalog.shortName) — Ch \(chapter.number) §\(range) — \(block.chapterTitle)"
+            return BookAssignment(displayText: text, links: [])
+        }
+        if block.chapter.contains("§") {
+            return BookAssignment(
+                displayText: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
+                    chapter: block.chapter,
+                    title: block.chapterTitle
+                ),
+                links: []
+            )
+        }
+        return BookAssignment(
+            displayText: ConceptualPhysicalScienceExplorationsCatalog.formattedLine(
+                chapter: block.chapter,
+                title: block.chapterTitle
+            ),
+            links: []
+        )
+    }
+
+    static func modAssignment(for block: StudyBlock) -> BookAssignment? {
+        guard block.subject == .chemistry else { return nil }
+        let isPrimary = block.bookCode == "Mod"
+        let isBackup = block.pass2BookCode == "Mod"
+        guard isPrimary || isBackup else { return nil }
+        let key = Key(week: block.week, day: block.day, subject: block.subject)
+        let chLine = isBackup ? (block.pass2Chapter ?? block.chapter) : block.chapter
+        let title = isBackup ? (block.pass2ChapterTitle ?? block.chapterTitle) : block.chapterTitle
         let chapterDisplay: String
         if chLine.contains("§") || chLine.contains("+") || chLine.localizedCaseInsensitiveContains("review") {
             chapterDisplay = chLine
@@ -112,23 +171,28 @@ enum BlockAssignedReadingCatalog {
         } else {
             chapterDisplay = chLine
         }
-        let text = "\(ChemistryTextbookCatalog.modTitle) — \(chapterDisplay) — \(block.chapterTitle)"
+        let text = "\(ChemistryTextbookCatalog.modTitle) — \(chapterDisplay) — \(title)"
         return BookAssignment(displayText: text, links: [])
     }
 
     static func troAssignment(for block: StudyBlock) -> BookAssignment? {
-        guard block.subject == .chemistry,
-              let code = block.pass2BookCode, code == "Tro",
-              let ch = block.pass2Chapter,
-              let title = block.pass2ChapterTitle else { return nil }
-        let text = ChemistryTextbookCatalog.formattedLine(bookCode: code, chapter: ch, title: title)
-        return BookAssignment(displayText: text, links: [])
+        guard block.subject == .chemistry else { return nil }
+        if block.pass2BookCode == "Tro",
+           let ch = block.pass2Chapter,
+           let title = block.pass2ChapterTitle {
+            let text = ChemistryTextbookCatalog.formattedLine(bookCode: "Tro", chapter: ch, title: title)
+            return BookAssignment(displayText: text, links: [])
+        }
+        if let backup = block.backupBookLine, backup.contains("Tro") {
+            let troPart = backup.components(separatedBy: " · ").first { $0.hasPrefix("Tro") } ?? backup
+            return BookAssignment(displayText: "\(ChemistryTextbookCatalog.troTitle) — \(troPart.replacingOccurrences(of: "Tro ", with: ""))", links: [])
+        }
+        return nil
     }
 
     static func osbAssignment(for block: StudyBlock) -> BookAssignment? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
-        guard block.subject == .biology, block.bookCode == "OSB",
-              let spec = osbByKey[key] else { return nil }
+        guard block.subject == .biology, let spec = osbByKey[key] else { return nil }
         let text = OpenStaxBiologyCatalog.formatAssignment(
             chapter: spec.chapter,
             sectionIds: spec.sections,
@@ -140,13 +204,11 @@ enum BlockAssignedReadingCatalog {
 
     static func flsAssignment(for block: StudyBlock) -> BookAssignment? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
-        guard let spec = flsByKey[key],
+        guard block.subject == .biology, block.bookCode == "FLS",
+              let spec = flsByKey[key],
               let chapter = FocusOnLifeScienceCatalog.chapter(spec.chapter) else { return nil }
-        let sectionLabels = spec.sections.compactMap { sid in
-            chapter.sections.first { $0.id == sid }.map { "§\(sid) \($0.title)" }
-        }
         let range = spec.sections.joined(separator: "–")
-        let text = "\(FocusOnLifeScienceCatalog.editionTitle) — Ch \(chapter.number) §\(range) — \(sectionLabels.prefix(2).joined(separator: "; "))"
+        let text = "\(FocusOnLifeScienceCatalog.editionTitle) — Ch \(chapter.number) §\(range) — \(block.chapterTitle)"
         return BookAssignment(displayText: text, links: [])
     }
 

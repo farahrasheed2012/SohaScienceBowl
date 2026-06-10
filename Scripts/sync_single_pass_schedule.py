@@ -267,23 +267,26 @@ COACH_ROWS = {
 }
 
 COMMON_PASS_REPLACEMENTS = [
-    ("Pass 1 bio · Jun", "OSB/FLS primary · Jun–Aug"),
-    ("Pass 2–3 bio · Jul–Aug", "CB backup · anytime"),
-    ("Pass 1 chem · Jun", "Mod primary · Jun–Aug"),
-    ("Pass 2–3 chem · Jul–Aug", "Tro backup · anytime"),
-    ("**FLS** (Pass 1) · **CB** (Pass 2–3)", "**OSB/FLS** primary · **CB** backup"),
-    ("**Mod** (Pass 1) · **Tro** (Pass 2–3)", "**Mod** primary · **Tro** backup"),
-    ("Mod (P1) · Tro (P2–3)", "Mod primary · Tro backup"),
-    ("FLS (P1) · CB (P2–3)", "OSB/FLS primary · CB backup"),
-    ("**FLS** (P1) · **CB** (P2–3)", "**OSB/FLS** primary · **CB** backup"),
-    ("**Mod** (P1) · **Tro** (P2–3)", "**Mod** primary · **Tro** backup"),
+    ("Pass 1 bio · Jun", "FLS primary · Jun–Aug"),
+    ("Pass 2–3 bio · Jul–Aug", "OSB/CB backup · anytime"),
+    ("Pass 1 chem · Jun", "Hewitt primary · Jun–Aug"),
+    ("Pass 2–3 chem · Jul–Aug", "Mod/Tro backup · anytime"),
+    ("**FLS** (Pass 1) · **CB** (Pass 2–3)", "**FLS** primary · **OSB/CB** backup"),
+    ("**Mod** (Pass 1) · **Tro** (Pass 2–3)", "**Hewitt** primary · **Mod/Tro** backup"),
+    ("Mod (P1) · Tro (P2–3)", "Hewitt primary · Mod/Tro backup"),
+    ("FLS (P1) · CB (P2–3)", "FLS primary · OSB/CB backup"),
+    ("**FLS** (P1) · **CB** (P2–3)", "**FLS** primary · **OSB/CB** backup"),
+    ("**Mod** (P1) · **Tro** (P2–3)", "**Hewitt** primary · **Mod/Tro** backup"),
     ("Pass 1–3", "one summer pass"),
     ("Pass 1–2", "weeks 1–10"),
     ("Book key & pass overview", "Book key & DOE topic scope"),
-    ("Focus on Life Science (FLS) — Pass 1", "OpenStax Biology (OSB) + FLS — primary"),
-    ("Modern Chemistry (Mod) — Pass 1", "Modern Chemistry (Mod) — primary"),
+    ("Focus on Life Science (FLS) — Pass 1", "Focus on Life Science (FLS) — primary"),
+    ("Modern Chemistry (Mod) — Pass 1", "Modern Chemistry (Mod) — backup"),
     ("Campbell Biology (CB) — Pass 2–3", "Campbell Biology (CB) — backup"),
     ("Introductory Chemistry (Tro) — Pass 2–3", "Introductory Chemistry (Tro) — backup"),
+    ("OSB/FLS primary", "FLS primary"),
+    ("Mod primary · Mon &amp; Thu", "Hewitt primary · Mon/Thu chem"),
+    ("OSB/FLS primary · Tue &amp; Fri", "FLS primary · Tue &amp; Fri"),
 ]
 
 
@@ -293,7 +296,12 @@ def esc(s: str) -> str:
 
 def html_cell(kind: str, book: str, title: str, focus: str, formulas: str, know: str, tossup: str) -> str:
     cls = {"chem": "chem", "bio": "bio", "phys": "phys"}.get(kind, "study-cell")
-    backup = '<span class="optional-book"><em>Backup:</em> Tro · CB · BFN</span>' if kind != "phys" else ""
+    if kind == "chem":
+        backup = '<span class="optional-book"><em>Backup:</em> Mod · Tro · BFN</span>'
+    elif kind == "bio":
+        backup = '<span class="optional-book"><em>Backup:</em> OSB · CB · BFN</span>'
+    else:
+        backup = ""
     return (
         f'<td class="{cls} study-cell">'
         f"<strong>{esc(book)}</strong> — {esc(title)}{backup}"
@@ -320,6 +328,64 @@ def coach_cell(week: int, day: str) -> str:
     )
 
 
+HEWITT_CHEM_PRIMARY: dict[tuple[int, int], str] = {
+    (1, 0): "Hewitt Ch 17 §17.1–17.3",
+    (1, 3): "Hewitt Ch 17 §17.6–17.8",
+    (2, 0): "Hewitt Ch 17 §17.3–17.5",
+    (2, 3): "Hewitt Ch 20 §20.1–20.4",
+    (3, 0): "Hewitt Ch 21 §21.1–21.3",
+    (3, 3): "Hewitt Ch 19 §19.1–19.4",
+    (4, 0): "Hewitt Ch 17–18 §17.6 + §18.1–18.2",
+    (4, 3): "Hewitt Ch 17 §17.1–17.4",
+    (5, 0): "Hewitt Ch 18 §18.1–18.6",
+    (5, 3): "Hewitt Ch 19 §19.3–19.4",
+    (6, 0): "Hewitt Ch 19 §19.3–19.5",
+    (6, 3): "Hewitt Ch 21 §21.1–21.3",
+    (7, 0): "Hewitt Ch 20 §20.1–20.4",
+    (7, 3): "Hewitt Ch 17 §17.6–17.7",
+    (8, 0): "Hewitt Ch 17 §17.4–17.5",
+    (8, 3): "Hewitt Ch 17 §17.3–17.5",
+    (9, 0): "Hewitt Ch 17 §17.2–17.3",
+    (9, 3): "Hewitt Ch 18 §18.2–18.4",
+    (10, 0): "Hewitt Review",
+    (10, 3): "Hewitt Review",
+}
+
+FLS_PRIMARY: dict[tuple[int, int], str] = {
+    (1, 1): "FLS Ch 1 §1.3–1.4",
+    (1, 4): "FLS Ch 2 §2.1–2.2",
+    (2, 1): "FLS Ch 4 §4.1–4.2",
+    (2, 4): "FLS Ch 4 §4.3",
+    (3, 1): "FLS Ch 7 §7.2–7.3",
+    (3, 4): "FLS Ch 17 §17.1–18.1",
+    (4, 1): "FLS Ch 5 §5.1–5.2",
+    (4, 4): "FLS Ch 6 §6.1",
+    (5, 1): "FLS Ch 3 §2.4",
+    (5, 4): "FLS Ch 3 §2.5",
+    (6, 1): "FLS Ch 7 §7.3",
+    (6, 4): "FLS Ch 8 §8.1–8.2",
+    (7, 1): "FLS Ch 21 §21.1",
+    (7, 4): "FLS Ch 10 §10.1–10.2",
+    (8, 1): "FLS Ch 11 §11.1",
+    (8, 4): "FLS Ch 16 §16.1",
+    (9, 1): "FLS Ch 3 §3.1–3.2",
+    (9, 4): "FLS Ch 18 §18.1–19.1",
+    (10, 1): "FLS Review",
+    (10, 4): "FLS Review",
+}
+
+
+def primary_display_book(week: int, day_idx: int, kind: str, book: str) -> str:
+    key = (week, day_idx)
+    if kind == "chem":
+        return HEWITT_CHEM_PRIMARY.get(key, book.replace("Mod", "Hewitt", 1))
+    if kind == "bio":
+        return FLS_PRIMARY.get(key, book.replace("OSB", "FLS", 1))
+    if kind == "phys" and book.startswith("Expl"):
+        return book.replace("Expl", "Hewitt", 1)
+    return book
+
+
 def generate_whiteboard_week(week: int) -> str:
     dates, theme = WEEK_META[week]
     blocks = SCIENCE_WEEKS[week]
@@ -329,7 +395,7 @@ def generate_whiteboard_week(week: int) -> str:
     rows = []
     for i, day in enumerate(DAY_NAMES):
         kind, book, title, focus, formulas, know, tossup = blocks[i]
-        display_book = format_mod_reading(week, i, book) if kind == "chem" else book
+        display_book = primary_display_book(week, i, kind, book)
         cell = html_cell(kind, display_book, title, focus, formulas, know, tossup)
         alg_cell = (
             f'<td class="alg study-cell"><strong>{esc(alg[i])}</strong>'
@@ -378,10 +444,10 @@ def generate_whiteboard_week(week: int) -> str:
 <section class="week" id="week-{week}">
   <div class="week-header">
     <h2>Week {week} · {dates} · {theme}</h2>
-    <div class="week-meta"><span class="pass-tag">SUMMER · ONE PASS</span><br>Mod + OSB/FLS + Expl</div>
+    <div class="week-meta"><span class="pass-tag">SUMMER · ONE PASS</span><br>Hewitt + FLS + assigned §</div>
   </div>
 {note}  <table>
-    <tr><th>Date</th><th>Day</th><th>Chemistry · Mod (+ Tro backup)</th><th>Biology · OSB/FLS</th><th>Physics · Expl</th><th>Algebra · Lar</th><th>Python · Coach<br><span style="font-weight:normal;text-transform:none">Tue/Thu 4:45–5:15</span></th><th>Fri review</th></tr>
+    <tr><th>Date</th><th>Day</th><th>Chemistry · Hewitt (+ Mod backup)</th><th>Biology · FLS</th><th>Physics · Hewitt</th><th>Algebra · Lar</th><th>Python · Coach<br><span style="font-weight:normal;text-transform:none">Tue/Thu 4:45–5:15</span></th><th>Fri review</th></tr>
 {chr(10).join(rows)}
   </table>{footer}
 </section>
@@ -443,19 +509,19 @@ def patch_whiteboard_legend(text: str) -> str:
     )
     legend_table = """  <table>
     <tr><th>Code</th><th>Book</th><th>When</th></tr>
-    <tr><td><strong>OSB</strong></td><td>OpenStax Biology 2e — free online (openstax.org)</td><td>Primary biology · Tue &amp; Fri</td></tr>
-    <tr><td><strong>FLS</strong></td><td>Focus on Life Science — Prentice Hall CA ed. (ISBN 9780130443465)</td><td>Biology backup · same DOE topics</td></tr>
+    <tr><td><strong>FLS</strong></td><td>Focus on Life Science — Prentice Hall CA ed. (ISBN 9780130443465)</td><td>Primary biology · Tue &amp; Fri</td></tr>
+    <tr><td><strong>OSB</strong></td><td>OpenStax Biology 2e — free online (openstax.org)</td><td>Biology backup · same DOE topics</td></tr>
     <tr><td><strong>CB</strong></td><td>Campbell Biology: Concepts &amp; Connections — 7th ed. (ISBN 9780321696816)</td><td>Biology backup · deeper TAG level</td></tr>
-    <tr><td><strong>Mod</strong></td><td>Modern Chemistry 2012 — Sarquis (ISBN 9780547586632)</td><td>Primary chemistry · Mon &amp; Thu</td></tr>
+    <tr><td><strong>Mod</strong></td><td>Modern Chemistry 2012 — Sarquis (ISBN 9780547586632)</td><td>Chemistry backup · Mon &amp; Thu</td></tr>
     <tr><td><strong>Tro</strong></td><td>Introductory Chemistry — Tro 4th ed. (ISBN 9780321687937)</td><td>Chemistry backup</td></tr>
-    <tr><td><strong>Expl</strong></td><td>Conceptual Physical Science Explorations — student text (ISBN 9780321567918)</td><td>Wed physics · optional chem Expl Ch 17–24</td></tr>
+    <tr><td><strong>Hewitt</strong></td><td>Conceptual Physical Science Explorations — Hewitt student text (ISBN 9780321567918)</td><td>Primary chem (Ch 17–24) · Wed physics</td></tr>
     <tr><td><strong>Lar</strong></td><td>Holt McDougal Larson Algebra 1 2011 (ISBN 9780547315157)</td><td>Algebra Mon–Fri · Ch 1–13</td></tr>
     <tr><td><strong>BFN-A/Bio/Sci</strong></td><td>Big Fat Notebooks — Algebra · Biology · Science</td><td>Backup quizzes · Fri review</td></tr>
     <tr><td><strong>Coach</strong></td><td>Soha Python Coach — Mac app (Outschool L1–4 + portfolio)</td><td>Tue/Thu 4:45–5:15 PM · Journey tab</td></tr>
   </table>"""
     text = re.sub(
         r"<section class=\"week legend-page\">.*?<!-- WEEK 1 -->",
-        f"<section class=\"week legend-page\">\n  <div class=\"week-header\">\n    <h2>Book key &amp; DOE topic scope</h2>\n    <div class=\"week-meta\">Summer 2026 · Soha<br>Jun 8 – Aug 19</div>\n  </div>\n{legend_table}\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">DOE study topics (not whole textbooks)</h3>\n  <p style=\"font-size:8pt;margin:0 0 0.1in\">Life: cell biology, genetics, anatomy &amp; physiology, plant biology, ecology, animal behavior · Physical: chem reactions/periodic table/states of matter + physics forces/motion/waves/electromagnetism/thermo · Math: algebra, geometry, probability, statistics (Lar block).</p>\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">Pick your book *(Soha)*</h3>\n  <table style=\"font-size:8pt\">\n    <tr><th>When</th><th>Primary</th><th>Also OK</th><th>Backup</th></tr>\n    <tr><td>Mon/Thu Chem</td><td><strong>Mod</strong></td><td><strong>Expl</strong> Ch 17–24 optional</td><td><strong>Tro</strong> · <strong>BFN-Sci</strong></td></tr>\n    <tr><td>Tue/Fri Bio</td><td><strong>OSB/FLS</strong></td><td>—</td><td><strong>CB</strong> · <strong>BFN-Bio</strong></td></tr>\n    <tr><td>Wed Phys</td><td><strong>Expl</strong></td><td>—</td><td><strong>BFN-Sci</strong></td></tr>\n    <tr><td>Mon–Fri Algebra</td><td><strong>Lar</strong></td><td>—</td><td><strong>BFN-A</strong></td></tr>\n    <tr><td>Tue/Thu Python</td><td><strong>Coach</strong> Journey week</td><td>—</td><td>Playground + live notes</td></tr>\n  </table>\n  <table style=\"margin-top:0.2in\">\n    <tr><th>Plan</th><th>Dates</th><th>Chemistry</th><th>Biology</th><th>Physics</th><th>Python</th></tr>\n    <tr><td><strong>One summer pass</strong></td><td>Jun 8 – Aug 14</td><td><strong>Mod</strong> + opt <strong>Expl</strong> chem</td><td><strong>OSB/FLS</strong> (+ CB backup)</td><td><strong>Expl</strong></td><td><strong>Coach</strong> wk 1–10</td></tr>\n    <tr><td><strong>Backups</strong></td><td>anytime</td><td><strong>Tro</strong> · BFN-Sci</td><td><strong>CB</strong> · BFN-Bio</td><td>BFN-Sci</td><td>Quiz → DOE in app</td></tr>\n    <tr><td><strong>Bridge</strong></td><td>Aug 15 – 18</td><td colspan=\"4\">Optional flash cards · school meetings in fall · Aug 19 = first day of school</td></tr>\n  </table>\n  <p class=\"footer\">Each cell: read assigned <strong>§ section</strong> only · <strong>Formulas</strong> · <strong>Focus</strong> · <strong>Know</strong> · <strong>Toss-up</strong> · Full detail + answers in summer-2026-calendar.md · Daily times → weekly-timetable.md</p>\n</section>\n\n<!-- WEEK 1 -->",
+        f"<section class=\"week legend-page\">\n  <div class=\"week-header\">\n    <h2>Book key &amp; DOE topic scope</h2>\n    <div class=\"week-meta\">Summer 2026 · Soha<br>Jun 8 – Aug 19</div>\n  </div>\n{legend_table}\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">DOE study topics (not whole textbooks)</h3>\n  <p style=\"font-size:8pt;margin:0 0 0.1in\">Life: cell biology, genetics, anatomy &amp; physiology, plant biology, ecology, animal behavior · Physical: chem reactions/periodic table/states of matter + physics forces/motion/waves/electromagnetism/thermo · Math: algebra, geometry, probability, statistics (Lar block).</p>\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">Pick your book *(Soha)*</h3>\n  <table style=\"font-size:8pt\">\n    <tr><th>When</th><th>Primary</th><th>Also OK</th><th>Backup</th></tr>\n    <tr><td>Mon/Thu Chem</td><td><strong>Hewitt</strong> Ch 17–24</td><td>—</td><td><strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td></tr>\n    <tr><td>Tue/Fri Bio</td><td><strong>FLS</strong></td><td>—</td><td><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td></tr>\n    <tr><td>Wed Phys</td><td><strong>Hewitt</strong></td><td>—</td><td><strong>BFN-Sci</strong></td></tr>\n    <tr><td>Mon–Fri Algebra</td><td><strong>Lar</strong></td><td>—</td><td><strong>BFN-A</strong></td></tr>\n    <tr><td>Tue/Thu Python</td><td><strong>Coach</strong> Journey week</td><td>—</td><td>Playground + live notes</td></tr>\n  </table>\n  <table style=\"margin-top:0.2in\">\n    <tr><th>Plan</th><th>Dates</th><th>Chemistry</th><th>Biology</th><th>Physics</th><th>Python</th></tr>\n    <tr><td><strong>One summer pass</strong></td><td>Jun 8 – Aug 14</td><td><strong>Hewitt</strong> chem</td><td><strong>FLS</strong> (+ OSB/CB backup)</td><td><strong>Hewitt</strong></td><td><strong>Coach</strong> wk 1–10</td></tr>\n    <tr><td><strong>Backups</strong></td><td>anytime</td><td><strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong> · <strong>CB</strong> · BFN-Bio</td><td>BFN-Sci</td><td>Quiz → DOE in app</td></tr>\n    <tr><td><strong>Bridge</strong></td><td>Aug 15 – 18</td><td colspan=\"4\">Optional flash cards · school meetings in fall · Aug 19 = first day of school</td></tr>\n  </table>\n  <p class=\"footer\">Each cell: read assigned <strong>§ section</strong> only · <strong>Formulas</strong> · <strong>Focus</strong> · <strong>Know</strong> · <strong>Toss-up</strong> · Full detail + answers in summer-2026-calendar.md · Daily times → weekly-timetable.md</p>\n</section>\n\n<!-- WEEK 1 -->",
         text,
         count=1,
         flags=re.DOTALL,
@@ -488,12 +554,12 @@ def patch_calendar_books_section(text: str) -> str:
 
 | Code | Book | ISBN | When |
 |------|------|------|------|
-| **OSB** | *OpenStax Biology 2e* — free online | openstax.org | Primary bio · Tue & Fri |
-| **FLS** | *Focus on Life Science* — Prentice Hall California ed. (2001) | 9780130443465 | Biology backup · same DOE topics |
+| **FLS** | *Focus on Life Science* — Prentice Hall California ed. (2001) | 9780130443465 | Primary bio · Tue & Fri |
+| **OSB** | *OpenStax Biology 2e* — free online | openstax.org | Biology backup · same DOE topics |
 | **CB** | *Campbell Biology: Concepts & Connections* — **7th ed.** | 9780321696816 | Biology backup · anytime |
-| **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Primary chem · Mon & Thu |
+| **Hewitt** | *Conceptual Physical Science Explorations* — Hewitt **student text** | 9780321567918 | Primary chem (Ch 17–24) · Wed **physics** |
+| **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Chemistry backup · Mon & Thu |
 | **Tro** | *Introductory Chemistry* — Tro **4th ed.** | 9780321687937 | Chemistry backup · anytime |
-| **Expl** | *Conceptual Physical Science Explorations* — Hewitt **student text** | 9780321567918 | Wed **physics** · optional **chem** Expl Ch 17–24 Mon/Thu |
 | **ExplLab** | *Explorations: Laboratory Manual* *(optional hands-on)* | 9780321051837 | Wed labs when you want |
 | **Lar** | *Holt McDougal Larson Algebra 1* — **2011** | 9780547315157 | Algebra Mon–Fri |
 | **BFN-A** | *Big Fat Notebook: Pre-Algebra & Algebra* | 9781523504382 | Algebra backup · CYK quizzes |
@@ -506,21 +572,21 @@ def patch_calendar_books_section(text: str) -> str:
     )
     for old, new in [
         ("| **FLS** | *Focus on Life Science* — Prentice Hall California ed. (2001) | 9780130443465 | Pass 1 bio · Jun |",
-         "| **FLS** | *Focus on Life Science* — Prentice Hall California ed. (2001) | 9780130443465 | Biology backup · same DOE topics |"),
+         "| **FLS** | *Focus on Life Science* — Prentice Hall California ed. (2001) | 9780130443465 | Primary bio · Tue & Fri |"),
         ("| **CB** | *Campbell Biology: Concepts & Connections* — **7th ed.** | 9780321696816 | CB backup · anytime |",
          "| **CB** | *Campbell Biology: Concepts & Connections* — **7th ed.** | 9780321696816 | Biology backup · anytime |"),
         ("| **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Pass 1 chem · Jun |",
-         "| **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Primary chem · Mon & Thu |"),
+         "| **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Chemistry backup · Mon & Thu |"),
         ("| **Tro** | *Introductory Chemistry* — Tro **4th ed.** | 9780321687937 | Tro backup · anytime |",
          "| **Tro** | *Introductory Chemistry* — Tro **4th ed.** | 9780321687937 | Chemistry backup · anytime |"),
         ("| **Mon** | Chemistry | **Mod** (P1) · **Tro** (P2–3) | **Expl** Ch 17–24 *(optional skim)* | **BFN-Sci** |",
-         "| **Mon** | Chemistry | **Mod** primary | **Expl** Ch 17–24 *(optional skim)* | **Tro** · **BFN-Sci** |"),
+         "| **Mon** | Chemistry | **Hewitt** primary | — | **Mod** · **Tro** · **BFN-Sci** |"),
         ("| **Tue** | Biology | **FLS** (P1) · **CB** (P2–3) | — | **BFN-Bio** |",
-         "| **Tue** | Biology | **OSB/FLS** primary | — | **CB** · **BFN-Bio** |"),
+         "| **Tue** | Biology | **FLS** primary | — | **OSB** · **CB** · **BFN-Bio** |"),
         ("| **Thu** | Chemistry | **Mod** (P1) · **Tro** (P2–3) | **Expl** Ch 17–24 *(optional skim)* | **BFN-Sci** |",
-         "| **Thu** | Chemistry | **Mod** primary | **Expl** Ch 17–24 *(optional skim)* | **Tro** · **BFN-Sci** |"),
+         "| **Thu** | Chemistry | **Hewitt** primary | — | **Mod** · **Tro** · **BFN-Sci** |"),
         ("| **Fri** | Biology | **FLS** (P1) · **CB** (P2–3) | — | **BFN-Bio** |",
-         "| **Fri** | Biology | **OSB/FLS** primary | — | **CB** · **BFN-Bio** |"),
+         "| **Fri** | Biology | **FLS** primary | — | **OSB** · **CB** · **BFN-Bio** |"),
         ("| **Mon–Thu** | Algebra | **Lar** | — | **BFN-A** |",
          "| **Mon–Fri** | Algebra | **Lar** | — | **BFN-A** |"),
     ]:
@@ -531,9 +597,9 @@ def patch_calendar_books_section(text: str) -> str:
 
 | Block | Chemistry | Biology | Physics | Python |
 |-------|-----------|---------|---------|--------|
-| **Mon/Thu** | **Mod** (+ optional Expl chem) | — | — | — |
-| **Tue/Fri** | — | **OSB/FLS** (+ CB backup) | — | — |
-| **Wed** | — | — | **Expl** | — |
+| **Mon/Thu** | **Hewitt** chem (Ch 17–24) | — | — | — |
+| **Tue/Fri** | — | **FLS** (+ OSB/CB backup) | — | — |
+| **Wed** | — | — | **Hewitt** physics | — |
 | **Mon–Fri** | — | — | — | **Lar** algebra |
 | **Tue/Thu PM** | — | — | — | **Coach** Journey wk 1–10 |
 
@@ -554,7 +620,7 @@ def patch_calendar_md(path: Path) -> None:
     if start != -1 and end != -1:
         new_section = """## WEEKS 1–10 — *Single summer pass* *(June 8 – August 14)*
 
-*One careful read through **Mod + OSB/FLS + Expl** (50 × 1-hr science blocks). Read assigned **§ sections** for each DOE topic — stop when Focus is covered. **Tro/CB/BFN** = backups. Extra DOE practice → Science Bowl Coach **Quiz** tab. Flash-card review → **school meetings** in fall.*
+*One careful read through **Hewitt + FLS** (50 × 1-hr science blocks). Read assigned **§ sections** for each DOE topic — stop when Focus is covered. **Mod/OSB/Tro/CB/BFN** = backups. Extra DOE practice → Science Bowl Coach **Quiz** tab. Flash-card review → **school meetings** in fall.*
 
 """
         new_section += "\n".join(generate_calendar_week_md(w) for w in range(1, 11))
@@ -576,8 +642,8 @@ def patch_weekly_timetable(path: Path) -> None:
             text = text[:insert_at] + "\n" + DOE_TOPIC_SCOPE + text[insert_at:]
     reps = [
         ("same **10-week Pass 1–3 schedule**", "same **10-week summer schedule**"),
-        ("**Mod** (Pass 1) · **Tro** (Pass 2–3)", "**Mod** primary · **Tro** backup"),
-        ("**FLS** (Pass 1) · **CB** (Pass 2–3)", "**OSB/FLS** primary · **CB** backup"),
+        ("**Mod** (Pass 1) · **Tro** (Pass 2–3)", "**Hewitt** primary · **Mod/Tro** backup"),
+        ("**FLS** (Pass 1) · **CB** (Pass 2–3)", "**FLS** primary · **OSB/CB** backup"),
         ("Pass 1–3", "one summer pass"),
         ("| **Mon–Thu** | Algebra | **Lar** | — | **BFN-A** |",
          "| **Mon–Fri** | Algebra | **Lar** | — | **BFN-A** |"),
@@ -598,8 +664,13 @@ def patch_weekly_html(path: Path) -> None:
         ("Pass 1–3", "one summer pass"),
         ("Pass 1 · Pass 2 · Pass 3", "one summer pass"),
         ("Weeks 1–4 = Pass 1", "Weeks 1–10 = one summer pass"),
-        ("FLS (P1) · CB (P2–3)", "OSB/FLS primary · CB backup"),
-        ("Mod (P1) · Tro (P2–3)", "Mod primary · Tro backup"),
+        ("FLS (P1) · CB (P2–3)", "FLS primary · OSB/CB backup"),
+        ("Mod (P1) · Tro (P2–3)", "Hewitt primary · Mod/Tro backup"),
+        ("Mod/Tro · Expl opt · BFN-Sci", "Hewitt · Mod/Tro backup · BFN-Sci"),
+        ("FLS/CB/Expl/Lar", "Hewitt/FLS/Mod/OSB/CB/Lar"),
+        ("calendar says primary (Mod/Tro/FLS/CB/Expl/Lar)", "calendar says primary (Hewitt/FLS) — backups on picker table"),
+        ("Chemistry — 30 min<br><span style=\"font-size:7.5pt\">Mod/Tro · Expl opt · BFN-Sci</span>",
+         "Chemistry — 1 hr<br><span style=\"font-size:7.5pt\">Hewitt · Mod/Tro backup · BFN-Sci</span>"),
         ("Book key & pass overview", "Book key & DOE topic scope"),
         ("one chapter in one day", "assigned § section per block"),
         ("whole chapter", "assigned § section"),
@@ -741,51 +812,61 @@ def format_mod_reading(week: int, day_idx: int, book: str) -> str:
     return f"{book} {extra}".strip() if extra else book
 
 
+def osb_backup_line(week: int, day_idx: int) -> str:
+    kind, osb_book, *_ = SCIENCE_WEEKS[week][day_idx]
+    if kind != "bio":
+        return "—"
+    fls_cb = BIO_BACKUP.get((week, day_idx), "CB backup")
+    if " · CB" in fls_cb:
+        cb_part = fls_cb.split(" · CB", 1)[1].strip()
+        return f"{osb_book} · CB {cb_part}"
+    return f"{osb_book} · {fls_cb}"
+
+
 def format_primary_md(week: int, day_idx: int, kind: str, book: str, title: str) -> str:
-    if kind == "chem" and book.startswith("Mod"):
-        reading = format_mod_reading(week, day_idx, book)
-        display = reading[4:] if reading.startswith("Mod ") else reading
-        return f"**Mod** {display} — *{title}*"
-    if kind == "bio":
-        return f"**{book}** — *{title}*"
-    return f"**{book}** — *{title}*"
+    display = primary_display_book(week, day_idx, kind, book)
+    label = display.split()[0]
+    rest = display[len(label) :].strip()
+    return f"**{label}** {rest} — *{title}*"
 
 
 def format_backup_md(week: int, day_idx: int, kind: str) -> str:
     if kind == "chem":
+        _, mod_book, *_ = SCIENCE_WEEKS[week][day_idx]
+        mod = format_mod_reading(week, day_idx, mod_book)
+        mod_display = mod[4:] if mod.startswith("Mod ") else mod
         tro = TRO_BACKUP.get((week, day_idx))
-        return f"**Tro** {tro}" if tro else "**Tro** / BFN-Sci if stuck"
+        tro_part = f" · **Tro** {tro}" if tro else " · **Tro** / BFN-Sci if stuck"
+        return f"**Mod** {mod_display}{tro_part}"
     if kind == "bio":
-        return BIO_BACKUP.get((week, day_idx), "FLS/CB backup")
+        return osb_backup_line(week, day_idx)
     return "—"
 
 
-def format_expl_opt(week: int, day_idx: int, kind: str) -> str:
+def format_mod_backup(week: int, day_idx: int, kind: str) -> str:
     if kind != "chem":
         return "—"
-    return EXPL_CHEM_OPT.get((week, day_idx), "Ch 17–24 optional")
+    _, mod_book, *_ = SCIENCE_WEEKS[week][day_idx]
+    mod = format_mod_reading(week, day_idx, mod_book)
+    return mod.replace("Mod ", "Mod ", 1)
 
 
 def format_primary_html(week: int, day_idx: int, kind: str, book: str) -> str:
-    if kind == "chem" and book.startswith("Mod"):
-        reading = format_mod_reading(week, day_idx, book)
-        display = reading[4:] if reading.startswith("Mod ") else reading
-        return f"<strong>Mod</strong> {esc(display)}"
-    if kind == "bio" and book.startswith("OSB"):
-        return f"<strong>OSB</strong> {esc(book[4:].strip())}"
-    if book.startswith("Expl"):
-        return f"<strong>Expl</strong> {esc(book[5:].strip())}"
-    return f"<strong>{esc(book.split()[0])}</strong> {esc(book)}"
+    display = primary_display_book(week, day_idx, kind, book)
+    label, _, rest = display.partition(" ")
+    return f"<strong>{esc(label)}</strong> {esc(rest)}"
 
 
 def format_backup_html(week: int, day_idx: int, kind: str) -> str:
     if kind == "chem":
+        _, mod_book, *_ = SCIENCE_WEEKS[week][day_idx]
+        mod = format_mod_reading(week, day_idx, mod_book)
+        mod_display = mod[4:] if mod.startswith("Mod ") else mod
         tro = TRO_BACKUP.get((week, day_idx))
-        if tro:
-            return f"<strong>Tro</strong> {esc(tro)}"
-        return "<strong>Tro</strong> / BFN-Sci if stuck"
+        tro_part = f" · <strong>Tro</strong> {esc(tro)}" if tro else " · <strong>Tro</strong> / BFN-Sci if stuck"
+        return f"<strong>Mod</strong> {esc(mod_display)}{tro_part}"
     if kind == "bio":
-        return esc(BIO_BACKUP.get((week, day_idx), "FLS/CB backup"))
+        return esc(osb_backup_line(week, day_idx))
     return "—"
 
 
@@ -796,14 +877,14 @@ def generate_prep_week_table_md(week: int) -> str:
     lines = [
         f"### Week {week} — {theme}",
         "",
-        "| Block | Topic | Primary (§ sections) | Backup | Expl opt |",
-        "|-------|-------|----------------------|--------|----------|",
+        "| Block | Topic | Primary (§ sections) | Backup | Mod backup |",
+        "|-------|-------|----------------------|--------|------------|",
     ]
     for day_idx, label, kind in PREP_BLOCK_ROWS:
         _, book, title, *_ = blocks[day_idx]
         lines.append(
             f"| **{label}** | {title} | {format_primary_md(week, day_idx, kind, book, title)} "
-            f"| {format_backup_md(week, day_idx, kind)} | {format_expl_opt(week, day_idx, kind)} |"
+            f"| {format_backup_md(week, day_idx, kind)} | {format_mod_backup(week, day_idx, kind)} |"
         )
     for day_idx, day_name in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri"]):
         lines.append(
@@ -824,7 +905,7 @@ def generate_prep_week_table_html(week: int) -> str:
             f'        <tr class="{kind}"><td>{label}</td><td>{esc(title)}</td>'
             f"<td>{format_primary_html(week, day_idx, kind, book)}</td>"
             f"<td>{format_backup_html(week, day_idx, kind)}</td>"
-            f"<td>{esc(format_expl_opt(week, day_idx, kind))}</td></tr>"
+            f"<td>{esc(format_mod_backup(week, day_idx, kind))}</td></tr>"
         )
     for day_idx, day_name in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri"]):
         rows.append(
@@ -834,7 +915,7 @@ def generate_prep_week_table_html(week: int) -> str:
         )
     return f"""      <h4 id="week-{week}"><span class="week-tag">Week {week}</span> {theme}</h4>
       <table>
-        <tr><th>Block</th><th>Topic</th><th>Primary (§ sections)</th><th>Backup</th><th>Expl opt</th></tr>
+        <tr><th>Block</th><th>Topic</th><th>Primary (§ sections)</th><th>Backup</th><th>Mod backup</th></tr>
 {chr(10).join(rows)}
       </table>
       <p style="font-size:8pt"><strong>Fri review:</strong> {esc(REVIEW_ROWS[week])}</p>
@@ -863,7 +944,7 @@ def generate_prep_reading_guide_html() -> str:
     </div>
   </div>
 
-  <p class="footer">Read assigned § sections only (stop at Focus) · Tro/CB/FLS = backup · DOE topics not whole books · Daily detail in summer-2026-calendar.md</p>
+  <p class="footer">Read assigned § sections only (stop at Focus) · Mod/OSB/CB = backup · DOE topics not whole books · Daily detail in summer-2026-calendar.md</p>
 </section>
 """
         )
@@ -893,7 +974,7 @@ def patch_prep_md(path: Path) -> None:
 
     text = text.replace(
         "**Weeks 1–4** = Pass 1 *(Mod + FLS · learn from textbook)* · **Weeks 5–8** = Pass 2 *(Tro + CB · DOE questions first)* · **Weeks 9–10** = Pass 3 *(flash cards → book only if stuck)*",
-        "**Weeks 1–10** = **one summer pass** *(Mod + OSB/FLS + Expl · assigned § section per 1-hr block)* · **Tro/CB/BFN** = backups · **DOE drill** = app Quiz tab · **Flash cards** = school meetings in fall",
+        "**Weeks 1–10** = **one summer pass** *(Hewitt + FLS · assigned § section per 1-hr block)* · **Mod/OSB/Tro/CB/BFN** = backups · **DOE drill** = app Quiz tab · **Flash cards** = school meetings in fall",
     )
     text = re.sub(
         r"## Pass 2 — Weeks 5–8.*?(?=## Pass 3|$)",
@@ -923,12 +1004,12 @@ def patch_prep_md(path: Path) -> None:
         r"\| Code \| Book \| ISBN \| When to use \|\n\|[-| ]+\|\n(?:\| \*\*[^|]+\*\* \|[^\n]+\n)+",
         """| Code | Book | ISBN | When to use |
 |------|------|------|-------------|
-| **OSB** | *OpenStax Biology 2e* — free online | openstax.org | **Primary** biology · Tue & Fri |
-| **FLS** | *Focus on Life Science* — Prentice Hall **California ed. (2001)** | 9780130443465 | Biology **backup** · same DOE topics |
+| **FLS** | *Focus on Life Science* — Prentice Hall **California ed. (2001)** | 9780130443465 | **Primary** biology · Tue & Fri |
+| **OSB** | *OpenStax Biology 2e* — free online | openstax.org | Biology **backup** · same DOE topics |
 | **CB** | *Campbell Biology: Concepts & Connections* — **7th ed.** | 9780321696816 | Biology **backup** · deeper TAG level |
-| **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | **Primary** chemistry · Mon & Thu |
+| **Hewitt** | *Conceptual Physical Science Explorations* — Hewitt **student text** | 9780321567918 | **Primary** chem (Ch 17–24) · Wed **physics** |
+| **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Chemistry **backup** · Mon & Thu |
 | **Tro** | *Introductory Chemistry* — Nivaldo Tro **4th ed.** | 9780321687937 | Chemistry **backup** |
-| **Expl** | *Conceptual Physical Science Explorations* — Hewitt **student text** | 9780321567918 | Wed **physics** · optional **chem** parallel Mon/Thu *(Ch 17–24)* |
 | **ExplLab** | *Explorations: Laboratory Manual* | 9780321051837 | Optional Wed labs |
 | **Lar** | *Holt McDougal Larson Algebra 1* — **2011** | 9780547315157 | Mon–Fri Algebra · 1 hr |
 | **BFN-A** | *Big Fat Notebook: Pre-Algebra & Algebra* | 9781523504382 | Algebra backup · CYK |
@@ -945,9 +1026,9 @@ def patch_prep_md(path: Path) -> None:
 
 | Block | Biology | Chemistry | Physics |
 |-------|---------|-----------|---------|
-| **Mon/Thu** | — | **Mod** primary (+ optional Expl chem) | — |
-| **Tue/Fri** | **OSB/FLS** primary (+ CB backup) | — | — |
-| **Wed** | — | — | **Expl** |
+| **Mon/Thu** | — | **Hewitt** primary (Ch 17–24) | — |
+| **Tue/Fri** | **FLS** primary (+ OSB/CB backup) | — | — |
+| **Wed** | — | — | **Hewitt** |
 
 **1-hr block:** read assigned **§ section** for the DOE topic → know cold → toss-ups. Tro/CB/BFN = backups only.
 
@@ -991,15 +1072,15 @@ def patch_prep_md(path: Path) -> None:
         ("**Pass difficulty:** Pass 1 = learn from textbook · Pass 2 = DOE regional-style questions first · Pass 3 = flash cards only unless stuck.",
          "**Summer plan:** One pass through DOE **Tips & Resources** topics — read assigned **§ sections** only (not whole textbooks). Tro/CB/BFN = backups. Extra DOE → app Quiz tab. Flash cards at school meetings."),
         ("**Mod** (Pass 1) and **Tro** (Pass 2) stay **primary**",
-         "**Mod** is **primary** chemistry · **Tro** is **backup**"),
+         "**Hewitt** is **primary** chemistry · **Mod/Tro** are **backups**"),
         ("| **Mon** | Chemistry | **Mod** (Pass 1) · **Tro** (Pass 2–3) |",
-         "| **Mon** | Chemistry | **Mod** primary |"),
+         "| **Mon** | Chemistry | **Hewitt** primary |"),
         ("| **Tue** | Biology | **FLS** (Pass 1) · **CB** (Pass 2–3) |",
-         "| **Tue** | Biology | **OSB/FLS** primary |"),
+         "| **Tue** | Biology | **FLS** primary |"),
         ("| **Thu** | Chemistry | **Mod** (Pass 1) · **Tro** (Pass 2–3) |",
-         "| **Thu** | Chemistry | **Mod** primary |"),
+         "| **Thu** | Chemistry | **Hewitt** primary |"),
         ("| **Fri** | Biology | **FLS** (Pass 1) · **CB** (Pass 2–3) |",
-         "| **Fri** | Biology | **OSB/FLS** primary |"),
+         "| **Fri** | Biology | **FLS** primary |"),
         ("pick **2 weak subtopics** for Pass 2", "log **2 weak subtopics** in app Progress"),
         ("for Pass 3", "for school meetings"),
         ("Pass 2: re-read only the Tro/CB/Expl section you missed on DOE",
@@ -1075,15 +1156,15 @@ def patch_prep_html(path: Path) -> None:
     )
     text = text.replace(
         "Pass 1 bio · Tue &amp; Fri",
-        "OSB/FLS primary · Tue &amp; Fri",
+        "FLS primary · Tue &amp; Fri",
     )
     text = text.replace(
         "Pass 2–3 bio",
-        "CB backup · bio",
+        "OSB/CB backup · bio",
     )
     text = text.replace(
         "Pass 2–3 chem",
-        "Tro backup · chem",
+        "Mod/Tro backup · chem",
     )
     text = text.replace(
         "Physics all passes · Wed",
@@ -1091,11 +1172,11 @@ def patch_prep_html(path: Path) -> None:
     )
     text = text.replace(
         "<tr><th>Pass</th><th>Dates</th><th>Biology</th><th>Chemistry</th></tr>\n        <tr><td><strong>1 Learn</strong></td><td>Jun 8 – Jul 3</td><td class=\"bio\"><strong>FLS</strong></td><td class=\"chem\"><strong>Mod</strong> + opt <strong>Expl</strong> chem</td></tr>\n        <tr><td><strong>2 Practice</strong></td><td>Jul 6 – Jul 31</td><td class=\"bio\"><strong>CB</strong> + DOE</td><td class=\"chem\"><strong>Tro</strong> + DOE + opt <strong>Expl</strong> chem</td></tr>\n        <tr><td><strong>3 Review</strong></td><td>Aug 3 – 14</td><td class=\"bio\"><strong>CB</strong> + <strong>FLS</strong> cards</td><td class=\"chem\"><strong>Tro</strong> + <strong>Mod</strong> cards</td></tr>",
-        "<tr><th>Block</th><th>Biology</th><th>Chemistry</th><th>Physics</th></tr>\n        <tr><td><strong>Mon/Thu</strong></td><td>—</td><td class=\"chem\"><strong>Mod</strong> primary (+ opt <strong>Expl</strong> chem)</td><td>—</td></tr>\n        <tr><td><strong>Tue/Fri</strong></td><td class=\"bio\"><strong>OSB/FLS</strong> primary</td><td>—</td><td>—</td></tr>\n        <tr><td><strong>Wed</strong></td><td>—</td><td>—</td><td class=\"phys\"><strong>Expl</strong></td></tr>\n        <tr><td><strong>Backup</strong></td><td class=\"bio\"><strong>CB</strong> · <strong>BFN-Bio</strong></td><td class=\"chem\"><strong>Tro</strong> · <strong>BFN-Sci</strong></td><td class=\"phys\">Flash cards at school</td></tr>",
+        "<tr><th>Block</th><th>Biology</th><th>Chemistry</th><th>Physics</th></tr>\n        <tr><td><strong>Mon/Thu</strong></td><td>—</td><td class=\"chem\"><strong>Hewitt</strong> primary (Ch 17–24)</td><td>—</td></tr>\n        <tr><td><strong>Tue/Fri</strong></td><td class=\"bio\"><strong>FLS</strong> primary</td><td>—</td><td>—</td></tr>\n        <tr><td><strong>Wed</strong></td><td>—</td><td>—</td><td class=\"phys\"><strong>Hewitt</strong></td></tr>\n        <tr><td><strong>Backup</strong></td><td class=\"bio\"><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td><td class=\"chem\"><strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td><td class=\"phys\"><strong>BFN-Sci</strong></td></tr>",
     )
     text = text.replace(
         "<tr><th>Physics stage</th><th>Book</th><th>Pass 2 change</th></tr>\n        <tr><td>Primary (§)</td><td class=\"phys\"><strong>Expl</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td><td>Learn concepts</td></tr>\n        <tr><td>Backup</td><td class=\"phys\">Same + Ch 5 · 7 · 14</td><td>DOE first, re-read</td></tr>\n        <tr><td>Pass 3 (Aug)</td><td class=\"phys\">Flash cards → book if stuck</td><td>Review only</td></tr>",
-        "<tr><th>Stage</th><th>Book</th><th>Notes</th></tr>\n        <tr><td>Primary (§)</td><td class=\"phys\"><strong>Expl</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td><td>Section splits · stop at Focus</td></tr>\n        <tr><td>Backup</td><td class=\"phys\"><strong>BFN-Sci</strong> · flash cards</td><td>If Expl section feels dense</td></tr>\n        <tr><td>School meetings</td><td class=\"phys\">Flash cards → book if stuck</td><td>Fall review</td></tr>",
+        "<tr><th>Stage</th><th>Book</th><th>Notes</th></tr>\n        <tr><td>Primary (§)</td><td class=\"phys\"><strong>Hewitt</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td><td>Section splits · stop at Focus</td></tr>\n        <tr><td>Backup</td><td class=\"phys\"><strong>BFN-Sci</strong> · flash cards</td><td>If Hewitt section feels dense</td></tr>\n        <tr><td>School meetings</td><td class=\"phys\">Flash cards → book if stuck</td><td>Fall review</td></tr>",
     )
     text = text.replace(
         "<tr><th>Wk</th><th>Topic</th><th>Mod (P1)</th><th>Tro (P2)</th><th>Expl opt</th></tr>",
@@ -1103,7 +1184,7 @@ def patch_prep_html(path: Path) -> None:
     )
     text = text.replace(
         "Pass 1 chem · Mon &amp; Thu",
-        "Mod primary · Mon &amp; Thu",
+        "Hewitt primary · Mon/Thu chem",
     )
     html_reps = [
         ("30-min science block", "1-hr science block"),
@@ -1114,19 +1195,60 @@ def patch_prep_html(path: Path) -> None:
         ("Pass 1 = textbook", "Primary = § sections"),
         ("whole chapter", "assigned § section"),
         ("one chapter in one day", "assigned § section per block"),
-        ("FLS (Pass 1)", "OSB/FLS primary"),
-        ("CB (Pass 2–3)", "CB backup"),
-        ("Mod (Pass 1)", "Mod primary"),
-        ("Tro (Pass 2–3)", "Tro backup"),
+        ("FLS (Pass 1)", "FLS primary"),
+        ("CB (Pass 2–3)", "OSB/CB backup"),
+        ("Mod (Pass 1)", "Hewitt primary"),
+        ("Tro (Pass 2–3)", "Mod/Tro backup"),
         ("Pass 1 (Jun)", "Primary (§)"),
         ("Pass 2 (Jul)", "Backup"),
-        ("Weeks 1–4 = Pass 1 (Mod+FLS)", "Weeks 1–10 = one pass (Mod+OSB)"),
-        ("Weeks 5–8 = Pass 2 (Tro+CB, DOE first)", "Tro/CB backup · DOE in Quiz tab"),
+        ("Weeks 1–4 = Pass 1 (Mod+FLS)", "Weeks 1–10 = one pass (Hewitt+FLS)"),
+        ("Weeks 5–8 = Pass 2 (Tro+CB, DOE first)", "Mod/OSB/Tro/CB backup · DOE in Quiz tab"),
         ("Weeks 9–10 = Pass 3 (flash cards)", "Weeks 9–10 capstone · flash cards at school"),
         ("review Pass 1 gaps", "review weak § sections"),
+        ("OSB/FLS primary", "FLS primary"),
+        ("Mod primary · Mon &amp; Thu", "Hewitt primary · Mon/Thu chem"),
+        ("Mod primary · Mon & Thu", "Hewitt primary · Mon/Thu chem"),
+        ("Mod/Tro primary · optional <strong>Expl Ch 17–24</strong> parallel",
+         "<strong>Hewitt</strong> Ch 17–24 primary · <strong>Mod/Tro</strong> backup"),
+        ("<strong>OSB/FLS</strong> primary", "<strong>FLS</strong> primary"),
+        ("<strong>Mod</strong> primary (+ opt <strong>Expl</strong> chem)",
+         "<strong>Hewitt</strong> primary (+ <strong>Mod</strong> backup)"),
+        ("class=\"phys\"><strong>Expl</strong></td>", "class=\"phys\"><strong>Hewitt</strong></td>"),
+        ("Mod/Tro · Expl opt · BFN-Sci", "Hewitt · Mod/Tro backup · BFN-Sci"),
+        ("Chemistry — 30 min<br><span style=\"font-size:7.5pt\">Mod/Tro · Expl opt · BFN-Sci</span>",
+         "Chemistry — 1 hr<br><span style=\"font-size:7.5pt\">Hewitt · Mod/Tro backup · BFN-Sci</span>"),
+        ("calendar says primary (Mod/Tro/FLS/CB/Expl/Lar)",
+         "calendar says primary (Hewitt/FLS) — backups on picker table"),
     ]
     for old, new in html_reps:
         text = text.replace(old, new)
+    # Fix prep book table rows after broad pass/replace substitutions.
+    text = text.replace(
+        '<tr class="chem"><td><strong>Mod</strong></td><td><em>Modern Chemistry</em> — 2012</td>'
+        '<td>9780547586632</td><td>Hewitt primary · Mon/Thu chem</td></tr>',
+        '<tr class="chem"><td><strong>Mod</strong></td><td><em>Modern Chemistry</em> — 2012</td>'
+        '<td>9780547586632</td><td>Chemistry backup · Mon &amp; Thu</td></tr>',
+    )
+    text = text.replace(
+        '<tr class="chem"><td><strong>Mod</strong></td><td><em>Modern Chemistry</em> — 2012</td>'
+        '<td>9780547586632</td><td>Hewitt primary · Mon &amp; Thu</td></tr>',
+        '<tr class="chem"><td><strong>Mod</strong></td><td><em>Modern Chemistry</em> — 2012</td>'
+        '<td>9780547586632</td><td>Chemistry backup · Mon &amp; Thu</td></tr>',
+    )
+    text = text.replace(
+        '<tr class="phys"><td><strong>Expl</strong></td><td><em>Conceptual Physical Science Explorations</em> — student text</td>'
+        '<td>9780321567918</td><td>Physics · Wed</td></tr>',
+        '<tr class="phys"><td><strong>Hewitt</strong></td><td><em>Conceptual Physical Science Explorations</em> — Hewitt student text</td>'
+        '<td>9780321567918</td><td>Primary chem (Ch 17–24) · Wed physics</td></tr>',
+    )
+    text = text.replace(
+        '<tr class="bio"><td><strong>CB</strong></td><td><em>Campbell Biology: C&amp;C</em> — 7th ed.</td>'
+        '<td>9780321696816</td><td>CB backup · bio</td></tr>',
+        '<tr class="bio"><td><strong>OSB</strong></td><td><em>OpenStax Biology 2e</em> — free online</td>'
+        '<td>openstax.org</td><td>Biology backup · Tue &amp; Fri</td></tr>\n'
+        '    <tr class="bio"><td><strong>CB</strong></td><td><em>Campbell Biology: C&amp;C</em> — 7th ed.</td>'
+        '<td>9780321696816</td><td>Biology backup · deeper TAG</td></tr>',
+    )
     for w, (_dates, theme) in WEEK_META.items():
         text = re.sub(
             rf'(<span class="week-tag">Week {w}</span>)[^<\n]*',
@@ -1149,7 +1271,7 @@ def patch_readme(path: Path) -> None:
 | **[summer-2026-whiteboard.html](summer-2026-whiteboard.html)** | Print grid · week jump in Science Bowl Coach Calendar tab |
 | **[science-bowl-prep.md](science-bowl-prep.md)** | Books · study method · chapter maps |
 
-**Plan:** One careful read through Mod + FLS/OSB + Expl (50 science blocks). Tro/CB/BFN = backups. DOE practice in the app. Flash-card review at school Science Bowl meetings.
+**Plan:** One careful read through **Hewitt + FLS** (50 science blocks). Mod/OSB/Tro/CB/BFN = backups. DOE practice in the app. Flash-card review at school Science Bowl meetings.
 
 Regenerate bundled HTML in the Mac app:
 
