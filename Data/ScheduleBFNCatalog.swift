@@ -131,6 +131,26 @@ enum ScheduleBFNCatalog {
             chapters: "Ch 12 Work and Machines · Ch 13 Forms of Energy",
             pages: "p91 · p129"
         ),
+        "Waves": Citation(
+            unit: "Unit 4",
+            chapters: "Ch 15 Light and Sound",
+            pages: "p129"
+        ),
+        "Electricity": Citation(
+            unit: "Unit 4",
+            chapters: "Ch 16 Electricity and Magnetism",
+            pages: "p129"
+        ),
+        "Chemical bonding": Citation(
+            unit: "Unit 2",
+            chapters: "Ch 7 Atomic Structure and Compounds",
+            pages: "p59"
+        ),
+        "Stoichiometry": Citation(
+            unit: "Unit 2",
+            chapters: "Ch 8 Solutions and Fluids · Molarity intro",
+            pages: "p59"
+        ),
         "Waves & electricity": Citation(
             unit: "Unit 4",
             chapters: "Ch 15 Light and Sound · Ch 16 Electricity and Magnetism",

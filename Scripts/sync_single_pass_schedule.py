@@ -5,7 +5,19 @@ from __future__ import annotations
 
 import re
 import shutil
+import sys
 from pathlib import Path
+
+_SCRIPTS = Path(__file__).resolve().parent
+if str(_SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS))
+
+from bfn_catalog import (  # noqa: E402
+    format_algebra_backup,
+    format_bio_backup,
+    format_chem_backup,
+    format_phys_backup,
+)
 
 SOHAAli = Path.home() / "Documents/SohaAli/Schedule"
 APP_RESOURCES = Path(__file__).resolve().parent.parent / "Resources/Schedule"
@@ -193,11 +205,12 @@ def format_osa_algebra_primary(week: int, day_idx: int) -> str:
 
 def algebra_html_cell(week: int, day_idx: int) -> str:
     primary = format_osa_algebra_primary(week, day_idx)
-    _, _, lar_backup = osa_math_reading(week, day_idx)
+    title, _, lar_part = osa_math_reading(week, day_idx)
+    backup = format_algebra_backup(week, day_idx, title, lar_part)
     return (
         f'<td class="alg study-cell">'
         f"<strong>{esc(primary)}</strong>"
-        f'<span class="optional-book"><em>Backup:</em> {esc(lar_backup)}</span>'
+        f'<span class="optional-book"><em>Backup:</em> {esc(backup)}</span>'
         f'<span class="focus"><em>Focus:</em> 1 hr algebra · assigned § only</span>'
         f"</td>"
     )
@@ -471,14 +484,31 @@ def esc(s: str) -> str:
     return s.replace("&", "&amp;")
 
 
-def html_cell(kind: str, book: str, title: str, focus: str, formulas: str, know: str, tossup: str) -> str:
+def html_cell(
+    week: int,
+    day_idx: int,
+    kind: str,
+    book: str,
+    title: str,
+    focus: str,
+    formulas: str,
+    know: str,
+    tossup: str,
+) -> str:
     cls = {"chem": "chem", "bio": "bio", "phys": "phys"}.get(kind, "study-cell")
     if kind == "chem":
-        backup = '<span class="optional-book"><em>Backup:</em> Mod · Tro · BFN</span>'
+        _, mod_book, *_ = SCIENCE_WEEKS[week][day_idx]
+        mod = format_mod_reading(week, day_idx, mod_book)
+        mod_display = mod[4:] if mod.startswith("Mod ") else mod
+        tro = TRO_BACKUP.get((week, day_idx))
+        tro_part = f" · Tro {tro}" if tro else " · Tro if stuck"
+        backup_text = format_chem_backup(week, day_idx, mod_display, tro_part)
+        backup = f'<span class="optional-book"><em>Backup:</em> {esc(backup_text)}</span>'
     elif kind == "bio":
-        backup = '<span class="optional-book"><em>Backup:</em> OSB · CB · BFN</span>'
+        backup_text = format_bio_backup(week, day_idx, osb_backup_line(week, day_idx))
+        backup = f'<span class="optional-book"><em>Backup:</em> {esc(backup_text)}</span>'
     else:
-        backup = ""
+        backup = f'<span class="optional-book"><em>Backup:</em> {esc(format_phys_backup(week, day_idx))}</span>'
     return (
         f'<td class="{cls} study-cell">'
         f"<strong>{esc(book)}</strong> — {esc(title)}{backup}"
@@ -671,7 +701,7 @@ def generate_whiteboard_week(week: int) -> str:
     for i, day in enumerate(DAY_NAMES):
         kind, book, title, focus, formulas, know, tossup = blocks[i]
         display_book = primary_display_book(week, i, kind, book)
-        cell = html_cell(kind, display_book, title, focus, formulas, know, tossup)
+        cell = html_cell(week, i, kind, display_book, title, focus, formulas, know, tossup)
         alg_cell = algebra_html_cell(week, i)
 
         if day == "Mon":
@@ -753,9 +783,11 @@ def generate_calendar_week_md(week: int) -> str:
         lines.append(
             f"| **{subj} · {book}** | *{title}* · backup Tro/CB/BFN | {focus} | {formulas} | {know} | 1. {tossup} |"
         )
+        math_title, _, lar_part = osa_math_reading(week, idx)
+        alg_backup = format_algebra_backup(week, idx, math_title, lar_part)
         lines.append(
             f"| **Algebra · OSA** | *{format_osa_algebra_primary(week, idx)}* · "
-            f"backup {osa_math_reading(week, idx)[2]} | 1 hr algebra block | — | — | — |"
+            f"backup {alg_backup} | 1 hr algebra block | — | — | — |"
         )
         if idx == 1:
             label, focus_txt = COACH_ROWS[week]["tue"]
@@ -1111,10 +1143,12 @@ def format_backup_md(week: int, day_idx: int, kind: str) -> str:
         mod = format_mod_reading(week, day_idx, mod_book)
         mod_display = mod[4:] if mod.startswith("Mod ") else mod
         tro = TRO_BACKUP.get((week, day_idx))
-        tro_part = f" · **Tro** {tro}" if tro else " · **Tro** / BFN-Sci if stuck"
-        return f"**Mod** {mod_display}{tro_part}"
+        tro_part = f" · Tro {tro}" if tro else " · Tro if stuck"
+        return format_chem_backup(week, day_idx, mod_display, tro_part)
     if kind == "bio":
-        return osb_backup_line(week, day_idx)
+        return format_bio_backup(week, day_idx, osb_backup_line(week, day_idx))
+    if kind == "phys":
+        return format_phys_backup(week, day_idx)
     return "—"
 
 
@@ -1138,10 +1172,12 @@ def format_backup_html(week: int, day_idx: int, kind: str) -> str:
         mod = format_mod_reading(week, day_idx, mod_book)
         mod_display = mod[4:] if mod.startswith("Mod ") else mod
         tro = TRO_BACKUP.get((week, day_idx))
-        tro_part = f" · <strong>Tro</strong> {esc(tro)}" if tro else " · <strong>Tro</strong> / BFN-Sci if stuck"
-        return f"<strong>Mod</strong> {esc(mod_display)}{tro_part}"
+        tro_part = f" · Tro {esc(tro)}" if tro else " · Tro if stuck"
+        return esc(format_chem_backup(week, day_idx, mod_display, tro_part))
     if kind == "bio":
-        return esc(osb_backup_line(week, day_idx))
+        return esc(format_bio_backup(week, day_idx, osb_backup_line(week, day_idx)))
+    if kind == "phys":
+        return esc(format_phys_backup(week, day_idx))
     return "—"
 
 
@@ -1161,10 +1197,11 @@ def generate_prep_week_table_md(week: int) -> str:
             f"| {format_backup_md(week, day_idx, kind)} | {format_mod_backup(week, day_idx, kind)} |"
         )
     for day_idx, day_name in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri"]):
-        title, _, lar_backup = osa_math_reading(week, day_idx)
+        title, _, lar_part = osa_math_reading(week, day_idx)
+        alg_backup = format_algebra_backup(week, day_idx, title, lar_part)
         lines.append(
             f"| **{day_name} Algebra** | {title} | **{format_osa_algebra_primary(week, day_idx)}** "
-            f"| {lar_backup} | — |"
+            f"| {alg_backup} | — |"
         )
     lines.extend(["", f"**Fri review:** {REVIEW_ROWS[week]}", "", "---", ""])
     return "\n".join(lines)
@@ -1183,11 +1220,12 @@ def generate_prep_week_table_html(week: int) -> str:
             f"<td>{esc(format_mod_backup(week, day_idx, kind))}</td></tr>"
         )
     for day_idx, day_name in enumerate(["Mon", "Tue", "Wed", "Thu", "Fri"]):
-        title, _, lar_backup = osa_math_reading(week, day_idx)
+        title, _, lar_part = osa_math_reading(week, day_idx)
+        alg_backup = format_algebra_backup(week, day_idx, title, lar_part)
         rows.append(
             f'        <tr class="alg"><td>{day_name} Alg</td><td>{esc(title)}</td>'
             f"<td>{esc(format_osa_algebra_primary(week, day_idx))}</td>"
-            f"<td>{esc(lar_backup)}</td><td>—</td></tr>"
+            f"<td>{esc(alg_backup)}</td><td>—</td></tr>"
         )
     return f"""      <h4 id="week-{week}"><span class="week-tag">Week {week}</span> {theme}</h4>
       <table>
