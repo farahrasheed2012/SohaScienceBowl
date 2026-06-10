@@ -143,7 +143,7 @@ extension SeedData {
         block(week: 3, day: .wednesday, subject: .physics, pass: .pass1,
               book: "Expl", chapter: "Ch 3", title: "Newton's 3rd Law & friction (part 2)",
               pass2Book: "Expl", pass2Chapter: "Ch 6–7", pass2Title: "Energy · Gravity",
-              focus: "~1 hr · part 2: action-reaction pairs · friction · net force · N = kg·m/s². Energy (Ch 6) in Pass 2.",
+              focus: "~1 hr · part 2: action-reaction pairs · friction · net force · N = kg·m/s². Wed week 7 = momentum.",
               formulas: "F = ma · action-reaction pairs · friction opposes motion · N = kg·m/s²",
               knowCold: ["Newton's 3rd law in words? (Every action has equal and opposite reaction)", "F=20 N, m=4 kg → a? (5 m/s²)"],
               topic: "Forces & Newton's laws",

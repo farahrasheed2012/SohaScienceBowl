@@ -204,21 +204,9 @@ extension AppState {
         let curriculum = curriculumExtras(for: block)
         let encyclopediaPool = encyclopediaQuestions(for: block, limit: 12)
 
-        var pool: [UnifiedQuestion]
-        switch currentPass {
-        case .pass2:
-            pool = doeUnified(for: category, limit: limit)
-            pool.append(contentsOf: curriculum)
-            pool.append(contentsOf: encyclopediaPool)
-        case .pass3:
-            pool = doeUnified(for: category, limit: (limit * 2) / 3)
-            pool.append(contentsOf: curriculum)
-            pool.append(contentsOf: encyclopediaPool)
-        case .pass1:
-            pool = curriculum
-            pool.append(contentsOf: encyclopediaPool)
-            pool.append(contentsOf: doeUnified(for: category, limit: limit / 2))
-        }
+        var pool: [UnifiedQuestion] = curriculum
+        pool.append(contentsOf: encyclopediaPool)
+        pool.append(contentsOf: doeUnified(for: category, limit: limit / 2))
 
         var deduped = dedupeQuestions(pool)
         if deduped.count < limit {
@@ -232,19 +220,8 @@ extension AppState {
     }
 
     func questionsForWeek(_ week: Int, limit: Int = 20) -> [UnifiedQuestion] {
-        switch currentPass {
-        case .pass2:
-            var pool: [UnifiedQuestion] = []
-            for category in [DOECategory.biology, .chemistry, .physics] {
-                pool.append(contentsOf: doeUnified(for: category, limit: 8))
-            }
-            pool.append(contentsOf: scienceBlocks(for: week).flatMap { $0.sampleTossups.map { $0.toUnified() } })
-            return Array(dedupeQuestions(pool).shuffled().prefix(limit))
-
-        default:
-            let blockQuestions = scienceBlocks(for: week).flatMap { questionsForBlock($0) }
-            return Array(dedupeQuestions(blockQuestions).shuffled().prefix(limit))
-        }
+        let blockQuestions = scienceBlocks(for: week).flatMap { questionsForBlock($0) }
+        return Array(dedupeQuestions(blockQuestions).shuffled().prefix(limit))
     }
 
     func questionsForSubject(_ subject: Subject, week: Int, limit: Int) -> [UnifiedQuestion] {
@@ -256,20 +233,11 @@ extension AppState {
         var pool = SeedData.tossupQuestions
             .filter { $0.week == week && $0.subject == subject }
             .map { $0.toUnified() }
-        let doeLimit = currentPass == .pass2 ? 12 : 8
-        pool.append(contentsOf: doeUnified(for: subject.doeCategory, limit: doeLimit))
+        pool.append(contentsOf: doeUnified(for: subject.doeCategory, limit: 8))
         return Array(dedupeQuestions(pool).shuffled().prefix(limit))
     }
 
     func questionsForBuzzerMixed(week: Int, limit: Int = 15) -> [UnifiedQuestion] {
-        if currentPass == .pass2 {
-            var pool: [UnifiedQuestion] = []
-            for category in [DOECategory.biology, .chemistry, .physics] {
-                pool.append(contentsOf: doeUnified(for: category, limit: 6))
-            }
-            return Array(dedupeQuestions(pool).shuffled().prefix(limit))
-        }
-
         let blocks = scienceBlocks(for: week)
         var pool = blocks.flatMap { questionsForBlock($0) }
         if pool.count < limit {
@@ -351,7 +319,7 @@ extension AppState {
             currentWeek = ScheduleConstants.weekNumber(for: today)
         }
         if !passManuallySet {
-            currentPass = ScheduleConstants.studyPass(for: today)
+            currentPass = .pass1
         }
     }
 

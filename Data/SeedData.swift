@@ -1,7 +1,7 @@
 import Foundation
 
 enum SeedData {
-    static let studyBlocks: [StudyBlock] = weeks1Through4 + weeks5Through8 + weeks9Through10
+    static let studyBlocks: [StudyBlock] = weeks1Through4 + weeks5Through10
     static let tossupQuestions: [TossupQuestion] = studyBlocks.flatMap(\.sampleTossups)
 
     static let checklistItems: [ChecklistItem] = [
@@ -104,12 +104,17 @@ enum SeedData {
     }
 
     static func topics(for week: Int) -> [Subject: String] {
-        let index = ((week - 1) % 4) + 1
-        switch index {
+        switch week {
         case 1: return [.chemistry: "Atoms & periodic table", .biology: "Cell structure", .physics: "About Science + Motion"]
         case 2: return [.chemistry: "States of matter", .biology: "Genetics", .physics: "Forces & Newton's laws"]
-        case 3: return [.chemistry: "Acids, bases & pH", .biology: "Ecology", .physics: "Work & energy"]
-        default: return [.chemistry: "Periodic trends & lab", .biology: "Evolution & plants", .physics: "Waves & electricity"]
+        case 3: return [.chemistry: "Acids, bases & pH", .biology: "Ecology", .physics: "Forces (continued)"]
+        case 4: return [.chemistry: "Periodic trends & lab", .biology: "Evolution & classification", .physics: "Waves (part 1)"]
+        case 5: return [.chemistry: "Bonding & stoichiometry", .biology: "Photosynthesis & respiration", .physics: "Work & energy"]
+        case 6: return [.chemistry: "Solutions & neutralization", .biology: "Population ecology & microbes", .physics: "Gravity"]
+        case 7: return [.chemistry: "Reactions & periodic trends", .biology: "Immunity & plants", .physics: "Momentum"]
+        case 8: return [.chemistry: "Lab math & phase changes", .biology: "Plant transport & tissues", .physics: "Electricity intro"]
+        case 9: return [.chemistry: "Isotopes & ions", .biology: "Cell division & body systems", .physics: "Circuits & waves"]
+        default: return [.chemistry: "Summer capstone", .biology: "Summer capstone", .physics: "Summer capstone"]
         }
     }
 }

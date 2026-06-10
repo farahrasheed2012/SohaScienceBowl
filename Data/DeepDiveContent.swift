@@ -9,48 +9,37 @@ enum DeepDiveContent {
     }
 
     static func passWorkflow(week: Int, pass: StudyPass) -> String? {
-        switch pass {
-        case .pass1 where week >= 1 && week <= 4:
+        guard week >= 1 && week <= 10 else { return nil }
+        if week == 10 {
             return """
-            Pass 1 block workflow (Weeks 1–4) — 1 hour:
-            • Minutes 0–10 — Quick recall (5 toss-ups from last week, same subject)
-            • Minutes 10–40 — Read today’s chapter (or section) · copy Formulas & key terms
-            • Minutes 40–50 — Know cold without notes
-            • Minutes 50–60 — Sample toss-ups · 3 facts + 1 miss
-            If the block lists “part 1,” finish the chapter on the next same-subject day this week.
+            Week 10 capstone blocks — 1 hour:
+            • Minutes 0–15 — Flash your weak topics (notebook + app Progress)
+            • Minutes 15–45 — Re-read only sections you missed · know-cold check
+            • Minutes 45–60 — Toss-ups · list 3 topics to keep sharp at school meetings
             """
-        case .pass2 where week >= 5 && week <= 8:
-            return """
-            Pass 2 block workflow (Weeks 5–8) — 1 hour:
-            • First 30 min — DOE toss-ups on today’s topic · log misses
-            • Next 30 min — re-read the Tro/CB/Expl section for misses · know-cold check
-            • Use harder regional wording; one chapter (or section) per block when reading
-            """
-        case .pass3 where week >= 9:
-            return """
-            Pass 3 block workflow (Weeks 9–10) — 1 hour:
-            • Flash cards first on today’s topic (~20 min)
-            • Open Tro/Mod/CB/FLS/Expl only if stuck (~20 min)
-            • Finish with 5–10 DOE-style toss-ups per science block (~20 min)
-            • No new reading — review only
-            """
-        default:
-            return nil
         }
+        return """
+        Summer block workflow (Weeks 1–9) — 1 hour:
+        • Minutes 0–10 — Quick recall (5 toss-ups from last week, same subject)
+        • Minutes 10–40 — Read today's chapter (or section) · copy Formulas & key terms
+        • Minutes 40–50 — Know cold without notes
+        • Minutes 50–60 — Sample toss-ups · 3 facts + 1 miss
+        If the block lists "part 1," finish the chapter on the next same-subject day this week.
+        """
     }
 
     static func weekTheme(week: Int, pass: StudyPass) -> String? {
-        switch (week, pass) {
-        case (1, .pass1): return "Week 1 — Foundations"
-        case (2, .pass1): return "Week 2 — Building depth"
-        case (3, .pass1): return "Week 3 — Mid-level mastery"
-        case (4, .pass1): return "Week 4 — Round-ready"
-        case (5, .pass2): return "Week 5 — Foundations (again · Tro/CB)"
-        case (6, .pass2): return "Week 6 — Building depth (again)"
-        case (7, .pass2): return "Week 7 — Mid-level mastery (again)"
-        case (8, .pass2): return "Week 8 — Round-ready (again)"
-        case (9, .pass3): return "Week 9 — Final review (1 of 2)"
-        case (10, .pass3): return "Week 10 — Final review (2 of 2)"
+        switch week {
+        case 1: return "Week 1 — Foundations"
+        case 2: return "Week 2 — Building depth"
+        case 3: return "Week 3 — Connections"
+        case 4: return "Week 4 — First rotation complete"
+        case 5: return "Week 5 — Energy in life & physics"
+        case 6: return "Week 6 — Ecology & solutions"
+        case 7: return "Week 7 — Immunity & momentum"
+        case 8: return "Week 8 — Plants & electricity"
+        case 9: return "Week 9 — Circuits & body systems"
+        case 10: return "Week 10 — Summer capstone"
         default: return nil
         }
     }
@@ -62,19 +51,19 @@ enum DeepDiveContent {
         case 3:
             return "Friday 4:40–5:40 — Timed drill: 20 toss-ups (Bio + Chem + Phys only) · log misses by subject"
         case 4:
-            return "Friday 4:40–5:40 — Full mock round (25 toss-ups, your categories only) · pick 2 weak subtopics for Pass 2"
+            return "Friday 4:40–5:40 — Timed drill: 20 toss-ups (Bio + Chem + Phys) · log misses by subject"
         case 5:
-            return "Friday 4:40–5:40 — Review Pass 1 gaps · list chapters where DOE misses clustered · re-read one weak chapter"
+            return "Friday 4:40–5:40 — Tie photosynthesis + respiration · 10 toss-ups on energy in cells"
         case 6:
-            return "Friday 4:40–5:40 — Timed drill: 20 toss-ups · regional-level wording · log misses by subject"
+            return "Friday 4:40–5:40 — Ecology + microbes drill · 15 toss-ups · log weak subtopics"
         case 7:
-            return "Friday 4:40–5:40 — Timed drill: 20 toss-ups · log misses by subtopic"
+            return "Friday 4:40–5:40 — Plant structure + transport · draw xylem/phloem path"
         case 8:
-            return "Friday 4:40–5:40 — Full mock round (25 toss-ups) · regional difficulty · pick 2 weak subtopics for Pass 3"
+            return "Friday 4:40–5:40 — Electricity + waves drill · V = IR and v = fλ toss-ups"
         case 9:
-            return "Friday 4:40–5:40 — Mixed drill: 15 toss-ups across all 3 categories · update flash card pile"
+            return "Friday 4:40–5:40 — Mixed drill: 20 toss-ups across all 3 categories"
         case 10:
-            return "Friday 4:40–5:40 — Final summer mock round (25 toss-ups) · celebrate wins · list 3 topics to keep reviewing in fall"
+            return "Friday 4:40–5:40 — Final summer mock round (25 toss-ups) · list 3 topics for school meetings"
         default:
             return nil
         }

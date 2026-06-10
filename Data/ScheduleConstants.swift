@@ -98,30 +98,17 @@ enum ScheduleConstants {
         return "\(startText) – \(endText)"
     }
 
-    static func studyPass(forWeek week: Int, calendar: Calendar = .current) -> StudyPass {
-        guard let start = weekStartDate(for: week, calendar: calendar) else { return .pass1 }
-        return studyPass(for: start, calendar: calendar)
-    }
+    static func studyPass(forWeek week: Int, calendar: Calendar = .current) -> StudyPass { .pass1 }
 
-    /// Pass 1: Jun 8 – Jul 3 · Pass 2: Jul 6 – Jul 31 · Pass 3: Aug 3 – Aug 14
-    static func studyPass(for date: Date, calendar: Calendar = .current) -> StudyPass {
-        func make(_ y: Int, _ m: Int, _ d: Int) -> Date {
-            calendar.date(from: DateComponents(year: y, month: m, day: d)) ?? date
-        }
-        let pass2Start = make(2026, 7, 6)
-        let pass3Start = make(2026, 8, 3)
-        let day = calendar.startOfDay(for: date)
-        if day >= pass3Start { return .pass3 }
-        if day >= pass2Start { return .pass2 }
-        return .pass1
-    }
+    /// Single summer pass — one careful read through Mod + FLS/OSB + Expl across 10 weeks.
+    static func studyPass(for date: Date, calendar: Calendar = .current) -> StudyPass { .pass1 }
 
     static func passLabel(for pass: StudyPass) -> String {
-        switch pass {
-        case .pass1: return "Pass 1 · Modern Chemistry (Sarquis) + Focus on Life Science"
-        case .pass2: return "Pass 2 · Introductory Chemistry (Tro) + Campbell Concepts & Connections 7e"
-        case .pass3: return "Pass 3 · Flash cards"
-        }
+        "Summer · Modern Chemistry + Focus on Life Science + Explorations"
+    }
+
+    static func summerPlanLabel() -> String {
+        "One pass · 50 science blocks · 1 hr each · Jun 8 – Aug 14"
     }
 }
 

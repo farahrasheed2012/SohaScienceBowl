@@ -1,7 +1,7 @@
 import SwiftUI
 
 private enum MainTab: String, Hashable, CaseIterable, Identifiable {
-    case today, weeks, topics, learn, quiz, progress, settings
+    case today, weeks, calendar, topics, learn, quiz, progress, settings
 
     var id: String { rawValue }
 
@@ -9,6 +9,7 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
         switch self {
         case .today: return "Today"
         case .weeks: return "Weeks"
+        case .calendar: return "Calendar"
         case .topics: return "Topics"
         case .learn: return "Learn"
         case .quiz: return "Quiz"
@@ -19,8 +20,9 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
 
     var systemImage: String {
         switch self {
-        case .today: return "calendar"
+        case .today: return "sun.max.fill"
         case .weeks: return "calendar.badge.clock"
+        case .calendar: return "calendar"
         case .topics: return "list.bullet.rectangle"
         case .learn: return "books.vertical.fill"
         case .quiz: return "questionmark.circle.fill"
@@ -34,6 +36,7 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
         switch self {
         case .today: TodayView()
         case .weeks: WeeksRootView()
+        case .calendar: CalendarRootView()
         case .topics: NSBTopicsRootView()
         case .learn: EncyclopediaRootView()
         case .quiz: QuizRootView()

@@ -13,6 +13,7 @@ def u():
 
 swift_files = sorted(p for p in ROOT.rglob("*.swift") if ".xcodeproj" not in str(p))
 json_files = sorted(p for p in ROOT.glob("Resources/StudyContent/*.json"))
+html_files = sorted(p for p in ROOT.glob("Resources/Schedule/*.html"))
 
 ids = {k: u() for k in [
     "project", "target", "product", "main_group", "products_group",
@@ -28,7 +29,11 @@ for sf in swift_files:
 resource_map = {}
 for jf in json_files:
     rel = jf.relative_to(ROOT).as_posix()
-    resource_map[rel] = {"ref": u(), "build": u()}
+    resource_map[rel] = {"ref": u(), "build": u(), "type": "text.json"}
+
+for hf in html_files:
+    rel = hf.relative_to(ROOT).as_posix()
+    resource_map[rel] = {"ref": u(), "build": u(), "type": "text.html"}
 
 assets_build = u()
 lines = []
@@ -57,7 +62,7 @@ for rel, fm in file_map.items():
     o(f'\t\t{fm["ref"]} /* {Path(rel).name} */ = {{isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "{rel}"; sourceTree = "<group>"; }};')
 o(f'\t\t{ids["assets"]} /* Assets.xcassets */ = {{isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; }};')
 for rel, rm in resource_map.items():
-    o(f'\t\t{rm["ref"]} /* {Path(rel).name} */ = {{isa = PBXFileReference; lastKnownFileType = text.json; path = "{rel}"; sourceTree = "<group>"; }};')
+    o(f'\t\t{rm["ref"]} /* {Path(rel).name} */ = {{isa = PBXFileReference; lastKnownFileType = {rm["type"]}; path = "{rel}"; sourceTree = "<group>"; }};')
 o("/* End PBXFileReference section */")
 o("")
 o("/* Begin PBXFrameworksBuildPhase section */")
@@ -162,4 +167,4 @@ o(f'\trootObject = {ids["project"]} /* Project object */;')
 o("}")
 
 (ROOT / "ScienceBowlCoach.xcodeproj" / "project.pbxproj").write_text("\n".join(lines))
-print(f"Generated project with {len(file_map)} Swift files and {len(resource_map)} JSON resources")
+print(f"Generated project with {len(file_map)} Swift files, {len(json_files)} JSON, {len(html_files)} HTML resources")

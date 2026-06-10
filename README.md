@@ -40,6 +40,7 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 ## Features
 
 - **Today** — daily study blocks, 4-stage study session (Recall → Read → Know Cold → Toss-ups), **1 hr science + 1 hr algebra**, buzzer drill schedule, Friday review
+- **Calendar** — weekly timetable, 10-week whiteboard, prep guide, and periodic table (bundled HTML; sync with `python3 Scripts/sync_schedule_html.py`)
 - **Learn** — 124 NSB encyclopedia topics (6 categories) with full articles, related topics, MC/Toss-up/Free-response practice; badges show topics missing drills; `make verify` checks reading + question coverage
 - **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill, encyclopedia practice, **Texas Regional Sprint** (11 packs), search, weak-area practice
 - **Progress** — weekly/lifetime accuracy, checklist, flash cards, spaced repetition
@@ -47,7 +48,7 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 
 ## Data
 
-- Curriculum seed data: Weeks 1–4 full, Weeks 5–8 Pass 2, Weeks 9–10 flash-card mode
+- **One summer pass** — 50 science blocks (10 weeks × 5 days), Mod + FLS/OSB + Expl; section splits for long chapters; weeks 9–10 are light capstone (not a third re-read pass)
 - Encyclopedia: 124 topics + 182 practice questions (includes 11 Regional Sprint articles)
 - DOE PDFs parsed at first launch via PDFKit → cached in Documents as `doe_questions_cache.json`
 - All progress stored locally in UserDefaults (no network, no accounts)
