@@ -18,6 +18,7 @@ from bfn_catalog import (  # noqa: E402
     format_chem_backup,
     format_phys_backup,
 )
+from fls_toc_data import FLS_PRIMARY  # noqa: E402
 
 SOHAAli = Path.home() / "Documents/SohaAli/Schedule"
 APP_RESOURCES = Path(__file__).resolve().parent.parent / "Resources/Schedule"
@@ -642,29 +643,6 @@ HEWITT_CHEM_PRIMARY: dict[tuple[int, int], str] = {
     (9, 3): "Hewitt Ch 18 §18.2–18.4",
     (10, 0): "Hewitt Review",
     (10, 3): "Hewitt Review",
-}
-
-FLS_PRIMARY: dict[tuple[int, int], str] = {
-    (1, 1): "FLS Ch 1 §1.3–1.4",
-    (1, 4): "FLS Ch 2 §2.1–2.2",
-    (2, 1): "FLS Ch 4 §4.1–4.2",
-    (2, 4): "FLS Ch 4 §4.3",
-    (3, 1): "FLS Ch 7 §7.2–7.3",
-    (3, 4): "FLS Ch 17 §17.1–18.1",
-    (4, 1): "FLS Ch 5 §5.1–5.2",
-    (4, 4): "FLS Ch 6 §6.1",
-    (5, 1): "FLS Ch 3 §2.4",
-    (5, 4): "FLS Ch 3 §2.5",
-    (6, 1): "FLS Ch 7 §7.3",
-    (6, 4): "FLS Ch 8 §8.1–8.2",
-    (7, 1): "FLS Ch 21 §21.1",
-    (7, 4): "FLS Ch 10 §10.1–10.2",
-    (8, 1): "FLS Ch 11 §11.1",
-    (8, 4): "FLS Ch 16 §16.1",
-    (9, 1): "FLS Ch 3 §3.1–3.2",
-    (9, 4): "FLS Ch 18 §18.1–19.1",
-    (10, 1): "FLS Review",
-    (10, 4): "FLS Review",
 }
 
 HEWITT_PHYS_PRIMARY: dict[tuple[int, int], str] = {

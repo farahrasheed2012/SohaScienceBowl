@@ -104,4 +104,26 @@ enum FocusOnLifeScienceCatalog {
         }
         return groups
     }
+
+    static func sectionTitle(chapter chapterNumber: Int, sectionId: String) -> String? {
+        guard let ch = chapter(chapterNumber) else { return nil }
+        return ch.sections.first { $0.id == sectionId }?.title
+    }
+
+    /// e.g. `Ch 1 — Cell Structure and Function · Parts of a Cell · Two Kinds of Cells`
+    static func formatChapterSections(chapter chapterNumber: Int, sectionIds: [String]) -> String {
+        guard let ch = chapter(chapterNumber) else { return "Ch \(chapterNumber)" }
+        let titles = sectionIds.compactMap { sectionTitle(chapter: chapterNumber, sectionId: $0) }
+        if titles.isEmpty {
+            return "Ch \(ch.number) — \(ch.title)"
+        }
+        return "Ch \(ch.number) — \(ch.title) · \(titles.joined(separator: " · "))"
+    }
+
+    /// One or more chapters; section ids are internal catalog keys mapped to printed section titles.
+    static func formatReadingLine(chapterSections: [(chapter: Int, sectionIds: [String])]) -> String {
+        chapterSections
+            .map { formatChapterSections(chapter: $0.chapter, sectionIds: $0.sectionIds) }
+            .joined(separator: " · ")
+    }
 }

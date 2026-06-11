@@ -16,12 +16,15 @@ extension StudyBlock {
         if title.contains("part 2") || focusLower.contains("part 2") {
             return "Finish part 2 today — you started this chapter on an earlier same-subject day. Still not rushing the whole book; just complete today's section."
         }
+        if bookCode == "FLS" {
+            return "Read only today's listed section titles — find them in your book's table of contents. Not the whole chapter; stop when the Focus bullets make sense."
+        }
         if ch.contains("§") {
             return "Read only the listed section (§) — not the entire chapter. Stop when the Focus bullets make sense."
         }
         if ch.hasPrefix("Ch ") || ch.hasPrefix("ch ") {
             if !ch.contains("+") && !title.contains("part") {
-                return "Read only the assigned § sections for today's Focus — not the whole chapter. See Reading options for the section range."
+                return "Read only the assigned sections for today's Focus — not the whole chapter. See Reading options for the section range."
             }
         }
         if ch.contains("–") || (ch.contains("-") && ch.contains("ch")) {
@@ -42,8 +45,9 @@ extension StudyBlock {
         if isFlashCardOnly || ch.contains("review") { return "review" }
         if title.contains("part 1") || focusLower.contains("part 1") { return "section · part 1" }
         if title.contains("part 2") || focusLower.contains("part 2") { return "section · part 2" }
+        if bookCode == "FLS" { return "assigned sections" }
         if ch.contains("§") { return "one section" }
-        if ch.hasPrefix("Ch ") || ch.hasPrefix("ch ") { return "assigned § sections" }
+        if ch.hasPrefix("Ch ") || ch.hasPrefix("ch ") { return "assigned sections" }
         return "assigned section"
     }
 }

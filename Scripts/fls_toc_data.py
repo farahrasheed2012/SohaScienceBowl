@@ -111,3 +111,54 @@ FLS_CHAPTERS = [
         ("23.2", "Human Reproduction"),
     ]),
 ]
+
+_CHAPTER_LOOKUP: dict[int, tuple[str, dict[str, str]]] = {
+    num: (title, {sid: stitle for sid, stitle in sections})
+    for num, title, sections in FLS_CHAPTERS
+}
+
+
+def format_chapter_sections(chapter: int, section_ids: list[str]) -> str:
+    """Match FocusOnLifeScienceCatalog.formatChapterSections in Swift."""
+    title, sec_map = _CHAPTER_LOOKUP.get(chapter, ("", {}))
+    if not title:
+        return f"Ch {chapter}"
+    sec_titles = [sec_map[sid] for sid in section_ids if sid in sec_map]
+    if not sec_titles:
+        return f"Ch {chapter} — {title}"
+    return f"Ch {chapter} — {title} · {' · '.join(sec_titles)}"
+
+
+def format_fls_reading(chapter_sections: list[tuple[int, list[str]]]) -> str:
+    parts = [format_chapter_sections(ch, secs) for ch, secs in chapter_sections]
+    return "FLS " + " · ".join(parts)
+
+
+# (week, day_idx) → chapter/section specs — mirrors BlockAssignedReadingCatalog.flsByKey
+# day_idx: Mon=0, Tue=1, Wed=2, Thu=3, Fri=4
+FLS_BY_BLOCK: dict[tuple[int, int], list[tuple[int, list[str]]]] = {
+    (1, 1): [(1, ["1.3", "1.4"])],
+    (1, 4): [(16, ["16.1"])],
+    (2, 1): [(4, ["4.1", "4.2"])],
+    (2, 4): [(4, ["4.3"])],
+    (3, 1): [(7, ["7.2", "7.3"])],
+    (3, 4): [(17, ["17.1"]), (18, ["18.1"])],
+    (4, 1): [(5, ["5.1", "5.2"])],
+    (4, 4): [(6, ["6.1"])],
+    (5, 1): [(2, ["2.4"])],
+    (5, 4): [(2, ["2.5"])],
+    (6, 1): [(7, ["7.3"])],
+    (6, 4): [(8, ["8.1", "8.2"])],
+    (7, 1): [(21, ["21.1"])],
+    (7, 4): [(10, ["10.1", "10.2"])],
+    (8, 1): [(11, ["11.1"])],
+    (8, 4): [(17, ["17.1"])],
+    (9, 1): [(3, ["3.1", "3.2"])],
+    (9, 4): [(18, ["18.1"]), (19, ["19.1"])],
+}
+
+FLS_PRIMARY: dict[tuple[int, int], str] = {
+    key: format_fls_reading(specs) for key, specs in FLS_BY_BLOCK.items()
+}
+FLS_PRIMARY[(10, 1)] = "FLS Review"
+FLS_PRIMARY[(10, 4)] = "FLS Review"

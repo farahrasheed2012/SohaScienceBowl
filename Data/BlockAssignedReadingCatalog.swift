@@ -35,26 +35,30 @@ enum BlockAssignedReadingCatalog {
         Key(week: 9, day: .friday, subject: .biology): (16, ["16.1", "16.3"]),
     ]
 
-    /// FLS chapter number + section ids (from FocusOnLifeScienceCatalog).
-    private static let flsByKey: [Key: (chapter: Int, sections: [String])] = [
-        Key(week: 1, day: .tuesday, subject: .biology): (1, ["1.3", "1.4"]),
-        Key(week: 1, day: .friday, subject: .biology): (2, ["2.1", "2.2"]),
-        Key(week: 2, day: .tuesday, subject: .biology): (4, ["4.1", "4.2"]),
-        Key(week: 2, day: .friday, subject: .biology): (4, ["4.3"]),
-        Key(week: 3, day: .tuesday, subject: .biology): (7, ["7.2", "7.3"]),
-        Key(week: 3, day: .friday, subject: .biology): (17, ["17.1", "18.1"]),
-        Key(week: 4, day: .tuesday, subject: .biology): (5, ["5.1", "5.2"]),
-        Key(week: 4, day: .friday, subject: .biology): (6, ["6.1"]),
-        Key(week: 5, day: .tuesday, subject: .biology): (2, ["2.4"]),
-        Key(week: 5, day: .friday, subject: .biology): (2, ["2.5"]),
-        Key(week: 6, day: .tuesday, subject: .biology): (7, ["7.3"]),
-        Key(week: 6, day: .friday, subject: .biology): (8, ["8.1", "8.2"]),
-        Key(week: 7, day: .tuesday, subject: .biology): (21, ["21.1"]),
-        Key(week: 7, day: .friday, subject: .biology): (10, ["10.1", "10.2"]),
-        Key(week: 8, day: .tuesday, subject: .biology): (11, ["11.1"]),
-        Key(week: 8, day: .friday, subject: .biology): (16, ["16.1"]),
-        Key(week: 9, day: .tuesday, subject: .biology): (3, ["3.1", "3.2"]),
-        Key(week: 9, day: .friday, subject: .biology): (18, ["18.1", "19.1"]),
+    /// FLS chapter + section ids (internal keys → section titles in FocusOnLifeScienceCatalog).
+    private struct FlsReadingSpec {
+        var chapterSections: [(chapter: Int, sectionIds: [String])]
+    }
+
+    private static let flsByKey: [Key: FlsReadingSpec] = [
+        Key(week: 1, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(1, ["1.3", "1.4"])]),
+        Key(week: 1, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(16, ["16.1"])]),
+        Key(week: 2, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(4, ["4.1", "4.2"])]),
+        Key(week: 2, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(4, ["4.3"])]),
+        Key(week: 3, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(7, ["7.2", "7.3"])]),
+        Key(week: 3, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(17, ["17.1"]), (18, ["18.1"])]),
+        Key(week: 4, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(5, ["5.1", "5.2"])]),
+        Key(week: 4, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(6, ["6.1"])]),
+        Key(week: 5, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(2, ["2.4"])]),
+        Key(week: 5, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(2, ["2.5"])]),
+        Key(week: 6, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(7, ["7.3"])]),
+        Key(week: 6, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(8, ["8.1", "8.2"])]),
+        Key(week: 7, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(21, ["21.1"])]),
+        Key(week: 7, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(10, ["10.1", "10.2"])]),
+        Key(week: 8, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(11, ["11.1"])]),
+        Key(week: 8, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(17, ["17.1"])]),
+        Key(week: 9, day: .tuesday, subject: .biology): FlsReadingSpec(chapterSections: [(3, ["3.1", "3.2"])]),
+        Key(week: 9, day: .friday, subject: .biology): FlsReadingSpec(chapterSections: [(18, ["18.1"]), (19, ["19.1"])]),
     ]
 
     /// Campbell chapter + section ids (7th ed. Concepts & Connections).
@@ -301,10 +305,9 @@ enum BlockAssignedReadingCatalog {
     static func flsAssignment(for block: StudyBlock) -> BookAssignment? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
         guard block.subject == .biology, block.bookCode == "FLS",
-              let spec = flsByKey[key],
-              let chapter = FocusOnLifeScienceCatalog.chapter(spec.chapter) else { return nil }
-        let range = spec.sections.joined(separator: "–")
-        let text = "\(FocusOnLifeScienceCatalog.editionTitle) — Ch \(chapter.number) §\(range) — \(block.chapterTitle)"
+              let spec = flsByKey[key] else { return nil }
+        let chapters = FocusOnLifeScienceCatalog.formatReadingLine(chapterSections: spec.chapterSections)
+        let text = "\(FocusOnLifeScienceCatalog.editionTitle) — \(chapters) — \(block.chapterTitle)"
         return BookAssignment(displayText: text, links: [])
     }
 

@@ -18,7 +18,7 @@ extension SeedData {
                   ("An atom has 11 protons and 12 neutrons. What is its mass number?", "23")
               ]),
         block(week: 1, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 1 §1.3–1.4", title: "Cell Structure and Function",
+              book: "FLS", chapter: "Ch 1 — Parts of a Cell · Two Kinds of Cells", title: "Cell Structure and Function",
                       backupBookLine: "OSB Ch 3 §3.2–3.4 · CB Ch 4",
               focus: "Nucleus (contains DNA/chromosomes) · cell membrane (selective barrier) · cytoplasm · mitochondria → ATP · ribosomes → proteins · ER & Golgi → transport/modify proteins · vacuole (large in plants) · chloroplast (plants only, photosynthesis) · cell wall (plants only) · prokaryote (no nucleus) vs eukaryote (has nucleus)",
               formulas: "ATP = energy currency · organelle → function pairs",
@@ -51,7 +51,7 @@ extension SeedData {
                   ("What is the chemical formula for table salt?", "NaCl")
               ]),
         block(week: 1, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 2 §2.1–2.2", title: "Levels of Organization",
+              book: "FLS", chapter: "Ch 16 — Your Body Systems", title: "Levels of Organization",
                       backupBookLine: "OSB Ch 1 §1.1 · CB Ch 6–7",
               focus: "~1 hr · section: cell → tissue → organ → system → organism · specialization · tissue types",
               formulas: "Levels of organization in order",
@@ -76,7 +76,7 @@ extension SeedData {
                   ("During boiling, is energy absorbed by or released from the substance?", "Absorbed")
               ]),
         block(week: 2, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 4 §4.1–4.2", title: "Genetics — DNA & genes (part 1)",
+              book: "FLS", chapter: "Ch 4 — Human Inheritance · Advances in Modern Genetics", title: "Genetics — DNA & genes (part 1)",
                       backupBookLine: "OSB Ch 8 §8.1–8.2 · CB Ch 9",
               focus: "~1 hr · part 1: DNA · gene · chromosome · allele · dominant vs recessive. Finish Punnett squares Friday (Ch 8).",
               formulas: "Tt × Tt → 3 dominant : 1 recessive phenotype · homozygous (TT, tt) vs heterozygous (Tt)",
@@ -110,7 +110,7 @@ extension SeedData {
                   ("A reaction that releases heat to the surroundings is called what?", "Exothermic")
               ]),
         block(week: 2, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 4 §4.3", title: "Genetics — Punnett squares (part 2)",
+              book: "FLS", chapter: "Ch 4 — Genetic Disorders", title: "Genetics — Punnett squares (part 2)",
                       backupBookLine: "OSB Ch 8 §8.2–8.3 · CB Ch 9",
               focus: "~1 hr · part 2: genotype vs phenotype · Punnett square · Tt × Tt → 3:1 · heterozygous vs homozygous",
               formulas: "Tt × Tt → 3 dominant : 1 recessive phenotype · homozygous (TT, tt) vs heterozygous (Tt)",
@@ -135,7 +135,7 @@ extension SeedData {
                   ("Is a solution with pH 11 acidic or basic?", "Basic")
               ]),
         block(week: 3, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 7 §7.2–7.3", title: "Ecology — communities (part 1)",
+              book: "FLS", chapter: "Ch 7 — Classification of Living Things · The Six Kingdoms", title: "Ecology — communities (part 1)",
                       backupBookLine: "OSB Ch 19 §19.1 · CB Ch 36–37",
               focus: "~1 hr · part 1: producers · consumers · decomposers · food chains · symbiosis types",
               formulas: "Mutualism (+/+) · commensalism (+/0) · parasitism (+/−) · 10% energy rule",
@@ -169,7 +169,7 @@ extension SeedData {
                   ("What separation method would you use to separate sand from water?", "Filtration")
               ]),
         block(week: 3, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 17 §17.1–18.1", title: "Body systems — musculoskeletal & cardiopulmonary",
+              book: "FLS", chapter: "Ch 17 — Bones and Muscles · Ch 18 — Food and Energy", title: "Body systems — musculoskeletal & cardiopulmonary",
                       backupBookLine: "OSB Ch 16 §16.1–16.3 · CB Ch 21–23",
               focus: "~1 hr · section: levers · heart · arteries/veins · lungs O₂/CO₂ · capillaries",
               formulas: "Lever: fulcrum · effort · load · artery = away from heart · vein = toward heart",
@@ -194,7 +194,7 @@ extension SeedData {
                   ("Which is the larger atom: sodium (Na) or chlorine (Cl)?", "Sodium (Na)")
               ]),
         block(week: 4, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 5 §5.1–5.2", title: "Evolution — natural selection (part 1)",
+              book: "FLS", chapter: "Ch 5 — Evidence for Evolution · How Evolution Works", title: "Evolution — natural selection (part 1)",
                       backupBookLine: "OSB Ch 11 · CB Ch 13–14",
               focus: "~1 hr · part 1: natural selection · variation · adaptation · fossil evidence. Fri = classification (Ch 12).",
               formulas: "Taxonomy mnemonic · Homo sapiens",
@@ -228,7 +228,7 @@ extension SeedData {
                   ("Which piece of lab glassware is used to measure liquid volume most precisely?", "Graduated cylinder")
               ]),
         block(week: 4, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 6 §6.1", title: "Classification & taxonomy (part 2)",
+              book: "FLS", chapter: "Ch 6 — Fossil Evidence", title: "Classification & taxonomy (part 2)",
                       backupBookLine: "OSB Ch 12 · CB Ch 14",
               focus: "~1 hr · part 2: Domain → Kingdom → … → Species · binomial nomenclature · Homo sapiens",
               formulas: "Taxonomy mnemonic · Homo sapiens",
