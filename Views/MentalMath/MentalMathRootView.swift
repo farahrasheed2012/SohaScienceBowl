@@ -12,7 +12,7 @@ struct MentalMathRootView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Rocket-style fluency drills")
                             .font(.headline)
-                        Text("20 problems per round. Get \(Int(MentalMathStore.passThreshold * 100))% or higher to unlock the next level.")
+                        Text("20 shuffled problems per round. Get \(Int(MentalMathStore.passThreshold * 100))% or higher to unlock the next level.")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         HStack(spacing: 16) {
@@ -27,6 +27,21 @@ struct MentalMathRootView: View {
                     .padding(.vertical, 4)
                 }
 
+                Section("Timer") {
+                    Picker("Per-problem limit", selection: Binding(
+                        get: { mentalMath.timedMode },
+                        set: { mentalMath.setTimedMode($0) }
+                    )) {
+                        ForEach(MentalMathTimedMode.allCases) { mode in
+                            Text(mode.label).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    Text("Live session timer always runs. Optional countdown marks unanswered problems wrong when time runs out.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("Pick a track") {
                     ForEach(MentalMathOperation.allCases) { operation in
                         NavigationLink {
@@ -37,6 +52,13 @@ struct MentalMathRootView: View {
                     }
                 }
 
+                if !mentalMath.sessionHistory.isEmpty {
+                    Section("Recent runs") {
+                        ForEach(mentalMath.sessionHistory.prefix(5)) { run in
+                            recentRunRow(run)
+                        }
+                    }
+                }
             }
             .platformListStyle()
             .navigationTitle("Mental Math")
@@ -61,6 +83,26 @@ struct MentalMathRootView: View {
             if let acc = mentalMath.accuracy(for: operation) {
                 Text("\(Int(acc * 100))%")
                     .font(.caption.weight(.medium))
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func recentRunRow(_ run: MentalMathDrillResult) -> some View {
+        HStack {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("\(run.operation.rawValue) · L\(run.level)")
+                    .font(.subheadline.weight(.medium))
+                Text(run.date.formatted(date: .abbreviated, time: .shortened))
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 2) {
+                Text("\(run.correct)/\(run.total)")
+                    .font(.subheadline.weight(.semibold))
+                Text(MentalMathFormatting.duration(run.elapsedSeconds))
+                    .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
@@ -101,12 +143,30 @@ struct MentalMathTrackView: View {
     }
 
     private func levelRow(level: Int, unlocked: Bool) -> some View {
-        HStack {
-            Text("Level \(level)")
-                .font(.body.weight(.semibold))
-            Text(operation.levelTitle(level))
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
+        let best = appState.mentalMath.best(for: operation, level: level)
+        return HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Level \(level)")
+                    .font(.body.weight(.semibold))
+                Text(operation.levelTitle(level))
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                if let best {
+                    HStack(spacing: 8) {
+                        if let time = best.formattedBestTime {
+                            Label(time, systemImage: "trophy.fill")
+                        }
+                        if best.bestCorrect > 0 {
+                            Label("\(best.bestCorrect)/\(MentalMathEngine.problemsPerSession)", systemImage: "star.fill")
+                        }
+                        if best.attempts > 0 {
+                            Text("\(best.passes)/\(best.attempts) passed")
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                }
+            }
             Spacer()
             if !unlocked {
                 Image(systemName: "lock.fill")

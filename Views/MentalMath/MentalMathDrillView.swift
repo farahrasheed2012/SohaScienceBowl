@@ -15,11 +15,26 @@ struct MentalMathDrillView: View {
     @State private var feedback: MentalMathFeedback = .idle
     @State private var finished = false
     @State private var startTime = Date()
+    @State private var problemStartTime = Date()
+    @State private var now = Date()
+    @State private var problemTimeRemaining: TimeInterval?
+    @State private var sessionOutcome: MentalMathStore.SessionRecordOutcome?
+    @State private var tickTimer: Timer?
     @FocusState private var answerFocused: Bool
+
+    private var timedMode: MentalMathTimedMode { appState.mentalMath.timedMode }
+    private var perProblemLimit: TimeInterval? {
+        let sec = timedMode.secondsPerProblem
+        return sec > 0 ? TimeInterval(sec) : nil
+    }
 
     private var current: MentalMathProblem? {
         guard index < problems.count else { return nil }
         return problems[index]
+    }
+
+    private var elapsed: TimeInterval {
+        now.timeIntervalSince(startTime)
     }
 
     var body: some View {
@@ -44,17 +59,27 @@ struct MentalMathDrillView: View {
         .inlineNavigationBarTitle()
         .task {
             guard problems.isEmpty else { return }
-            problems = MentalMathEngine.problems(operation: operation, level: level)
-            startTime = Date()
-            answerFocused = true
+            beginDrill()
         }
+        .onDisappear { tickTimer?.invalidate() }
         .onSubmit { submitAnswer() }
     }
 
     private var drillHeader: some View {
         VStack(spacing: 8) {
+            HStack {
+                Label(MentalMathFormatting.duration(elapsed), systemImage: "timer")
+                    .font(.subheadline.weight(.semibold))
+                    .monospacedDigit()
+                Spacer()
+                if let limit = perProblemLimit, let remaining = problemTimeRemaining {
+                    problemTimerBadge(remaining: remaining, limit: limit)
+                }
+            }
+
             ProgressView(value: Double(index), total: Double(problems.count))
                 .tint(theme.accent)
+
             HStack {
                 Text("\(index + 1) / \(problems.count)")
                     .font(.caption.weight(.medium))
@@ -63,10 +88,29 @@ struct MentalMathDrillView: View {
                     .font(.caption)
                     .foregroundStyle(theme.secondaryText)
             }
-            Text("Type the answer and press Return")
-                .font(.caption2)
-                .foregroundStyle(theme.secondaryText)
+
+            if let best = appState.mentalMath.best(for: operation, level: level),
+               let bestTime = best.formattedBestTime {
+                Text("Best: \(bestTime) · \(best.bestCorrect)/\(MentalMathEngine.problemsPerSession)")
+                    .font(.caption2)
+                    .foregroundStyle(theme.secondaryText)
+            }
         }
+    }
+
+    private func problemTimerBadge(remaining: TimeInterval, limit: TimeInterval) -> some View {
+        let urgent = remaining <= 2
+        return HStack(spacing: 4) {
+            Image(systemName: "hourglass")
+            Text(String(format: "%.0f", max(0, remaining.rounded(.up))))
+                .monospacedDigit()
+        }
+        .font(.caption.weight(.bold))
+        .foregroundStyle(urgent ? theme.wrong : theme.accent)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background((urgent ? theme.wrong : theme.accent).opacity(0.15))
+        .clipShape(Capsule())
     }
 
     private func problemDisplay(_ problem: MentalMathProblem) -> some View {
@@ -117,15 +161,21 @@ struct MentalMathDrillView: View {
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(theme.wrong)
                 .padding(.top, 12)
+        case .timedOut(let correctAnswer):
+            Text("Time's up — \(correctAnswer)")
+                .font(.title3.weight(.semibold))
+                .foregroundStyle(theme.wrong)
+                .padding(.top, 12)
         }
     }
 
     private var endScreen: some View {
         let total = problems.count
         let passed = total > 0 && Double(correctCount) / Double(total) >= MentalMathStore.passThreshold
-        let elapsed = Date().timeIntervalSince(startTime)
+        let elapsedNow = Date().timeIntervalSince(startTime)
+        let avg = total > 0 ? elapsedNow / Double(total) : 0
 
-        return VStack(spacing: 20) {
+        return VStack(spacing: 16) {
             Image(systemName: passed ? "star.circle.fill" : "arrow.clockwise.circle.fill")
                 .font(.system(size: 56))
                 .foregroundStyle(passed ? theme.success : theme.accent)
@@ -136,13 +186,31 @@ struct MentalMathDrillView: View {
             Text("\(correctCount) / \(total) correct")
                 .font(.title3)
 
-            Text(String(format: "Time: %.0f sec · Need %d/%d to advance",
-                        elapsed,
-                        Int(ceil(MentalMathStore.passThreshold * Double(total))),
-                        total))
-                .font(.subheadline)
-                .foregroundStyle(theme.secondaryText)
-                .multilineTextAlignment(.center)
+            VStack(spacing: 4) {
+                Text("Time: \(MentalMathFormatting.duration(elapsedNow))")
+                Text(String(format: "Avg %.1f sec / problem", avg))
+            }
+            .font(.subheadline)
+            .foregroundStyle(theme.secondaryText)
+
+            if let outcome = sessionOutcome {
+                if outcome.isNewBestTime {
+                    Label("New best time!", systemImage: "trophy.fill")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(theme.success)
+                }
+                if outcome.isNewBestScore {
+                    Label("New best score!", systemImage: "medal.fill")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(theme.accent)
+                }
+                if let best = appState.mentalMath.best(for: operation, level: level),
+                   let bestTime = best.formattedBestTime {
+                    Text("Personal best: \(bestTime) · \(best.bestCorrect)/\(total)")
+                        .font(.caption)
+                        .foregroundStyle(theme.secondaryText)
+                }
+            }
 
             if passed, level < operation.levelCount {
                 Text("Unlocked: Level \(level + 1)")
@@ -151,17 +219,57 @@ struct MentalMathDrillView: View {
             }
 
             HStack(spacing: 12) {
-                Button("Try again") {
-                    resetDrill()
-                }
-                .buttonStyle(.bordered)
-
+                Button("Try again") { resetDrill() }
+                    .buttonStyle(.bordered)
                 Button("Done") { dismiss() }
                     .buttonStyle(.borderedProminent)
                     .tint(theme.accent)
             }
         }
         .padding()
+    }
+
+    private func beginDrill() {
+        problems = MentalMathEngine.problems(operation: operation, level: level)
+        startTime = Date()
+        now = startTime
+        problemStartTime = startTime
+        resetProblemTimer()
+        startTickTimer()
+        answerFocused = true
+    }
+
+    private func startTickTimer() {
+        tickTimer?.invalidate()
+        tickTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            Task { @MainActor in
+                now = Date()
+                guard feedback == .idle, let limit = perProblemLimit else { return }
+                let remaining = limit - now.timeIntervalSince(problemStartTime)
+                problemTimeRemaining = remaining
+                if remaining <= 0 {
+                    handleTimeout()
+                }
+            }
+        }
+    }
+
+    private func resetProblemTimer() {
+        problemStartTime = Date()
+        if let limit = perProblemLimit {
+            problemTimeRemaining = limit
+        } else {
+            problemTimeRemaining = nil
+        }
+    }
+
+    private func handleTimeout() {
+        guard feedback == .idle, let problem = current else { return }
+        feedback = .timedOut(correctAnswer: problem.answer)
+        HapticFeedback.impact(.medium)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+            advance()
+        }
     }
 
     private func submitAnswer() {
@@ -186,18 +294,22 @@ struct MentalMathDrillView: View {
 
     private func advance() {
         if index + 1 >= problems.count {
-            appState.mentalMath.recordSession(
+            tickTimer?.invalidate()
+            let elapsedFinal = Date().timeIntervalSince(startTime)
+            sessionOutcome = appState.mentalMath.recordSession(
                 operation: operation,
                 level: level,
                 correct: correctCount,
                 total: problems.count,
-                elapsed: Date().timeIntervalSince(startTime)
+                elapsed: elapsedFinal,
+                timedMode: perProblemLimit != nil
             )
             finished = true
         } else {
             index += 1
             answer = ""
             feedback = .idle
+            resetProblemTimer()
             answerFocused = true
         }
     }
@@ -208,8 +320,7 @@ struct MentalMathDrillView: View {
         correctCount = 0
         feedback = .idle
         finished = false
-        startTime = Date()
-        problems = MentalMathEngine.problems(operation: operation, level: level)
-        answerFocused = true
+        sessionOutcome = nil
+        beginDrill()
     }
 }

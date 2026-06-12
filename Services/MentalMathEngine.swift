@@ -5,7 +5,9 @@ enum MentalMathEngine {
 
     static func problems(operation: MentalMathOperation, level: Int, count: Int = problemsPerSession, seed: UInt64? = nil) -> [MentalMathProblem] {
         var rng = SeededRNG(seed: seed ?? UInt64(Date().timeIntervalSince1970))
-        return (0..<count).map { _ in makeProblem(operation: operation, level: level, rng: &rng) }
+        var batch = (0..<count).map { _ in makeProblem(operation: operation, level: level, rng: &rng) }
+        batch.shuffle(using: &rng)
+        return batch
     }
 
     private static func makeProblem(operation: MentalMathOperation, level: Int, rng: inout SeededRNG) -> MentalMathProblem {
@@ -141,12 +143,16 @@ enum MentalMathEngine {
     }
 }
 
-private struct SeededRNG {
+private struct SeededRNG: RandomNumberGenerator {
     private var state: UInt64
     init(seed: UInt64) { state = seed == 0 ? 1 : seed }
     mutating func int(in range: ClosedRange<Int>) -> Int {
         let span = UInt64(range.upperBound - range.lowerBound + 1)
         state = state &* 6_364_136_223_846_793_005 &+ 1_446_960_989_394_037_157
         return Int(state % span) + range.lowerBound
+    }
+    mutating func next() -> UInt64 {
+        state = state &* 6_364_136_223_846_793_005 &+ 1_446_960_989_394_037_157
+        return state
     }
 }

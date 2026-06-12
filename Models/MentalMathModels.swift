@@ -124,10 +124,99 @@ struct MentalMathDrillResult: Codable, Identifiable, Hashable {
     let correct: Int
     let total: Int
     let elapsedSeconds: Double
+    let timedMode: Bool
+
+    init(
+        id: UUID,
+        date: Date,
+        operation: MentalMathOperation,
+        level: Int,
+        correct: Int,
+        total: Int,
+        elapsedSeconds: Double,
+        timedMode: Bool = false
+    ) {
+        self.id = id
+        self.date = date
+        self.operation = operation
+        self.level = level
+        self.correct = correct
+        self.total = total
+        self.elapsedSeconds = elapsedSeconds
+        self.timedMode = timedMode
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        date = try c.decode(Date.self, forKey: .date)
+        operation = try c.decode(MentalMathOperation.self, forKey: .operation)
+        level = try c.decode(Int.self, forKey: .level)
+        correct = try c.decode(Int.self, forKey: .correct)
+        total = try c.decode(Int.self, forKey: .total)
+        elapsedSeconds = try c.decode(Double.self, forKey: .elapsedSeconds)
+        timedMode = try c.decodeIfPresent(Bool.self, forKey: .timedMode) ?? false
+    }
 
     var passed: Bool {
         guard total > 0 else { return false }
         return Double(correct) / Double(total) >= MentalMathStore.passThreshold
+    }
+
+    var accuracy: Double {
+        guard total > 0 else { return 0 }
+        return Double(correct) / Double(total)
+    }
+
+    var avgSecondsPerProblem: Double {
+        guard total > 0 else { return 0 }
+        return elapsedSeconds / Double(total)
+    }
+}
+
+struct MentalMathLevelBest: Codable, Hashable {
+    var fastestPassSeconds: Double?
+    var bestCorrect: Int = 0
+    var attempts: Int = 0
+    var passes: Int = 0
+
+    var formattedBestTime: String? {
+        guard let fastestPassSeconds else { return nil }
+        return MentalMathFormatting.duration(fastestPassSeconds)
+    }
+}
+
+enum MentalMathTimedMode: Int, CaseIterable, Identifiable {
+    case off = 0
+    case relaxed = 10
+    case standard = 8
+    case sprint = 5
+
+    var id: Int { rawValue }
+
+    var label: String {
+        switch self {
+        case .off: return "No limit"
+        case .relaxed: return "10 sec / problem"
+        case .standard: return "8 sec / problem"
+        case .sprint: return "5 sec / problem"
+        }
+    }
+
+    var secondsPerProblem: Int { rawValue }
+
+    static func from(stored: Int) -> MentalMathTimedMode {
+        allCases.first { $0.rawValue == stored } ?? .off
+    }
+}
+
+enum MentalMathFormatting {
+    static func duration(_ seconds: TimeInterval) -> String {
+        let total = max(0, Int(seconds.rounded()))
+        let m = total / 60
+        let s = total % 60
+        if m > 0 { return String(format: "%d:%02d", m, s) }
+        return "\(s)s"
     }
 }
 
@@ -135,4 +224,5 @@ enum MentalMathFeedback: Equatable {
     case idle
     case correct
     case incorrect(correctAnswer: Int)
+    case timedOut(correctAnswer: Int)
 }
