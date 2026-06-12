@@ -1,7 +1,7 @@
 import SwiftUI
 
 private enum MainTab: String, Hashable, CaseIterable, Identifiable {
-    case today, weeks, calendar, topics, learn, quiz, progress, settings
+    case today, weeks, calendar, topics, learn, mathCounts, mentalMath, quiz, progress, settings
 
     var id: String { rawValue }
 
@@ -12,6 +12,8 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
         case .calendar: return "Calendar"
         case .topics: return "Topics"
         case .learn: return "Learn"
+        case .mathCounts: return "MathCounts"
+        case .mentalMath: return "Mental Math"
         case .quiz: return "Quiz"
         case .progress: return "Progress"
         case .settings: return "Settings"
@@ -25,6 +27,8 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
         case .calendar: return "calendar"
         case .topics: return "list.bullet.rectangle"
         case .learn: return "books.vertical.fill"
+        case .mathCounts: return "function"
+        case .mentalMath: return "bolt.fill"
         case .quiz: return "questionmark.circle.fill"
         case .progress: return "chart.bar.fill"
         case .settings: return "gearshape.fill"
@@ -39,6 +43,8 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
         case .calendar: CalendarRootView()
         case .topics: NSBTopicsRootView()
         case .learn: EncyclopediaRootView()
+        case .mathCounts: MathCountsRootView()
+        case .mentalMath: MentalMathRootView()
         case .quiz: QuizRootView()
         case .progress: ProgressDashboardView()
         case .settings: SettingsView()
@@ -63,6 +69,26 @@ struct ContentView: View {
         #endif
     }
 
+    // MARK: - iOS — bottom tab bar
+
+    #if os(iOS)
+    private var iosLayout: some View {
+        TabView(selection: $selectedTab) {
+            ForEach(MainTab.allCases) { tab in
+                tab.rootView
+                    .tabItem {
+                        Label(tab.title, systemImage: tab.systemImage)
+                    }
+                    .tag(tab)
+            }
+        }
+        .tint(theme.accent)
+        .preferredColorScheme(appState.appAppearance.colorScheme)
+        .environment(\.themePalette, theme)
+    }
+    #endif
+
+    #if os(macOS)
     // MARK: - macOS — sidebar + large detail pane (not iPhone tab bar)
 
     private var macLayout: some View {
@@ -89,21 +115,5 @@ struct ContentView: View {
         .preferredColorScheme(appState.appAppearance.colorScheme)
         .environment(\.themePalette, theme)
     }
-
-    // MARK: - iOS — bottom tab bar
-
-    private var iosLayout: some View {
-        TabView(selection: $selectedTab) {
-            ForEach(MainTab.allCases) { tab in
-                tab.rootView
-                    .tabItem {
-                        Label(tab.title, systemImage: tab.systemImage)
-                    }
-                    .tag(tab)
-            }
-        }
-        .tint(theme.accent)
-        .preferredColorScheme(appState.appAppearance.colorScheme)
-        .environment(\.themePalette, theme)
-    }
+    #endif
 }

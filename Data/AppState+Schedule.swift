@@ -26,13 +26,22 @@ struct PlanDrillRequest: Hashable {
         )
     }
 
-    static func thisWeek(week: Int) -> PlanDrillRequest {
-        PlanDrillRequest(
-            title: "This week",
-            subtitle: "Week \(week) · all Bio, Chem & Phys blocks",
+    static func thisWeek(week: Int, subject: Subject? = nil) -> PlanDrillRequest {
+        let subtitle: String
+        let title: String
+        if let subject {
+            title = "\(subject.rawValue) quiz"
+            subtitle = "Week \(week) · \(subject.rawValue) blocks only"
+        } else {
+            title = "All subjects"
+            subtitle = "Week \(week) · mixed Bio, Chem & Phys"
+        }
+        return PlanDrillRequest(
+            title: title,
+            subtitle: subtitle,
             mode: "Week quiz",
             week: week,
-            subject: nil,
+            subject: subject,
             block: nil,
             buzzerMixed: false
         )
@@ -151,6 +160,9 @@ extension AppState {
             guard let block = request.block else { return [] }
             return questionsForBlock(block)
         case "Week quiz":
+            if let subject = request.subject {
+                return questionsForSubjectWeek(subject, week: request.week)
+            }
             return questionsForWeek(request.week)
         case "Buzzer drill":
             if request.buzzerMixed {
@@ -218,10 +230,20 @@ extension AppState {
         return Array(dedupeQuestions(blockQuestions).shuffled().prefix(limit))
     }
 
+    func questionsForSubjectWeek(_ subject: Subject, week: Int, limit: Int = 15) -> [UnifiedQuestion] {
+        let blocks = scienceBlocks(for: week).filter { $0.subject == subject }
+        if !blocks.isEmpty {
+            let pool = blocks.flatMap { questionsForBlock($0) }
+            return Array(dedupeQuestions(pool).shuffled().prefix(limit))
+        }
+        return questionsForSubject(subject, week: week, limit: limit)
+    }
+
     func questionsForSubject(_ subject: Subject, week: Int, limit: Int) -> [UnifiedQuestion] {
-        let block = scienceBlocks(for: week).first { $0.subject == subject }
-        if let block {
-            return Array(questionsForBlock(block).prefix(limit))
+        let blocks = scienceBlocks(for: week).filter { $0.subject == subject }
+        if !blocks.isEmpty {
+            let pool = blocks.flatMap { questionsForBlock($0) }
+            return Array(dedupeQuestions(pool).shuffled().prefix(limit))
         }
 
         var pool = SeedData.tossupQuestions

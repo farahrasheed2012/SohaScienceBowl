@@ -2,7 +2,6 @@ import SwiftUI
 
 struct QuizRootView: View {
     @Environment(AppState.self) private var appState
-    @State private var subjectFilter: Subject? = nil
 
     var body: some View {
         NavigationStack {
@@ -13,16 +12,6 @@ struct QuizRootView: View {
                     } header: {
                         Text("DOE official questions")
                     }
-                }
-
-                Section {
-                    Picker("Subject", selection: $subjectFilter) {
-                        Text("All").tag(Optional<Subject>.none)
-                        ForEach(Subject.allCases) { s in
-                            Text(s.rawValue).tag(Optional(s))
-                        }
-                    }
-                    .pickerStyle(.segmented)
                 }
 
                 Section("Texas Regional Sprint") {
@@ -56,18 +45,29 @@ struct QuizRootView: View {
                     }
                     .padding(.vertical, 2)
 
-                    if let block = appState.todayBlocks().first {
+                    ForEach(appState.todayBlocks()) { block in
                         NavigationLink {
                             PlanDrillView(request: .todayBlock(block, week: appState.currentWeek))
                         } label: {
-                            Label("Quiz today's topics", systemImage: "sun.max.fill")
+                            Label("Quiz today · \(block.subject.rawValue)", systemImage: quizIcon(for: block.subject))
                         }
                     }
 
                     NavigationLink {
                         PlanDrillView(request: .thisWeek(week: appState.currentWeek))
                     } label: {
-                        Label("Quiz this week", systemImage: "calendar")
+                        Label("Quiz all subjects", systemImage: "square.grid.3x3.fill")
+                    }
+                    Text("Mixed Bio + Chem + Phys from this week's plan")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    ForEach(Subject.allCases) { subject in
+                        NavigationLink {
+                            PlanDrillView(request: .thisWeek(week: appState.currentWeek, subject: subject))
+                        } label: {
+                            Label("\(subject.rawValue) only", systemImage: quizIcon(for: subject))
+                        }
                     }
 
                     NavigationLink(value: StudyNavigationRoute.topicBrowser(initialWeek: nil)) {
@@ -208,7 +208,7 @@ struct QuizRootView: View {
 
                 Section("Search Questions") {
                     NavigationLink("Search") {
-                        SearchQuestionsView(initialSubject: subjectFilter)
+                        SearchQuestionsView(initialSubject: nil)
                     }
                 }
 
@@ -247,6 +247,14 @@ struct QuizRootView: View {
                 appState.refreshScheduleFromCalendar()
                 Task { await appState.loadDOEQuestions() }
             }
+        }
+    }
+
+    private func quizIcon(for subject: Subject) -> String {
+        switch subject {
+        case .biology: return "leaf.fill"
+        case .chemistry: return "flask.fill"
+        case .physics: return "bolt.fill"
         }
     }
 }

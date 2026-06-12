@@ -39,6 +39,8 @@ final class AppState {
 
     var doeStore = DOEQuestionStore.shared
     var encyclopedia = EncyclopediaStore()
+    var mathCounts = MathCountsStore()
+    var mentalMath = MentalMathStore()
     var textbookReading = TextbookReadingProgressStore()
     var isDOELoading = false
 
