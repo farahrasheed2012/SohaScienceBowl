@@ -17,9 +17,9 @@ enum SpeechRatePreset: String, CaseIterable, Identifiable, Codable {
 
     var rate: Float {
         switch self {
-        case .slow: return 0.32
-        case .normal: return 0.42
-        case .fast: return 0.52
+        case .slow: return 0.30
+        case .normal: return 0.38
+        case .fast: return 0.48
         }
     }
 }
@@ -67,7 +67,7 @@ final class SpeechManager: NSObject {
         speak(parts.joined(separator: ". "), rate: rate, voiceIdentifier: voiceIdentifier)
     }
 
-    func speakPraise(studentName: String) {
+    func speakPraise(studentName: String, voiceIdentifier: String? = nil) {
         let name = studentName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "champion" : studentName
         let phrases = [
             "Nice buzz, \(name)!",
@@ -76,23 +76,37 @@ final class SpeechManager: NSObject {
             "Awesome, \(name)!",
             "Super star, \(name)!",
         ]
-        speak(phrases.randomElement() ?? "Great job, \(name)!", rate: 0.44)
+        speak(
+            phrases.randomElement() ?? "Great job, \(name)!",
+            rate: SpeechRatePreset.normal.rate,
+            voiceIdentifier: voiceIdentifier
+        )
     }
 
-    func speakEncouragement(studentName: String) {
+    func speakEncouragement(studentName: String, voiceIdentifier: String? = nil) {
         let name = studentName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "friend" : studentName
         let phrases = [
             "Good try, \(name). You'll get the next one.",
             "Keep going, \(name)!",
             "Almost — try the next one.",
         ]
-        speak(phrases.randomElement() ?? "Keep going, \(name)!", rate: 0.4)
+        speak(
+            phrases.randomElement() ?? "Keep going, \(name)!",
+            rate: SpeechRatePreset.slow.rate,
+            voiceIdentifier: voiceIdentifier
+        )
+    }
+
+    func previewVoice(voiceIdentifier: String?, rate: Float) {
+        speakQuestion(SpeechVoiceCatalog.previewSampleQuestion, rate: rate, voiceIdentifier: voiceIdentifier)
     }
 
     private func makeUtterance(_ text: String, rate: Float, voiceIdentifier: String?) -> AVSpeechUtterance {
         let utterance = AVSpeechUtterance(string: text)
         utterance.rate = rate
-        utterance.pitchMultiplier = 1.05
+        utterance.pitchMultiplier = 1.0
+        utterance.preUtteranceDelay = 0.08
+        utterance.postUtteranceDelay = 0.12
         utterance.voice = SpeechVoiceCatalog.voice(identifier: voiceIdentifier)
         return utterance
     }

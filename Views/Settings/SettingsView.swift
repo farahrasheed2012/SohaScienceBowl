@@ -1,5 +1,6 @@
 import SwiftUI
 import UniformTypeIdentifiers
+import AVFoundation
 
 struct SettingsView: View {
     @Environment(AppState.self) private var appState
@@ -134,15 +135,28 @@ struct SettingsView: View {
             }
             .disabled(!appState.readQuestionsAloud)
             Picker("Voice", selection: speechVoiceBinding) {
-                Text("System default (en-US)").tag(Optional<String>.none)
-                ForEach(SpeechVoiceCatalog.englishVoices, id: \.identifier) { voice in
-                    Text("\(voice.name) (\(voice.language))").tag(Optional(voice.identifier))
+                ForEach(SpeechVoiceCatalog.pickerVoices, id: \.identifier) { voice in
+                    Text(SpeechVoiceCatalog.displayName(for: voice)).tag(Optional(voice.identifier))
                 }
             }
             .disabled(!appState.readQuestionsAloud)
             #if os(macOS)
             .pickerStyle(.menu)
             #endif
+            if appState.readQuestionsAloud, let voice = currentSpeechVoice {
+                Text("Using \(SpeechVoiceCatalog.displayName(for: voice))")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            Button {
+                SpeechManager.shared.previewVoice(
+                    voiceIdentifier: appState.speechVoiceIdentifier,
+                    rate: appState.speechRate
+                )
+            } label: {
+                Label("Preview voice", systemImage: "speaker.wave.2.fill")
+            }
+            .disabled(!appState.readQuestionsAloud)
             Picker("Flash card review pace", selection: Bindable(appState).flashCardReviewPace) {
                 ForEach(FlashCardReviewPace.allCases) { pace in
                     Text(pace.label).tag(pace)
@@ -154,13 +168,20 @@ struct SettingsView: View {
         } header: {
             Text("Speech & review")
         } footer: {
-            Text("Text-to-speech works across drills, DOE, encyclopedia, mental math, and flash cards. Mac: Space replays. iPhone/iPad: Replay button or long-press Replay for question + choices.")
+            Text("Enhanced or Premium voices sound most natural. Download more under System Settings → Accessibility → Spoken Content → Voices. Use Preview voice to test before drilling.")
         }
+    }
+
+    private var currentSpeechVoice: AVSpeechSynthesisVoice? {
+        guard let id = appState.speechVoiceIdentifier else {
+            return SpeechVoiceCatalog.preferredEnglishVoice()
+        }
+        return AVSpeechSynthesisVoice(identifier: id) ?? SpeechVoiceCatalog.preferredEnglishVoice()
     }
 
     private var speechVoiceBinding: Binding<String?> {
         Binding(
-            get: { appState.speechVoiceIdentifier },
+            get: { appState.speechVoiceIdentifier ?? SpeechVoiceCatalog.preferredDefaultVoiceIdentifier },
             set: { appState.speechVoiceIdentifier = $0 }
         )
     }

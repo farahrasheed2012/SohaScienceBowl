@@ -79,7 +79,11 @@ final class AppState {
         let rateRaw = UserDefaults.standard.string(forKey: "speechRatePreset") ?? SpeechRatePreset.normal.rawValue
         speechRatePreset = SpeechRatePreset(rawValue: rateRaw) ?? .normal
         studentName = UserDefaults.standard.string(forKey: "studentName") ?? "Soha"
-        speechVoiceIdentifier = UserDefaults.standard.string(forKey: "speechVoiceIdentifier")
+        if UserDefaults.standard.object(forKey: "speechVoiceIdentifier") == nil {
+            speechVoiceIdentifier = SpeechVoiceCatalog.preferredDefaultVoiceIdentifier
+        } else {
+            speechVoiceIdentifier = UserDefaults.standard.string(forKey: "speechVoiceIdentifier")
+        }
         let paceRaw = UserDefaults.standard.string(forKey: "flashCardReviewPace") ?? FlashCardReviewPace.normal.rawValue
         flashCardReviewPace = FlashCardReviewPace(rawValue: paceRaw) ?? .normal
         autoSyncScheduleFromCalendar = UserDefaults.standard.object(forKey: "autoSyncScheduleFromCalendar") as? Bool ?? true

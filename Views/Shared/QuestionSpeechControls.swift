@@ -186,12 +186,18 @@ enum QuestionSpeechHelper {
 
     static func speakPraiseIfNeeded(appState: AppState) {
         guard appState.readQuestionsAloud else { return }
-        SpeechManager.shared.speakPraise(studentName: appState.studentName)
+        SpeechManager.shared.speakPraise(
+            studentName: appState.studentName,
+            voiceIdentifier: appState.speechVoiceIdentifier
+        )
     }
 
     static func speakEncouragementIfNeeded(appState: AppState) {
         guard appState.readQuestionsAloud else { return }
-        SpeechManager.shared.speakEncouragement(studentName: appState.studentName)
+        SpeechManager.shared.speakEncouragement(
+            studentName: appState.studentName,
+            voiceIdentifier: appState.speechVoiceIdentifier
+        )
     }
 }
 
