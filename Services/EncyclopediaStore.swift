@@ -122,6 +122,82 @@ final class EncyclopediaStore {
         return Array(scored.prefix(5))
     }
 
+    /// Best encyclopedia article for a drill question (explicit id, then topic-title match).
+    func topic(forQuestion question: UnifiedQuestion) -> NSBTopic? {
+        if let topicId = question.topicId, let topic = topic(byId: topicId) {
+            return topic
+        }
+        let label = question.topic.trimmingCharacters(in: .whitespacesAndNewlines)
+        if Self.genericTopicLabels.contains(label.lowercased()) {
+            if let match = bestTopicMatch(
+                label: label,
+                subject: question.subject,
+                extraWords: Self.keywords(from: question.questionText),
+                minimumScore: 8
+            ) {
+                return match
+            }
+            return nil
+        }
+        return bestTopicMatch(label: label, subject: question.subject)
+    }
+
+    private static let genericTopicLabels: Set<String> = [
+        "chemistry", "biology", "physics", "general science", "earth and space", "energy", "math",
+    ]
+
+    private static func keywords(from text: String) -> Set<String> {
+        Set(
+            text.lowercased()
+                .components(separatedBy: CharacterSet.alphanumerics.inverted)
+                .filter { $0.count > 3 }
+        )
+    }
+
+    private func bestTopicMatch(
+        label: String,
+        subject: Subject?,
+        extraWords: Set<String> = [],
+        minimumScore: Int = 4
+    ) -> NSBTopic? {
+        var words = Set(
+            label.lowercased()
+                .components(separatedBy: CharacterSet.alphanumerics.inverted)
+                .filter { $0.count > 2 }
+        )
+        words.formUnion(extraWords)
+        guard !words.isEmpty else { return nil }
+
+        let candidates: [NSBTopic] = if let subject {
+            topics.filter { topic in
+                switch subject {
+                case .biology: topic.subject == "Life Science"
+                case .chemistry: topic.subject == "Chemistry" || topic.subject == "Physical Science"
+                case .physics: topic.subject == "Physical Science" || topic.subject == "Energy"
+                }
+            }
+        } else {
+            topics
+        }
+
+        let scored = candidates.map { topic -> (NSBTopic, Int) in
+            let title = topic.title.lowercased()
+            var score = 0
+            if title == label.lowercased() { score += 10 }
+            if label.lowercased().contains(title) || title.contains(label.lowercased()) { score += 6 }
+            for word in words where title.contains(word) { score += 2 }
+            return (topic, score)
+        }
+        .filter { $0.1 >= minimumScore }
+        .sorted { $0.1 > $1.1 }
+
+        return scored.first?.0
+    }
+
+    private func bestTopicMatch(label: String, subject: Subject?) -> NSBTopic? {
+        bestTopicMatch(label: label, subject: subject, extraWords: [], minimumScore: 4)
+    }
+
     func questions(
         subject: String?,
         difficulty: String?,

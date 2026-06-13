@@ -15,7 +15,12 @@ extension SeedData {
               topic: "Atoms & periodic table",
               tossups: [
                   ("What is the atomic number of an atom with 15 protons?", "15 (Phosphorus)"),
-                  ("An atom has 11 protons and 12 neutrons. What is its mass number?", "23")
+                  ("An atom has 11 protons and 12 neutrons. What is its mass number?", "23"),
+                  ("How many neutrons are in a neutral carbon-12 atom?", "6"),
+                  ("What subatomic particle carries a negative charge?", "Electron"),
+                  ("Two atoms with the same atomic number but different numbers of neutrons are called what?", "Isotopes"),
+                  ("What is the charge of a proton?", "Positive (+1)"),
+                  ("In a neutral atom, how does the number of electrons compare to the number of protons?", "They are equal")
               ]),
         block(week: 1, day: .tuesday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 1 — Parts of a Cell · Two Kinds of Cells", title: "Cell Structure and Function",
@@ -48,7 +53,13 @@ extension SeedData {
               topic: "Elements & ions",
               tossups: [
                   ("Which group on the periodic table contains the noble gases?", "Group 18"),
-                  ("What is the chemical formula for table salt?", "NaCl")
+                  ("What is the chemical formula for table salt?", "NaCl"),
+                  ("What is the chemical symbol for sodium?", "Na"),
+                  ("Elements in Group 1 are known as what type of metals?", "Alkali metals"),
+                  ("How many valence electrons does a neutral atom of neon have?", "8"),
+                  ("What type of bond forms between a metal and a nonmetal, as in NaCl?", "Ionic bond"),
+                  ("What is the chemical formula for carbon dioxide?", "CO₂"),
+                  ("When sodium loses one electron, what ion does it form?", "Na⁺")
               ]),
         block(week: 1, day: .friday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 16 — Your Body Systems", title: "Levels of Organization",

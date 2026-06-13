@@ -16,6 +16,7 @@ struct PlanDrillView: View {
     @State private var countdown = 5
     @State private var countdownActive = false
     @State private var countdownGeneration = 0
+    @State private var answerFeedback: DrillAnswerFeedback?
 
     private var isBuzzerMode: Bool { request.mode == "Buzzer drill" }
 
@@ -34,80 +35,90 @@ struct PlanDrillView: View {
                     description: Text(emptyMessage)
                 )
             } else {
-                ProgressView(value: Double(index), total: Double(questions.count))
-                    .padding(.horizontal, 16)
-                    .tint(PlatformColor.systemBlue)
-
-                VStack(spacing: 4) {
-                    Text("Question \(index + 1) of \(questions.count)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    Text(request.subtitle)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 16)
-                    if isBuzzerMode {
-                        buzzerStatusRow
-                    }
-                    if let subject = questions[index].subject {
-                        SubjectBadge(subject: subject)
-                    } else {
-                        DOECategoryBadge(category: questions[index].category)
-                    }
-                }
-
-                QuestionSpeechBar(
+                DrillQuestionScreen(
                     questionText: questions[index].questionText,
-                    answerText: questions[index].answer,
-                    showAnswerButton: revealed
-                )
+                    header: {
+                        VStack(spacing: 16) {
+                            ProgressView(value: Double(index), total: Double(questions.count))
+                                .tint(PlatformColor.systemBlue)
 
-                Spacer()
+                            VStack(spacing: 4) {
+                                Text("Question \(index + 1) of \(questions.count)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                Text(request.subtitle)
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .multilineTextAlignment(.center)
+                                if isBuzzerMode {
+                                    buzzerStatusRow
+                                }
+                                if let subject = questions[index].subject {
+                                    SubjectBadge(subject: subject)
+                                } else {
+                                    DOECategoryBadge(category: questions[index].category)
+                                }
+                            }
 
-                Text(questions[index].questionText)
-                    .font(.title2.weight(.semibold))
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 16)
+                            QuestionSpeechBar(
+                                questionText: questions[index].questionText,
+                                answerText: questions[index].answer,
+                                showAnswerButton: revealed
+                            )
+                        }
+                    },
+                    revealed: {
+                        if revealed {
+                            Text(questions[index].answer)
+                                .font(.body)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
 
-                Spacer()
-
-                if revealed {
-                    Text(questions[index].answer)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 16)
-
-                    HStack(spacing: 16) {
-                        logButton(correct: true)
-                        logButton(correct: false)
-                    }
-                    .padding(.horizontal, 16)
-                } else if isBuzzerMode && countdownActive && countdown > 0 {
-                    Text("\(countdown)")
-                        .font(.system(size: 56, weight: .bold, design: .rounded))
-                        .foregroundStyle(.secondary)
-                    Text("Get ready to buzz…")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                } else {
-                    Button {
-                        revealAnswer()
-                    } label: {
-                        Label(isBuzzerMode ? "Buzz (B)" : "Buzz", systemImage: "bolt.fill")
-                            .font(.title2.weight(.semibold))
+                            if let feedback = answerFeedback {
+                                DrillAnswerFeedbackPanel(
+                                    feedback: feedback,
+                                    nextLabel: index + 1 >= questions.count ? "Finish drill" : "Next question",
+                                    onNext: advanceFromFeedback
+                                )
+                            }
+                        }
+                    },
+                    footer: {
+                        if revealed {
+                            if answerFeedback == nil {
+                                HStack(spacing: 16) {
+                                    logButton(correct: true)
+                                    logButton(correct: false)
+                                }
+                            }
+                        } else if isBuzzerMode && countdownActive && countdown > 0 {
+                            VStack(spacing: 4) {
+                                Text("\(countdown)")
+                                    .font(.system(size: 56, weight: .bold, design: .rounded))
+                                    .foregroundStyle(.secondary)
+                                Text("Get ready to buzz…")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 20)
+                        } else {
+                            Button {
+                                revealAnswer()
+                            } label: {
+                                Label(isBuzzerMode ? "Buzz (B)" : "Buzz", systemImage: "bolt.fill")
+                                    .font(.title2.weight(.semibold))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 20)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .keyboardShortcut("b", modifiers: [])
+                            .accessibilityLabel("Buzz to reveal answer")
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
-                    .padding(.horizontal, 16)
-                    .keyboardShortcut("b", modifiers: [])
-                    .accessibilityLabel("Buzz to reveal answer")
-                }
+                )
             }
         }
-        .padding(.vertical, 16)
         .navigationTitle(request.title)
         .inlineNavigationBarTitle()
         .onAppear {
@@ -129,6 +140,10 @@ struct PlanDrillView: View {
             speechToken: index,
             autoRead: !isBuzzerMode,
             spaceReplayEnabled: !isBuzzerMode
+        )
+        .trackDrillQuestion(
+            questions.indices.contains(index) ? questions[index] : nil,
+            token: index
         )
         .onKeyPress(.space) {
             if isBuzzerMode, !revealed && !finished && !questions.isEmpty && (!countdownActive || countdown == 0) {
@@ -217,33 +232,7 @@ struct PlanDrillView: View {
 
     private func logButton(correct: Bool) -> some View {
         Button {
-            let q = questions[index]
-            let subject = q.subject ?? request.subject ?? .biology
-            if correct {
-                correctCount += 1
-                QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
-            } else {
-                appState.addMissToFlashCards(question: q)
-                QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
-            }
-            appState.recordAttempt(topic: q.topic, subject: subject, correct: correct)
-
-            if index + 1 >= questions.count {
-                appState.recordDrill(
-                    subject: request.subject,
-                    week: request.week > 0 ? request.week : appState.currentWeek,
-                    total: questions.count,
-                    correct: correctCount,
-                    mode: request.mode
-                )
-                finished = true
-            } else {
-                index += 1
-                revealed = false
-                if isBuzzerMode {
-                    startCountdownIfNeeded()
-                }
-            }
+            submitAnswer(correct: correct)
         } label: {
             Label(correct ? "Correct" : "Incorrect", systemImage: correct ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .frame(maxWidth: .infinity)
@@ -252,5 +241,41 @@ struct PlanDrillView: View {
         .buttonStyle(.bordered)
         .background(correct ? Color.green.opacity(0.15) : Color.red.opacity(0.15))
         .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func submitAnswer(correct: Bool) {
+        let q = questions[index]
+        let subject = q.subject ?? request.subject ?? .biology
+        if correct {
+            correctCount += 1
+            DrillFeedbackMessages.onCorrect(appState: appState)
+            HapticFeedback.impact(.light)
+        } else {
+            appState.addMissToFlashCards(question: q)
+            DrillFeedbackMessages.onIncorrect(appState: appState)
+            HapticFeedback.error()
+        }
+        appState.recordAttempt(topic: q.topic, subject: subject, correct: correct)
+        answerFeedback = DrillFeedbackMessages.makeFeedback(correct: correct, question: q, appState: appState)
+    }
+
+    private func advanceFromFeedback() {
+        answerFeedback = nil
+        if index + 1 >= questions.count {
+            appState.recordDrill(
+                subject: request.subject,
+                week: request.week > 0 ? request.week : appState.currentWeek,
+                total: questions.count,
+                correct: correctCount,
+                mode: request.mode
+            )
+            finished = true
+        } else {
+            index += 1
+            revealed = false
+            if isBuzzerMode {
+                startCountdownIfNeeded()
+            }
+        }
     }
 }

@@ -115,3 +115,34 @@ struct PrimaryButton: View {
         .tint(PlatformColor.systemBlue)
     }
 }
+
+/// Scrollable toss-up body — action button sits just below the question; long content scrolls.
+struct DrillQuestionScreen<Header: View, Revealed: View, Footer: View>: View {
+    let questionText: String
+    var questionFont: Font = .title2.weight(.semibold)
+    @ViewBuilder var header: () -> Header
+    @ViewBuilder var revealed: () -> Revealed
+    @ViewBuilder var footer: () -> Footer
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                header()
+
+                Text(questionText)
+                    .font(questionFont)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .textSelection(.enabled)
+
+                revealed()
+
+                footer()
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity)
+        }
+    }
+}

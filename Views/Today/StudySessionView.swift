@@ -12,6 +12,7 @@ struct StudySessionView: View {
     @State private var revealedKnowCold = Set<Int>()
     @State private var revealedTossups = Set<UUID>()
     @State private var tossupResults: [UUID: Bool] = [:]
+    @State private var tossupFeedback: [UUID: DrillAnswerFeedback] = [:]
     @State private var facts: [String] = ["", "", ""]
     @State private var miss = ""
     @State private var readingDone = false
@@ -233,8 +234,15 @@ struct StudySessionView: View {
                             Text(q.answer)
                                 .foregroundStyle(.secondary)
                             HStack {
-                                resultButton(title: "Correct", symbol: "checkmark.circle.fill", correct: true, id: q.id)
-                                resultButton(title: "Incorrect", symbol: "xmark.circle.fill", correct: false, id: q.id)
+                                resultButton(title: "Correct", symbol: "checkmark.circle.fill", correct: true, id: q.id, question: q)
+                                resultButton(title: "Incorrect", symbol: "xmark.circle.fill", correct: false, id: q.id, question: q)
+                            }
+                            if let feedback = tossupFeedback[q.id] {
+                                DrillFeedbackBanner(feedback: feedback)
+                                    .padding(.top, 4)
+                                if let topic = feedback.explanationTopic {
+                                    DrillTopicExplanationCard(topic: topic)
+                                }
                             }
                         } else {
                             Button("Reveal Answer") {
@@ -257,18 +265,21 @@ struct StudySessionView: View {
         }
     }
 
-    private func resultButton(title: String, symbol: String, correct: Bool, id: UUID) -> some View {
+    private func resultButton(title: String, symbol: String, correct: Bool, id: UUID, question: TossupQuestion) -> some View {
         Button {
             tossupResults[id] = correct
             if correct {
-                if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
+                DrillFeedbackMessages.onCorrect(appState: appState)
             } else {
-                if let q = block.sampleTossups.first(where: { $0.id == id }) {
-                    appState.addFlashCard(prompt: q.question, answer: q.answer, topic: q.topic, subject: q.subject, sourceID: id)
-                }
-                if appState.readQuestionsAloud { QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState) }
+                appState.addFlashCard(prompt: question.question, answer: question.answer, topic: question.topic, subject: question.subject, sourceID: id)
+                DrillFeedbackMessages.onIncorrect(appState: appState)
             }
-            appState.recordAttempt(topic: block.sampleTossups.first?.topic ?? block.subject.rawValue, subject: block.subject, correct: correct)
+            tossupFeedback[id] = DrillFeedbackMessages.makeFeedback(
+                correct: correct,
+                question: question.toUnified(),
+                appState: appState
+            )
+            appState.recordAttempt(topic: question.topic, subject: block.subject, correct: correct)
         } label: {
             Label(title, systemImage: symbol)
                 .frame(maxWidth: .infinity)

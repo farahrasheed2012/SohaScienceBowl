@@ -13,6 +13,7 @@ struct TossupDrillView: View {
     @State private var revealed = false
     @State private var correctCount = 0
     @State private var finished = false
+    @State private var answerFeedback: DrillAnswerFeedback?
 
     var body: some View {
         VStack(spacing: 20) {
@@ -21,62 +22,71 @@ struct TossupDrillView: View {
             } else if questions.isEmpty {
                 ContentUnavailableView("No Questions", systemImage: "questionmark.circle", description: Text("Try another week or subject."))
             } else {
-                ProgressView(value: Double(index), total: Double(questions.count))
-                    .padding(.horizontal, 16)
-                    .tint(PlatformColor.systemBlue)
-
-                Text("Question \(index + 1) of \(questions.count)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                QuestionSpeechBar(
+                DrillQuestionScreen(
                     questionText: questions[index].questionText,
-                    answerText: questions[index].answer,
-                    showAnswerButton: revealed
+                    header: {
+                        VStack(spacing: 16) {
+                            ProgressView(value: Double(index), total: Double(questions.count))
+                                .tint(PlatformColor.systemBlue)
+
+                            Text("Question \(index + 1) of \(questions.count)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+
+                            QuestionSpeechBar(
+                                questionText: questions[index].questionText,
+                                answerText: questions[index].answer,
+                                showAnswerButton: revealed
+                            )
+                        }
+                    },
+                    revealed: {
+                        if revealed {
+                            Text(questions[index].answer)
+                                .font(.body)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
+
+                            if let feedback = answerFeedback {
+                                DrillAnswerFeedbackPanel(
+                                    feedback: feedback,
+                                    nextLabel: index + 1 >= questions.count ? "Finish drill" : "Next question",
+                                    onNext: advanceFromFeedback
+                                )
+                            }
+                        }
+                    },
+                    footer: {
+                        if revealed {
+                            if answerFeedback == nil {
+                                HStack(spacing: 16) {
+                                    logButton(correct: true)
+                                    logButton(correct: false)
+                                }
+                            }
+                        } else {
+                            Button {
+                                revealed = true
+                            } label: {
+                                Label("Buzz", systemImage: "bolt.fill")
+                                    .font(.title2.weight(.semibold))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 20)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .accessibilityLabel("Buzz to reveal answer")
+                        }
+                    }
                 )
-
-                Spacer()
-
-                Text(questions[index].questionText)
-                    .font(.title2.weight(.semibold))
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 16)
-
-                Spacer()
-
-                if revealed {
-                    Text(questions[index].answer)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 16)
-
-                    HStack(spacing: 16) {
-                        logButton(correct: true)
-                        logButton(correct: false)
-                    }
-                    .padding(.horizontal, 16)
-                } else {
-                    Button {
-                        revealed = true
-                    } label: {
-                        Label("Buzz", systemImage: "bolt.fill")
-                            .font(.title2.weight(.semibold))
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 20)
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .padding(.horizontal, 16)
-                    .accessibilityLabel("Buzz to reveal answer")
-                }
             }
         }
-        .padding(.vertical, 16)
         .navigationTitle("Toss-up Drill")
         .inlineNavigationBarTitle()
         .onAppear { loadQuestions() }
         .onDisappear { SpeechManager.shared.stop() }
         .questionSpeech(questionText: questions.indices.contains(index) ? questions[index].questionText : nil, speechToken: index)
+        .trackDrillQuestion(questions.indices.contains(index) ? questions[index] : nil, token: index)
     }
 
     private var endScreen: some View {
@@ -103,22 +113,7 @@ struct TossupDrillView: View {
 
     private func logButton(correct: Bool) -> some View {
         Button {
-            if correct {
-                correctCount += 1
-                QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
-            } else {
-                appState.addMissToFlashCards(question: questions[index])
-                QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
-            }
-            appState.recordAttempt(topic: questions[index].topic, subject: subject, correct: correct)
-
-            if index + 1 >= questions.count {
-                appState.recordDrill(subject: subject, week: week, total: questions.count, correct: correctCount, mode: "Toss-up Drill")
-                finished = true
-            } else {
-                index += 1
-                revealed = false
-            }
+            submitAnswer(correct: correct)
         } label: {
             Label(correct ? "Correct" : "Incorrect", systemImage: correct ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .frame(maxWidth: .infinity)
@@ -129,34 +124,39 @@ struct TossupDrillView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
-    private func loadQuestions() {
-        var pool = appState.allUnifiedQuestions.filter { $0.subject == subject || $0.category.subject == subject }
-        if let week {
-            let curriculum = pool.filter {
-                $0.source == .customCurriculum && $0.sourceDescription.contains("Week \(week)")
-            }
-            let doe = appState.doeUnifiedQuestions.filter { $0.category == subject.doeCategory }
-            pool = curriculum + doe
+    private func submitAnswer(correct: Bool) {
+        let q = questions[index]
+        if correct {
+            correctCount += 1
+            DrillFeedbackMessages.onCorrect(appState: appState)
+            HapticFeedback.impact(.light)
+        } else {
+            appState.addMissToFlashCards(question: q)
+            DrillFeedbackMessages.onIncorrect(appState: appState)
+            HapticFeedback.error()
         }
-        if pool.isEmpty {
-            pool = SeedData.tossupQuestions.filter { $0.subject == subject && (week == nil || $0.week == week) }.map { $0.toUnified() }
-            pool.append(contentsOf: appState.doeUnifiedQuestions.filter { $0.category == subject.doeCategory })
-        }
-        if let topicFilter {
-            pool = pool.filter { $0.topic == topicFilter }
-        }
-        questions = dedupe(pool).shuffled()
-        if questions.count > 20 { questions = Array(questions.prefix(20)) }
+        appState.recordAttempt(topic: q.topic, subject: subject, correct: correct)
+        answerFeedback = DrillFeedbackMessages.makeFeedback(correct: correct, question: q, appState: appState)
     }
 
-    private func dedupe(_ questions: [UnifiedQuestion]) -> [UnifiedQuestion] {
-        var seen = Set<String>()
-        return questions.filter { q in
-            let key = q.normalizedText
-            if seen.contains(key) { return false }
-            seen.insert(key)
-            return true
+    private func advanceFromFeedback() {
+        answerFeedback = nil
+        if index + 1 >= questions.count {
+            appState.recordDrill(subject: subject, week: week, total: questions.count, correct: correctCount, mode: "Toss-up Drill")
+            finished = true
+        } else {
+            index += 1
+            revealed = false
         }
+    }
+
+    private func loadQuestions() {
+        questions = appState.questionsForTossupDrill(
+            subject: subject,
+            week: week,
+            topicFilter: topicFilter,
+            limit: 20
+        )
     }
 }
 
@@ -174,6 +174,7 @@ struct TopicQuizView: View {
     @State private var correctCount = 0
     @State private var finished = false
     @State private var choices: [String] = []
+    @State private var answerFeedback: DrillAnswerFeedback?
 
     var body: some View {
         VStack(spacing: 0) {
@@ -234,20 +235,30 @@ struct TopicQuizView: View {
                         let isCorrect = selected.map { strip($0) == strip(questions[index].answer) } ?? false
                         if isCorrect {
                             correctCount += 1
-                            QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
+                            DrillFeedbackMessages.onCorrect(appState: appState)
+                            HapticFeedback.impact(.light)
                         } else {
                             appState.addMissToFlashCards(question: questions[index])
-                            QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+                            DrillFeedbackMessages.onIncorrect(appState: appState)
+                            HapticFeedback.error()
                         }
                         appState.recordAttempt(topic: questions[index].topic, subject: subject, correct: isCorrect)
+                        answerFeedback = DrillFeedbackMessages.makeFeedback(
+                            correct: isCorrect,
+                            question: questions[index],
+                            appState: appState
+                        )
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(selected == nil)
                     .padding(16)
-                } else {
-                    Button("Next") { advance() }
-                        .buttonStyle(.borderedProminent)
-                        .padding(16)
+                } else if let answerFeedback {
+                    DrillAnswerFeedbackPanel(
+                        feedback: answerFeedback,
+                        nextLabel: index + 1 >= questions.count ? "Finish quiz" : "Next question",
+                        onNext: advanceFromFeedback
+                    )
+                    .padding(.bottom, 16)
                 }
             }
         }
@@ -259,6 +270,7 @@ struct TopicQuizView: View {
             questionText: questions.indices.contains(index) ? questions[index].questionText : nil,
             speechToken: index
         )
+        .trackDrillQuestion(questions.indices.contains(index) ? questions[index] : nil, token: index)
     }
 
     private var endView: some View {
@@ -290,24 +302,15 @@ struct TopicQuizView: View {
     }
 
     private func setup() {
-        var pool = SeedData.tossupQuestions.filter { $0.subject == subject }
-        if let week { pool = pool.filter { $0.week == week } }
-        var built = pool.map { $0.toUnified() }
-        let doeLimit = 8
-        built.append(contentsOf: appState.doeUnifiedQuestions.filter { $0.category == subject.doeCategory }.shuffled().prefix(doeLimit))
-        if built.isEmpty {
-            built = appState.allUnifiedQuestions.filter { $0.subject == subject }
-        }
-        var seen = Set<String>()
-        questions = built.filter { q in
-            if seen.contains(q.normalizedText) { return false }
-            seen.insert(q.normalizedText)
-            return true
-        }.shuffled()
-        if questions.count > 15 { questions = Array(questions.prefix(15)) }
+        questions = appState.questionsForTossupDrill(subject: subject, week: week, limit: 15)
         if !questions.isEmpty {
             choices = appState.quizChoices(for: questions[index])
         }
+    }
+
+    private func advanceFromFeedback() {
+        answerFeedback = nil
+        advance()
     }
 
     private func advance() {

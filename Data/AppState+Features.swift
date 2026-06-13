@@ -242,7 +242,7 @@ extension AppState {
             pool.append(contentsOf: doeUnifiedQuestions.shuffled().prefix(limit - pool.count))
         }
 
-        return Array(dedupeWeakReview(pool).shuffled().prefix(limit))
+        return selectDrillQuestions(from: pool, limit: limit)
     }
 
     private func dedupeWeakReview(_ questions: [UnifiedQuestion]) -> [UnifiedQuestion] {

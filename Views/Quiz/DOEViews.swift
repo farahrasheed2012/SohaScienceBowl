@@ -14,6 +14,7 @@ struct MockRoundView: View {
     @State private var revealed = false
     @State private var score = 0
     @State private var finished = false
+    @State private var answerFeedback: DrillAnswerFeedback?
 
     var body: some View {
         Group {
@@ -28,47 +29,61 @@ struct MockRoundView: View {
             } else if questions.isEmpty {
                 ContentUnavailableView("No Questions", systemImage: "tray")
             } else {
-                VStack(spacing: 20) {
-                    ProgressView(value: Double(index), total: Double(questions.count))
-                        .padding(.horizontal, 16)
-                    Text("\(index + 1) / \(questions.count)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    if questions[index].subject != nil {
-                        SubjectBadge(subject: questions[index].subject!)
-                    } else {
-                        DOECategoryBadge(category: questions[index].category)
-                    }
-                    QuestionSpeechBar(
-                        questionText: questions[index].questionText,
-                        answerText: questions[index].answer,
-                        showAnswerButton: revealed
-                    )
-                    Spacer()
-                    Text(questions[index].questionText)
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 16)
-                    Spacer()
-                    if revealed {
-                        Text(questions[index].answer)
-                            .foregroundStyle(.secondary)
-                        HStack {
-                            Button("Correct") { log(correct: true) }
-                                .buttonStyle(.bordered)
-                                .background(Color.green.opacity(0.15))
-                            Button("Incorrect") { log(correct: false) }
-                                .buttonStyle(.bordered)
-                                .background(Color.red.opacity(0.15))
+                DrillQuestionScreen(
+                    questionText: questions[index].questionText,
+                    questionFont: .headline,
+                    header: {
+                        VStack(spacing: 12) {
+                            ProgressView(value: Double(index), total: Double(questions.count))
+                            Text("\(index + 1) / \(questions.count)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            if questions[index].subject != nil {
+                                SubjectBadge(subject: questions[index].subject!)
+                            } else {
+                                DOECategoryBadge(category: questions[index].category)
+                            }
+                            QuestionSpeechBar(
+                                questionText: questions[index].questionText,
+                                answerText: questions[index].answer,
+                                showAnswerButton: revealed
+                            )
                         }
-                        .padding(.horizontal, 16)
-                    } else {
-                        Button("Buzz") { revealed = true }
-                            .buttonStyle(.borderedProminent)
-                            .padding(.horizontal, 16)
+                    },
+                    revealed: {
+                        if revealed {
+                            Text(questions[index].answer)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
+
+                            if let feedback = answerFeedback {
+                                DrillAnswerFeedbackPanel(
+                                    feedback: feedback,
+                                    nextLabel: index + 1 >= questions.count ? "Finish round" : "Next question",
+                                    onNext: advanceFromFeedback
+                                )
+                            }
+                        }
+                    },
+                    footer: {
+                        if revealed {
+                            if answerFeedback == nil {
+                                HStack {
+                                    Button("Correct") { submitAnswer(correct: true) }
+                                        .buttonStyle(.bordered)
+                                        .background(Color.green.opacity(0.15))
+                                    Button("Incorrect") { submitAnswer(correct: false) }
+                                        .buttonStyle(.bordered)
+                                        .background(Color.red.opacity(0.15))
+                                }
+                            }
+                        } else {
+                            Button("Buzz") { revealed = true }
+                                .buttonStyle(.borderedProminent)
+                        }
                     }
-                }
-                .padding(.vertical, 16)
+                )
             }
         }
         .navigationTitle(title)
@@ -79,6 +94,7 @@ struct MockRoundView: View {
             questionText: questions.indices.contains(index) ? questions[index].questionText : nil,
             speechToken: index
         )
+        .trackDrillQuestion(questions.indices.contains(index) ? questions[index] : nil, token: index)
     }
 
     private func load() {
@@ -87,29 +103,40 @@ struct MockRoundView: View {
             if let categoryFilter {
                 pool = pool.filter { $0.category == categoryFilter }
             }
-            questions = Array(pool.shuffled().prefix(questionCount))
+            pool = Array(pool.shuffled().prefix(questionCount * 3))
+            questions = appState.selectDrillQuestions(from: pool, limit: questionCount)
         } else {
-            questions = Array(appState.allUnifiedQuestions.shuffled().prefix(questionCount))
+            let pool = Array(appState.allUnifiedQuestions.shuffled().prefix(questionCount * 3))
+            questions = appState.selectDrillQuestions(from: pool, limit: questionCount)
         }
         if questions.count < questionCount {
             let seed = SeedData.tossupQuestions.map { $0.toUnified() }.shuffled()
-            questions.append(contentsOf: seed.prefix(questionCount - questions.count))
+            let combined = questions + seed
+            questions = appState.selectDrillQuestions(from: combined, limit: questionCount)
         }
     }
 
-    private func log(correct: Bool) {
+    private func submitAnswer(correct: Bool) {
+        let q = questions[index]
         if correct {
             score += 1
-            QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
+            DrillFeedbackMessages.onCorrect(appState: appState)
+            HapticFeedback.impact(.light)
         } else {
-            appState.addMissToFlashCards(question: questions[index])
-            QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+            appState.addMissToFlashCards(question: q)
+            DrillFeedbackMessages.onIncorrect(appState: appState)
+            HapticFeedback.error()
         }
-        if let sub = questions[index].subject {
-            appState.recordAttempt(topic: questions[index].topic, subject: sub, correct: correct)
+        if let sub = q.subject {
+            appState.recordAttempt(topic: q.topic, subject: sub, correct: correct)
         } else {
-            appState.recordAttempt(topic: questions[index].category.rawValue, subject: .biology, correct: correct)
+            appState.recordAttempt(topic: q.category.rawValue, subject: .biology, correct: correct)
         }
+        answerFeedback = DrillFeedbackMessages.makeFeedback(correct: correct, question: q, appState: appState)
+    }
+
+    private func advanceFromFeedback() {
+        answerFeedback = nil
         if index + 1 >= questions.count {
             appState.recordDrill(subject: nil, week: nil, total: questions.count, correct: score, mode: title)
             finished = true
@@ -128,6 +155,7 @@ struct DOEMockRoundView: View {
     @State private var revealed = false
     @State private var score = 0
     @State private var finished = false
+    @State private var answerFeedback: DrillAnswerFeedback?
 
     var body: some View {
         Group {
@@ -137,40 +165,53 @@ struct DOEMockRoundView: View {
             } else if pairs.isEmpty {
                 ContentUnavailableView("No DOE Questions", systemImage: "doc.text", description: Text(appState.doeStore.loadError ?? "Download PDFs first"))
             } else {
-                VStack(spacing: 16) {
-                    Text(showBonus ? "Bonus \(pairIndex + 1)" : "Toss-Up \(pairIndex + 1)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                    QuestionSpeechBar(
-                        questionText: currentQuestion.questionText,
-                        answerText: currentQuestion.answer,
-                        showAnswerButton: revealed
-                    )
-                    Text(currentQuestion.questionText)
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 16)
-                    if revealed {
-                        Text(currentQuestion.answer)
-                            .foregroundStyle(.secondary)
-                        Button("Correct (+ points)") {
-                            score += showBonus ? 10 : 4
-                            QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
-                            advance()
+                DrillQuestionScreen(
+                    questionText: currentQuestion.questionText,
+                    questionFont: .headline,
+                    header: {
+                        VStack(spacing: 12) {
+                            Text(showBonus ? "Bonus \(pairIndex + 1)" : "Toss-Up \(pairIndex + 1)")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            QuestionSpeechBar(
+                                questionText: currentQuestion.questionText,
+                                answerText: currentQuestion.answer,
+                                showAnswerButton: revealed
+                            )
                         }
-                        .buttonStyle(.borderedProminent)
-                        Button("Incorrect") {
-                            appState.addMissToFlashCards(question: currentQuestion)
-                            QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
-                            advance()
+                    },
+                    revealed: {
+                        if revealed {
+                            Text(currentQuestion.answer)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity)
+
+                            if let feedback = answerFeedback {
+                                DrillAnswerFeedbackPanel(
+                                    feedback: feedback,
+                                    nextLabel: "Continue",
+                                    onNext: advanceFromFeedback
+                                )
+                            }
                         }
-                        .buttonStyle(.bordered)
-                    } else {
-                        Button("Reveal") { revealed = true }
-                            .buttonStyle(.borderedProminent)
+                    },
+                    footer: {
+                        if revealed {
+                            if answerFeedback == nil {
+                                HStack(spacing: 12) {
+                                    Button("Correct (+ points)") { submitAnswer(correct: true) }
+                                        .buttonStyle(.borderedProminent)
+                                    Button("Incorrect") { submitAnswer(correct: false) }
+                                        .buttonStyle(.bordered)
+                                }
+                            }
+                        } else {
+                            Button("Reveal") { revealed = true }
+                                .buttonStyle(.borderedProminent)
+                        }
                     }
-                }
-                .padding(16)
+                )
                 .questionSpeech(
                     questionText: currentQuestion.questionText,
                     speechToken: "\(pairIndex)-\(showBonus)"
@@ -181,6 +222,28 @@ struct DOEMockRoundView: View {
         .inlineNavigationBarTitle()
         .onAppear { buildPairs() }
         .onDisappear { SpeechManager.shared.stop() }
+    }
+
+    private func submitAnswer(correct: Bool) {
+        if correct {
+            score += showBonus ? 10 : 4
+            DrillFeedbackMessages.onCorrect(appState: appState)
+            HapticFeedback.impact(.light)
+        } else {
+            appState.addMissToFlashCards(question: currentQuestion)
+            DrillFeedbackMessages.onIncorrect(appState: appState)
+            HapticFeedback.error()
+        }
+        answerFeedback = DrillFeedbackMessages.makeFeedback(
+            correct: correct,
+            question: currentQuestion,
+            appState: appState
+        )
+    }
+
+    private func advanceFromFeedback() {
+        answerFeedback = nil
+        advance()
     }
 
     private var currentQuestion: UnifiedQuestion {
@@ -436,45 +499,68 @@ struct SingleQuestionDrillView: View {
     @Environment(AppState.self) private var appState
     let question: UnifiedQuestion
     @State private var revealed = false
+    @State private var answerFeedback: DrillAnswerFeedback?
 
     var body: some View {
-        VStack(spacing: 24) {
-            QuestionSpeechBar(
-                questionText: question.questionText,
-                answerText: question.answer,
-                showAnswerButton: revealed,
-                choiceTexts: unifiedSpeechChoices(question)
-            )
-            Text(question.questionText)
-                .font(.headline)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 16)
-            if revealed {
-                Text(question.answer)
-                    .foregroundStyle(.secondary)
-                HStack {
-                    Button("Correct") {
-                        if let s = question.subject {
-                            appState.recordAttempt(topic: question.topic, subject: s, correct: true)
-                        }
-                        QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
-                    }
-                    Button("Incorrect") {
-                        appState.addMissToFlashCards(question: question)
-                        QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+        DrillQuestionScreen(
+            questionText: question.questionText,
+            header: {
+                QuestionSpeechBar(
+                    questionText: question.questionText,
+                    answerText: question.answer,
+                    showAnswerButton: revealed,
+                    choiceTexts: unifiedSpeechChoices(question)
+                )
+            },
+            revealed: {
+                if revealed {
+                    Text(question.answer)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+
+                    if let feedback = answerFeedback {
+                        DrillAnswerFeedbackPanel(
+                            feedback: feedback,
+                            nextLabel: "Done",
+                            onNext: { answerFeedback = nil }
+                        )
                     }
                 }
-            } else {
-                Button("Buzz") { revealed = true }
-                    .buttonStyle(.borderedProminent)
+            },
+            footer: {
+                if revealed {
+                    if answerFeedback == nil {
+                        HStack {
+                            Button("Correct") { submitAnswer(correct: true) }
+                            Button("Incorrect") { submitAnswer(correct: false) }
+                        }
+                    }
+                } else {
+                    Button("Buzz") { revealed = true }
+                        .buttonStyle(.borderedProminent)
+                }
             }
-            Spacer()
-        }
-        .padding(.top, 32)
+        )
         .navigationTitle("Drill")
         .inlineNavigationBarTitle()
         .onDisappear { SpeechManager.shared.stop() }
         .questionSpeech(questionText: question.questionText, speechToken: question.id)
+    }
+
+    private func submitAnswer(correct: Bool) {
+        if correct {
+            if let s = question.subject {
+                appState.recordAttempt(topic: question.topic, subject: s, correct: true)
+            }
+            DrillFeedbackMessages.onCorrect(appState: appState)
+            HapticFeedback.impact(.light)
+        } else {
+            appState.addMissToFlashCards(question: question)
+            DrillFeedbackMessages.onIncorrect(appState: appState)
+            HapticFeedback.error()
+        }
+        answerFeedback = DrillFeedbackMessages.makeFeedback(correct: correct, question: question, appState: appState)
     }
 }
 

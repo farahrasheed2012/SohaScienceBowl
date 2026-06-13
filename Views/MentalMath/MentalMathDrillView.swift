@@ -160,15 +160,21 @@ struct MentalMathDrillView: View {
         case .idle:
             EmptyView()
         case .correct:
-            Label("Correct!", systemImage: "checkmark.circle.fill")
+            Label(DrillFeedbackMessages.praise(for: appState.studentName), systemImage: "checkmark.circle.fill")
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(theme.success)
                 .padding(.top, 12)
         case .incorrect(let correctAnswer):
-            Text("Answer: \(correctAnswer)")
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(theme.wrong)
-                .padding(.top, 12)
+            VStack(spacing: 6) {
+                Text(DrillFeedbackMessages.encouragement(for: appState.studentName))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.orange)
+                    .multilineTextAlignment(.center)
+                Text("Answer: \(correctAnswer)")
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(theme.wrong)
+            }
+            .padding(.top, 12)
         case .timedOut(let correctAnswer):
             Text("Time's up — \(correctAnswer)")
                 .font(.title3.weight(.semibold))
@@ -306,10 +312,11 @@ struct MentalMathDrillView: View {
             correctCount += 1
             feedback = .correct
             HapticFeedback.impact(.light)
-            if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
+            DrillFeedbackMessages.onCorrect(appState: appState)
         } else {
             feedback = .incorrect(correctAnswer: problem.answer)
             HapticFeedback.impact(.medium)
+            DrillFeedbackMessages.onIncorrect(appState: appState)
         }
 
         let generation = lifecycleGeneration

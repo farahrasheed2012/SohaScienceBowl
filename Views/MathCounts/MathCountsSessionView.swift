@@ -148,6 +148,13 @@ struct MathCountsSessionView: View {
             }
         case .revealed:
             VStack(alignment: .leading, spacing: 12) {
+                DrillFeedbackBanner(
+                    feedback: DrillAnswerFeedback(
+                        correct: false,
+                        headline: DrillFeedbackMessages.encouragement(for: appState.studentName),
+                        explanationTopic: nil
+                    )
+                )
                 coachMessage(title: "Solution", icon: "checkmark.seal.fill", color: theme.success, body: q.explanation)
                 if let strategy = q.strategy {
                     Label(strategy, systemImage: "bolt.fill")
@@ -160,9 +167,13 @@ struct MathCountsSessionView: View {
             }
         case .correct:
             VStack(alignment: .leading, spacing: 8) {
-                Label("Great reasoning!", systemImage: "hand.thumbsup.fill")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(theme.success)
+                DrillFeedbackBanner(
+                    feedback: DrillAnswerFeedback(
+                        correct: true,
+                        headline: DrillFeedbackMessages.praise(for: appState.studentName),
+                        explanationTopic: nil
+                    )
+                )
                 if let strategy = q.strategy {
                     Text("Strategy: \(strategy)")
                         .font(.caption)
@@ -235,8 +246,9 @@ struct MathCountsSessionView: View {
         if correct {
             phase = .correct
             recordAttempt(q, correct: true)
-            if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
+            DrillFeedbackMessages.onCorrect(appState: appState)
         } else {
+            DrillFeedbackMessages.onIncorrect(appState: appState)
             wrongAttempts += 1
             if wrongAttempts == 1 {
                 hintsUsed += 1

@@ -199,42 +199,27 @@ extension AppState {
             let extra = encyclopedia.questions(subject: "Math", difficulty: nil, limit: limit, type: "multipleChoice")
             pool.append(contentsOf: extra.map { $0.toUnified() })
         }
-        return Array(dedupeQuestions(pool).shuffled().prefix(limit))
+        return selectDrillQuestions(from: pool, limit: limit)
     }
 
     func questionsForBlock(
         _ block: StudyBlock,
         limit: Int = ScheduleConstants.dayTopicQuizQuestionCount
     ) -> [UnifiedQuestion] {
-        let category = block.subject.doeCategory
-        let curriculum = curriculumExtras(for: block)
-        let encyclopediaPool = encyclopediaQuestions(for: block, limit: 12)
-
-        var pool: [UnifiedQuestion] = curriculum
-        pool.append(contentsOf: encyclopediaPool)
-        pool.append(contentsOf: doeUnified(for: category, limit: limit / 2))
-
-        var deduped = dedupeQuestions(pool)
-        if deduped.count < limit {
-            var fill = pool
-            fill.append(contentsOf: weekSubjectSeed(for: block))
-            fill.append(contentsOf: doeUnified(for: category, limit: limit))
-            deduped = dedupeQuestions(fill)
-        }
-
-        return Array(deduped.shuffled().prefix(limit))
+        selectDrillQuestions(from: buildQuestionsForBlock(block), limit: limit)
     }
 
     func questionsForWeek(_ week: Int, limit: Int = 20) -> [UnifiedQuestion] {
-        let blockQuestions = scienceBlocks(for: week).flatMap { questionsForBlock($0) }
-        return Array(dedupeQuestions(blockQuestions).shuffled().prefix(limit))
+        let blocks = scienceBlocks(for: week)
+        let pool = buildCurriculumFirstPool(for: blocks, minimumCount: limit)
+        return selectDrillQuestions(from: pool, limit: limit)
     }
 
     func questionsForSubjectWeek(_ subject: Subject, week: Int, limit: Int = 15) -> [UnifiedQuestion] {
         let blocks = scienceBlocks(for: week).filter { $0.subject == subject }
         if !blocks.isEmpty {
-            let pool = blocks.flatMap { questionsForBlock($0) }
-            return Array(dedupeQuestions(pool).shuffled().prefix(limit))
+            let pool = buildCurriculumFirstPool(for: blocks, minimumCount: limit)
+            return selectDrillQuestions(from: pool, limit: limit)
         }
         return questionsForSubject(subject, week: week, limit: limit)
     }
@@ -242,24 +227,166 @@ extension AppState {
     func questionsForSubject(_ subject: Subject, week: Int, limit: Int) -> [UnifiedQuestion] {
         let blocks = scienceBlocks(for: week).filter { $0.subject == subject }
         if !blocks.isEmpty {
-            let pool = blocks.flatMap { questionsForBlock($0) }
-            return Array(dedupeQuestions(pool).shuffled().prefix(limit))
+            let pool = blocks.flatMap { buildQuestionsForBlock($0) }
+            return selectDrillQuestions(from: pool, limit: limit)
         }
 
         var pool = SeedData.tossupQuestions
             .filter { $0.week == week && $0.subject == subject }
             .map { $0.toUnified() }
-        pool.append(contentsOf: doeUnified(for: subject.doeCategory, limit: 8))
-        return Array(dedupeQuestions(pool).shuffled().prefix(limit))
+        pool = supplementThinPool(pool: pool, subject: subject, week: week, limit: limit)
+        return selectDrillQuestions(from: pool, limit: limit)
     }
 
     func questionsForBuzzerMixed(week: Int, limit: Int = 15) -> [UnifiedQuestion] {
         let blocks = scienceBlocks(for: week)
-        var pool = blocks.flatMap { questionsForBlock($0) }
+        var pool = blocks.flatMap { buildQuestionsForBlock($0) }
         if pool.count < limit {
             pool.append(contentsOf: SeedData.tossupQuestions.filter { $0.week == week }.map { $0.toUnified() })
         }
-        return Array(dedupeQuestions(pool).shuffled().prefix(limit))
+        return selectDrillQuestions(from: pool, limit: limit)
+    }
+
+    func questionsForTossupDrill(
+        subject: Subject,
+        week: Int?,
+        topicFilter: String? = nil,
+        limit: Int = 20
+    ) -> [UnifiedQuestion] {
+        var pool: [UnifiedQuestion]
+
+        if let week {
+            let blocks = scienceBlocks(for: week).filter { $0.subject == subject }
+            if !blocks.isEmpty {
+                pool = blocks.flatMap { buildQuestionsForBlock($0) }
+            } else {
+                pool = SeedData.tossupQuestions
+                    .filter { $0.week == week && $0.subject == subject }
+                    .map { $0.toUnified() }
+                pool = supplementThinPool(pool: pool, subject: subject, week: week, limit: limit)
+            }
+        } else {
+            pool = allUnifiedQuestions.filter { $0.subject == subject || $0.category.subject == subject }
+            if pool.count < limit {
+                pool.append(contentsOf: SeedData.tossupQuestions.filter { $0.subject == subject }.map { $0.toUnified() })
+            }
+            pool = supplementThinPool(pool: pool, subject: subject, week: week ?? currentWeek, limit: limit)
+        }
+
+        if let topicFilter {
+            pool = pool.filter { $0.topic == topicFilter }
+        }
+
+        return selectDrillQuestions(from: pool, limit: limit)
+    }
+
+    func markQuestionSeen(_ question: UnifiedQuestion) {
+        RecentQuestionStore.record(question)
+    }
+
+    func selectDrillQuestions(from pool: [UnifiedQuestion], limit: Int) -> [UnifiedQuestion] {
+        let deduped = dedupeQuestions(pool)
+        let displayable = deduped.filter { Self.looksDisplayable($0) }
+        let candidates = displayable.count >= min(limit, 3) ? displayable : deduped
+        return RecentQuestionStore.prioritizeFresh(candidates, limit: limit)
+    }
+
+    /// Drops stems that look cut off during PDF import (e.g. ending with "of" or "the").
+    private static func looksDisplayable(_ question: UnifiedQuestion) -> Bool {
+        let text = question.questionText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard text.count >= 10 else { return false }
+        let lower = text.lowercased()
+        let danglingEndings = [" of", " the", " a", " an", " with", " for", " to", " and", " or", " in", " on", " at", " by"]
+        return !danglingEndings.contains(where: { lower.hasSuffix($0) })
+    }
+
+    private static let thinPoolThreshold = 12
+
+    /// Week/subject quizzes: block toss-ups first, then block-linked encyclopedia — DOE only if still short.
+    private func buildCurriculumFirstPool(for blocks: [StudyBlock], minimumCount: Int) -> [UnifiedQuestion] {
+        var pool = blocks.flatMap { $0.sampleTossups.map { $0.toUnified() } }
+        pool = dedupeQuestions(pool)
+
+        if pool.count >= minimumCount {
+            return pool
+        }
+
+        for block in blocks {
+            pool.append(contentsOf: encyclopediaQuestions(for: block, limit: 10))
+        }
+        pool = dedupeQuestions(pool)
+
+        if pool.count >= minimumCount {
+            return pool
+        }
+
+        let categories = Set(blocks.map { $0.subject.doeCategory })
+        for category in categories {
+            pool.append(contentsOf: doeUnified(for: category, limit: minimumCount))
+        }
+        return dedupeQuestions(pool)
+    }
+
+    private func buildQuestionsForBlock(_ block: StudyBlock) -> [UnifiedQuestion] {
+        let category = block.subject.doeCategory
+        var pool = curriculumExtras(for: block)
+        pool.append(contentsOf: encyclopediaQuestions(for: block, limit: 15))
+
+        var deduped = dedupeQuestions(pool)
+
+        if deduped.count < Self.thinPoolThreshold {
+            deduped = supplementThinPool(pool: deduped, block: block, category: category)
+        } else {
+            pool.append(contentsOf: doeUnified(for: category, limit: ScheduleConstants.dayTopicQuizQuestionCount / 2))
+            deduped = dedupeQuestions(pool)
+        }
+
+        if deduped.count < ScheduleConstants.dayTopicQuizQuestionCount {
+            var fill = deduped
+            fill.append(contentsOf: weekSubjectSeed(for: block))
+            fill.append(contentsOf: doeUnified(for: category, limit: ScheduleConstants.dayTopicQuizQuestionCount))
+            fill.append(contentsOf: encyclopediaSubjectQuestions(for: block.subject, limit: 20))
+            deduped = dedupeQuestions(fill)
+        }
+
+        return deduped
+    }
+
+    private func supplementThinPool(
+        pool: [UnifiedQuestion],
+        block: StudyBlock,
+        category: DOECategory
+    ) -> [UnifiedQuestion] {
+        var expanded = pool
+        expanded.append(contentsOf: doeUnified(for: category, limit: 30))
+        expanded.append(contentsOf: encyclopediaQuestions(for: block, limit: 25))
+        expanded.append(contentsOf: encyclopediaSubjectQuestions(for: block.subject, limit: 20))
+        return dedupeQuestions(expanded)
+    }
+
+    private func supplementThinPool(
+        pool: [UnifiedQuestion],
+        subject: Subject,
+        week: Int,
+        limit: Int
+    ) -> [UnifiedQuestion] {
+        var expanded = pool
+        expanded.append(contentsOf: doeUnified(for: subject.doeCategory, limit: max(limit * 2, 25)))
+        expanded.append(contentsOf: encyclopediaSubjectQuestions(for: subject, limit: 25))
+        expanded.append(contentsOf: SeedData.tossupQuestions
+            .filter { $0.week == week && $0.subject == subject }
+            .map { $0.toUnified() })
+        return dedupeQuestions(expanded)
+    }
+
+    private func encyclopediaSubjectQuestions(for subject: Subject, limit: Int) -> [UnifiedQuestion] {
+        let subjectName: String = switch subject {
+        case .biology: "Life Science"
+        case .chemistry: "Chemistry"
+        case .physics: "Physical Science"
+        }
+        return encyclopedia.questions(subject: subjectName, difficulty: nil, limit: limit, type: "tossUp")
+            .map { $0.toUnified() }
     }
 
     private func curriculumExtras(for block: StudyBlock) -> [UnifiedQuestion] {

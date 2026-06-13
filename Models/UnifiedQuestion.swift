@@ -15,6 +15,7 @@ struct UnifiedQuestion: Identifiable, Codable, Hashable {
     var setNumber: Int?
     var roundNumber: Int?
     var sourceYear: Int?
+    var topicId: String? = nil
 
     var subject: Subject? { category.subject }
 

@@ -106,11 +106,17 @@ private struct QuestionSpeechModifier<Token: Hashable>: ViewModifier {
     var spaceReplayEnabled: Bool
     var choiceTexts: [(key: String, text: String)]
 
+    @State private var lastAutoReadKey: String?
+
     func body(content: Content) -> some View {
         content
             .onAppear { triggerAutoRead() }
             .onChange(of: speechToken) { _, _ in triggerAutoRead() }
-            .onDisappear { SpeechManager.shared.stop() }
+            .onChange(of: questionText) { _, _ in triggerAutoRead() }
+            .onDisappear {
+                lastAutoReadKey = nil
+                SpeechManager.shared.stop()
+            }
             #if os(macOS)
             .onKeyPress(.space) {
                 guard spaceReplayEnabled, appState.readQuestionsAloud, let questionText else { return .ignored }
@@ -121,7 +127,17 @@ private struct QuestionSpeechModifier<Token: Hashable>: ViewModifier {
     }
 
     private func triggerAutoRead() {
-        guard autoRead, appState.readQuestionsAloud, appState.autoReadQuestions, let questionText else { return }
+        guard autoRead,
+              appState.readQuestionsAloud,
+              appState.autoReadQuestions,
+              let questionText,
+              !questionText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        else { return }
+
+        let key = "\(speechToken)|\(questionText)"
+        guard lastAutoReadKey != key else { return }
+        lastAutoReadKey = key
+
         SpeechManager.shared.speakQuestion(
             questionText,
             rate: appState.speechRate,
@@ -176,5 +192,31 @@ enum QuestionSpeechHelper {
     static func speakEncouragementIfNeeded(appState: AppState) {
         guard appState.readQuestionsAloud else { return }
         SpeechManager.shared.speakEncouragement(studentName: appState.studentName)
+    }
+}
+
+extension View {
+    /// Records the current drill question so future sessions prefer unseen content.
+    func trackDrillQuestion(_ question: UnifiedQuestion?, token: some Hashable) -> some View {
+        modifier(TrackDrillQuestionModifier(question: question, token: token))
+    }
+}
+
+private struct TrackDrillQuestionModifier<Token: Hashable>: ViewModifier {
+    @Environment(AppState.self) private var appState
+
+    let question: UnifiedQuestion?
+    let token: Token
+
+    func body(content: Content) -> some View {
+        content
+            .onAppear { recordIfNeeded() }
+            .onChange(of: token) { _, _ in recordIfNeeded() }
+            .onChange(of: question?.questionText) { _, _ in recordIfNeeded() }
+    }
+
+    private func recordIfNeeded() {
+        guard let question else { return }
+        appState.markQuestionSeen(question)
     }
 }

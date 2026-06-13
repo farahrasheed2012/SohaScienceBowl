@@ -68,7 +68,8 @@ extension NSBQuestion {
             sourceDescription: "Encyclopedia · \(subject)",
             setNumber: nil,
             roundNumber: nil,
-            sourceYear: nil
+            sourceYear: nil,
+            topicId: topicId
         )
     }
 }

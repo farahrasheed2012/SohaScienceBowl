@@ -51,7 +51,7 @@ extension AppState {
             ))
         }
 
-        return Array(dedupeRegionalQuestions(pool).shuffled().prefix(limit))
+        return selectDrillQuestions(from: pool, limit: limit)
     }
 
     func regionalSprintMixedQuestions(track: RegionalSprintCatalog.Track?, limit: Int = 20) -> [UnifiedQuestion] {
@@ -60,19 +60,7 @@ extension AppState {
         for pack in packList {
             pool.append(contentsOf: regionalSprintQuestions(for: pack.id, limit: 6))
         }
-        return Array(dedupeRegionalQuestions(pool).shuffled().prefix(limit))
-    }
-
-    private func dedupeRegionalQuestions(_ questions: [UnifiedQuestion]) -> [UnifiedQuestion] {
-        var seen = Set<String>()
-        var result: [UnifiedQuestion] = []
-        for q in questions {
-            let key = q.normalizedText
-            if seen.contains(key) { continue }
-            seen.insert(key)
-            result.append(q)
-        }
-        return result
+        return selectDrillQuestions(from: pool, limit: limit)
     }
 }
 

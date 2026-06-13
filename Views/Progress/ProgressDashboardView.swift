@@ -180,6 +180,7 @@ struct FlashCardReviewView: View {
 
     @State private var index = 0
     @State private var revealed = false
+    @State private var answerFeedback: DrillAnswerFeedback?
 
     private var currentPrompt: String? {
         cards.indices.contains(index) ? cards[index].prompt : nil
@@ -207,15 +208,19 @@ struct FlashCardReviewView: View {
                 if revealed {
                     Text(cards[index].answer)
                         .foregroundStyle(.secondary)
-                    HStack {
-                        Button("Got it") {
-                            updateCard(correct: true)
+                    if let answerFeedback {
+                        DrillAnswerFeedbackPanel(
+                            feedback: answerFeedback,
+                            nextLabel: index + 1 < cards.count ? "Next card" : "Done",
+                            onNext: advanceFromFeedback
+                        )
+                    } else {
+                        HStack {
+                            Button("Got it") { updateCard(correct: true) }
+                                .buttonStyle(.borderedProminent)
+                            Button("Missed") { updateCard(correct: false) }
+                                .buttonStyle(.bordered)
                         }
-                        .buttonStyle(.borderedProminent)
-                        Button("Missed") {
-                            updateCard(correct: false)
-                        }
-                        .buttonStyle(.bordered)
                     }
                 } else {
                     Button("Reveal") { revealed = true }
@@ -244,12 +249,35 @@ struct FlashCardReviewView: View {
         let pace = appState.flashCardReviewPace
         if correct {
             appState.flashCards[globalIndex].markCorrect(pace: pace)
-            QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
+            DrillFeedbackMessages.onCorrect(appState: appState)
         } else {
             appState.flashCards[globalIndex].markIncorrect(pace: pace)
-            QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+            DrillFeedbackMessages.onIncorrect(appState: appState)
         }
         PersistenceService.saveFlashCards(appState.flashCards)
+        let card = cards[index]
+        let pseudoQuestion = UnifiedQuestion(
+            id: card.id,
+            source: .customCurriculum,
+            category: card.subject.doeCategory,
+            questionType: .tossUp,
+            format: .shortAnswer,
+            topic: card.topic,
+            questionText: card.prompt,
+            choices: [],
+            answer: card.answer,
+            sourceFile: "",
+            sourceDescription: "Flash card"
+        )
+        answerFeedback = DrillFeedbackMessages.makeFeedback(
+            correct: correct,
+            question: pseudoQuestion,
+            appState: appState
+        )
+    }
+
+    private func advanceFromFeedback() {
+        answerFeedback = nil
         revealed = false
         if index + 1 < cards.count {
             index += 1
