@@ -70,14 +70,23 @@ struct RegionalSprintPackDetailView: View {
 
                 Section("Know cold") {
                     ForEach(Array(pack.knowCold.enumerated()), id: \.offset) { _, line in
-                        Text(line)
-                            .font(.body)
+                        VStack(alignment: .leading, spacing: 6) {
+                            QuestionSpeechBar(questionText: line)
+                            Text(line)
+                                .font(.body)
+                        }
+                        .padding(.vertical, 2)
                     }
                 }
 
                 Section("Sample toss-ups") {
                     ForEach(Array(pack.tossups.enumerated()), id: \.offset) { _, item in
                         VStack(alignment: .leading, spacing: 4) {
+                            QuestionSpeechBar(
+                                questionText: item.question,
+                                answerText: item.answer,
+                                showAnswerButton: true
+                            )
                             Text(item.question)
                                 .font(.headline)
                             Text(item.answer)

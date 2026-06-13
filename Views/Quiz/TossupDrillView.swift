@@ -6,6 +6,7 @@ struct TossupDrillView: View {
 
     let subject: Subject
     let week: Int?
+    var topicFilter: String? = nil
 
     @State private var questions: [UnifiedQuestion] = []
     @State private var index = 0
@@ -27,6 +28,12 @@ struct TossupDrillView: View {
                 Text("Question \(index + 1) of \(questions.count)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                QuestionSpeechBar(
+                    questionText: questions[index].questionText,
+                    answerText: questions[index].answer,
+                    showAnswerButton: revealed
+                )
 
                 Spacer()
 
@@ -68,6 +75,8 @@ struct TossupDrillView: View {
         .navigationTitle("Toss-up Drill")
         .inlineNavigationBarTitle()
         .onAppear { loadQuestions() }
+        .onDisappear { SpeechManager.shared.stop() }
+        .questionSpeech(questionText: questions.indices.contains(index) ? questions[index].questionText : nil, speechToken: index)
     }
 
     private var endScreen: some View {
@@ -94,8 +103,13 @@ struct TossupDrillView: View {
 
     private func logButton(correct: Bool) -> some View {
         Button {
-            if correct { correctCount += 1 }
-            else { appState.addMissToFlashCards(question: questions[index]) }
+            if correct {
+                correctCount += 1
+                QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
+            } else {
+                appState.addMissToFlashCards(question: questions[index])
+                QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+            }
             appState.recordAttempt(topic: questions[index].topic, subject: subject, correct: correct)
 
             if index + 1 >= questions.count {
@@ -127,6 +141,9 @@ struct TossupDrillView: View {
         if pool.isEmpty {
             pool = SeedData.tossupQuestions.filter { $0.subject == subject && (week == nil || $0.week == week) }.map { $0.toUnified() }
             pool.append(contentsOf: appState.doeUnifiedQuestions.filter { $0.category == subject.doeCategory })
+        }
+        if let topicFilter {
+            pool = pool.filter { $0.topic == topicFilter }
         }
         questions = dedupe(pool).shuffled()
         if questions.count > 20 { questions = Array(questions.prefix(20)) }
@@ -171,6 +188,12 @@ struct TopicQuizView: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
+                        QuestionSpeechBar(
+                            questionText: questions[index].questionText,
+                            answerText: questions[index].answer,
+                            showAnswerButton: checked,
+                            choiceTexts: topicQuizSpeechChoices(choices)
+                        )
                         Text(questions[index].questionText)
                             .font(.headline)
                             .padding(.horizontal, 16)
@@ -209,8 +232,13 @@ struct TopicQuizView: View {
                     Button("Check") {
                         checked = true
                         let isCorrect = selected.map { strip($0) == strip(questions[index].answer) } ?? false
-                        if isCorrect { correctCount += 1 }
-                        else { appState.addMissToFlashCards(question: questions[index]) }
+                        if isCorrect {
+                            correctCount += 1
+                            QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
+                        } else {
+                            appState.addMissToFlashCards(question: questions[index])
+                            QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+                        }
                         appState.recordAttempt(topic: questions[index].topic, subject: subject, correct: isCorrect)
                     }
                     .buttonStyle(.borderedProminent)
@@ -226,6 +254,11 @@ struct TopicQuizView: View {
         .navigationTitle("Topic Quiz")
         .inlineNavigationBarTitle()
         .onAppear { setup() }
+        .onDisappear { SpeechManager.shared.stop() }
+        .questionSpeech(
+            questionText: questions.indices.contains(index) ? questions[index].questionText : nil,
+            speechToken: index
+        )
     }
 
     private var endView: some View {
@@ -294,9 +327,16 @@ struct WeakAreaDrillView: View {
     let topic: TopicStats
 
     var body: some View {
-        TossupDrillView(subject: topic.subject, week: nil)
+        TossupDrillView(subject: topic.subject, week: nil, topicFilter: topic.topic)
             .navigationTitle("Weak: \(topic.topic)")
     }
 }
 
 private func strip(_ s: String) -> String { s.lowercased().trimmingCharacters(in: .whitespaces) }
+
+private func topicQuizSpeechChoices(_ choices: [String]) -> [(key: String, text: String)] {
+    choices.enumerated().map { index, text in
+        let key = String(UnicodeScalar(65 + index)!)
+        return (key, text)
+    }
+}

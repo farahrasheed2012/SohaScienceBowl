@@ -15,8 +15,13 @@ struct PlanDrillView: View {
     @State private var buzzer = BuzzerNetworkService.shared
     @State private var countdown = 5
     @State private var countdownActive = false
+    @State private var countdownGeneration = 0
 
     private var isBuzzerMode: Bool { request.mode == "Buzzer drill" }
+
+    private var currentQuestionText: String? {
+        questions.indices.contains(index) ? questions[index].questionText : nil
+    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -51,6 +56,12 @@ struct PlanDrillView: View {
                         DOECategoryBadge(category: questions[index].category)
                     }
                 }
+
+                QuestionSpeechBar(
+                    questionText: questions[index].questionText,
+                    answerText: questions[index].answer,
+                    showAnswerButton: revealed
+                )
 
                 Spacer()
 
@@ -111,9 +122,16 @@ struct PlanDrillView: View {
             if isBuzzerMode {
                 buzzer.stopAll()
             }
+            SpeechManager.shared.stop()
         }
+        .questionSpeech(
+            questionText: currentQuestionText,
+            speechToken: index,
+            autoRead: !isBuzzerMode,
+            spaceReplayEnabled: !isBuzzerMode
+        )
         .onKeyPress(.space) {
-            if !revealed && !finished && !questions.isEmpty && (!countdownActive || countdown == 0) {
+            if isBuzzerMode, !revealed && !finished && !questions.isEmpty && (!countdownActive || countdown == 0) {
                 revealAnswer()
                 return .handled
             }
@@ -168,14 +186,25 @@ struct PlanDrillView: View {
     }
 
     private func startCountdownIfNeeded() {
+        countdownGeneration += 1
+        let generation = countdownGeneration
         countdown = 5
         countdownActive = true
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-            if countdown > 0 {
-                countdown -= 1
-            } else {
-                countdownActive = false
-                timer.invalidate()
+            Task { @MainActor in
+                guard generation == countdownGeneration else {
+                    timer.invalidate()
+                    return
+                }
+                if countdown > 0 {
+                    countdown -= 1
+                } else {
+                    countdownActive = false
+                    timer.invalidate()
+                    if let text = currentQuestionText {
+                        QuestionSpeechHelper.autoReadIfNeeded(text, appState: appState)
+                    }
+                }
             }
         }
     }
@@ -190,8 +219,13 @@ struct PlanDrillView: View {
         Button {
             let q = questions[index]
             let subject = q.subject ?? request.subject ?? .biology
-            if correct { correctCount += 1 }
-            else { appState.addMissToFlashCards(question: q) }
+            if correct {
+                correctCount += 1
+                QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
+            } else {
+                appState.addMissToFlashCards(question: q)
+                QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+            }
             appState.recordAttempt(topic: q.topic, subject: subject, correct: correct)
 
             if index + 1 >= questions.count {

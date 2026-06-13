@@ -59,8 +59,15 @@ struct MentalMathDrillView: View {
         .navigationTitle("\(operation.rawValue) · L\(level)")
         .inlineNavigationBarTitle()
         .task { beginDrill() }
-        .onDisappear { invalidateDrill() }
+        .onDisappear {
+            invalidateDrill()
+            SpeechManager.shared.stop()
+        }
         .onSubmit { submitAnswer() }
+        .questionSpeech(
+            questionText: current?.prompt,
+            speechToken: index
+        )
     }
 
     private var drillHeader: some View {
@@ -112,13 +119,16 @@ struct MentalMathDrillView: View {
     }
 
     private func problemDisplay(_ problem: MentalMathProblem) -> some View {
-        Text(problem.prompt)
+        VStack(spacing: 12) {
+            QuestionSpeechBar(questionText: problem.prompt)
+            Text(problem.prompt)
             .font(.system(size: 48, weight: .bold, design: .rounded))
             .minimumScaleFactor(0.5)
             .lineLimit(2)
             .multilineTextAlignment(.center)
             .foregroundStyle(theme.primaryText)
             .padding(.horizontal, 8)
+        }
     }
 
     private var answerArea: some View {
@@ -296,6 +306,7 @@ struct MentalMathDrillView: View {
             correctCount += 1
             feedback = .correct
             HapticFeedback.impact(.light)
+            if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
         } else {
             feedback = .incorrect(correctAnswer: problem.answer)
             HapticFeedback.impact(.medium)

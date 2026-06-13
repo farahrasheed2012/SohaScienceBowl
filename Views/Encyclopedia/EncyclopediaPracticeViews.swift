@@ -119,6 +119,7 @@ struct EncyclopediaMultipleChoiceView: View {
         .navigationTitle("Multiple Choice")
         .inlineNavigationBarTitle()
         .background(theme.surface.ignoresSafeArea())
+        .onDisappear { SpeechManager.shared.stop() }
     }
 
     private func questionView(_ q: NSBQuestion) -> some View {
@@ -127,6 +128,12 @@ struct EncyclopediaMultipleChoiceView: View {
                 Text("Question \(currentIndex + 1) of \(questions.count)")
                     .font(.system(size: ThemePalette.captionSize))
                     .foregroundStyle(theme.secondaryText)
+                QuestionSpeechBar(
+                    questionText: q.questionText,
+                    answerText: q.correctAnswer,
+                    showAnswerButton: showResult,
+                    choiceTexts: encyclopediaSpeechChoices(for: q)
+                )
                 Text(q.questionText)
                     .font(.system(size: ThemePalette.bodySize, weight: .semibold))
                     .foregroundStyle(theme.primaryText)
@@ -159,6 +166,7 @@ struct EncyclopediaMultipleChoiceView: View {
             }
             .padding(24)
         }
+        .questionSpeech(questionText: q.questionText, speechToken: currentIndex)
     }
 
     private func optionButton(key: String, text: String, correct: String, correctText: String) -> some View {
@@ -172,9 +180,11 @@ struct EncyclopediaMultipleChoiceView: View {
             if key == correct {
                 score += 1
                 HapticFeedback.impact(.light)
+                if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
             } else {
                 missedTopicIds.append(current?.topicId ?? "")
                 HapticFeedback.error()
+                if appState.readQuestionsAloud { QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState) }
             }
             showResult = true
         } label: {
@@ -307,6 +317,12 @@ struct EncyclopediaTossUpView: View {
                         Text("Toss-up \(currentIndex + 1) of \(questions.count)")
                             .font(.system(size: ThemePalette.captionSize))
                             .foregroundStyle(theme.secondaryText)
+                        QuestionSpeechBar(
+                            questionText: q.questionText,
+                            answerText: q.correctAnswer,
+                            showAnswerButton: selectedKey != nil,
+                            choiceTexts: encyclopediaSpeechChoices(for: q)
+                        )
                         Text(q.questionText)
                             .font(.system(size: ThemePalette.bodySize, weight: .semibold))
                             .foregroundStyle(theme.primaryText)
@@ -320,6 +336,7 @@ struct EncyclopediaTossUpView: View {
                     }
                     .padding(24)
                 }
+                .questionSpeech(questionText: q.questionText, speechToken: currentIndex)
             } else {
                 EncyclopediaSessionEndView(
                     score: score,
@@ -332,6 +349,7 @@ struct EncyclopediaTossUpView: View {
         .navigationTitle("Toss-Up & Bonus")
         .inlineNavigationBarTitle()
         .background(theme.surface.ignoresSafeArea())
+        .onDisappear { SpeechManager.shared.stop() }
     }
 
     private func tossUpOptionButton(key: String, text: String, question: NSBQuestion, correctText: String) -> some View {
@@ -341,9 +359,11 @@ struct EncyclopediaTossUpView: View {
             if key == question.correctAnswer {
                 score += 1
                 HapticFeedback.impact(.light)
+                if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
             } else {
                 missedTopicIds.append(question.topicId)
                 HapticFeedback.error()
+                if appState.readQuestionsAloud { QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState) }
             }
             showExplanation = true
         } label: {
@@ -435,6 +455,11 @@ struct EncyclopediaFreeResponseView: View {
                         Text("Question \(currentIndex + 1) of \(questions.count)")
                             .font(.system(size: ThemePalette.captionSize))
                             .foregroundStyle(theme.secondaryText)
+                        QuestionSpeechBar(
+                            questionText: q.questionText,
+                            answerText: q.correctAnswer,
+                            showAnswerButton: showAnswer
+                        )
                         Text(q.questionText)
                             .font(.system(size: ThemePalette.bodySize, weight: .semibold))
                             .foregroundStyle(theme.primaryText)
@@ -452,6 +477,7 @@ struct EncyclopediaFreeResponseView: View {
                                 Button("I got it right") {
                                     score += 1
                                     HapticFeedback.success()
+                                    if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
                                     showExplanation = true
                                 }
                                 .foregroundStyle(theme.success)
@@ -459,6 +485,7 @@ struct EncyclopediaFreeResponseView: View {
                                 Button("I got it wrong") {
                                     missedTopicIds.append(q.topicId)
                                     HapticFeedback.error()
+                                    if appState.readQuestionsAloud { QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState) }
                                     showExplanation = true
                                 }
                                 .foregroundStyle(theme.wrong)
@@ -473,6 +500,7 @@ struct EncyclopediaFreeResponseView: View {
                     }
                     .padding(24)
                 }
+                .questionSpeech(questionText: q.questionText, speechToken: currentIndex)
             } else {
                 EncyclopediaSessionEndView(
                     score: score,
@@ -486,6 +514,7 @@ struct EncyclopediaFreeResponseView: View {
         .navigationTitle("Free Response")
         .inlineNavigationBarTitle()
         .background(theme.surface.ignoresSafeArea())
+        .onDisappear { SpeechManager.shared.stop() }
     }
 
     private func advance() {
@@ -505,5 +534,12 @@ struct EncyclopediaFreeResponseView: View {
             )
             currentIndex = questions.count
         }
+    }
+}
+
+private func encyclopediaSpeechChoices(for q: NSBQuestion) -> [(key: String, text: String)] {
+    guard let choices = q.answerChoices else { return [] }
+    return ["W", "X", "Y", "Z"].compactMap { key in
+        choices[key].map { (key, $0) }
     }
 }

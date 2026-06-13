@@ -181,6 +181,10 @@ struct FlashCardReviewView: View {
     @State private var index = 0
     @State private var revealed = false
 
+    private var currentPrompt: String? {
+        cards.indices.contains(index) ? cards[index].prompt : nil
+    }
+
     var body: some View {
         VStack(spacing: 24) {
             if cards.isEmpty {
@@ -189,6 +193,13 @@ struct FlashCardReviewView: View {
                 Text("Card \(index + 1) of \(cards.count)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+
+                QuestionSpeechBar(
+                    questionText: cards[index].prompt,
+                    answerText: cards[index].answer,
+                    showAnswerButton: revealed
+                )
+
                 Text(cards[index].prompt)
                     .font(.title2.weight(.semibold))
                     .multilineTextAlignment(.center)
@@ -216,14 +227,27 @@ struct FlashCardReviewView: View {
         .padding(.top, 32)
         .navigationTitle("Flash Cards")
         .inlineNavigationBarTitle()
+        .onDisappear { SpeechManager.shared.stop() }
+        .questionSpeech(questionText: currentPrompt, speechToken: index)
+        .onChange(of: revealed) { _, isRevealed in
+            guard isRevealed, appState.readQuestionsAloud else { return }
+            SpeechManager.shared.speakAnswer(
+                cards[index].answer,
+                rate: appState.speechRate,
+                voiceIdentifier: appState.speechVoiceIdentifier
+            )
+        }
     }
 
     private func updateCard(correct: Bool) {
         guard let globalIndex = appState.flashCards.firstIndex(where: { $0.id == cards[index].id }) else { return }
+        let pace = appState.flashCardReviewPace
         if correct {
-            appState.flashCards[globalIndex].markCorrect()
+            appState.flashCards[globalIndex].markCorrect(pace: pace)
+            QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
         } else {
-            appState.flashCards[globalIndex].markIncorrect()
+            appState.flashCards[globalIndex].markIncorrect(pace: pace)
+            QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
         }
         PersistenceService.saveFlashCards(appState.flashCards)
         revealed = false

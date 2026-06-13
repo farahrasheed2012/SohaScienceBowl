@@ -39,6 +39,11 @@ struct MockRoundView: View {
                     } else {
                         DOECategoryBadge(category: questions[index].category)
                     }
+                    QuestionSpeechBar(
+                        questionText: questions[index].questionText,
+                        answerText: questions[index].answer,
+                        showAnswerButton: revealed
+                    )
                     Spacer()
                     Text(questions[index].questionText)
                         .font(.headline)
@@ -69,6 +74,11 @@ struct MockRoundView: View {
         .navigationTitle(title)
         .inlineNavigationBarTitle()
         .onAppear { load() }
+        .onDisappear { SpeechManager.shared.stop() }
+        .questionSpeech(
+            questionText: questions.indices.contains(index) ? questions[index].questionText : nil,
+            speechToken: index
+        )
     }
 
     private func load() {
@@ -88,8 +98,13 @@ struct MockRoundView: View {
     }
 
     private func log(correct: Bool) {
-        if correct { score += 1 }
-        else { appState.addMissToFlashCards(question: questions[index]) }
+        if correct {
+            score += 1
+            QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
+        } else {
+            appState.addMissToFlashCards(question: questions[index])
+            QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+        }
         if let sub = questions[index].subject {
             appState.recordAttempt(topic: questions[index].topic, subject: sub, correct: correct)
         } else {
@@ -126,6 +141,11 @@ struct DOEMockRoundView: View {
                     Text(showBonus ? "Bonus \(pairIndex + 1)" : "Toss-Up \(pairIndex + 1)")
                         .font(.caption)
                         .foregroundStyle(.secondary)
+                    QuestionSpeechBar(
+                        questionText: currentQuestion.questionText,
+                        answerText: currentQuestion.answer,
+                        showAnswerButton: revealed
+                    )
                     Text(currentQuestion.questionText)
                         .font(.headline)
                         .multilineTextAlignment(.center)
@@ -135,20 +155,32 @@ struct DOEMockRoundView: View {
                             .foregroundStyle(.secondary)
                         Button("Correct (+ points)") {
                             score += showBonus ? 10 : 4
+                            QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
                             advance()
                         }
                         .buttonStyle(.borderedProminent)
+                        Button("Incorrect") {
+                            appState.addMissToFlashCards(question: currentQuestion)
+                            QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
+                            advance()
+                        }
+                        .buttonStyle(.bordered)
                     } else {
                         Button("Reveal") { revealed = true }
                             .buttonStyle(.borderedProminent)
                     }
                 }
                 .padding(16)
+                .questionSpeech(
+                    questionText: currentQuestion.questionText,
+                    speechToken: "\(pairIndex)-\(showBonus)"
+                )
             }
         }
         .navigationTitle("DOE Mock Round")
         .inlineNavigationBarTitle()
         .onAppear { buildPairs() }
+        .onDisappear { SpeechManager.shared.stop() }
     }
 
     private var currentQuestion: UnifiedQuestion {
@@ -368,6 +400,12 @@ struct QuestionDetailView: View {
     var body: some View {
         List {
             Section {
+                QuestionSpeechBar(
+                    questionText: question.questionText,
+                    answerText: question.answer,
+                    showAnswerButton: revealed,
+                    choiceTexts: unifiedSpeechChoices(question)
+                )
                 Text(question.questionText)
                     .font(.headline)
             }
@@ -401,6 +439,12 @@ struct SingleQuestionDrillView: View {
 
     var body: some View {
         VStack(spacing: 24) {
+            QuestionSpeechBar(
+                questionText: question.questionText,
+                answerText: question.answer,
+                showAnswerButton: revealed,
+                choiceTexts: unifiedSpeechChoices(question)
+            )
             Text(question.questionText)
                 .font(.headline)
                 .multilineTextAlignment(.center)
@@ -413,9 +457,11 @@ struct SingleQuestionDrillView: View {
                         if let s = question.subject {
                             appState.recordAttempt(topic: question.topic, subject: s, correct: true)
                         }
+                        QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState)
                     }
                     Button("Incorrect") {
                         appState.addMissToFlashCards(question: question)
+                        QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState)
                     }
                 }
             } else {
@@ -427,6 +473,17 @@ struct SingleQuestionDrillView: View {
         .padding(.top, 32)
         .navigationTitle("Drill")
         .inlineNavigationBarTitle()
+        .onDisappear { SpeechManager.shared.stop() }
+        .questionSpeech(questionText: question.questionText, speechToken: question.id)
+    }
+}
+
+private func unifiedSpeechChoices(_ question: UnifiedQuestion) -> [(key: String, text: String)] {
+    guard !question.choices.isEmpty else { return [] }
+    let keys = ["W", "X", "Y", "Z", "A", "B", "C", "D"]
+    return question.choices.enumerated().map { index, text in
+        let key = keys.indices.contains(index) ? keys[index] : String(index + 1)
+        return (key, text)
     }
 }
 

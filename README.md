@@ -42,9 +42,13 @@ open ~/Library/Developer/Xcode/DerivedData/ScienceBowlCoach-*/Build/Products/Deb
 - **Today** — daily study blocks, 4-stage study session (Recall → Read → Know Cold → Toss-ups), **1 hr science + 1 hr algebra**, buzzer drill schedule, Friday review
 - **Calendar** — weekly timetable, 10-week whiteboard, prep guide, and periodic table (bundled HTML; sync with `python3 Scripts/sync_single_pass_schedule.py`)
 - **Learn** — 124 NSB encyclopedia topics (6 categories) with full articles, related topics, MC/Toss-up/Free-response practice; badges show topics missing drills; `make verify` checks reading + question coverage
-- **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill, encyclopedia practice, **Texas Regional Sprint** (11 packs), search, weak-area practice
-- **Progress** — weekly/lifetime accuracy, checklist, flash cards, spaced repetition
-- **Settings** — week picker, parent-reads-aloud mode, session timer, DOE PDF download
+- **Quiz** — toss-up drill, topic quiz, mock rounds, DOE browse/drill (toss-up + bonus mock), encyclopedia practice, **Texas Regional Sprint** (11 packs), search, weak-area practice
+- **Progress** — weekly/lifetime accuracy, checklist, flash cards with spaced repetition, spaced-review pace setting
+- **Settings** — week picker, **read-aloud TTS** (auto-read, voice, student name, MC choices), parent-reads-aloud mode, session timer, DOE PDF download
+
+### Speech (Settings → Speech & review)
+
+Turn on **Read questions aloud** for TTS across toss-up drill, plan/buzzer drill, DOE mock (toss-up + bonus), study session, MathCounts, encyclopedia, mental math, flash cards, and regional sprint previews. Set **Student name** for personalized praise, pick a **Voice**, and choose **Flash card review pace** (normal / quick / long retention). Mac: **Space** replays; iPhone/iPad: **Replay** button.
 
 ## Data
 

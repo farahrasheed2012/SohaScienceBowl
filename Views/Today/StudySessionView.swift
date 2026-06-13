@@ -57,6 +57,7 @@ struct StudySessionView: View {
                 startTimer()
             }
         }
+        .onDisappear { SpeechManager.shared.stop() }
     }
 
     private var stageHeader: some View {
@@ -114,6 +115,11 @@ struct StudySessionView: View {
 
     private func recallRow(question: String, answer: String, id: UUID) -> some View {
         VStack(alignment: .leading, spacing: 8) {
+            QuestionSpeechBar(
+                questionText: question,
+                answerText: answer,
+                showAnswerButton: revealedRecall.contains(id)
+            )
             Text(question)
                 .font(.headline)
             if revealedRecall.contains(id) {
@@ -181,6 +187,11 @@ struct StudySessionView: View {
             Section("Know cold — close the book") {
                 ForEach(Array(knowColdItems.enumerated()), id: \.offset) { index, item in
                     VStack(alignment: .leading, spacing: 8) {
+                        QuestionSpeechBar(
+                            questionText: item.prompt,
+                            answerText: item.answer,
+                            showAnswerButton: revealedKnowCold.contains(index)
+                        )
                         Text(item.prompt)
                             .font(.headline)
                         if revealedKnowCold.contains(index) {
@@ -203,10 +214,16 @@ struct StudySessionView: View {
             Section("Sample toss-ups") {
                 ForEach(block.sampleTossups) { q in
                     VStack(alignment: .leading, spacing: 12) {
+                        QuestionSpeechBar(
+                            questionText: q.question,
+                            answerText: q.answer,
+                            showAnswerButton: revealedTossups.contains(q.id)
+                        )
+
                         Text(q.question)
                             .font(.headline)
 
-                        if appState.parentReadsAloud {
+                        if appState.parentReadsAloud && !appState.readQuestionsAloud {
                             Text("Parent reads aloud — answer verbally, then reveal.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
@@ -243,10 +260,13 @@ struct StudySessionView: View {
     private func resultButton(title: String, symbol: String, correct: Bool, id: UUID) -> some View {
         Button {
             tossupResults[id] = correct
-            if !correct {
+            if correct {
+                if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
+            } else {
                 if let q = block.sampleTossups.first(where: { $0.id == id }) {
                     appState.addFlashCard(prompt: q.question, answer: q.answer, topic: q.topic, subject: q.subject, sourceID: id)
                 }
+                if appState.readQuestionsAloud { QuestionSpeechHelper.speakEncouragementIfNeeded(appState: appState) }
             }
             appState.recordAttempt(topic: block.sampleTossups.first?.topic ?? block.subject.rawValue, subject: block.subject, correct: correct)
         } label: {

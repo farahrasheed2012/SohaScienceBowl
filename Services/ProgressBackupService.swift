@@ -36,6 +36,12 @@ enum ProgressBackupService {
                 currentPass: appState.currentPass,
                 showSessionTimer: appState.showSessionTimer,
                 parentReadsAloud: appState.parentReadsAloud,
+                readQuestionsAloud: appState.readQuestionsAloud,
+                autoReadQuestions: appState.autoReadQuestions,
+                speechRatePreset: appState.speechRatePreset,
+                studentName: appState.studentName,
+                speechVoiceIdentifier: appState.speechVoiceIdentifier,
+                flashCardReviewPace: appState.flashCardReviewPace,
                 autoSyncScheduleFromCalendar: appState.autoSyncScheduleFromCalendar,
                 weekManuallySet: appState.weekManuallySet,
                 passManuallySet: appState.passManuallySet,
@@ -107,6 +113,12 @@ enum ProgressBackupService {
         appState.currentPass = .pass1
         appState.showSessionTimer = settings.showSessionTimer
         appState.parentReadsAloud = settings.parentReadsAloud
+        appState.readQuestionsAloud = settings.readQuestionsAloud ?? false
+        appState.autoReadQuestions = settings.autoReadQuestions ?? true
+        appState.speechRatePreset = settings.speechRatePreset ?? .normal
+        appState.studentName = settings.studentName ?? "Soha"
+        appState.speechVoiceIdentifier = settings.speechVoiceIdentifier
+        appState.flashCardReviewPace = settings.flashCardReviewPace ?? .normal
         appState.autoSyncScheduleFromCalendar = settings.autoSyncScheduleFromCalendar
         appState.weekManuallySet = settings.weekManuallySet
         appState.passManuallySet = false

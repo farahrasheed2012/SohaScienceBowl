@@ -206,11 +206,36 @@ extension AppState {
             ))
         }
 
-        for stat in weakTopics.prefix(3) {
-            let matches = SeedData.tossupQuestions
+        for stat in weakTopics.prefix(5) {
+            let unifiedMatches = allUnifiedQuestions.filter {
+                ($0.subject == stat.subject || $0.category.subject == stat.subject) && $0.topic == stat.topic
+            }
+            pool.append(contentsOf: unifiedMatches)
+
+            let seedMatches = SeedData.tossupQuestions
                 .filter { $0.subject == stat.subject && $0.topic == stat.topic }
                 .map { $0.toUnified() }
-            pool.append(contentsOf: matches)
+            pool.append(contentsOf: seedMatches)
+
+            let missedCards = flashCards.filter { $0.topic == stat.topic && $0.subject == stat.subject }
+            for card in missedCards.prefix(3) {
+                pool.append(UnifiedQuestion(
+                    id: card.id,
+                    source: .customCurriculum,
+                    category: card.subject.doeCategory,
+                    questionType: .tossUp,
+                    format: .shortAnswer,
+                    topic: card.topic,
+                    questionText: card.prompt,
+                    choices: [],
+                    answer: card.answer,
+                    sourceFile: "",
+                    sourceDescription: "Weak-area flash card",
+                    setNumber: nil,
+                    roundNumber: nil,
+                    sourceYear: nil
+                ))
+            }
         }
 
         if pool.count < limit {

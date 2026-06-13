@@ -109,6 +109,39 @@ enum QuestionSource: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
 }
 
+enum FlashCardReviewPace: String, CaseIterable, Identifiable, Codable {
+    case normal
+    case quick
+    case longTerm
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .normal: return "Normal"
+        case .quick: return "Quick review"
+        case .longTerm: return "Long retention"
+        }
+    }
+
+    func intervalDays(for stage: ReviewStage) -> Int {
+        switch (self, stage) {
+        case (.normal, .new): return 1
+        case (.normal, .learning): return 3
+        case (.normal, .review): return 7
+        case (.normal, .mastered): return 14
+        case (.quick, .new): return 1
+        case (.quick, .learning): return 2
+        case (.quick, .review): return 4
+        case (.quick, .mastered): return 7
+        case (.longTerm, .new): return 2
+        case (.longTerm, .learning): return 5
+        case (.longTerm, .review): return 14
+        case (.longTerm, .mastered): return 30
+        }
+    }
+}
+
 enum ReviewStage: String, Codable, CaseIterable {
     case new
     case learning
@@ -116,12 +149,7 @@ enum ReviewStage: String, Codable, CaseIterable {
     case mastered
 
     var nextIntervalDays: Int {
-        switch self {
-        case .new: return 1
-        case .learning: return 3
-        case .review: return 7
-        case .mastered: return 14
-        }
+        FlashCardReviewPace.normal.intervalDays(for: self)
     }
 
     func advanced() -> ReviewStage {

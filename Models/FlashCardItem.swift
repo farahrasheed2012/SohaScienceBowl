@@ -12,16 +12,17 @@ struct FlashCardItem: Identifiable, Codable, Hashable {
 
     var isDue: Bool { nextReviewDate <= Date() }
 
-    mutating func markCorrect(calendar: Calendar = .current) {
+    mutating func markCorrect(pace: FlashCardReviewPace = .normal, calendar: Calendar = .current) {
         let stage = reviewStage.advanced()
         reviewStage = stage
-        let days = stage == .mastered ? 30 : stage.nextIntervalDays
+        let days = pace.intervalDays(for: stage)
         nextReviewDate = calendar.date(byAdding: .day, value: days, to: Date()) ?? Date()
     }
 
-    mutating func markIncorrect(calendar: Calendar = .current) {
+    mutating func markIncorrect(pace: FlashCardReviewPace = .normal, calendar: Calendar = .current) {
         reviewStage = reviewStage.regressed()
-        nextReviewDate = calendar.date(byAdding: .day, value: 1, to: Date()) ?? Date()
+        let days = pace == .quick ? 1 : (pace == .longTerm ? 2 : 1)
+        nextReviewDate = calendar.date(byAdding: .day, value: days, to: Date()) ?? Date()
     }
 }
 

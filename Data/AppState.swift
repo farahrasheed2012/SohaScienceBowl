@@ -16,6 +16,26 @@ final class AppState {
     var parentReadsAloud: Bool {
         didSet { UserDefaults.standard.set(parentReadsAloud, forKey: "parentReadsAloud") }
     }
+    var readQuestionsAloud: Bool {
+        didSet { UserDefaults.standard.set(readQuestionsAloud, forKey: "readQuestionsAloud") }
+    }
+    var autoReadQuestions: Bool {
+        didSet { UserDefaults.standard.set(autoReadQuestions, forKey: "autoReadQuestions") }
+    }
+    var speechRatePreset: SpeechRatePreset {
+        didSet { UserDefaults.standard.set(speechRatePreset.rawValue, forKey: "speechRatePreset") }
+    }
+    var studentName: String {
+        didSet { UserDefaults.standard.set(studentName, forKey: "studentName") }
+    }
+    var speechVoiceIdentifier: String? {
+        didSet { UserDefaults.standard.set(speechVoiceIdentifier, forKey: "speechVoiceIdentifier") }
+    }
+    var flashCardReviewPace: FlashCardReviewPace {
+        didSet { UserDefaults.standard.set(flashCardReviewPace.rawValue, forKey: "flashCardReviewPace") }
+    }
+
+    var speechRate: Float { speechRatePreset.rate }
     var autoSyncScheduleFromCalendar: Bool {
         didSet { UserDefaults.standard.set(autoSyncScheduleFromCalendar, forKey: "autoSyncScheduleFromCalendar") }
     }
@@ -54,6 +74,14 @@ final class AppState {
         currentPass = .pass1
         showSessionTimer = UserDefaults.standard.object(forKey: "showSessionTimer") as? Bool ?? true
         parentReadsAloud = UserDefaults.standard.object(forKey: "parentReadsAloud") as? Bool ?? false
+        readQuestionsAloud = UserDefaults.standard.object(forKey: "readQuestionsAloud") as? Bool ?? false
+        autoReadQuestions = UserDefaults.standard.object(forKey: "autoReadQuestions") as? Bool ?? true
+        let rateRaw = UserDefaults.standard.string(forKey: "speechRatePreset") ?? SpeechRatePreset.normal.rawValue
+        speechRatePreset = SpeechRatePreset(rawValue: rateRaw) ?? .normal
+        studentName = UserDefaults.standard.string(forKey: "studentName") ?? "Soha"
+        speechVoiceIdentifier = UserDefaults.standard.string(forKey: "speechVoiceIdentifier")
+        let paceRaw = UserDefaults.standard.string(forKey: "flashCardReviewPace") ?? FlashCardReviewPace.normal.rawValue
+        flashCardReviewPace = FlashCardReviewPace(rawValue: paceRaw) ?? .normal
         autoSyncScheduleFromCalendar = UserDefaults.standard.object(forKey: "autoSyncScheduleFromCalendar") as? Bool ?? true
         weekManuallySet = UserDefaults.standard.object(forKey: "weekManuallySet") as? Bool ?? false
         passManuallySet = UserDefaults.standard.object(forKey: "passManuallySet") as? Bool ?? false

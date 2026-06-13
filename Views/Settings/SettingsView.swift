@@ -21,6 +21,7 @@ struct SettingsView: View {
             List {
                 appearanceSection
                 sessionSection
+                speechSection
                 studyPlanSection
                 backupSection
                 clearProgressSection
@@ -117,6 +118,51 @@ struct SettingsView: View {
         } footer: {
             Text("When enabled, answers stay hidden until you tap Reveal — for verbal practice with a parent.")
         }
+    }
+
+    private var speechSection: some View {
+        Section {
+            Toggle("Read questions aloud", isOn: Bindable(appState).readQuestionsAloud)
+            Toggle("Auto-read each new question", isOn: Bindable(appState).autoReadQuestions)
+                .disabled(!appState.readQuestionsAloud)
+            TextField("Student name (for praise)", text: Bindable(appState).studentName)
+                .disabled(!appState.readQuestionsAloud)
+            Picker("Speech speed", selection: Bindable(appState).speechRatePreset) {
+                ForEach(SpeechRatePreset.allCases) { preset in
+                    Text(preset.label).tag(preset)
+                }
+            }
+            .disabled(!appState.readQuestionsAloud)
+            Picker("Voice", selection: speechVoiceBinding) {
+                Text("System default (en-US)").tag(Optional<String>.none)
+                ForEach(SpeechVoiceCatalog.englishVoices, id: \.identifier) { voice in
+                    Text("\(voice.name) (\(voice.language))").tag(Optional(voice.identifier))
+                }
+            }
+            .disabled(!appState.readQuestionsAloud)
+            #if os(macOS)
+            .pickerStyle(.menu)
+            #endif
+            Picker("Flash card review pace", selection: Bindable(appState).flashCardReviewPace) {
+                ForEach(FlashCardReviewPace.allCases) { pace in
+                    Text(pace.label).tag(pace)
+                }
+            }
+            #if os(macOS)
+            .pickerStyle(.menu)
+            #endif
+        } header: {
+            Text("Speech & review")
+        } footer: {
+            Text("Text-to-speech works across drills, DOE, encyclopedia, mental math, and flash cards. Mac: Space replays. iPhone/iPad: Replay button or long-press Replay for question + choices.")
+        }
+    }
+
+    private var speechVoiceBinding: Binding<String?> {
+        Binding(
+            get: { appState.speechVoiceIdentifier },
+            set: { appState.speechVoiceIdentifier = $0 }
+        )
     }
 
     private var studyPlanSection: some View {

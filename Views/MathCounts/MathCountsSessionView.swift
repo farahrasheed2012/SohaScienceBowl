@@ -63,6 +63,11 @@ struct MathCountsSessionView: View {
         .onAppear {
             resetQuestionState()
         }
+        .onDisappear { SpeechManager.shared.stop() }
+        .questionSpeech(
+            questionText: current?.prompt,
+            speechToken: currentIndex
+        )
     }
 
     private var progressHeader: some View {
@@ -90,6 +95,11 @@ struct MathCountsSessionView: View {
 
     private func questionCard(_ q: MathCountsQuestion) -> some View {
         VStack(alignment: .leading, spacing: 10) {
+            QuestionSpeechBar(
+                questionText: q.prompt,
+                answerText: q.answer,
+                showAnswerButton: phase == .correct || phase == .revealed
+            )
             Text(q.topic)
                 .font(.caption.weight(.medium))
                 .foregroundStyle(theme.secondaryText)
@@ -225,6 +235,7 @@ struct MathCountsSessionView: View {
         if correct {
             phase = .correct
             recordAttempt(q, correct: true)
+            if appState.readQuestionsAloud { QuestionSpeechHelper.speakPraiseIfNeeded(appState: appState) }
         } else {
             wrongAttempts += 1
             if wrongAttempts == 1 {
