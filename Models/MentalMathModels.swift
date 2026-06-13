@@ -1,5 +1,10 @@
 import Foundation
 
+struct MentalMathDrillSession: Identifiable {
+    let id = UUID()
+    let level: Int
+}
+
 enum MentalMathOperation: String, CaseIterable, Codable, Identifiable {
     case addition = "Addition"
     case subtraction = "Subtraction"

@@ -112,6 +112,7 @@ struct MentalMathRootView: View {
 struct MentalMathTrackView: View {
     @Environment(AppState.self) private var appState
     let operation: MentalMathOperation
+    @State private var activeDrill: MentalMathDrillSession?
 
     var body: some View {
         List {
@@ -126,11 +127,12 @@ struct MentalMathTrackView: View {
                 ForEach(1...operation.levelCount, id: \.self) { level in
                     let unlocked = level <= appState.mentalMath.level(for: operation)
                     if unlocked {
-                        NavigationLink {
-                            MentalMathDrillView(operation: operation, level: level)
+                        Button {
+                            activeDrill = MentalMathDrillSession(level: level)
                         } label: {
                             levelRow(level: level, unlocked: true)
                         }
+                        .buttonStyle(.borderless)
                     } else {
                         levelRow(level: level, unlocked: false)
                             .foregroundStyle(.secondary)
@@ -140,6 +142,7 @@ struct MentalMathTrackView: View {
         }
         .navigationTitle(operation.rawValue)
         .inlineNavigationBarTitle()
+        .mentalMathDrillPresentation(operation: operation, activeDrill: $activeDrill)
     }
 
     private func levelRow(level: Int, unlocked: Bool) -> some View {
@@ -168,10 +171,55 @@ struct MentalMathTrackView: View {
                 }
             }
             Spacer()
-            if !unlocked {
+            if unlocked {
+                Image(systemName: "play.circle.fill")
+                    .font(.title3)
+                    .foregroundStyle(Color.accentColor)
+            } else {
                 Image(systemName: "lock.fill")
                     .font(.caption)
             }
+        }
+        .contentShape(Rectangle())
+    }
+}
+
+private extension View {
+    func mentalMathDrillPresentation(
+        operation: MentalMathOperation,
+        activeDrill: Binding<MentalMathDrillSession?>
+    ) -> some View {
+        modifier(MentalMathDrillPresentationModifier(operation: operation, activeDrill: activeDrill))
+    }
+}
+
+private struct MentalMathDrillPresentationModifier: ViewModifier {
+    let operation: MentalMathOperation
+    @Binding var activeDrill: MentalMathDrillSession?
+
+    func body(content: Content) -> some View {
+        #if os(iOS)
+        content
+            .fullScreenCover(item: $activeDrill) { session in
+                drillContainer(level: session.level)
+            }
+        #else
+        content
+            .sheet(item: $activeDrill) { session in
+                drillContainer(level: session.level)
+                    .frame(minWidth: 520, minHeight: 640)
+            }
+        #endif
+    }
+
+    private func drillContainer(level: Int) -> some View {
+        NavigationStack {
+            MentalMathDrillView(operation: operation, level: level)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Close") { activeDrill = nil }
+                    }
+                }
         }
     }
 }

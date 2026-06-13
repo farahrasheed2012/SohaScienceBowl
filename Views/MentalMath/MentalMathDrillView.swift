@@ -20,6 +20,7 @@ struct MentalMathDrillView: View {
     @State private var problemTimeRemaining: TimeInterval?
     @State private var sessionOutcome: MentalMathStore.SessionRecordOutcome?
     @State private var tickTimer: Timer?
+    @State private var lifecycleGeneration = 0
     @FocusState private var answerFocused: Bool
 
     private var timedMode: MentalMathTimedMode { appState.mentalMath.timedMode }
@@ -57,11 +58,8 @@ struct MentalMathDrillView: View {
         .background(theme.surface.ignoresSafeArea())
         .navigationTitle("\(operation.rawValue) · L\(level)")
         .inlineNavigationBarTitle()
-        .task {
-            guard problems.isEmpty else { return }
-            beginDrill()
-        }
-        .onDisappear { tickTimer?.invalidate() }
+        .task { beginDrill() }
+        .onDisappear { invalidateDrill() }
         .onSubmit { submitAnswer() }
     }
 
@@ -229,7 +227,20 @@ struct MentalMathDrillView: View {
         .padding()
     }
 
+    private func invalidateDrill() {
+        lifecycleGeneration += 1
+        tickTimer?.invalidate()
+        tickTimer = nil
+    }
+
     private func beginDrill() {
+        invalidateDrill()
+        index = 0
+        answer = ""
+        correctCount = 0
+        feedback = .idle
+        finished = false
+        sessionOutcome = nil
         problems = MentalMathEngine.problems(operation: operation, level: level)
         startTime = Date()
         now = startTime
@@ -240,9 +251,10 @@ struct MentalMathDrillView: View {
     }
 
     private func startTickTimer() {
-        tickTimer?.invalidate()
+        let generation = lifecycleGeneration
         tickTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             Task { @MainActor in
+                guard generation == lifecycleGeneration else { return }
                 now = Date()
                 guard feedback == .idle, let limit = perProblemLimit else { return }
                 let remaining = limit - now.timeIntervalSince(problemStartTime)
@@ -265,9 +277,11 @@ struct MentalMathDrillView: View {
 
     private func handleTimeout() {
         guard feedback == .idle, let problem = current else { return }
+        let generation = lifecycleGeneration
         feedback = .timedOut(correctAnswer: problem.answer)
         HapticFeedback.impact(.medium)
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+            guard generation == lifecycleGeneration else { return }
             advance()
         }
     }
@@ -287,14 +301,16 @@ struct MentalMathDrillView: View {
             HapticFeedback.impact(.medium)
         }
 
+        let generation = lifecycleGeneration
         DispatchQueue.main.asyncAfter(deadline: .now() + (isCorrect ? 0.35 : 0.9)) {
+            guard generation == lifecycleGeneration else { return }
             advance()
         }
     }
 
     private func advance() {
         if index + 1 >= problems.count {
-            tickTimer?.invalidate()
+            invalidateDrill()
             let elapsedFinal = Date().timeIntervalSince(startTime)
             sessionOutcome = appState.mentalMath.recordSession(
                 operation: operation,
@@ -315,12 +331,6 @@ struct MentalMathDrillView: View {
     }
 
     private func resetDrill() {
-        index = 0
-        answer = ""
-        correctCount = 0
-        feedback = .idle
-        finished = false
-        sessionOutcome = nil
         beginDrill()
     }
 }
