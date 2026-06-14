@@ -88,9 +88,9 @@ enum BlockAssignedReadingCatalog {
         Key(week: 1, day: .monday, subject: .chemistry): "§3.1–3.3",
         Key(week: 1, day: .thursday, subject: .chemistry): "§5.1–5.2",
         Key(week: 2, day: .monday, subject: .chemistry): "§10.1–10.2",
-        Key(week: 2, day: .thursday, subject: .chemistry): "§8.1–8.3",
-        Key(week: 3, day: .monday, subject: .chemistry): "§14.1–14.2",
-        Key(week: 3, day: .thursday, subject: .chemistry): "§12.1–12.2",
+        Key(week: 2, day: .thursday, subject: .chemistry): "§7.1–7.2",
+        Key(week: 3, day: .monday, subject: .chemistry): "§12.1–12.2",
+        Key(week: 3, day: .thursday, subject: .chemistry): "§8.1–8.3",
         Key(week: 4, day: .thursday, subject: .chemistry): "§2.1–2.3",
         Key(week: 5, day: .monday, subject: .chemistry): "§7.1–7.2",
         Key(week: 5, day: .thursday, subject: .chemistry): "§6.1–6.2",
@@ -104,26 +104,32 @@ enum BlockAssignedReadingCatalog {
         Key(week: 9, day: .thursday, subject: .chemistry): "§5.1 + §7.1",
     ]
 
-    /// Hewitt / Expl Part 3 chemistry — primary § per block.
-    private static let explChemByKey: [Key: (chapter: Int, sections: [String])] = [
-        Key(week: 1, day: .monday, subject: .chemistry): (17, ["17.1", "17.2", "17.3"]),
-        Key(week: 1, day: .thursday, subject: .chemistry): (17, ["17.6", "17.7", "17.8"]),
-        Key(week: 2, day: .monday, subject: .chemistry): (17, ["17.3", "17.4", "17.5"]),
-        Key(week: 2, day: .thursday, subject: .chemistry): (20, ["20.1", "20.2", "20.3", "20.4"]),
-        Key(week: 3, day: .monday, subject: .chemistry): (21, ["21.1", "21.2", "21.3"]),
-        Key(week: 3, day: .thursday, subject: .chemistry): (19, ["19.1", "19.2", "19.3", "19.4"]),
-        Key(week: 4, day: .monday, subject: .chemistry): (17, ["17.6", "17.7"]),
-        Key(week: 4, day: .thursday, subject: .chemistry): (17, ["17.1", "17.4"]),
-        Key(week: 5, day: .monday, subject: .chemistry): (18, ["18.1", "18.2", "18.3", "18.4", "18.5", "18.6"]),
-        Key(week: 5, day: .thursday, subject: .chemistry): (19, ["19.3", "19.4"]),
-        Key(week: 6, day: .monday, subject: .chemistry): (19, ["19.3", "19.4", "19.5"]),
-        Key(week: 6, day: .thursday, subject: .chemistry): (21, ["21.1", "21.2", "21.3"]),
-        Key(week: 7, day: .monday, subject: .chemistry): (20, ["20.1", "20.2", "20.3", "20.4"]),
-        Key(week: 7, day: .thursday, subject: .chemistry): (17, ["17.6", "17.7"]),
-        Key(week: 8, day: .monday, subject: .chemistry): (17, ["17.4", "17.5"]),
-        Key(week: 8, day: .thursday, subject: .chemistry): (17, ["17.3", "17.4", "17.5"]),
-        Key(week: 9, day: .monday, subject: .chemistry): (17, ["17.2", "17.3"]),
-        Key(week: 9, day: .thursday, subject: .chemistry): (18, ["18.2", "18.3", "18.4"]),
+    /// Hewitt / Expl chemistry — primary § per block (Part 2 atom sections + Part 3 chem).
+    private struct ChemReadingSpec {
+        var chapterSections: [(chapter: Int, sections: [String])]
+    }
+
+    private static let explChemByKey: [Key: ChemReadingSpec] = [
+        Key(week: 1, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.1", "17.2", "17.3"])]),
+        Key(week: 1, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.6", "17.7", "17.8"])]),
+        Key(week: 2, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.3", "17.4", "17.5"])]),
+        Key(week: 2, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(18, ["18.1", "18.2", "18.3", "18.4"])]),
+        Key(week: 3, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(19, ["19.1", "19.2", "19.3", "19.4"])]),
+        Key(week: 3, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(20, ["20.1", "20.2", "20.3", "20.4"])]),
+        Key(week: 4, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [
+            (15, ["15.1", "15.2", "15.3", "15.4", "15.5"]),
+        ]),
+        Key(week: 4, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.1", "17.4"])]),
+        Key(week: 5, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(18, ["18.5", "18.6", "18.7", "18.8"])]),
+        Key(week: 5, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(19, ["19.3", "19.4"])]),
+        Key(week: 6, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(19, ["19.3", "19.4", "19.5"])]),
+        Key(week: 6, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(21, ["21.1", "21.2", "21.3"])]),
+        Key(week: 7, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(20, ["20.1", "20.2", "20.3", "20.4"])]),
+        Key(week: 7, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.6", "17.7"])]),
+        Key(week: 8, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.4", "17.5"])]),
+        Key(week: 8, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.3", "17.4", "17.5"])]),
+        Key(week: 9, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.2", "17.3"])]),
+        Key(week: 9, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(18, ["18.2", "18.3", "18.4"])]),
     ]
 
     /// Hewitt physics — primary § per Wednesday block (NSB mechanics · energy · waves · electricity).
@@ -144,7 +150,7 @@ enum BlockAssignedReadingCatalog {
             chapterSections: [(3, ["3.4", "3.5", "3.6"]), (4, ["4.1", "4.2", "4.3"])]
         ),
         Key(week: 4, day: .wednesday, subject: .physics): PhysReadingSpec(
-            chapterSections: [(12, ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6"])]
+            chapterSections: [(5, ["5.1", "5.2", "5.3", "5.4", "5.5"])]
         ),
         Key(week: 5, day: .wednesday, subject: .physics): PhysReadingSpec(
             chapterSections: [(6, ["6.1", "6.2", "6.3", "6.4", "6.5"])]
@@ -153,16 +159,16 @@ enum BlockAssignedReadingCatalog {
             chapterSections: [(7, ["7.1", "7.2", "7.3", "7.4"]), (7, ["7.7"])]
         ),
         Key(week: 7, day: .wednesday, subject: .physics): PhysReadingSpec(
-            chapterSections: [(5, ["5.1", "5.2", "5.3", "5.4", "5.5"])]
+            chapterSections: [(9, ["9.1", "9.2", "9.3", "9.4", "9.5"])]
         ),
         Key(week: 8, day: .wednesday, subject: .physics): PhysReadingSpec(
             chapterSections: [(10, ["10.1", "10.2", "10.3", "10.4", "10.5", "10.6", "10.7"]), (10, ["10.11"])]
         ),
         Key(week: 9, day: .wednesday, subject: .physics): PhysReadingSpec(
-            chapterSections: [(10, ["10.11"]), (12, ["12.1", "12.2", "12.3"]), (13, ["13.1"])]
+            chapterSections: [(11, ["11.1", "11.2", "11.3", "11.4", "11.5"]), (12, ["12.1", "12.2", "12.3", "12.4", "12.5", "12.6"])]
         ),
         Key(week: 10, day: .wednesday, subject: .physics): PhysReadingSpec(
-            chapterSections: [(11, ["11.1", "11.2", "11.3", "11.4", "11.5"]), (13, ["13.3", "13.4"])]
+            chapterSections: [(13, ["13.1", "13.3", "13.4"])]
         ),
     ]
 
@@ -172,22 +178,27 @@ enum BlockAssignedReadingCatalog {
         return "§\(first)–\(last)"
     }
 
-    private static func formatPhysReadingLine(_ spec: PhysReadingSpec) -> String {
+    private static func formatChapterSectionsLine(_ chapterSections: [(chapter: Int, sections: [String])]) -> String {
         var parts: [String] = []
         var index = 0
-        while index < spec.chapterSections.count {
-            let chapter = spec.chapterSections[index].chapter
+        while index < chapterSections.count {
+            let chapter = chapterSections[index].chapter
             var sectionParts: [String] = []
-            while index < spec.chapterSections.count, spec.chapterSections[index].chapter == chapter {
-                sectionParts.append(sectionRangeLabel(spec.chapterSections[index].sections))
+            while index < chapterSections.count, chapterSections[index].chapter == chapter {
+                sectionParts.append(sectionRangeLabel(chapterSections[index].sections))
                 index += 1
             }
             parts.append("Ch \(chapter) \(sectionParts.joined(separator: " + "))")
         }
-        if spec.includeAppB {
-            parts.append("App. B")
-        }
         return parts.joined(separator: " + ")
+    }
+
+    private static func formatPhysReadingLine(_ spec: PhysReadingSpec) -> String {
+        var line = formatChapterSectionsLine(spec.chapterSections)
+        if spec.includeAppB {
+            line += " + App. B"
+        }
+        return line
     }
 
     static func hewittPhysAssignment(for block: StudyBlock) -> BookAssignment? {
@@ -231,10 +242,9 @@ enum BlockAssignedReadingCatalog {
                 links: []
             )
         }
-        if let spec = explChemByKey[key],
-           let chapter = ConceptualPhysicalScienceExplorationsCatalog.chapters.first(where: { $0.number == spec.chapter }) {
-            let range = spec.sections.joined(separator: "–")
-            let text = "\(ConceptualPhysicalScienceExplorationsCatalog.shortName) — Ch \(chapter.number) §\(range) — \(block.chapterTitle)"
+        if let spec = explChemByKey[key] {
+            let chapters = formatChapterSectionsLine(spec.chapterSections)
+            let text = "\(ConceptualPhysicalScienceExplorationsCatalog.shortName) — \(chapters) — \(block.chapterTitle)"
             return BookAssignment(displayText: text, links: [])
         }
         if block.chapter.contains("§") {

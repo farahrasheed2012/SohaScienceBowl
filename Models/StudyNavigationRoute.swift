@@ -20,6 +20,8 @@ enum StudyNavigationRoute: Hashable {
     case encyclopediaPractice(EncyclopediaPracticeMode, topicIds: [String]?)
     case periodicTableDrill
     case periodicTableReference
+    case periodicTableInteractive
+    case periodicTablePrint
     case elementFlashCards
     case weakAreaReview
     case buzzerRemote

@@ -69,14 +69,16 @@ enum Pass3ReadingContent {
         ]
 
         m[k(9, .wednesday, .physics)] = [
-            rs("Motion review", """
-            v = d/t — average speed.
+            rs("Magnetism & waves (Ch 11–12)", """
+            Magnetic poles — north and south. Like poles repel; unlike attract.
 
-            SI distance unit = meter (m). Time = second (s).
+            Moving charges and currents create magnetic fields (electromagnetism intro).
 
-            d-t graph: slope = speed; flat line = at rest.
+            Wave: wavelength λ, frequency f, amplitude. v = fλ.
 
-            Timed 5 toss-ups — compare to Monday misses.
+            Sound — longitudinal waves. Higher pitch → higher frequency.
+
+            Reflection — bounce off surface. Refraction — bend when speed changes in a new medium.
             """)
         ]
 
@@ -130,14 +132,16 @@ enum Pass3ReadingContent {
         ]
 
         m[k(10, .wednesday, .physics)] = [
-            rs("Energy & gravity — final drill", """
-            W = Fd: 8 N for 3 m = 24 J.
+            rs("Light (Ch 13) — final drill", """
+            Electromagnetic spectrum — radio → microwave → infrared → visible → UV → X-ray → gamma.
 
-            Ball falls: PE converts to KE.
+            ROYGBIV — red lowest frequency in visible; violet highest.
 
-            Weight = mg; mass same everywhere.
+            Reflection — angle of incidence = angle of reflection.
 
-            Conservation of energy — forms convert, total conserved in closed system.
+            Refraction — light bends entering a new medium (speed change).
+
+            Review v = fλ. Ball falls: PE → KE.
             """)
         ]
 

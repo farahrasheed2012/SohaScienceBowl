@@ -97,21 +97,19 @@ enum Pass2ReadingContent {
         ]
 
         m[k(5, .wednesday, .physics)] = [
-            rs("Precision vs accuracy", """
-            Accuracy — how close to the true value.
+            rs("Work & energy (Ch 6)", """
+            Work W = Fd (joules, J). No movement → no work (force must have a component along displacement).
 
-            Precision — how repeatable measurements are (may all be wrong but consistent).
+            KE = ½mv² — kinetic energy. Double speed → KE × 4.
 
-            Good data is both accurate and precise.
+            PE = mgh — gravitational potential energy. Higher → more PE.
+
+            Conservation of energy — energy converts between forms; total conserved in closed system.
             """),
-            rs("Graphs — d-t vs v-t", """
-            d-t graph slope = speed (not acceleration).
-
-            v-t graph slope = acceleration.
-
-            Car slows from 20 m/s to 10 m/s (forward positive) → acceleration is negative.
-
-            Relative motion: velocity depends on reference frame (passenger vs ground observer).
+            rs("NSB tips", """
+            • 10 N for 4 m → W = 40 J.
+            • Double speed → KE multiplied by 4.
+            • SI unit of work = joule (J).
             """)
         ]
 
@@ -191,21 +189,14 @@ enum Pass2ReadingContent {
         ]
 
         m[k(6, .wednesday, .physics)] = [
-            rs("Momentum", """
-            p = mv (kg·m/s). Vector — has direction.
+            rs("Gravity & projectiles (Ch 7)", """
+            Weight W = mg — force of gravity (N). Mass (kg) is constant; weight changes with g.
 
-            Conservation of momentum: total momentum before = total after in closed system (no external net force).
+            On Moon: same mass, less weight.
 
-            At same velocity, heavier object has more momentum: truck > bicycle.
+            PE = mgh increases as height increases. Ball thrown up: rising → PE up, KE down.
 
-            2 kg at 3 m/s → p = 6 kg·m/s.
-            """),
-            rs("Collisions (concept)", """
-            Elastic — kinetic energy conserved (ideal billiard balls).
-
-            Inelastic — KE not conserved (objects may stick, heat sound produced).
-
-            Net force diagrams: arrows show direction and relative size of forces.
+            Projectile motion (qualitative): horizontal and vertical motions are independent.
             """)
         ]
 
@@ -281,19 +272,21 @@ enum Pass2ReadingContent {
         ]
 
         m[k(7, .wednesday, .physics)] = [
-            rs("Energy formulas", """
-            PE = mgh — gravitational potential energy (J). Higher → more PE.
+            rs("Heat & temperature (Ch 9)", """
+            Temperature — average kinetic energy per molecule. Heat — thermal energy transferred between objects.
 
-            KE = ½mv² — kinetic energy. Faster or heavier → more KE.
+            Heat flows from hot to cold until thermal equilibrium.
 
-            Weight W = mg (force of gravity). Mass is constant; weight changes on Moon vs Earth.
+            Absolute zero = 0 K (−273°C) — lowest possible temperature.
 
-            Conservation of energy — total energy constant in closed system; converts PE ↔ KE.
+            Specific heat capacity — how much energy needed to raise 1 kg by 1°C (thermal inertia).
+
+            Conduction — heat transfer by particle collisions through a material.
             """),
-            rs("Projectile (qualitative)", """
-            Ball thrown up: rising → PE increases, KE decreases. Top → max PE. Falling → PE → KE.
-
-            On Moon: same mass, less weight (weaker g), same inertia.
+            rs("NSB tips", """
+            • Heat ≠ temperature (heat is energy transfer).
+            • 25°C = 298 K.
+            • Next: Ch 10 electricity.
             """)
         ]
 
@@ -349,16 +342,16 @@ enum Pass2ReadingContent {
         ]
 
         m[k(8, .wednesday, .physics)] = [
-            rs("Circuits & waves — round-ready", """
-            Series: R_total = R₁ + R₂ + … — more resistors, more total R, same current.
+            rs("Electricity (Ch 10)", """
+            Charge — fundamental property of matter. Like charges repel; opposites attract.
 
-            Parallel: current splits; 1/R_total = 1/R₁ + 1/R₂.
+            Current I — flow of charge (ampere, A). Voltage V — electrical pressure. Resistance R — opposition (ohm, Ω).
 
-            V = IR: solve for any variable.
+            Ohm's law: V = I × R. I = 2 A, R = 5 Ω → V = 10 V.
 
-            v = fλ: v = 340 m/s for sound in air often; c ≈ 3×10⁸ m/s for light.
+            Series circuit — one path; R_total = R₁ + R₂ + …
 
-            ROYGBIV — red lowest f in visible, violet highest. Ch 14 stretch: lenses, dispersion.
+            Parallel — branches; current splits; 1/R_total = 1/R₁ + 1/R₂.
             """),
             rs("Week 8 mock prep", """
             Friday: full 25-toss-up mock at regional difficulty. Log misses by subtopic — pick 2 weak areas for Pass 3 flash cards.

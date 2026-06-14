@@ -109,16 +109,16 @@ extension SeedData {
                   ("Newton's 3rd law: Earth pulls you down. What do you pull on Earth?", "Up (equal and opposite force)")
               ]),
         block(week: 2, day: .thursday, subject: .chemistry, pass: .pass1,
-              book: "Expl", chapter: "Ch 20 §20.1–20.4", title: "Chemical Equations and Reactions",
-              pass2Book: "Mod", pass2Chapter: "Ch 8", pass2Title: "Chemical Reactions (backup)",
-              backupBookLine: "Tro Ch 7 §7.1–7.4",
-              focus: "Reactants → products · balancing equations (conservation of mass) · exothermic (releases heat) vs endothermic (absorbs heat) · signs of a chemical reaction (color change, gas, precipitate, energy change)",
-              formulas: "2H₂ + O₂ → 2H₂O · H₂ + Cl₂ → 2HCl (balanced) · exothermic = releases heat",
-              knowCold: ["Balance H₂ + Cl₂ → HCl (answer: H₂ + Cl₂ → 2HCl)", "Exothermic = releases or absorbs? (Releases)"],
-              topic: "Chemical reactions",
+              book: "Expl", chapter: "Ch 18 §18.1–18.4", title: "Chemical Bonding (part 1)",
+              pass2Book: "Mod", pass2Chapter: "Ch 7", pass2Title: "Molecules & Compounds (backup)",
+              backupBookLine: "Tro Ch 5",
+              focus: "Electron-dot structures · ions (cations/anions) · ionic bonds (electron transfer, e.g. NaCl) · metallic bonds · valence electrons set bonding behavior",
+              formulas: "Na → Na⁺ + e⁻ · Cl + e⁻ → Cl⁻ · ionic = metal + nonmetal · NaCl",
+              knowCold: ["NaCl — ionic or covalent? (Ionic)", "Metal atom loses electrons → cation or anion? (Cation)"],
+              topic: "Chemical bonding",
               tossups: [
-                  ("Balance the following: H₂ + Cl₂ → HCl", "H₂ + Cl₂ → 2HCl"),
-                  ("A reaction that releases heat to the surroundings is called what?", "Exothermic")
+                  ("Is NaCl held together by ionic or covalent bonds?", "Ionic"),
+                  ("When a metal atom loses electrons, does it form a cation or an anion?", "Cation")
               ]),
         block(week: 2, day: .friday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 4 — Genetic Disorders", title: "Genetics — Punnett squares (part 2)",
@@ -134,16 +134,16 @@ extension SeedData {
 
         // WEEK 3
         block(week: 3, day: .monday, subject: .chemistry, pass: .pass1,
-              book: "Expl", chapter: "Ch 21 §21.1–21.3", title: "Acids and Bases",
-              pass2Book: "Mod", pass2Chapter: "Ch 14", pass2Title: "Acids and Bases (backup)",
-              backupBookLine: "Tro Ch 14",
-              focus: "pH scale 0–14 · neutral = 7 · below 7 = acid (more H⁺) · above 7 = base (more OH⁻) · common acids (HCl, H₂SO₄, vinegar) · common bases (NaOH, baking soda, ammonia) · indicators change color with pH",
-              formulas: "pH < 7 acid · pH > 7 base · pH = 7 neutral · HCl · NaOH",
-              knowCold: ["pH of pure water? (7)", "pH 3 — acid or base? (Acid)"],
-              topic: "Acids, bases & pH",
+              book: "Expl", chapter: "Ch 19 §19.1–19.4", title: "Solutions",
+              pass2Book: "Mod", pass2Chapter: "Ch 12", pass2Title: "Solutions (backup)",
+              backupBookLine: "Tro Ch 13",
+              focus: "Solution = solute dissolved in solvent · aqueous = water as solvent · saturation · concentration · filtration separates insoluble solid from liquid · distillation separates liquids by boiling point differences",
+              formulas: "Solute dissolved in solvent · dilution ↓ concentration · filtration vs distillation",
+              knowCold: ["Salt water — which is the solute? (Salt / NaCl)", "Separate sand from water? (Filtration)"],
+              topic: "Solutions",
               tossups: [
-                  ("What is the pH of a neutral solution at 25°C?", "7"),
-                  ("Is a solution with pH 11 acidic or basic?", "Basic")
+                  ("In a salt water solution, which substance is the solute?", "Salt (sodium chloride)"),
+                  ("What separation method would you use to separate sand from water?", "Filtration")
               ]),
         block(week: 3, day: .tuesday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 7 — Classification of Living Things · The Six Kingdoms", title: "Ecology — communities (part 1)",
@@ -168,16 +168,16 @@ extension SeedData {
                   ("A 4 kg object experiences an acceleration of 5 m/s². What is the net force?", "20 N (F = 4 × 5)")
               ]),
         block(week: 3, day: .thursday, subject: .chemistry, pass: .pass1,
-              book: "Expl", chapter: "Ch 19 §19.1–19.4", title: "Solutions",
-              pass2Book: "Mod", pass2Chapter: "Ch 12", pass2Title: "Solutions (backup)",
-              backupBookLine: "Tro Ch 13",
-              focus: "Solution = solute dissolved in solvent · aqueous = water as solvent · saturation · concentration · filtration separates insoluble solid from liquid · distillation separates liquids by boiling point differences",
-              formulas: "Solute dissolved in solvent · dilution ↓ concentration · filtration vs distillation",
-              knowCold: ["Salt water — which is the solute? (Salt / NaCl)", "Separate sand from water? (Filtration)"],
-              topic: "Solutions",
+              book: "Expl", chapter: "Ch 20 §20.1–20.4", title: "Chemical Equations and Reactions",
+              pass2Book: "Mod", pass2Chapter: "Ch 8", pass2Title: "Chemical Reactions (backup)",
+              backupBookLine: "Tro Ch 7 §7.1–7.4",
+              focus: "Reactants → products · balancing equations (conservation of mass) · exothermic (releases heat) vs endothermic (absorbs heat) · signs of a chemical reaction (color change, gas, precipitate, energy change)",
+              formulas: "2H₂ + O₂ → 2H₂O · H₂ + Cl₂ → 2HCl (balanced) · exothermic = releases heat",
+              knowCold: ["Balance H₂ + Cl₂ → HCl (answer: H₂ + Cl₂ → 2HCl)", "Exothermic = releases or absorbs? (Releases)"],
+              topic: "Chemical reactions",
               tossups: [
-                  ("In a salt water solution, which substance is the solute?", "Salt (sodium chloride)"),
-                  ("What separation method would you use to separate sand from water?", "Filtration")
+                  ("Balance the equation: H₂ + Cl₂ → HCl", "H₂ + Cl₂ → 2HCl"),
+                  ("Does an exothermic reaction release or absorb heat?", "Releases")
               ]),
         block(week: 3, day: .friday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 17 — Bones and Muscles · Ch 18 — Food and Energy", title: "Body systems — musculoskeletal & cardiopulmonary",
@@ -193,16 +193,17 @@ extension SeedData {
 
         // WEEK 4
         block(week: 4, day: .monday, subject: .chemistry, pass: .pass1,
-              book: "Expl", chapter: "Ch 17–18 §17.6 + §18.1–18.2", title: "Periodic Properties + Electrons",
+              book: "Expl", chapter: "Ch 15 §15.1–15.5", title: "The Atom",
               pass2Book: "Mod", pass2Chapter: "Ch 5 §3 + Ch 4", pass2Title: "Periodic trends (backup)",
               backupBookLine: "Tro Ch 9 §9.7 · §9.9",
-              focus: "Valence electrons determine reactivity · atomic radius decreases across a period, increases down a group · first 20 element symbols: H through Ca",
-              formulas: "Radius ↓ across period · ↑ down group · first 20 symbols",
-              knowCold: ["Symbol for potassium? (K)", "Na vs Cl — which atom is larger? (Na)"],
-              topic: "Periodic trends & elements",
+              focus: "Hewitt Ch 15: atom discovery · elements & periodic table · nucleus (protons/neutrons) · isotopes & weighted average atomic mass · electron shells & valence e⁻ · first 20 symbols H–Ca",
+              formulas: "Z = # protons · A = p + n · avg atomic mass from isotopes · valence e⁻ in outer shell",
+              knowCold: ["Symbol for potassium? (K)", "Carbon-12 vs carbon-14 — same proton count? (Yes, isotopes)", "Where are protons located? (Nucleus)"],
+              topic: "The atom",
               tossups: [
                   ("What is the chemical symbol for potassium?", "K"),
-                  ("Which is the larger atom: sodium (Na) or chlorine (Cl)?", "Sodium (Na)")
+                  ("Carbon-12 and carbon-14 are isotopes of carbon. How many protons does each have?", "6"),
+                  ("In an atom, where are protons located?", "In the nucleus")
               ]),
         block(week: 4, day: .tuesday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 5 — Evidence for Evolution · How Evolution Works", title: "Evolution — natural selection (part 1)",
@@ -216,15 +217,15 @@ extension SeedData {
                   ("What is the most specific level in the classification system?", "Species")
               ]),
         block(week: 4, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 12 §12.1–12.6", title: "Waves & sound (part 1)",
-              pass2Book: "Expl", pass2Chapter: "Ch 10–13", pass2Title: "Electricity · Waves · Light",
-              focus: "~1 hr · part 1: wavelength · frequency · amplitude · v = fλ · reflection · refraction",
-              formulas: "v = fλ · wavelength (λ) · frequency (f) · amplitude",
-              knowCold: ["Higher pitch → higher or lower frequency? (Higher)", "v = fλ relates which three quantities? (Speed, frequency, wavelength)"],
-              topic: "Waves",
+              book: "Expl", chapter: "Ch 5 §5.1–5.5", title: "Momentum & Collisions",
+              pass2Book: "Expl", pass2Chapter: "Ch 2–5", pass2Title: "Newton's Laws + Momentum",
+              focus: "~1 hr · momentum p = mv · conservation of momentum · elastic vs inelastic · impulse (intro)",
+              formulas: "p = mv · conservation of momentum · F = ma",
+              knowCold: ["2 kg at 3 m/s — momentum? (6 kg·m/s)", "Same v — truck or bike more momentum? (Truck)"],
+              topic: "Forces & momentum",
               tossups: [
-                  ("A higher-pitched sound corresponds to a higher or lower frequency?", "Higher frequency"),
-                  ("What does the amplitude of a wave relate to?", "Energy / loudness (for sound)")
+                  ("A 2 kg object moves at 3 m/s — what is its momentum?", "6 kg·m/s"),
+                  ("At equal velocity, which has greater momentum, a truck or a bicycle?", "Truck")
               ]),
         block(week: 4, day: .thursday, subject: .chemistry, pass: .pass1,
               book: "Expl", chapter: "Ch 17 §17.1–17.4", title: "Measurements and Calculations",

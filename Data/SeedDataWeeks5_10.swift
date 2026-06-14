@@ -6,16 +6,16 @@ extension SeedData {
     static let weeks5Through10: [StudyBlock] = [
         // WEEK 5 — Energy in living things + work & energy
         block(week: 5, day: .monday, subject: .chemistry, pass: .pass1,
-              book: "Expl", chapter: "Ch 18 §18.1–18.6", title: "Chemical Bonding",
+              book: "Expl", chapter: "Ch 18 §18.5–18.8", title: "Covalent Bonds & Molecular Forces",
               pass2Book: "Mod", pass2Chapter: "Ch 7", pass2Title: "Molecules & Compounds (backup)",
               backupBookLine: "Tro Ch 5",
-              focus: "~1 hr · ionic vs covalent vs metallic · Lewis dots (intro) · electronegativity · NaCl vs H₂O vs O₂",
-              formulas: "ionic = metal + nonmetal · covalent = nonmetals share · NaCl · H₂O · O₂",
-              knowCold: ["NaCl — ionic or covalent? (Ionic)", "O₂ — ionic or covalent? (Covalent)"],
-              topic: "Chemical bonding",
+              focus: "~1 hr · covalent bonds (electron sharing) · polar vs nonpolar · electronegativity · H₂O vs O₂ · molecular attractions (intermolecular forces intro)",
+              formulas: "covalent = nonmetals share · H₂O · O₂ · polar = uneven sharing",
+              knowCold: ["O₂ — ionic or covalent? (Covalent)", "Two nonmetals sharing electrons — bond type? (Covalent)"],
+              topic: "Covalent bonding",
               tossups: [
-                  ("Is NaCl held together by ionic or covalent bonds?", "Ionic"),
-                  ("Two nonmetals sharing electrons form what type of bond?", "Covalent")
+                  ("Two nonmetals sharing electrons form what type of bond?", "Covalent"),
+                  ("Is O₂ held together by ionic or covalent bonds?", "Covalent")
               ]),
         block(week: 5, day: .tuesday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 2 — Photosynthesis", title: "Photosynthesis (part 1)",
@@ -145,14 +145,14 @@ extension SeedData {
                   ("Name one innate immune barrier.", "Skin/mucous membranes")
               ]),
         block(week: 7, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 5 §5.1–5.5", title: "Momentum & Collisions",
-              focus: "~1 hr · momentum p = mv · conservation of momentum · elastic vs inelastic · impulse (intro)",
-              formulas: "p = mv · conservation of momentum · F = ma",
-              knowCold: ["2 kg at 3 m/s — momentum? (6 kg·m/s)", "Same v — truck or bike more momentum? (Truck)"],
-              topic: "Forces & momentum",
+              book: "Expl", chapter: "Ch 9 §9.1–9.5", title: "Heat & Temperature",
+              focus: "~1 hr · thermal energy · temperature vs heat · absolute zero · specific heat · conduction (intro)",
+              formulas: "heat flows hot → cold · specific heat capacity · °C vs K (K = °C + 273)",
+              knowCold: ["Heat vs temperature — which is energy transfer? (Heat)", "25°C in kelvin? (298 K)"],
+              topic: "Heat & thermodynamics",
               tossups: [
-                  ("A 2 kg object moves at 3 m/s — what is its momentum?", "6 kg·m/s"),
-                  ("At equal velocity, which has greater momentum, a truck or a bicycle?", "Truck")
+                  ("Is heat the same as temperature?", "No — heat is energy transfer; temperature measures average kinetic energy"),
+                  ("Convert 25°C to kelvin.", "298 K")
               ]),
         block(week: 7, day: .thursday, subject: .chemistry, pass: .pass1,
               book: "Expl", chapter: "Ch 17 §17.6–17.7", title: "Periodic Trends (deeper)",
@@ -261,14 +261,14 @@ extension SeedData {
                   ("Mitosis is used primarily for what purpose in the body?", "Growth and repair")
               ]),
         block(week: 9, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 10 §10.11 + Ch 12 §12.1–12.3 + Ch 13 §13.1", title: "Circuits & Waves (part 2)",
-              focus: "~1 hr · series vs parallel circuits · v = fλ · electromagnetic spectrum · sound vs light (intro)",
-              formulas: "V = IR · series R_total ↑ · v = fλ · ROYGBIV",
-              knowCold: ["Higher pitch → higher or lower frequency? (Higher)", "v = fλ relates? (Speed, frequency, wavelength)"],
-              topic: "Waves & electricity",
+              book: "Expl", chapter: "Ch 11 §11.1–11.5 + Ch 12 §12.1–12.6", title: "Magnetism & Waves",
+              focus: "~1 hr · magnetic poles · electromagnetism (intro) · wavelength · frequency · amplitude · v = fλ · reflection · refraction",
+              formulas: "v = fλ · wavelength (λ) · frequency (f) · like poles repel",
+              knowCold: ["Higher pitch → higher or lower frequency? (Higher)", "Like magnetic poles — attract or repel? (Repel)"],
+              topic: "Waves & electromagnetism",
               tossups: [
                   ("A higher-pitched sound corresponds to higher or lower frequency?", "Higher frequency"),
-                  ("What three quantities does v = fλ relate?", "Speed, frequency, and wavelength")
+                  ("Do like magnetic poles attract or repel?", "Repel")
               ]),
         block(week: 9, day: .thursday, subject: .chemistry, pass: .pass1,
               book: "Expl", chapter: "Ch 18 §18.2–18.4", title: "Ions & Ionic Compounds",
@@ -319,13 +319,13 @@ extension SeedData {
                   ("In a monohybrid cross Tt × Tt, what is the expected phenotypic ratio?", "3:1")
               ]),
         block(week: 10, day: .wednesday, subject: .physics, pass: .pass1,
-              book: "Expl", chapter: "Ch 11 §11.1–11.5 + Ch 13 §13.3–13.4", title: "Electricity & Magnetism (wrap-up)",
-              focus: "~1 hr · magnets · electromagnetism (intro) · review V = IR · circuits · energy forms in a scenario",
-              formulas: "V = IR · W = Fd · PE = mgh · KE = ½mv² · v = fλ",
-              knowCold: ["SI unit of resistance? (Ohm/Ω)", "Ball falls — PE converts to? (Kinetic energy)"],
-              topic: "Electricity",
+              book: "Expl", chapter: "Ch 13 §13.1 + §13.3–13.4", title: "Light & Reflection",
+              focus: "~1 hr · electromagnetic spectrum · reflection · refraction · ROYGBIV · review v = fλ · energy forms in a scenario",
+              formulas: "v = fλ · ROYGBIV · reflection vs refraction",
+              knowCold: ["Red or violet — lower frequency in visible light? (Red)", "Ball falls — PE converts to? (Kinetic energy)"],
+              topic: "Waves & light",
               tossups: [
-                  ("What is the SI unit of electrical resistance?", "Ohm (Ω)"),
+                  ("In visible light, does red or violet have the lower frequency?", "Red"),
                   ("As a ball falls, potential energy is converted primarily into what?", "Kinetic energy")
               ]),
         block(week: 10, day: .thursday, subject: .chemistry, pass: .pass1,

@@ -122,11 +122,11 @@ enum DeepDiveContent {
         Know cold: which state has fastest particles (gas) · boiling vs evaporation (throughout vs surface only).
         """
         map[Key(week: 2, day: .thursday, subject: .chemistry)] = """
-        Reactants → products · balance equations (conservation of mass) · exothermic (releases heat) vs endothermic (absorbs heat) · signs of reaction: color change, gas, precipitate, temperature change.
+        Electron-dot structures · ions (cations/anions) · ionic bonds (NaCl) · metallic bonds · valence electrons drive bonding.
 
-        Balance H₂ + Cl₂ → 2HCl. Exothermic reactions feel hot because energy is released.
+        NaCl = ionic. Metal loses electrons → cation (positive). Nonmetal gains electrons → anion (negative).
 
-        Know cold: balance H₂ + Cl₂ → HCl · exothermic = releases heat.
+        Know cold: NaCl ionic or covalent (ionic) · metal loses e⁻ → cation or anion (cation).
         """
         map[Key(week: 2, day: .tuesday, subject: .biology)] = """
         DNA · gene · chromosome · allele · dominant (capital) vs recessive (lowercase) · genotype (letters) vs phenotype (observable trait) · Punnett square · Tt × Tt → 3:1 phenotype ratio · homozygous (TT, tt) vs heterozygous (Tt).
@@ -148,18 +148,18 @@ enum DeepDiveContent {
 
         // Week 3
         map[Key(week: 3, day: .monday, subject: .chemistry)] = """
-        pH scale 0–14 · neutral = 7 · pH < 7 = acid · pH > 7 = base · H⁺ and OH⁻ · common acids (HCl) and bases (NaOH) · indicators change color.
-
-        Pure water at 25 °C has pH 7. pH 11 is basic (alkaline).
-
-        Know cold: pH of pure water (7) · pH 3 is acid or base (acid).
-        """
-        map[Key(week: 3, day: .thursday, subject: .chemistry)] = """
         Solvent + solute → solution · saturation · concentration · separation: filtration (solid from liquid) · distillation (by boiling point) · dilution lowers concentration.
 
         In salt water, salt (NaCl) is the solute. Filter sand from water — sand stays on paper.
 
         Know cold: solute in salt water (salt) · separate sand from water (filtration).
+        """
+        map[Key(week: 3, day: .thursday, subject: .chemistry)] = """
+        Reactants → products · balance equations (conservation of mass) · exothermic (releases heat) vs endothermic (absorbs heat) · signs of reaction: color change, gas, precipitate, temperature change.
+
+        Balance H₂ + Cl₂ → 2HCl. Exothermic reactions feel hot because energy is released.
+
+        Know cold: balance H₂ + Cl₂ → HCl · exothermic = releases heat.
         """
         map[Key(week: 3, day: .tuesday, subject: .biology)] = """
         Food chain/web · producer (makes food from sunlight) · consumer · decomposer · symbiosis: mutualism, commensalism, parasitism · biomes · ~10% energy rule between trophic levels.
@@ -185,11 +185,11 @@ enum DeepDiveContent {
 
         // Week 4
         map[Key(week: 4, day: .monday, subject: .chemistry)] = """
-        Valence electrons · atomic radius trends (↓ across period, ↑ down group) · reactivity · memorize symbols H through Ca (first 20 elements).
+        Hewitt Ch 15 §15.1–15.5: atom discovery · elements & periodic table · nucleus (protons/neutrons) · isotopes & weighted average atomic mass · electron shells · valence electrons.
 
-        Symbol for potassium = K. Sodium atom is larger than chlorine atom (same period, Cl has more protons pulling electrons in).
+        Z = protons · A = p + n · isotopes same Z, different neutrons. Protons in nucleus. Symbol for potassium = K. Carbon-12 and carbon-14 both have 6 protons.
 
-        Know cold: symbol for K · which is larger: Na or Cl (Na).
+        Know cold: symbol for K · C-12 vs C-14 proton count (6) · where protons are (nucleus).
         """
         map[Key(week: 4, day: .thursday, subject: .chemistry)] = """
         SI base units (kg, m, s, mol) · significant figures (intro) · lab equipment: beaker, flask, balance, graduated cylinder · safety goggles · read meniscus at eye level.
@@ -213,11 +213,11 @@ enum DeepDiveContent {
         Know cold: primary root function (absorb water) · where photosynthesis mainly occurs (leaves).
         """
         map[Key(week: 4, day: .wednesday, subject: .physics)] = """
-        Wavelength λ · frequency f · amplitude · v = fλ · reflection & refraction · V = IR (Ohm's law) · series vs parallel circuits · Hz, m/s, Ω, A.
+        Momentum p = mv · conservation of momentum · elastic vs inelastic collisions · impulse (intro).
 
-        Higher pitch = higher frequency. I = 2 A, R = 5 Ω → V = 10 V. In series, resistances add (more R). In parallel, current splits.
+        2 kg at 3 m/s → p = 6 kg·m/s. At equal velocity, truck has more momentum than bicycle.
 
-        Know cold: higher pitch → higher or lower f (higher) · I = 2 A, R = 5 Ω → 10 V · unit of current (ampere/A).
+        Know cold: 2 kg at 3 m/s momentum (6 kg·m/s) · truck vs bike at same v (truck).
         """
 
         return map
@@ -252,9 +252,9 @@ enum DeepDiveContent {
         Respiration inputs: glucose + O₂. Outputs: CO₂ + H₂O + ATP. Photosynthesis inputs: CO₂ + H₂O + light. Output: glucose + O₂. Match each process to its organelle.
         """
         map[Key(week: 5, day: .wednesday, subject: .physics)] = """
-        Precision vs accuracy · acceleration sign when slowing · v-t graph slope = acceleration · relative motion (intro).
+        Work W = Fd · joule · KE = ½mv² · PE = mgh (intro) · energy conservation.
 
-        Slowing down = negative acceleration (if velocity is positive). On a v-t graph, slope = acceleration (not speed). Precision = repeatability; accuracy = closeness to true value.
+        10 N for 4 m → 40 J. Double speed → KE × 4. Energy converts between forms in a closed system.
         """
 
         // Week 6
@@ -279,9 +279,9 @@ enum DeepDiveContent {
         Most nutrient absorption = small intestine. Alveoli = gas exchange in lungs. Arteries carry blood away from heart; veins toward heart. Capillaries = exchange sites.
         """
         map[Key(week: 6, day: .wednesday, subject: .physics)] = """
-        p = mv · conservation of momentum · elastic vs inelastic collision (concept) · net force diagrams · friction types.
+        Weight W = mg · mass vs weight · PE = mgh · projectile motion (qualitative) · conservation of energy.
 
-        Momentum = mass × velocity (kg·m/s). In a closed system, total momentum is conserved. At equal velocity, heavier object has more momentum (truck > bicycle).
+        On the Moon, mass unchanged; weight less. Ball rising → PE increases. Energy converts PE ↔ KE.
         """
 
         // Week 7
@@ -306,9 +306,9 @@ enum DeepDiveContent {
         Innate = fast, general (skin, mucous, stomach acid). Adaptive = specific with memory. Second infection often milder because memory cells recognize the pathogen faster.
         """
         map[Key(week: 7, day: .wednesday, subject: .physics)] = """
-        PE = mgh · KE = ½mv² · W = mg (weight) · conservation of energy · mass vs weight · projectile (qualitative).
+        Thermal energy · temperature vs heat · absolute zero · specific heat capacity · heat flows hot → cold · conduction (intro).
 
-        As a ball rises, gravitational PE increases. Mass stays the same on the Moon; weight is less. Energy converts between forms but total energy is conserved in a closed system.
+        Heat is energy transfer; temperature measures average particle kinetic energy. 25°C = 298 K.
         """
 
         // Week 8
@@ -333,9 +333,9 @@ enum DeepDiveContent {
         Xylem transports water upward. Phloem transports sugars. Meristem = growth tissue in plants. Four animal tissue types: epithelial, muscle, nervous, connective.
         """
         map[Key(week: 8, day: .wednesday, subject: .physics)] = """
-        V = IR · series R_total ↑ · parallel 1/R_total = 1/R₁ + 1/R₂ · v = fλ · ROYGBIV · Ch 14 lenses/dispersion (stretch).
+        Electric charge · current · voltage · resistance · V = IR · conductors vs insulators · series vs parallel (intro).
 
-        More resistors in series → total resistance increases. In parallel, current splits. v = fλ links wave speed, frequency, and wavelength. Speed of light c ≈ 3×10⁸ m/s.
+        I = 2 A, R = 5 Ω → V = 10 V. More resistors in series → total R increases. SI unit of current = ampere (A).
         """
 
         return map
@@ -368,9 +368,9 @@ enum DeepDiveContent {
         Write both processes from memory (words OK). Order: cell → tissue → organ → system → organism. Gas released in photosynthesis = O₂.
         """
         map[Key(week: 9, day: .wednesday, subject: .physics)] = """
-        SI units · v = d/t · d-t graph reading · timed 5 toss-ups · compare to Monday misses.
+        Magnetic poles · electromagnetism (intro) · v = fλ · wavelength · frequency · amplitude · reflection · refraction.
 
-        Formula for average speed: v = d/t. SI unit for distance = meter (m). Flat d-t graph = at rest.
+        Higher pitch = higher frequency. Like magnetic poles repel. v = fλ links speed, frequency, wavelength.
         """
 
         // Week 10
@@ -395,9 +395,9 @@ enum DeepDiveContent {
         Tt × Tt → 3:1 phenotypic ratio. Antibiotics do not work on viruses. Vaccines train the body to produce antibodies. Dominant allele = capital letter.
         """
         map[Key(week: 10, day: .wednesday, subject: .physics)] = """
-        Energy & gravity: W = Fd · PE/KE · conservation · weight vs mass · 5 DOE.
+        Electromagnetic spectrum · ROYGBIV · reflection · refraction · review v = fλ · energy forms in a scenario.
 
-        W = Fd: 8 N for 3 m = 24 J. Ball falls → PE converts to KE. Weight = mg; mass is constant everywhere.
+        Red = lower frequency in visible light; violet = higher. Ball falls → PE converts to KE.
         """
 
         return map

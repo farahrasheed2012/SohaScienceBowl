@@ -116,13 +116,13 @@ enum ScheduleConstants {
         switch week {
         case 1: return "Atoms · cells · motion"
         case 2: return "Matter · genetics · Newton's"
-        case 3: return "Acids · ecology · forces"
-        case 4: return "Evolution · waves · periodic trends"
+        case 3: return "Solutions · ecology · forces"
+        case 4: return "Evolution · the atom · momentum"
         case 5: return "Energy in life & physics"
         case 6: return "Ecology & solutions"
-        case 7: return "Immunity & momentum"
+        case 7: return "Immunity & heat"
         case 8: return "Plants & electricity"
-        case 9: return "Circuits & body systems"
+        case 9: return "Magnetism · waves · body systems"
         case 10: return "Summer capstone"
         default: return "Week \(week)"
         }

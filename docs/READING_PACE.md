@@ -45,8 +45,8 @@ Earth & Space, Energy, and Math are official NSB categories but **not** on the s
 
 | Weeks | NSB focus |
 |-------|-----------|
-| **1–4** | Atoms · cells · motion · genetics · acids · ecology · Newton's · evolution · waves |
-| **5–8** | Bonding · photosynthesis/respiration · energy · microbes · immunity · plants · electricity |
-| **9–10** | Circuits · mitosis · ions · body systems · **capstone review** |
+| **1–4** | Atoms · cells · motion · genetics · bonding · ecology · Newton's · evolution · momentum |
+| **5–8** | Energy · gravity · heat · electricity · photosynthesis/respiration · microbes · immunity · plants |
+| **9–10** | Magnetism · waves · light · mitosis · ions · body systems · **capstone review** |
 
 Tro, CB, and BFN stay as **backup books** when primary sections feel dense. Use **Quiz → DOE** for extra toss-up practice anytime.

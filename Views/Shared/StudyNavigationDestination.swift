@@ -28,6 +28,10 @@ extension View {
                 PeriodicTableDrillSetupView()
             case .periodicTableReference:
                 PeriodicTableReferenceView()
+            case .periodicTableInteractive:
+                PeriodicTableInteractiveView()
+            case .periodicTablePrint:
+                PeriodicTablePrintView()
             case .elementFlashCards:
                 ElementFlashCardDeckView()
             case .weakAreaReview:

@@ -25,7 +25,7 @@ enum MSNSBStudyScope {
     static let scheduledFLSChapterNumbers: Set<Int> = [1, 2, 3, 4, 5, 7, 8, 10, 11, 16, 21]
 
     /// Hewitt (Expl) chapters on the summer physics plan.
-    static let scheduledExplChapterNumbers: Set<Int> = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13]
+    static let scheduledExplChapterNumbers: Set<Int> = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15]
 
     static func includes(flsChapter number: Int) -> Bool {
         scheduledFLSChapterNumbers.contains(number)

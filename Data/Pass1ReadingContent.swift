@@ -233,28 +233,33 @@ enum Pass1ReadingContent {
 
         m[k(2, .thursday, .chemistry)] = [
             rs("Big picture", """
-            Chemical reactions rearrange atoms — nothing is created or destroyed (conservation of mass). Balancing equations and spotting reaction types are core NSB skills.
+            After states of matter, Hewitt Ch 18 explains how atoms connect. Ionic bonds transfer electrons (NaCl); metallic bonds share a sea of electrons in metals. Valence electrons in the outer shell drive all of this.
             """),
-            rs("Balancing & reaction signs", """
-            Reactants (left) → Products (right). Coefficients balance atom counts.
+            rs("Electron-dot structures & ions", """
+            Lewis (electron-dot) diagrams show valence electrons as dots around the element symbol.
 
-            Example: H₂ + Cl₂ → 2HCl (need 2 HCl for 2 H and 2 Cl).
+            Atoms gain or lose electrons to reach a stable outer shell → ions.
 
-            2H₂ + O₂ → 2H₂O — classic synthesis/combustion pattern.
+            Cation — positive ion (metal lost electrons). Na → Na⁺ + e⁻.
 
-            Signs of chemical change: color change, gas produced, precipitate forms, temperature change — not just phase change.
+            Anion — negative ion (nonmetal gained electrons). Cl + e⁻ → Cl⁻.
+
+            Ionic compounds form when cations and anions attract (Na⁺ + Cl⁻ → NaCl).
             """),
-            rs("Exothermic vs endothermic", """
-            Exothermic — releases heat to surroundings (feels hot). Products have less stored chemical energy.
+            rs("Ionic & metallic bonds", """
+            Ionic bond — electron transfer between metal and nonmetal. Example: NaCl (sodium chloride).
 
-            Endothermic — absorbs heat (feels cold). Example: cold pack.
+            Rule of thumb: metal + nonmetal → usually ionic.
 
-            Combustion (burning) is exothermic. Photosynthesis is endothermic (stores energy).
+            Metallic bond — metal atoms share a "sea" of delocalized electrons; explains conductivity and malleability of metals.
+
+            Covalent bonding (sharing electrons) comes in Ch 18 §18.5 — Week 5 picks that up.
             """),
             rs("NSB tips", """
-            • Balance with smallest whole-number coefficients.
-            • "Releases heat" → exothermic.
-            • Decomposition looks like AB → A + B (opposite of synthesis).
+            • NaCl → ionic bond.
+            • Metal loses electrons → cation (positive).
+            • Nonmetal gains electrons → anion (negative).
+            • Week 3 covers solutions (Ch 19) then reactions (Ch 20) — read in order.
             """)
         ]
 
@@ -349,35 +354,6 @@ enum Pass1ReadingContent {
         // WEEK 3
         m[k(3, .monday, .chemistry)] = [
             rs("Big picture", """
-            Acids and bases show up constantly in NSB. pH measures acidity; neutral is 7. Know HCl as acid, NaOH as base, and that indicators change color.
-            """),
-            rs("pH scale", """
-            pH 0–14 at standard conditions. pH 7 = neutral (pure water at 25 °C).
-
-            pH < 7 = acidic (more H⁺). pH > 7 = basic/alkaline (more OH⁻).
-
-            Lower pH = stronger acid. pH 2 is strongly acidic; pH 12 is strongly basic.
-
-            Acids taste sour (don't taste in lab!). Bases feel slippery.
-            """),
-            rs("Common acids & bases", """
-            HCl — hydrochloric acid (stomach acid dilute form).
-
-            NaOH — sodium hydroxide (strong base).
-
-            Neutralization: acid + base → salt + water. HCl + NaOH → NaCl + H₂O.
-
-            Indicators: litmus red in acid, blue in base; universal indicator gives color across the scale.
-            """),
-            rs("NSB tips", """
-            • pH of pure water → 7.
-            • pH 11 → basic.
-            • Bonus may ask what ion pH measures → H⁺ (hydrogen ion concentration).
-            """)
-        ]
-
-        m[k(3, .thursday, .chemistry)] = [
-            rs("Big picture", """
             Solutions are homogeneous mixtures. Know solvent vs solute, saturation, and how to separate mixtures (filtration, distillation).
             """),
             rs("Solutions vocabulary", """
@@ -404,6 +380,33 @@ enum Pass1ReadingContent {
             • Salt in salt water → solute is salt (NaCl).
             • Add solvent → concentration decreases.
             • Saturated solution at room temp + crystal → often will not dissolve more.
+            """)
+        ]
+
+        m[k(3, .thursday, .chemistry)] = [
+            rs("Big picture", """
+            Chemical reactions rearrange atoms — nothing is created or destroyed (conservation of mass). Balancing equations and spotting reaction types are core NSB skills.
+            """),
+            rs("Balancing & reaction signs", """
+            Reactants (left) → Products (right). Coefficients balance atom counts.
+
+            Example: H₂ + Cl₂ → 2HCl (need 2 HCl for 2 H and 2 Cl).
+
+            2H₂ + O₂ → 2H₂O — classic synthesis/combustion pattern.
+
+            Signs of chemical change: color change, gas produced, precipitate forms, temperature change — not just phase change.
+            """),
+            rs("Exothermic vs endothermic", """
+            Exothermic — releases heat to surroundings (feels hot). Products have less stored chemical energy.
+
+            Endothermic — absorbs heat (feels cold). Example: cold pack.
+
+            Combustion (burning) is exothermic. Photosynthesis is endothermic (stores energy).
+            """),
+            rs("NSB tips", """
+            • Balance with smallest whole-number coefficients.
+            • "Releases heat" → exothermic.
+            • Decomposition looks like AB → A + B (opposite of synthesis).
             """)
         ]
 
@@ -495,29 +498,46 @@ enum Pass1ReadingContent {
         // WEEK 4
         m[k(4, .monday, .chemistry)] = [
             rs("Big picture", """
-            Periodic trends predict reactivity and size. Memorize symbols H through Ca (first 20 elements) — NSB asks these directly.
+            Hewitt Ch 15 (Part Two — The Atom) is the full atom chapter before deeper Part Three chemistry. Read §15.1–15.5 in order: how we discovered atoms, the periodic table, the nucleus, isotopes, and electron shells. Memorize symbols H through Ca — NSB asks these directly.
             """),
-            rs("Trends across a period", """
-            Left to right: atomic radius decreases (more protons pull electrons closer).
+            rs("Discovering the atom & elements (Ch 15 §15.1–15.2)", """
+            Atoms are the basic units of elements — too small to see, but real.
 
-            Ionization energy increases (harder to remove an electron).
+            Elements are pure substances of one kind of atom; the periodic table organizes them by atomic number.
 
-            Electronegativity increases (stronger pull on shared electrons).
+            Periods = rows; groups = columns with similar valence-electron patterns.
 
-            Down a group: radius increases (new energy level).
+            Metals, nonmetals, and metalloids have different properties across the table.
             """),
-            rs("Valence electrons & reactivity", """
-            Valence electrons — outermost electrons; determine bonding and group behavior.
+            rs("The nucleus (Ch 15 §15.3)", """
+            Protons (+) and neutrons (neutral) live in the nucleus — nearly all the atom's mass.
 
-            Group 1 — 1 valence e⁻ (very reactive metals). Group 17 — 7 valence e⁻ (reactive halogens). Group 18 — full outer shell (unreactive).
+            Atomic number Z = number of protons (defines the element).
 
-            Na is larger than Cl in the same period (Cl has more protons pulling shell in).
+            Mass number A = protons + neutrons.
+
+            Electrons (−) orbit in shells outside the nucleus — negligible mass but determine chemistry.
+            """),
+            rs("Isotopes & average atomic mass (Ch 15 §15.4)", """
+            Isotopes — same element, same proton count, different neutron count (different mass number).
+
+            Carbon-12 and carbon-14 both have 6 protons; carbon-14 has more neutrons.
+
+            Average atomic mass on the periodic table is a weighted average of natural isotope abundances — not the mass of any single atom.
+            """),
+            rs("Electron shells & valence (Ch 15 §15.5)", """
+            Electrons occupy shells (energy levels) around the nucleus. Inner shells fill first; outermost shell holds valence electrons.
+
+            Valence electrons determine bonding, group behavior, and reactivity.
+
+            Group 1 — 1 valence e⁻ (very reactive metals). Group 17 — 7 valence e⁻ (reactive halogens). Group 18 — full outer shell (unreactive noble gases).
             """),
             rs("NSB tips", """
             • Symbol for potassium → K (from Latin kalium).
-            • Larger atom: Na or Cl → Na.
-            • Fluorine = most reactive halogen.
+            • Carbon-12 and carbon-14 → both 6 protons (isotopes).
+            • Protons → nucleus.
             • Use the Top 20 elements reference sheet — flash card any you miss.
+            • Periodic trends (radius, reactivity) → Week 1 Thu & Week 7 Thu (Ch 17).
             """)
         ]
 
@@ -612,36 +632,28 @@ enum Pass1ReadingContent {
 
         m[k(4, .wednesday, .physics)] = [
             rs("Big picture", """
-            Waves, light, and electricity round out early-summer physics. v = fλ links wave properties; V = IR is Ohm's law for circuits.
+            After Newton's laws (Ch 2–4), Hewitt Ch 5 covers momentum — inertia in motion. Momentum helps explain collisions, sports, and why a truck is harder to stop than a bicycle at the same speed.
             """),
-            rs("Wave properties", """
-            Wavelength λ — distance crest to crest (m).
+            rs("Momentum p = mv", """
+            Momentum = mass × velocity (kg·m/s). Vector — has direction.
 
-            Frequency f — cycles per second (Hz).
+            2 kg at 3 m/s → p = 6 kg·m/s.
 
-            Amplitude — height of wave; related to energy/loudness/brightness.
-
-            v = fλ — wave speed = frequency × wavelength.
-
-            Higher pitch → higher frequency. ROYGBIV — red lowest frequency visible, violet highest.
+            At the same velocity, a heavier object has more momentum (truck > bicycle).
             """),
-            rs("Light & electricity", """
-            Reflection — bounce off surface. Refraction — bend entering new medium.
+            rs("Conservation & collisions", """
+            Conservation of momentum: in a closed system with no net external force, total momentum before = total after.
 
-            Current I — flow of charge (ampere, A). Voltage V — electrical pressure. Resistance R — opposition (ohm, Ω).
+            Elastic collision — kinetic energy conserved (ideal billiard balls).
 
-            Ohm's law: V = I × R. I = 2 A, R = 5 Ω → V = 10 V.
+            Inelastic — objects may stick or lose KE to heat/sound; momentum still conserved.
 
-            Series circuit — one path; resistances add; R_total increases.
-
-            Parallel — branches; current splits; 1/R_total = 1/R₁ + 1/R₂.
+            Impulse — force applied over time changes momentum (Δp = FΔt).
             """),
             rs("NSB tips", """
-            • Higher pitch → higher frequency.
-            • I = 2 A, R = 5 Ω → 10 V.
-            • More resistors in series → total R increases.
-            • Speed of light c ≈ 3 × 10⁸ m/s (electromagnetic waves).
-            • Week 8 adds Ch 14 lenses/dispersion stretch.
+            • p = mv — units kg·m/s.
+            • Same speed → heavier object has more momentum.
+            • Next up: Ch 6 energy, then Ch 7 gravity, then Part Two starting with Ch 9 heat.
             """)
         ]
 

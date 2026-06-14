@@ -1,5 +1,171 @@
 import SwiftUI
 
+struct PeriodicTableRootView: View {
+    @Environment(AppState.self) private var appState
+
+    private var masteryProgress: Double {
+        guard ElementData.first20.count > 0 else { return 0 }
+        return Double(appState.elementMasteredCount) / Double(ElementData.first20.count)
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                progressSection
+                learnSection
+                practiceSection
+                fullTableSection
+                nsbTipsSection
+            }
+            .platformListStyle()
+            .navigationTitle("Periodic Table")
+            .largeNavigationBarTitle()
+            .studyNavigationDestinations()
+        }
+    }
+
+    private var progressSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Hi, \(appState.studentName)!")
+                            .font(.headline)
+                        Text("Master H through Ca — symbols, names, and atomic numbers for Science Bowl chemistry toss-ups.")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    Spacer(minLength: 12)
+                    ZStack {
+                        Circle()
+                            .stroke(Color.secondary.opacity(0.2), lineWidth: 6)
+                        Circle()
+                            .trim(from: 0, to: masteryProgress)
+                            .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                            .rotationEffect(.degrees(-90))
+                        Text("\(appState.elementMasteredCount)")
+                            .font(.title3.weight(.bold))
+                    }
+                    .frame(width: 56, height: 56)
+                    .accessibilityLabel("\(appState.elementMasteredCount) of \(ElementData.first20.count) elements mastered")
+                }
+
+                ProgressView(value: masteryProgress)
+                    .tint(Color.accentColor)
+                Text("\(appState.elementMasteredCount) / \(ElementData.first20.count) elements mastered · checklist completes at \(ElementData.checklistMasteredCount)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding(.vertical, 4)
+        }
+    }
+
+    private var learnSection: some View {
+        Section("Learn") {
+            NavigationLink(value: StudyNavigationRoute.periodicTableReference) {
+                Label("First 20 elements (H–Ca)", systemImage: "square.grid.3x3.fill")
+            }
+            Text("Tap each element for symbol, atomic number, group, and NSB tips.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            NavigationLink(value: StudyNavigationRoute.periodicTableInteractive) {
+                Label("Full periodic table (118 elements)", systemImage: "tablecells.fill")
+            }
+            Text("Interactive study grid with flash cards and quiz — all elements.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var practiceSection: some View {
+        Section("Practice") {
+            NavigationLink(value: StudyNavigationRoute.elementFlashCards) {
+                Label("Element flash cards", systemImage: "rectangle.on.rectangle")
+            }
+            NavigationLink(value: StudyNavigationRoute.periodicTableDrill) {
+                Label("Element drill", systemImage: "atom")
+            }
+            Text("Symbol ↔ name ↔ atomic number · multiple choice or type the answer.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var fullTableSection: some View {
+        Section("Print & reference") {
+            NavigationLink(value: StudyNavigationRoute.periodicTablePrint) {
+                Label("Printable reference sheet", systemImage: "doc.richtext")
+            }
+            Text("Full grid plus drill sheet — good for offline review.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var nsbTipsSection: some View {
+        Section("NSB quick tips") {
+            Label("No periodic table is allowed during competition.", systemImage: "exclamationmark.triangle.fill")
+                .font(.subheadline)
+                .foregroundStyle(.orange)
+            VStack(alignment: .leading, spacing: 8) {
+                tipRow("Na", "Sodium — not S or N")
+                tipRow("K", "Potassium — not P (phosphorus)")
+                tipRow("Cl", "Chlorine — Cl, not C")
+                tipRow("Ca", "Calcium — atomic number 20")
+            }
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+    }
+
+    private func tipRow(_ symbol: String, _ detail: String) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text(symbol)
+                .font(.caption.weight(.bold))
+                .frame(width: 28, alignment: .leading)
+            Text(detail)
+        }
+    }
+}
+
+struct PeriodicTableInteractiveView: View {
+    var body: some View {
+        Group {
+            if let url = ScheduleHTMLResources.url(for: .periodicTableStudy) {
+                HTMLWebView(url: url, scrollToWeek: nil)
+            } else {
+                ContentUnavailableView(
+                    "Study table missing",
+                    systemImage: "tablecells",
+                    description: Text("Rebuild the app to include periodic-table-study.html.")
+                )
+            }
+        }
+        .navigationTitle("118 Elements")
+        .inlineNavigationBarTitle()
+    }
+}
+
+struct PeriodicTablePrintView: View {
+    var body: some View {
+        Group {
+            if let url = ScheduleHTMLResources.url(for: .periodicTablePrint) {
+                HTMLWebView(url: url, scrollToWeek: nil)
+            } else {
+                ContentUnavailableView(
+                    "Print sheet missing",
+                    systemImage: "doc.richtext",
+                    description: Text("Rebuild the app to include periodic-table-print.html.")
+                )
+            }
+        }
+        .navigationTitle("Printable Table")
+        .inlineNavigationBarTitle()
+    }
+}
+
 struct PeriodicTableDrillSetupView: View {
     @Environment(AppState.self) private var appState
 
