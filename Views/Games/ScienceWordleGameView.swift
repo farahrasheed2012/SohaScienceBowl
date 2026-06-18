@@ -10,6 +10,7 @@ enum WordleLetterState: Equatable {
 
 struct ScienceWordleGameView: View {
     @Environment(AppState.self) private var appState
+    @FocusState private var inputFocused: Bool
 
     private let maxGuesses = 6
     private let wordLength = 5
@@ -46,6 +47,9 @@ struct ScienceWordleGameView: View {
             }
         }
         .onAppear { resetGame(useDaily: true) }
+        #if os(macOS)
+        .onKeyPress(.escape) { .handled }
+        #endif
     }
 
     private var gridView: some View {
@@ -144,6 +148,7 @@ struct ScienceWordleGameView: View {
             #else
             TextField("Type guess", text: $currentGuess)
                 .textFieldStyle(.roundedBorder)
+                .focused($inputFocused)
             #endif
         }
         .onChange(of: currentGuess) { _, newValue in
@@ -151,6 +156,9 @@ struct ScienceWordleGameView: View {
             if filtered != newValue { currentGuess = filtered }
         }
         .onSubmit { submitGuess() }
+        #if os(macOS)
+        .onAppear { focusTypingField() }
+        #endif
     }
 
     private var letterRows: some View {
@@ -276,7 +284,19 @@ struct ScienceWordleGameView: View {
         currentGuess = ""
         gameOver = false
         won = false
+        #if os(macOS)
+        focusTypingField()
+        #endif
     }
+
+    #if os(macOS)
+    private func focusTypingField() {
+        inputFocused = true
+        DispatchQueue.main.async {
+            inputFocused = true
+        }
+    }
+    #endif
 }
 
 private struct ShakeEffect: GeometryEffect {

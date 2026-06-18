@@ -15,7 +15,11 @@ struct MiniGamesHubView: View {
                         NavigationLink(value: game) {
                             hubCard(for: game)
                         }
+                        #if os(macOS)
+                        .buttonStyle(.borderless)
+                        #else
                         .buttonStyle(.plain)
+                        #endif
                     }
                 }
             }

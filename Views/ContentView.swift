@@ -65,6 +65,9 @@ struct ContentView: View {
     @Environment(AppState.self) private var appState
     @Environment(\.colorScheme) private var colorScheme
     @State private var selectedTab: MainTab = .today
+    #if os(macOS)
+    @State private var miniGameCapturesKeyboard = false
+    #endif
 
     private var theme: ThemePalette {
         AppAppearance.resolvedTheme(appearance: appState.appAppearance, systemColorScheme: colorScheme)
@@ -111,6 +114,7 @@ struct ContentView: View {
                 }
             }
             .listStyle(.sidebar)
+            .focusable(!miniGameCapturesKeyboard)
             .navigationTitle("Science Bowl Coach")
             .navigationSplitViewColumnWidth(min: 200, ideal: 230, max: 280)
         } detail: {
@@ -119,6 +123,7 @@ struct ContentView: View {
                 .background(theme.surface)
         }
         .navigationSplitViewStyle(.balanced)
+        .onPreferenceChange(MiniGameKeyboardCaptureKey.self) { miniGameCapturesKeyboard = $0 }
         .frame(minWidth: 1000, minHeight: 700)
         .tint(theme.accent)
         .preferredColorScheme(appState.appAppearance.colorScheme)
