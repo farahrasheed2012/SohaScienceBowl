@@ -1,7 +1,7 @@
 import SwiftUI
 
 private enum MainTab: String, Hashable, CaseIterable, Identifiable {
-    case today, weeks, calendar, topics, learn, elements, mathCounts, mentalMath, quiz, progress, settings
+    case today, weeks, calendar, topics, learn, elements, mathCounts, mentalMath, games, quiz, progress, settings
 
     var id: String { rawValue }
 
@@ -15,6 +15,7 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
         case .elements: return "Elements"
         case .mathCounts: return "MathCounts"
         case .mentalMath: return "Mental Math"
+        case .games: return "Games"
         case .quiz: return "Quiz"
         case .progress: return "Progress"
         case .settings: return "Settings"
@@ -31,6 +32,7 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
         case .elements: return "tablecells.fill"
         case .mathCounts: return "function"
         case .mentalMath: return "bolt.fill"
+        case .games: return "gamecontroller.fill"
         case .quiz: return "questionmark.circle.fill"
         case .progress: return "chart.bar.fill"
         case .settings: return "gearshape.fill"
@@ -48,6 +50,10 @@ private enum MainTab: String, Hashable, CaseIterable, Identifiable {
         case .elements: PeriodicTableRootView()
         case .mathCounts: MathCountsRootView()
         case .mentalMath: MentalMathRootView()
+        case .games:
+            NavigationStack {
+                MiniGamesHubView()
+            }
         case .quiz: QuizRootView()
         case .progress: ProgressDashboardView()
         case .settings: SettingsView()

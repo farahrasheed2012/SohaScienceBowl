@@ -29,4 +29,6 @@ enum StudyNavigationRoute: Hashable {
     case regionalSprintPack(String)
     case regionalSprintMixed(RegionalSprintCatalog.Track?)
     case hewittChapter17
+    case miniGamesHub
+    case miniGame(MiniGameRoute)
 }

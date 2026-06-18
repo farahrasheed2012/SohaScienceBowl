@@ -46,7 +46,27 @@ extension View {
                 PlanDrillView(request: track.map { .regionalSprint(track: $0) } ?? .regionalSprintMixed())
             case .hewittChapter17:
                 HewittChapter17RootView()
+            case .miniGamesHub:
+                MiniGamesHubView()
+            case .miniGame(let route):
+                miniGameView(for: route)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func miniGameView(for route: MiniGameRoute) -> some View {
+        switch route {
+        case .scienceWordle:
+            ScienceWordleGameView()
+        case .trueOrFalseBlitz:
+            TrueOrFalseBlitzGameView()
+        case .elementBlitz:
+            ElementBlitzGameView()
+        case .moleculeMatch:
+            MoleculeMatchGameView()
+        case .cellBuilder:
+            CellBuilderGameView()
         }
     }
 }
