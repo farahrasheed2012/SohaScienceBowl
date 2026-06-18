@@ -2,7 +2,17 @@ import SwiftUI
 
 struct TodayView: View {
     @Environment(AppState.self) private var appState
+    @Environment(\.themePalette) private var theme
+    @Environment(\.colorScheme) private var colorScheme
     @State private var navigationPath = NavigationPath()
+
+    private var isDarkCoach: Bool {
+        switch appState.appAppearance {
+        case .dark: return true
+        case .warmLight: return false
+        case .system: return colorScheme == .dark
+        }
+    }
 
     private var isFriday: Bool {
         Weekday.from(Date()) == .friday
@@ -23,10 +33,10 @@ struct TodayView: View {
                                 .font(.title3.weight(.semibold))
                             Text(next.subtitle)
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                             Text(next.duration)
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                             if let route = next.route {
                                 Button {
                                     navigationPath.append(route)
@@ -38,14 +48,16 @@ struct TodayView: View {
                             }
                         }
                         .padding(.vertical, 4)
+                        .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                     }
                 }
 
                 if appState.studyStreakDays > 0 || !appState.earnedBadges().isEmpty {
-                    Section("Streaks & badges") {
+                    Section {
                         if appState.studyStreakDays > 0 {
                             Label("\(appState.studyStreakDays)-day study streak", systemImage: "flame.fill")
                                 .foregroundStyle(.orange)
+                                .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                         }
                         let badges = appState.earnedBadges()
                         if !badges.isEmpty {
@@ -61,7 +73,10 @@ struct TodayView: View {
                                     }
                                 }
                             }
+                            .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                         }
+                    } header: {
+                        coachSectionHeader("Streaks & badges")
                     }
                 }
 
@@ -71,28 +86,31 @@ struct TodayView: View {
                             .font(.headline)
                         Text(ScheduleConstants.passLabel(for: appState.currentPass))
                             .font(.subheadline)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                         Text(MSNSBStudyScope.introShort)
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                         Text(appState.doeStore.drillReadinessLabel)
                             .font(.caption)
-                            .foregroundStyle(appState.doeStore.isDrillReady ? .green : .secondary)
+                            .foregroundStyle(appState.doeStore.isDrillReady ? .green : (isDarkCoach ? theme.secondaryText : .secondary))
                     }
                     .padding(.vertical, 4)
+                    .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                 }
 
                 if !appState.flashCardsDueToday.isEmpty || !appState.weakTopics.isEmpty {
-                    Section("Today's review") {
+                    Section {
                         if !appState.flashCardsDueToday.isEmpty {
                             Text("\(appState.flashCardsDueToday.count) flash cards due")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+                                .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                         }
                         if let weak = appState.weakTopics.first {
                             Text("Weakest: \(weak.topic) (\(Int(weak.accuracy * 100))%)")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+                                .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                         }
                         studyActionRow(
                             title: "Review weak areas",
@@ -101,19 +119,21 @@ struct TodayView: View {
                         ) {
                             navigationPath.append(StudyNavigationRoute.weakAreaReview)
                         }
+                    } header: {
+                        coachSectionHeader("Today's review")
                     }
                 }
 
                 if let weekday = Weekday.from(Date()) {
                     ForEach(appState.todayBlocks()) { block in
-                        Section("\(block.subject.rawValue) · \(block.primaryTopic)") {
+                        Section {
                             StudyBlockReadingAndVideos(
                                 block: block,
                                 activePass: appState.currentPass,
                                 compact: true
                             )
                             .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
-                            .listRowBackground(Color.clear)
+                            .todayListRow(isDarkCoach: isDarkCoach, theme: theme, clear: true)
 
                             Button {
                                 navigationPath.append(StudyNavigationRoute.studyMaterial(block))
@@ -145,6 +165,9 @@ struct TodayView: View {
                                 }
                                 .buttonStyle(.bordered)
                             }
+                            .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
+                        } header: {
+                            coachSectionHeader("\(block.subject.rawValue) · \(block.primaryTopic)")
                         }
                     }
 
@@ -152,14 +175,14 @@ struct TodayView: View {
                         week: appState.currentWeek,
                         day: weekday
                     ) {
-                        Section("Math · \(mathReading.title)") {
+                        Section {
                             StudyMathReadingAndVideos(
                                 reading: mathReading,
                                 week: appState.currentWeek,
                                 day: weekday
                             )
                             .listRowInsets(EdgeInsets(top: 10, leading: 16, bottom: 10, trailing: 16))
-                            .listRowBackground(Color.clear)
+                            .todayListRow(isDarkCoach: isDarkCoach, theme: theme, clear: true)
 
                             studyActionRow(
                                 title: "Math quiz",
@@ -174,16 +197,19 @@ struct TodayView: View {
                             } subtitle: {
                                 Text("Toss-ups from today's math topic")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                             }
+                        } header: {
+                            coachSectionHeader("Math · \(mathReading.title)")
                         }
                     }
 
                     if let cross = ScheduleCrossCategory.block(for: appState.currentWeek, day: weekday) {
-                        Section("\(cross.nsbSubject.rawValue) · \(cross.title)") {
+                        Section {
                             Text(cross.subtitle)
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+                                .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                             studyActionRow(
                                 title: "Read topic",
                                 systemImage: "book.fill",
@@ -203,16 +229,18 @@ struct TodayView: View {
                                     )
                                 )
                             }
+                        } header: {
+                            coachSectionHeader("\(cross.nsbSubject.rawValue) · \(cross.title)")
                         }
                     }
                 } else if let weekend = appState.weekendSuggestion() {
-                    Section("Weekend · optional") {
+                    Section {
                         VStack(alignment: .leading, spacing: 8) {
                             Text(weekend.title)
                                 .font(.headline)
                             Text(weekend.subtitle)
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                             if let route = weekend.route {
                                 studyActionRow(
                                     title: "Start optional study",
@@ -224,6 +252,7 @@ struct TodayView: View {
                             }
                         }
                         .padding(.vertical, 4)
+                        .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
 
                         if let saturday = ScheduleCrossCategory.saturdaySuggestion(for: appState.currentWeek) {
                             studyActionRow(
@@ -246,6 +275,8 @@ struct TodayView: View {
                         ) {
                             navigationPath.append(StudyNavigationRoute.topicBrowser(initialWeek: nil))
                         }
+                    } header: {
+                        coachSectionHeader("Weekend · optional")
                     }
                 }
 
@@ -253,10 +284,11 @@ struct TodayView: View {
                     week: appState.currentWeek,
                     blocks: appState.blocks(for: appState.currentWeek, pass: appState.currentPass)
                 ) {
-                    Section("Element symbols (H–Ca)") {
+                    Section {
                         Text("\(appState.elementMasteredCount) / \(ElementData.first20.count) mastered · checklist completes at 18")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+                            .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
 
                         studyActionRow(
                             title: "Element flash cards",
@@ -281,10 +313,12 @@ struct TodayView: View {
                         ) {
                             navigationPath.append(StudyNavigationRoute.periodicTableReference)
                         }
+                    } header: {
+                        coachSectionHeader("Element symbols (H–Ca)")
                     }
                 }
 
-                Section("Texas Regional Sprint") {
+                Section {
                     studyActionRow(
                         title: "Regional Sprint packs",
                         systemImage: "flag.fill",
@@ -294,8 +328,10 @@ struct TodayView: View {
                     } subtitle: {
                         Text("Phyla · IUPAC · gas laws · pedigrees · centripetal — 11 packs")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                     }
+                } header: {
+                    coachSectionHeader("Texas Regional Sprint")
                 }
 
                 Section {
@@ -308,11 +344,12 @@ struct TodayView: View {
                     } subtitle: {
                         Text("Same as Weeks tab · filter by subject")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                     }
+                    .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                 }
 
-                Section("Practice the plan") {
+                Section {
                     if let block = appState.todayBlocks().first {
                         studyActionRow(
                             title: "Quiz today's block",
@@ -327,7 +364,7 @@ struct TodayView: View {
                         } subtitle: {
                             Text("Questions only — read the topic first")
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                         }
                     }
 
@@ -340,9 +377,11 @@ struct TodayView: View {
                             StudyNavigationRoute.planDrill(.thisWeek(week: appState.currentWeek))
                         )
                     }
+                } header: {
+                    coachSectionHeader("Practice the plan")
                 }
 
-                Section("Buzzer drills today") {
+                Section {
                     studyActionRow(
                         title: "iPhone buzzer remote",
                         systemImage: "iphone.gen3.radiowaves.left.and.right",
@@ -352,7 +391,7 @@ struct TodayView: View {
                     } subtitle: {
                         Text("Connect phone on same Wi‑Fi during a buzzer drill")
                             .font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                     }
 
                     if let weekday = Weekday.from(Date()) {
@@ -377,28 +416,31 @@ struct TodayView: View {
                                     Text(slot.duration)
                                 }
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                             }
                         }
                     } else {
                         Text("Buzzer drills run on weekdays during free time.")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+                            .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
                     }
+                } header: {
+                    coachSectionHeader("Buzzer drills today")
                 }
 
                 if isFriday {
-                    Section("Friday review") {
+                    Section {
                         VStack(alignment: .leading, spacing: 12) {
                             Text("Planning block 4:40 – 5:40 PM")
                                 .font(.headline)
                             Text("Score the week · weak spots · 5 toss-up + bonus chains")
                                 .font(.subheadline)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                             let summary = appState.fridaySummary()
                             if !summary.weakest.isEmpty {
                                 Text("Weakest topics: \(summary.weakest.joined(separator: ", "))")
                                     .font(.caption)
-                                    .foregroundStyle(.secondary)
+                                    .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                             }
                             studyActionRow(
                                 title: "Friday review quiz (full week)",
@@ -411,6 +453,9 @@ struct TodayView: View {
                             }
                         }
                         .padding(.vertical, 4)
+                        .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
+                    } header: {
+                        coachSectionHeader("Friday review")
                     }
                 }
 
@@ -424,9 +469,7 @@ struct TodayView: View {
                     }
                 }
             }
-            .platformListStyle()
-            .scrollContentBackground(.hidden)
-            .background(GameColors.appBackground)
+            .todayListStyle(isDarkCoach: isDarkCoach, theme: theme)
             .navigationTitle("Today")
             .largeNavigationBarTitle()
             .studyNavigationDestinations()
@@ -442,7 +485,7 @@ struct TodayView: View {
                 HStack(alignment: .top) {
                     Text(CoachCopy.timeGreeting(name: appState.studentName))
                         .font(GameFont.title2())
-                        .foregroundStyle(GameColors.textPrimary)
+                        .foregroundStyle(theme.primaryText)
                     Spacer()
                     XPStreakBar(
                         streak: max(appState.studyStreakDays, XPManager.shared.currentStreak),
@@ -451,9 +494,10 @@ struct TodayView: View {
                 }
                 Text(coachNudge)
                     .font(GameFont.caption())
-                    .foregroundStyle(GameColors.textSecondary)
+                    .foregroundStyle(theme.secondaryText)
             }
-            .listRowBackground(GameColors.cardSurface)
+            .listRowBackground(theme.cardBackground)
+            .listRowInsets(EdgeInsets(top: 14, leading: 16, bottom: 14, trailing: 16))
         }
     }
 
@@ -463,6 +507,13 @@ struct TodayView: View {
             return "You're on a \(streak)-day streak. Don't break it today."
         }
         return "Game on — start a drill and earn XP."
+    }
+
+    private func coachSectionHeader(_ title: String) -> some View {
+        Text(title)
+            .font(isDarkCoach ? GameFont.caption(.semibold) : .subheadline)
+            .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+            .textCase(nil)
     }
 
     @ViewBuilder
@@ -483,5 +534,42 @@ struct TodayView: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
+    }
+}
+
+// MARK: - Today list chrome (dark coach theme vs warm light)
+
+private extension View {
+    @ViewBuilder
+    func todayListStyle(isDarkCoach: Bool, theme: ThemePalette) -> some View {
+        if isDarkCoach {
+            self
+                #if os(macOS)
+                .listStyle(.plain)
+                #else
+                .listStyle(.insetGrouped)
+                #endif
+                .scrollContentBackground(.hidden)
+                .background(theme.surface)
+                .foregroundStyle(theme.primaryText)
+                .tint(theme.accent)
+        } else {
+            self
+                .platformListStyle()
+        }
+    }
+
+    @ViewBuilder
+    func todayListRow(isDarkCoach: Bool, theme: ThemePalette, clear: Bool = false) -> some View {
+        if isDarkCoach {
+            if clear {
+                self.listRowBackground(Color.clear)
+            } else {
+                self.listRowBackground(theme.cardBackground)
+            }
+        } else {
+            self
+        }
     }
 }

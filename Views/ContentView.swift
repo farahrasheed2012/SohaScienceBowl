@@ -110,7 +110,7 @@ struct ContentView: View {
         } detail: {
             selectedTab.rootView
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(PlatformColor.groupedBackground)
+                .background(theme.surface)
         }
         .navigationSplitViewStyle(.balanced)
         .frame(minWidth: 1000, minHeight: 700)
