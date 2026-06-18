@@ -10,151 +10,315 @@ struct TossupDrillView: View {
 
     @State private var questions: [UnifiedQuestion] = []
     @State private var index = 0
-    @State private var revealed = false
-    @State private var correctCount = 0
+    @State private var choices: [String] = []
+    @State private var drillState: DrillScreenState = .countdown
+    @State private var arcProgress: CGFloat = 1.0
+    @State private var countdownText = "3"
+    @State private var liveCorrect = 0
+    @State private var liveMissed = 0
     @State private var finished = false
-    @State private var answerFeedback: DrillAnswerFeedback?
+    @State private var flashColor: Color?
+    @State private var showXPFloater = false
+    @State private var results: [(question: UnifiedQuestion, correct: Bool)] = []
+    @State private var xpAtStart = 0
+
+    private let arcTimer = ArcCountdownTimer()
+    @State private var countdownTask: Task<Void, Never>?
+    @State private var transitionTask: Task<Void, Never>?
+
+    private var subjectColor: Color { subject.gameColor }
 
     var body: some View {
-        VStack(spacing: 20) {
+        ZStack {
+            GameColors.appBackground.ignoresSafeArea()
+            subjectBleed(subject)
+
             if finished {
                 endScreen
             } else if questions.isEmpty {
                 ContentUnavailableView("No Questions", systemImage: "questionmark.circle", description: Text("Try another week or subject."))
             } else {
-                DrillQuestionScreen(
-                    questionText: questions[index].questionText,
-                    header: {
-                        VStack(spacing: 16) {
-                            ProgressView(value: Double(index), total: Double(questions.count))
-                                .tint(PlatformColor.systemBlue)
+                drillBody
+            }
 
-                            Text("Question \(index + 1) of \(questions.count)")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+            DrillFlashOverlay(color: flashColor)
 
-                            QuestionSpeechBar(
-                                questionText: questions[index].questionText,
-                                answerText: questions[index].answer,
-                                showAnswerButton: revealed
-                            )
-                        }
-                    },
-                    revealed: {
-                        if revealed {
-                            Text(questions[index].answer)
-                                .font(.body)
-                                .foregroundStyle(.secondary)
-                                .multilineTextAlignment(.center)
-                                .frame(maxWidth: .infinity)
-
-                            if let feedback = answerFeedback {
-                                DrillAnswerFeedbackPanel(
-                                    feedback: feedback,
-                                    nextLabel: index + 1 >= questions.count ? "Finish drill" : "Next question",
-                                    onNext: advanceFromFeedback
-                                )
-                            }
-                        }
-                    },
-                    footer: {
-                        if revealed {
-                            if answerFeedback == nil {
-                                HStack(spacing: 16) {
-                                    logButton(correct: true)
-                                    logButton(correct: false)
-                                }
-                            }
-                        } else {
-                            Button {
-                                revealed = true
-                            } label: {
-                                Label("BUZZ ⚡", systemImage: "bolt.fill")
-                                    .font(GameFont.headline(.bold))
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 20)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .tint(subject.gameColor)
-                            .accessibilityLabel("Buzz to reveal answer")
-                        }
+            if showXPFloater {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Text("+10 XP")
+                            .font(GameFont.headline(.bold))
+                            .foregroundStyle(GameColors.xpGold)
+                            .padding(.top, 8)
+                            .padding(.trailing, 20)
                     }
-                )
+                    Spacer()
+                }
+            }
+
+            if drillState == .countdown {
+                DrillCountdownOverlay(text: countdownText, subjectColor: subjectColor)
             }
         }
-        .navigationTitle("Toss-up Drill")
+        .navigationTitle("Buzzer Drill")
         .inlineNavigationBarTitle()
-        .onAppear { loadQuestions() }
-        .onDisappear { SpeechManager.shared.stop() }
+        .onAppear {
+            xpAtStart = XPManager.shared.totalXP
+            let loaded = appState.questionsForTossupDrill(
+                subject: subject,
+                week: week,
+                topicFilter: topicFilter,
+                limit: 20
+            )
+            questions = loaded
+            if let first = loaded.first {
+                choices = appState.quizChoices(for: first)
+                startCountdown()
+            }
+        }
+        .onDisappear {
+            arcTimer.cancel()
+            countdownTask?.cancel()
+            transitionTask?.cancel()
+            SpeechManager.shared.stop()
+        }
         .questionSpeech(questionText: questions.indices.contains(index) ? questions[index].questionText : nil, speechToken: index)
         .trackDrillQuestion(questions.indices.contains(index) ? questions[index] : nil, token: index)
     }
 
-    private var endScreen: some View {
-        VStack(spacing: 16) {
-            Text(CoachCopy.drillHeadline(correct: correctCount, total: questions.count))
-                .font(GameFont.largeTitle())
-                .foregroundStyle(GameColors.textPrimary)
-            Text("You got \(correctCount) out of \(questions.count) right")
-                .font(GameFont.title3())
-                .foregroundStyle(GameColors.textSecondary)
-            Text("\(subject.rawValue) · Week \(week.map(String.init) ?? "All")")
-                .font(GameFont.caption())
-                .foregroundStyle(GameColors.textTertiary)
+    private var drillBody: some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                HStack {
+                    Text("Question \(index + 1) of \(questions.count)")
+                        .font(GameFont.caption())
+                        .foregroundStyle(GameColors.textSecondary)
+                    Spacer()
+                    DrillScorePill(correct: liveCorrect, missed: liveMissed)
+                }
 
-            Button("Add misses to flash cards") {
-                for q in questions {
-                    appState.addMissToFlashCards(question: q)
+                DrillThinProgressBar(
+                    progress: Double(index) / Double(max(questions.count, 1)),
+                    color: subjectColor
+                )
+
+                questionCard
+
+                footer
+            }
+            .padding(20)
+        }
+    }
+
+    private var questionCard: some View {
+        let q = questions[index]
+        let showAnswer = drillState == .revealed || drillState == .transitioning
+
+        return VStack(alignment: .leading, spacing: 14) {
+            SubjectBadge(subject: subject, suffix: "Toss-Up")
+
+            QuestionSpeechBar(
+                questionText: q.questionText,
+                answerText: q.answer,
+                showAnswerButton: showAnswer,
+                choiceTexts: topicQuizSpeechChoices(choices)
+            )
+
+            Text(q.questionText)
+                .font(GameFont.title3())
+                .foregroundStyle(GameColors.textPrimary)
+
+            if !choices.isEmpty {
+                ForEach(choices, id: \.self) { choice in
+                    let isCorrect = showAnswer && (strip(choice) == strip(q.answer))
+                    Text(choice)
+                        .font(GameFont.body())
+                        .foregroundStyle(isCorrect ? subjectColor : GameColors.textPrimary)
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(isCorrect ? subjectColor.opacity(0.2) : Color.clear)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
             }
-            .buttonStyle(.bordered)
 
-            Button("Done") { dismiss() }
-                .buttonStyle(.borderedProminent)
+            if showAnswer {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("ANSWER").font(GameFont.caption(.bold)).foregroundStyle(subjectColor)
+                    Text(q.answer).font(GameFont.title2(.bold)).foregroundStyle(GameColors.textPrimary)
+                }
+            }
         }
-        .padding(16)
+        .gameCard(color: subjectColor.opacity(0.06))
     }
 
-    private func logButton(correct: Bool) -> some View {
-        Button {
-            submitAnswer(correct: correct)
-        } label: {
-            Label(correct ? "Correct" : "Incorrect", systemImage: correct ? "checkmark.circle.fill" : "xmark.circle.fill")
+    @ViewBuilder
+    private var footer: some View {
+        switch drillState {
+        case .questionLive:
+            BuzzButton(subjectColor: subjectColor, progress: arcProgress, action: buzz)
+            DrillDotRow(total: questions.count, current: index, color: subjectColor)
+            Button("Skip →") { skipQuestion() }
+                .font(GameFont.caption())
+                .foregroundStyle(GameColors.textSecondary)
+        case .buzzed:
+            Button("Reveal Answer →") { revealAnswer() }
+                .font(GameFont.headline())
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
+                .background(subjectColor)
+                .foregroundStyle(.white)
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        case .revealed:
+            DrillOutcomeButtons(onCorrect: { logOutcome(correct: true) }, onMissed: { logOutcome(correct: false) })
+        default:
+            EmptyView()
         }
-        .buttonStyle(.bordered)
-        .background(correct ? Color.green.opacity(0.15) : Color.red.opacity(0.15))
-        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
-    private func submitAnswer(correct: Bool) {
+    private var endScreen: some View {
+        DrillRoundEndView(
+            correct: liveCorrect,
+            missed: liveMissed,
+            total: questions.count,
+            xpEarned: max(0, XPManager.shared.totalXP - xpAtStart),
+            streak: XPManager.shared.currentStreak,
+            subjectRows: [(subject.rawValue, liveCorrect, questions.count, subjectColor)],
+            primaryActionTitle: "Drill Again →",
+            onPrimary: { dismiss() },
+            secondaryActionTitle: "Add misses to flash cards",
+            onSecondary: {
+                for item in results where !item.correct {
+                    appState.addMissToFlashCards(question: item.question)
+                }
+            }
+        )
+    }
+
+    // MARK: - Actions
+
+    private func startCountdown() {
+        drillState = .countdown
+        let sequence = ["3", "2", "1", "Go!"]
+        countdownTask?.cancel()
+        countdownTask = Task {
+            for (i, label) in sequence.enumerated() {
+                guard !Task.isCancelled else { return }
+                await MainActor.run {
+                    countdownText = label
+                    HapticFeedback.impact(.heavy)
+                }
+                try? await Task.sleep(nanoseconds: label == "Go!" ? 600_000_000 : 800_000_000)
+                if i == sequence.count - 1 {
+                    await MainActor.run { beginQuestionLive() }
+                }
+            }
+        }
+    }
+
+    private func beginQuestionLive() {
+        drillState = .questionLive
+        arcProgress = 1
+        arcTimer.start(duration: 5, onProgress: { progress in
+            arcProgress = progress
+        }, onExpired: {
+            handleTimeExpired()
+        })
+    }
+
+    private func buzz() {
+        guard drillState == .questionLive else { return }
+        arcTimer.cancel()
+        drillState = .buzzed
+        HapticFeedback.impact(.medium)
+    }
+
+    private func revealAnswer() {
+        guard drillState == .buzzed else { return }
+        withAnimation { drillState = .revealed }
+    }
+
+    private func logOutcome(correct: Bool) {
+        guard drillState == .revealed else { return }
         let q = questions[index]
-        if correct {
-            correctCount += 1
-            _ = XPManager.shared.award(.tossupCorrect)
-            DrillFeedbackMessages.onCorrect(appState: appState)
-            HapticFeedback.impact(.light)
-        } else {
-            appState.addMissToFlashCards(question: q)
-            DrillFeedbackMessages.onIncorrect(appState: appState)
-            HapticFeedback.error()
-        }
+        results.append((q, correct))
         appState.recordAttempt(topic: q.topic, subject: subject, correct: correct)
-        answerFeedback = DrillFeedbackMessages.makeFeedback(correct: correct, question: q, appState: appState)
+
+        if correct {
+            liveCorrect += 1
+            _ = XPManager.shared.award(.tossupCorrect)
+            flash(GameColors.correct)
+            HapticFeedback.impact(.light)
+            showXPFloater = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { showXPFloater = false }
+        } else {
+            liveMissed += 1
+            appState.addMissToFlashCards(question: q)
+            flash(GameColors.incorrect)
+            HapticFeedback.error()
+            DrillFeedbackMessages.onIncorrect(appState: appState)
+        }
+
+        if correct {
+            DrillFeedbackMessages.onCorrect(appState: appState)
+        }
+
+        drillState = .transitioning
+        transitionTask?.cancel()
+        transitionTask = Task {
+            try? await Task.sleep(nanoseconds: 800_000_000)
+            guard !Task.isCancelled else { return }
+            await MainActor.run { advance() }
+        }
     }
 
-    private func advanceFromFeedback() {
-        answerFeedback = nil
+    private func handleTimeExpired() {
+        guard drillState == .questionLive else { return }
+        let q = questions[index]
+        results.append((q, false))
+        liveMissed += 1
+        appState.addMissToFlashCards(question: q)
+        appState.recordAttempt(topic: q.topic, subject: subject, correct: false)
+        flash(GameColors.incorrect)
+        HapticFeedback.error()
+        withAnimation { drillState = .revealed }
+        transitionTask?.cancel()
+        transitionTask = Task {
+            try? await Task.sleep(nanoseconds: 1_200_000_000)
+            guard !Task.isCancelled else { return }
+            await MainActor.run { advance() }
+        }
+    }
+
+    private func skipQuestion() {
+        arcTimer.cancel()
+        let q = questions[index]
+        results.append((q, false))
+        liveMissed += 1
+        appState.addMissToFlashCards(question: q)
+        appState.recordAttempt(topic: q.topic, subject: subject, correct: false)
+        flash(GameColors.incorrect)
+        advance()
+    }
+
+    private func advance() {
+        arcTimer.cancel()
+        flashColor = nil
         if index + 1 >= questions.count {
-            appState.recordDrill(subject: subject, week: week, total: questions.count, correct: correctCount, mode: "Toss-up Drill")
+            appState.recordDrill(subject: subject, week: week, total: questions.count, correct: liveCorrect, mode: "Toss-up Drill")
             _ = XPManager.shared.award(.studySessionComplete)
             XPManager.shared.recordActivity()
             finished = true
         } else {
             index += 1
-            revealed = false
+            choices = appState.quizChoices(for: questions[index])
+            beginQuestionLive()
         }
+    }
+
+    private func flash(_ color: Color) {
+        withAnimation { flashColor = color }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { flashColor = nil }
     }
 
     private func loadQuestions() {
@@ -164,6 +328,10 @@ struct TossupDrillView: View {
             topicFilter: topicFilter,
             limit: 20
         )
+    }
+
+    private func strip(_ s: String) -> String {
+        s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
     }
 }
 

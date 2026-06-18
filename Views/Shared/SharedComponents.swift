@@ -2,13 +2,14 @@ import SwiftUI
 
 struct SubjectBadge: View {
     let subject: Subject
+    var suffix: String = ""
 
     var color: Color { subject.gameColor }
 
     var body: some View {
         HStack(spacing: 6) {
             Image(systemName: subject.gameIcon)
-            Text(subject.rawValue)
+            Text(subject.rawValue + (suffix.isEmpty ? "" : " · \(suffix)"))
         }
         .font(GameFont.caption(.semibold))
         .padding(.horizontal, 10)
