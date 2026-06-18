@@ -6,6 +6,18 @@ struct ProgressDashboardView: View {
     var body: some View {
         NavigationStack {
             List {
+                Section {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Your NSB Journey 🚀")
+                            .font(GameFont.title2())
+                        XPStreakBar(
+                            streak: max(appState.studyStreakDays, XPManager.shared.currentStreak),
+                            xp: XPManager.shared.totalXP
+                        )
+                    }
+                    .listRowBackground(GameColors.cardSurface)
+                }
+
                 Section("This week") {
                     ForEach(Subject.allCases) { subject in
                         VStack(alignment: .leading, spacing: 8) {
@@ -16,7 +28,7 @@ struct ProgressDashboardView: View {
                                     .font(.subheadline.weight(.semibold))
                             }
                             ProgressView(value: appState.weekAccuracy(subject: subject))
-                                .tint(PlatformColor.systemBlue)
+                                .tint(subject.gameColor)
                         }
                         .padding(.vertical, 4)
                     }

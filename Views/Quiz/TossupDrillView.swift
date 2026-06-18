@@ -69,12 +69,13 @@ struct TossupDrillView: View {
                             Button {
                                 revealed = true
                             } label: {
-                                Label("Buzz", systemImage: "bolt.fill")
-                                    .font(.title2.weight(.semibold))
+                                Label("BUZZ ⚡", systemImage: "bolt.fill")
+                                    .font(GameFont.headline(.bold))
                                     .frame(maxWidth: .infinity)
                                     .padding(.vertical, 20)
                             }
                             .buttonStyle(.borderedProminent)
+                            .tint(subject.gameColor)
                             .accessibilityLabel("Buzz to reveal answer")
                         }
                     }
@@ -91,12 +92,15 @@ struct TossupDrillView: View {
 
     private var endScreen: some View {
         VStack(spacing: 16) {
-            Text("Drill Complete")
-                .font(.title.weight(.semibold))
-            Text("\(correctCount) / \(questions.count) correct")
-                .font(.title2)
+            Text(CoachCopy.drillHeadline(correct: correctCount, total: questions.count))
+                .font(GameFont.largeTitle())
+                .foregroundStyle(GameColors.textPrimary)
+            Text("You got \(correctCount) out of \(questions.count) right")
+                .font(GameFont.title3())
+                .foregroundStyle(GameColors.textSecondary)
             Text("\(subject.rawValue) · Week \(week.map(String.init) ?? "All")")
-                .foregroundStyle(.secondary)
+                .font(GameFont.caption())
+                .foregroundStyle(GameColors.textTertiary)
 
             Button("Add misses to flash cards") {
                 for q in questions {
@@ -128,6 +132,7 @@ struct TossupDrillView: View {
         let q = questions[index]
         if correct {
             correctCount += 1
+            _ = XPManager.shared.award(.tossupCorrect)
             DrillFeedbackMessages.onCorrect(appState: appState)
             HapticFeedback.impact(.light)
         } else {
@@ -143,6 +148,8 @@ struct TossupDrillView: View {
         answerFeedback = nil
         if index + 1 >= questions.count {
             appState.recordDrill(subject: subject, week: week, total: questions.count, correct: correctCount, mode: "Toss-up Drill")
+            _ = XPManager.shared.award(.studySessionComplete)
+            XPManager.shared.recordActivity()
             finished = true
         } else {
             index += 1

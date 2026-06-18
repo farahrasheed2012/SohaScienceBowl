@@ -3,23 +3,20 @@ import SwiftUI
 struct SubjectBadge: View {
     let subject: Subject
 
-    var color: Color {
-        switch subject {
-        case .biology: return PlatformColor.systemGreen
-        case .chemistry: return PlatformColor.systemBlue
-        case .physics: return PlatformColor.systemOrange
-        }
-    }
+    var color: Color { subject.gameColor }
 
     var body: some View {
-        Text(subject.rawValue)
-            .font(.caption.weight(.semibold))
-            .padding(.horizontal, 10)
-            .padding(.vertical, 4)
-            .background(color.opacity(0.15))
-            .foregroundStyle(color)
-            .clipShape(Capsule())
-            .accessibilityLabel("\(subject.rawValue) subject")
+        HStack(spacing: 6) {
+            Image(systemName: subject.gameIcon)
+            Text(subject.rawValue)
+        }
+        .font(GameFont.caption(.semibold))
+        .padding(.horizontal, 10)
+        .padding(.vertical, 4)
+        .background(color.opacity(0.15))
+        .foregroundStyle(color)
+        .clipShape(Capsule())
+        .accessibilityLabel("\(subject.rawValue) subject")
     }
 }
 

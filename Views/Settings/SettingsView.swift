@@ -16,6 +16,7 @@ struct SettingsView: View {
     @State private var backupAlertTitle = ""
     @State private var backupAlertMessage = ""
     @State private var showClearProgressConfirm = false
+    @State private var showResetXPConfirm = false
 
     var body: some View {
         NavigationStack {
@@ -90,6 +91,14 @@ struct SettingsView: View {
                 Button("Cancel", role: .cancel) {}
             } message: {
                 Text("This cannot be undone. Export a backup first if you want to keep a copy.\n\nKeeps: appearance, session timer, parent-reads-aloud, and calendar sync settings. Resets week & pass to today's date.")
+            }
+            .alert("Reset XP and streak?", isPresented: $showResetXPConfirm) {
+                Button("Reset", role: .destructive) {
+                    XPManager.shared.resetProgress()
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Clears total XP and day streak only. Drill history and checklist are not affected.")
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -240,6 +249,11 @@ struct SettingsView: View {
 
     private var clearProgressSection: some View {
         Section {
+            Button(role: .destructive) {
+                showResetXPConfirm = true
+            } label: {
+                Label("Reset XP and streak", systemImage: "star.slash")
+            }
             Button(role: .destructive) {
                 showClearProgressConfirm = true
             } label: {

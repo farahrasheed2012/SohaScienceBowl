@@ -11,6 +11,8 @@ struct TodayView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             List {
+                gameHeaderSection
+
                 if let next = appState.nextUpItem() {
                     Section {
                         VStack(alignment: .leading, spacing: 10) {
@@ -423,6 +425,8 @@ struct TodayView: View {
                 }
             }
             .platformListStyle()
+            .scrollContentBackground(.hidden)
+            .background(GameColors.appBackground)
             .navigationTitle("Today")
             .largeNavigationBarTitle()
             .studyNavigationDestinations()
@@ -430,6 +434,35 @@ struct TodayView: View {
                 appState.refreshScheduleFromCalendar()
             }
         }
+    }
+
+    private var gameHeaderSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(alignment: .top) {
+                    Text(CoachCopy.timeGreeting(name: appState.studentName))
+                        .font(GameFont.title2())
+                        .foregroundStyle(GameColors.textPrimary)
+                    Spacer()
+                    XPStreakBar(
+                        streak: max(appState.studyStreakDays, XPManager.shared.currentStreak),
+                        xp: XPManager.shared.totalXP
+                    )
+                }
+                Text(coachNudge)
+                    .font(GameFont.caption())
+                    .foregroundStyle(GameColors.textSecondary)
+            }
+            .listRowBackground(GameColors.cardSurface)
+        }
+    }
+
+    private var coachNudge: String {
+        let streak = max(appState.studyStreakDays, XPManager.shared.currentStreak)
+        if streak > 0 {
+            return "You're on a \(streak)-day streak. Don't break it today."
+        }
+        return "Game on — start a drill and earn XP."
     }
 
     @ViewBuilder

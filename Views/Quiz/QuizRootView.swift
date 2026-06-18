@@ -249,7 +249,7 @@ struct QuizRootView: View {
                 }
             }
             .platformListStyle()
-            .navigationTitle("Quiz")
+            .navigationTitle("Drill")
             .largeNavigationBarTitle()
             .studyNavigationDestinations()
             .onAppear {

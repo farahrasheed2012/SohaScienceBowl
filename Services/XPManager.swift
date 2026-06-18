@@ -1,0 +1,79 @@
+import Foundation
+
+@MainActor
+@Observable
+final class XPManager {
+    static let shared = XPManager()
+
+    private let xpKey = "totalXP"
+    private let streakKey = "currentStreak"
+    private let lastActivityKey = "xpLastActivityDate"
+
+    var totalXP: Int {
+        didSet { UserDefaults.standard.set(totalXP, forKey: xpKey) }
+    }
+
+    var currentStreak: Int {
+        didSet { UserDefaults.standard.set(currentStreak, forKey: streakKey) }
+    }
+
+    private init() {
+        totalXP = UserDefaults.standard.integer(forKey: xpKey)
+        currentStreak = UserDefaults.standard.integer(forKey: streakKey)
+    }
+
+    enum Award {
+        case tossupCorrect
+        case bonusCorrect
+        case studySessionComplete
+        case mockRoundComplete
+
+        var points: Int {
+            switch self {
+            case .tossupCorrect: return 10
+            case .bonusCorrect: return 15
+            case .studySessionComplete: return 25
+            case .mockRoundComplete: return 50
+            }
+        }
+    }
+
+    @discardableResult
+    func award(_ award: Award) -> Int {
+        let points = award.points
+        totalXP += points
+        recordActivity()
+        return points
+    }
+
+    func awardCustom(points: Int) {
+        guard points > 0 else { return }
+        totalXP += points
+        recordActivity()
+    }
+
+    func recordActivity(on date: Date = Date()) {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: date)
+
+        if let lastRaw = UserDefaults.standard.object(forKey: lastActivityKey) as? Date {
+            let last = calendar.startOfDay(for: lastRaw)
+            let delta = calendar.dateComponents([.day], from: last, to: today).day ?? 0
+            switch delta {
+            case 0: break
+            case 1: currentStreak += 1
+            default: currentStreak = 1
+            }
+        } else {
+            currentStreak = 1
+        }
+
+        UserDefaults.standard.set(today, forKey: lastActivityKey)
+    }
+
+    func resetProgress() {
+        totalXP = 0
+        currentStreak = 0
+        UserDefaults.standard.removeObject(forKey: lastActivityKey)
+    }
+}

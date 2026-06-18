@@ -60,3 +60,7 @@ Turn on **Read questions aloud** for TTS across toss-up drill, plan/buzzer drill
 ## Books referenced
 
 FLS · Hewitt (Expl) · Mod · Tro · OSB · CB — summer schedule books; **reading checkboxes** track **NSB-scheduled FLS + Hewitt sections only** (not entire books).
+
+## UX redesign (in progress)
+
+Shared game-style UX with [TossUp](../TossUp/) — dark theme, subject colors, XP/streak, coach copy. Full spec: `../TossUp/CURSOR_PROMPT_ScienceBowlCoach_UX_Redesign.md`.
