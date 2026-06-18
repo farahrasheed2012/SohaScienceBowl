@@ -52,7 +52,7 @@ Turn on **Read questions aloud** for TTS across toss-up drill, plan/buzzer drill
 
 ## Data
 
-- **One summer plan** — 50 science blocks; **DOE Tips & Resources topics** (Life Science · Physical Science) — not whole textbooks; algebra block covers DOE Math topics
+- **One summer plan** — 50 science blocks; **DOE Tips & Resources topics** (Life Science · Physical Science) — not whole textbooks; **algebra block walks all 68 BFN-A chapters** (optional OpenStax/Larson for NSB drills)
 - Encyclopedia: 124 topics + 182 practice questions (includes 11 Regional Sprint articles)
 - DOE PDFs parsed at first launch via PDFKit → cached in Documents as `doe_questions_cache.json`
 - All progress stored locally in UserDefaults (no network, no accounts)

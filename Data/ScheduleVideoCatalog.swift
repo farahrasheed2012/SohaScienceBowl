@@ -168,9 +168,10 @@ enum ScheduleVideoCatalog {
         ],
         2: [
             .monday: [
-                DayBlock(label: "Chem · states of matter", links: [
-                    yt("States of matter", "wclY8F-UoHE", "Amoeba Sisters — States of matter"),
-                    yt("Heat transfer & phases", "FPPv1mkRpKw", "Khan Academy — Heat transfer & phase changes")
+                DayBlock(label: "Chem · the atom", links: [
+                    yt("What's Inside an Atom?", "e9GuJUaX0UM", "Tyler DeWitt — What's Inside an Atom?"),
+                    yt("What are Isotopes?", "EboWeWmh5Pg", "Tyler DeWitt — What are Isotopes?"),
+                    yt("Periodic table basics", "84780SzjGt0", "Periodic table basics")
                 ]),
                 DayBlock(label: "Math · percent", links: [
                     yt("Percent of a number", "JeVSmq1Nrpw", "Khan Academy — Percent of a number"),
@@ -277,10 +278,9 @@ enum ScheduleVideoCatalog {
         ],
         4: [
             .monday: [
-                DayBlock(label: "Chem · the atom", links: [
-                    yt("What's Inside an Atom?", "e9GuJUaX0UM", "Tyler DeWitt — What's Inside an Atom?"),
-                    yt("What are Isotopes?", "EboWeWmh5Pg", "Tyler DeWitt — What are Isotopes?"),
-                    yt("Periodic table basics", "84780SzjGt0", "Periodic table basics")
+                DayBlock(label: "Chem · states of matter", links: [
+                    yt("States of matter", "wclY8F-UoHE", "Amoeba Sisters — States of matter"),
+                    yt("Heat transfer & phases", "FPPv1mkRpKw", "Khan Academy — Heat transfer & phase changes")
                 ]),
                 DayBlock(label: "Math · number review", links: [
                     yt("Comparing rational numbers", "kQ3K_H9QOGA", "Khan Academy — Comparing rational numbers"),

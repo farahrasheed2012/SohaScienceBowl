@@ -26,7 +26,11 @@ final class EncyclopediaStore {
 
     func loadContent() {
         topics = loadJSON(named: "topics", as: [NSBTopic].self) ?? []
-        questions = loadJSON(named: "questions", as: [NSBQuestion].self) ?? []
+        var loaded = loadJSON(named: "questions", as: [NSBQuestion].self) ?? []
+        if let hewitt = loadJSON(named: "hewitt_ch17_questions", as: [NSBQuestion].self) {
+            loaded.append(contentsOf: hewitt)
+        }
+        questions = loaded
         rebuildQuestionCounts()
     }
 

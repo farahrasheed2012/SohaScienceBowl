@@ -133,27 +133,27 @@ BFN_BIO_BY_TOPIC: dict[str, BfnCitation] = {
 }
 
 BFN_ALG_BY_TITLE: dict[str, BfnCitation] = {
-    "Scientific notation": BfnCitation("Unit 4", "Ch 19 Exponents · Ch 20 Scientific Notation", "p141"),
-    "Ratios": BfnCitation("Unit 3", "Ch 11–18 Ratios · Unit Rates · Proportions", "p75"),
-    "Graphs & slope": BfnCitation("Unit 6", "Ch 31–38 Slope · Slope-Intercept · Read Graphs", "p247"),
-    "Graphs": BfnCitation("Unit 6", "Ch 31–38 Graphing Linear Equations", "p247"),
-    "Graph reading": BfnCitation("Unit 6", "Ch 31–38 Read Graphs · Slope as Rate", "p247"),
-    "Unit conversion": BfnCitation("Unit 2", "Ch 4–10 The Number System · Decimals", "p23"),
-    "Unit conversion review": BfnCitation("Unit 2", "Ch 4–10 Fractions · Decimals · Metric", "p23"),
-    "PEMDAS & estimation": BfnCitation("Unit 1", "Ch 1–3 Types of Numbers · Order of Operations", "p1"),
-    "Percent": BfnCitation("Unit 3", "Ch 11–18 Percent · Proportions", "p75"),
-    "Proportions": BfnCitation("Unit 3", "Ch 11–18 Proportions · Cross-Multiply", "p75"),
-    "F = ma": BfnCitation("Unit 5", "Ch 24–30 Linear Equations · Plug-In", "p175"),
-    "Exponents": BfnCitation("Unit 4", "Ch 19 Exponents · Ch 20 Scientific Notation", "p141"),
-    "Body-scale ratios": BfnCitation("Unit 3", "Ch 11–18 Ratios · Unit Rates", "p75"),
-    "Formula substitution": BfnCitation("Unit 5", "Ch 24–30 Solve Equations · Rearrange Formulas", "p175"),
-    "Formula plug-in": BfnCitation("Unit 5", "Ch 24–30 Linear Equations · Substitution", "p175"),
-    "W = Fd": BfnCitation("Unit 5", "Ch 24–30 Equations · Formula Rearranging", "p175"),
-    "Concentration ratios": BfnCitation("Unit 3", "Ch 11–18 Proportions · Percent", "p75"),
+    "Scientific notation": BfnCitation("Unit 4", "Ch 20 Scientific Notation", "p141"),
+    "Ratios": BfnCitation("Unit 3", "Ch 11 Ratio", "p75"),
+    "Graphs & slope": BfnCitation("Unit 6", "Ch 32 Slope · Ch 33 Slope-Intercept Form", "p247"),
+    "Graphs": BfnCitation("Unit 6", "Ch 34 Graphing Linear Equations", "p247"),
+    "Graph reading": BfnCitation("Unit 6", "Ch 37 Reading Graphs · Slope as Rate", "p247"),
+    "Unit conversion": BfnCitation("Unit 2", "Ch 9 Decimals · Metric Units", "p23"),
+    "Unit conversion review": BfnCitation("Unit 2", "Ch 8 Fractions · Ch 9 Decimals", "p23"),
+    "PEMDAS & estimation": BfnCitation("Unit 1", "Ch 2 Order of Operations", "p1"),
+    "Percent": BfnCitation("Unit 3", "Ch 15 Percent", "p75"),
+    "Proportions": BfnCitation("Unit 3", "Ch 13 Proportion · Ch 14 Cross-Multiplication", "p75"),
+    "F = ma": BfnCitation("Unit 5", "Ch 26 Solving Equations · Plug-In", "p175"),
+    "Exponents": BfnCitation("Unit 4", "Ch 19 Exponents", "p141"),
+    "Body-scale ratios": BfnCitation("Unit 3", "Ch 12 Unit Rate", "p75"),
+    "Formula substitution": BfnCitation("Unit 5", "Ch 28 Literal Equations · Rearrange Formulas", "p175"),
+    "Formula plug-in": BfnCitation("Unit 5", "Ch 26 Solving Equations · Substitution", "p175"),
+    "W = Fd": BfnCitation("Unit 5", "Ch 28 Literal Equations · Formula Rearranging", "p175"),
+    "Concentration ratios": BfnCitation("Unit 3", "Ch 13 Proportion · Ch 15 Percent", "p75"),
     "Mixed review": BfnCitation("Units 1–7", "Pick weakest unit · Check Your Knowledge", "p1"),
-    "Number review": BfnCitation("Unit 2", "Ch 4–10 Negatives · Fractions · Decimals", "p23"),
-    "Logic & probability": BfnCitation("Unit 7", "Ch 39–44 Data · Probability · Logic", "p325"),
-    "v = fλ": BfnCitation("Unit 11", "Ch 57–60 Square Roots · Simplify Radicals", "p505"),
+    "Number review": BfnCitation("Unit 2", "Ch 6 Integers · Ch 8 Fractions", "p23"),
+    "Logic & probability": BfnCitation("Unit 7", "Ch 42 Probability · Ch 43 Logic", "p325"),
+    "v = fλ": BfnCitation("Unit 11", "Ch 57 Square Roots · Ch 58 Simplifying Radicals", "p505"),
     "Flash review": BfnCitation("Units 1–6", "Mixed CYK · sci notation · ratios · graphs", "p1"),
     "Final review": BfnCitation("Units 1–7", "All summer units · Check Your Knowledge", "p1"),
 }
@@ -178,9 +178,20 @@ def format_bfn_algebra(math_title: str) -> str:
     return f"BFN-A · {c.short_line}"
 
 
+def format_bfn_algebra_day(week: int, day_idx: int) -> str:
+    from bfn_algebra_catalog import day_assignment
+
+    return day_assignment(week, day_idx).bfn_line
+
+
 def format_algebra_backup(week: int, day_idx: int, math_title: str, lar_part: str) -> str:
-    lar = lar_part.split(" · BFN")[0].strip()
-    return f"{lar} · {format_bfn_algebra(math_title)}"
+    from bfn_algebra_catalog import day_assignment
+
+    assignment = day_assignment(week, day_idx)
+    osa = " · ".join(f"§{k}" for k in assignment.osa_section_keys if k != "home")
+    if osa:
+        return f"{assignment.bfn_line} · Also OK: OSA {osa} · {assignment.lar_backup}"
+    return f"{assignment.bfn_line} · Also OK: {assignment.lar_backup}"
 
 
 def format_chem_backup(week: int, day_idx: int, mod_display: str, tro_part: str) -> str:

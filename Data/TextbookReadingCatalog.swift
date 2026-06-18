@@ -22,6 +22,8 @@ enum TextbookReadingCatalog {
         switch categoryId {
         case "chemistry":
             return []
+        case "mathematics":
+            return bfnAlgebraChapters
         case "physics":
             return explChapters(partIDs: ["intro", "p1", "p2"])
                 .filter { chapterNumber(from: $0.id).map(MSNSBStudyScope.includes(explChapter:)) == true }
@@ -65,6 +67,8 @@ enum TextbookReadingCatalog {
         switch categoryId {
         case "biology":
             return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "FLS")
+        case "mathematics":
+            return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "BFN-A")
         default:
             return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "Hewitt")
         }
@@ -102,6 +106,16 @@ enum TextbookReadingCatalog {
                 id: flsChapterID(number: chapter.number),
                 label: "Ch \(chapter.number) — \(chapter.title)",
                 sectionIds: sectionIds
+            )
+        }
+    }
+
+    private static var bfnAlgebraChapters: [ChapterTrackable] {
+        BFNAlgebraCatalog.chapters.map { chapter in
+            ChapterTrackable(
+                id: chapter.trackableId,
+                label: chapter.label,
+                sectionIds: []
             )
         }
     }

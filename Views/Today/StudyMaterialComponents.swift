@@ -155,6 +155,12 @@ struct StudyBookOptionRow: View {
 struct StudyMathBookOptionsCard: View {
     let reading: ScheduleOpenStaxCatalog.MathReading
 
+    private var osaLabel: String {
+        let sections = reading.sectionKeys.filter { $0 != "home" }
+        if sections.isEmpty { return "OpenStax — review" }
+        return "OSA §\(sections.joined(separator: " · §"))"
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Label("Math reading options", systemImage: "books.vertical.fill")
@@ -162,40 +168,42 @@ struct StudyMathBookOptionsCard: View {
 
             StudyBookOptionRow(
                 option: StudyBookOption(
-                    id: "osa-primary",
+                    id: "bfn-a-primary",
                     role: .primary,
-                    text: "OSA — \(reading.title)",
-                    links: Array(zip(reading.sectionKeys, reading.urls)).map { key, url in
-                        StudyBookLink(
-                            label: key == "home" ? "OpenStax book overview" : "OpenStax §\(key)",
-                            url: url
-                        )
-                    },
-                    isRecommended: false
+                    text: reading.bfnOptionText,
+                    links: [],
+                    isRecommended: true
                 )
             )
+
+            if !reading.sectionKeys.isEmpty {
+                StudyBookOptionRow(
+                    option: StudyBookOption(
+                        id: "osa-also",
+                        role: .alsoOK,
+                        text: osaLabel,
+                        links: Array(zip(reading.sectionKeys, reading.urls)).map { key, url in
+                            StudyBookLink(
+                                label: key == "home" ? "OpenStax book overview" : "OpenStax §\(key)",
+                                url: url
+                            )
+                        },
+                        isRecommended: false
+                    )
+                )
+            }
 
             if !reading.larBackupLine.isEmpty {
                 StudyBookOptionRow(
                     option: StudyBookOption(
                         id: "lar-backup",
-                        role: .alsoOK,
+                        role: .backup,
                         text: reading.larBackupLine,
                         links: [],
                         isRecommended: false
                     )
                 )
             }
-
-            StudyBookOptionRow(
-                option: StudyBookOption(
-                    id: "bfn-a-backup",
-                    role: .backup,
-                    text: ScheduleBFNCatalog.algebraOptionText(for: reading.title),
-                    links: [],
-                    isRecommended: false
-                )
-            )
         }
     }
 }
@@ -253,7 +261,7 @@ struct StudyMathReadingAndVideos: View {
                     .font(.headline)
                     .foregroundStyle(PlatformColor.systemRed)
 
-                Text("~5–12 min each · read OpenStax first")
+                Text("~5–12 min each · read BFN-A first")
                     .font(.caption)
                     .foregroundStyle(.secondary)
 

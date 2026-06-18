@@ -4331,5 +4331,34 @@
       "ps-reflection-refraction",
       "ps-waves"
     ]
+  },
+  {
+    "id": "hewitt-ch17",
+    "subject": "Chemistry",
+    "title": "Hewitt Ch 17 — Elements of Chemistry",
+    "whatIsIt": "Paul Hewitt's introductory chemistry chapter: atoms, phases of matter, physical vs chemical properties and changes, the periodic table, compounds, and naming systems.",
+    "howItWorks": "Read §17.1–17.8 in order. Each section builds: central science → subatomic particles → phases → properties → changes → periodic table → compounds → naming. Practice with 59 official-format toss-up and bonus pairs.",
+    "realWorldExample": "Understanding why salt dissolves but burning wood cannot be undone connects physical vs chemical change (§17.5) to everyday chemistry.",
+    "keyTerms": [
+      {"term": "Isotope", "definition": "Atoms of the same element with different numbers of neutrons."},
+      {"term": "Density", "definition": "Mass divided by volume — intensive physical property."},
+      {"term": "Alkali metals", "definition": "Group 1 — highly reactive metals."},
+      {"term": "Ionic bond", "definition": "Transfer of electrons between metal and nonmetal."},
+      {"term": "Law of definite proportions", "definition": "A compound always has the same element ratio by mass."}
+    ],
+    "nsbTraps": [
+      "Deposition = gas → solid; sublimation = solid → gas.",
+      "Groups = columns (similar properties); periods = rows.",
+      "Dissolving salt is usually classified as physical change because salt can be recovered."
+    ],
+    "didYouKnow": [
+      "Hewitt calls chemistry the 'central science' because it connects biology, physics, and Earth science."
+    ],
+    "relatedTopics": [
+      "ch-atomic-structure",
+      "ch-periodic-table",
+      "ch-elements-compounds",
+      "ch-chemical-bonds"
+    ]
   }
 ]

@@ -87,7 +87,8 @@ enum BlockAssignedReadingCatalog {
     private static let modSectionByKey: [Key: String] = [
         Key(week: 1, day: .monday, subject: .chemistry): "§3.1–3.3",
         Key(week: 1, day: .thursday, subject: .chemistry): "§5.1–5.2",
-        Key(week: 2, day: .monday, subject: .chemistry): "§10.1–10.2",
+        Key(week: 2, day: .monday, subject: .chemistry): "§5.3 + §4",
+        Key(week: 4, day: .monday, subject: .chemistry): "§10.1–10.2",
         Key(week: 2, day: .thursday, subject: .chemistry): "§7.1–7.2",
         Key(week: 3, day: .monday, subject: .chemistry): "§12.1–12.2",
         Key(week: 3, day: .thursday, subject: .chemistry): "§8.1–8.3",
@@ -112,13 +113,13 @@ enum BlockAssignedReadingCatalog {
     private static let explChemByKey: [Key: ChemReadingSpec] = [
         Key(week: 1, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.1", "17.2", "17.3"])]),
         Key(week: 1, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.6", "17.7", "17.8"])]),
-        Key(week: 2, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.3", "17.4", "17.5"])]),
+        Key(week: 2, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [
+            (15, ["15.1", "15.2", "15.3", "15.4", "15.5"]),
+        ]),
         Key(week: 2, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(18, ["18.1", "18.2", "18.3", "18.4"])]),
         Key(week: 3, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(19, ["19.1", "19.2", "19.3", "19.4"])]),
         Key(week: 3, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(20, ["20.1", "20.2", "20.3", "20.4"])]),
-        Key(week: 4, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [
-            (15, ["15.1", "15.2", "15.3", "15.4", "15.5"]),
-        ]),
+        Key(week: 4, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.3", "17.4", "17.5"])]),
         Key(week: 4, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(17, ["17.1", "17.4"])]),
         Key(week: 5, day: .monday, subject: .chemistry): ChemReadingSpec(chapterSections: [(18, ["18.5", "18.6", "18.7", "18.8"])]),
         Key(week: 5, day: .thursday, subject: .chemistry): ChemReadingSpec(chapterSections: [(19, ["19.3", "19.4"])]),

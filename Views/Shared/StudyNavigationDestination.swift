@@ -44,6 +44,8 @@ extension View {
                 RegionalSprintPackDetailView(packId: packId)
             case .regionalSprintMixed(let track):
                 PlanDrillView(request: track.map { .regionalSprint(track: $0) } ?? .regionalSprintMixed())
+            case .hewittChapter17:
+                HewittChapter17RootView()
             }
         }
     }

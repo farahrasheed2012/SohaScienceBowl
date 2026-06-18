@@ -980,7 +980,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U1 · Ch 1–3 Order of Operations · p1",
+      "label": "U1 · Ch 2 Order of Operations · p1",
       "role": "backup"
     }
   ],
@@ -997,7 +997,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U2–U3 · p23",
+      "label": "U3 · Ch 15 Percent · p75",
       "role": "backup"
     }
   ],
@@ -1014,7 +1014,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U3 · Ch 11–18 · p75",
+      "label": "U3 · Ch 11 Ratio · p75",
       "role": "backup"
     }
   ],
@@ -1031,7 +1031,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U4 · Ch 19–20 · p141",
+      "label": "U4 · Ch 19 Exponents · p141",
       "role": "backup"
     }
   ],
@@ -1048,7 +1048,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U2–U3 · p23",
+      "label": "U5 · Ch 28 Literal Equations · p175",
       "role": "backup"
     }
   ],
@@ -1065,7 +1065,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U5 · Ch 24–30 · p175",
+      "label": "U5 · Ch 26 Solving Equations · p175",
       "role": "backup"
     }
   ],
@@ -1082,7 +1082,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U8 · Ch 45–47 · p395",
+      "label": "U8 · Ch 45 Introduction to Functions · p395",
       "role": "backup"
     }
   ],
@@ -1099,7 +1099,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U6 · Ch 31–38 · p247",
+      "label": "U6 · Ch 32 Slope · p247",
       "role": "backup"
     }
   ],
@@ -1116,7 +1116,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U6 · p247",
+      "label": "U6 · Ch 31 Coordinate Plane · p247",
       "role": "backup"
     }
   ],
@@ -1133,7 +1133,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U7 · Ch 39–44 · p325",
+      "label": "U7 · Ch 42 Probability · p325",
       "role": "backup"
     }
   ],
@@ -1150,7 +1150,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U7 · p325",
+      "label": "U7 · Ch 40 Mean · Median · Mode · p325",
       "role": "backup"
     }
   ],
@@ -1191,7 +1191,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U11 · Ch 57–60 · p505",
+      "label": "U11 · Ch 57 Square Roots · p505",
       "role": "backup"
     }
   ],
@@ -1203,7 +1203,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U5 · systems · p175",
+      "label": "U5 · Ch 29 Systems of Equations · p175",
       "role": "backup"
     }
   ],
@@ -1215,7 +1215,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U4 · Ch 21–23 · p141",
+      "label": "U4 · Ch 21 Algebraic Expressions · p141",
       "role": "backup"
     }
   ],
@@ -1232,7 +1232,7 @@
     },
     {
       "bookCode": "BFN-A",
-      "label": "U2 · p23",
+      "label": "U2 · Ch 6 Integers · p23",
       "role": "backup"
     }
   ],

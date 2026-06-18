@@ -153,6 +153,8 @@ struct NSBCategoryDetailView: View {
         switch category.id {
         case "biology":
             return "Check off FLS sections on the NSB summer schedule only — not every chapter in the book."
+        case "mathematics":
+            return "Check off BFN-A chapters as you complete them — the summer algebra block walks Ch 1–68."
         default:
             return "Check off Hewitt sections on the NSB summer schedule only — not the full textbook."
         }
@@ -249,6 +251,10 @@ struct NSBCategoryDetailView: View {
                 biologyReferenceSection
             }
 
+            if category.id == "mathematics" {
+                bfnAlgebraTextbookSection
+            }
+
             Section {
                 Text("These study guides are in the Learn tab. They are not an official DOE topic checklist — use them to explore ideas within this category.")
                     .font(.caption)
@@ -337,6 +343,33 @@ struct NSBCategoryDetailView: View {
                 .foregroundStyle(.secondary)
             Link("Open DOE Tips & Resources", destination: MSNSBOfficialCatalog.tipsURL)
                 .font(.caption.weight(.medium))
+        }
+    }
+
+    @ViewBuilder
+    private var bfnAlgebraTextbookSection: some View {
+        let trackable = TextbookReadingCatalog.chapters(forCategoryId: "mathematics")
+        let completed = trackable.filter {
+            appState.textbookReading.isChapterComplete(chapterId: $0.id)
+        }.count
+
+        Section {
+            ForEach(BFNAlgebraCatalog.chaptersGroupedByUnit(), id: \.unit.id) { group in
+                Section {
+                    ForEach(group.chapters) { chapter in
+                        TextbookSimpleChapterRow(
+                            chapterId: chapter.trackableId,
+                            label: chapter.label
+                        )
+                    }
+                } header: {
+                    Text("Unit \(group.unit.number) — \(group.unit.name)")
+                }
+            }
+        } header: {
+            Text(BFNAlgebraCatalog.editionTitle)
+        } footer: {
+            Text("Summer algebra block covers all \(BFNAlgebraCatalog.chapterCount) chapters (Jun 8 – Aug 19). \(completed)/\(trackable.count) checked off.")
         }
     }
 

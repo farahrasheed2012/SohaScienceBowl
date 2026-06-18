@@ -75,16 +75,17 @@ extension SeedData {
 
         // WEEK 2
         block(week: 2, day: .monday, subject: .chemistry, pass: .pass1,
-              book: "Expl", chapter: "Ch 17 §17.3–17.5", title: "States of Matter",
-              pass2Book: "Mod", pass2Chapter: "Ch 10", pass2Title: "Matter and Energy (backup)",
-              backupBookLine: "Tro Ch 3",
-              focus: "Solid (fixed shape & volume) · liquid (fixed volume, takes shape of container) · gas (fills container) · particle model: spacing & motion differences · melting / freezing / boiling / condensation · phase changes absorb or release energy · heating curve: flat plateau during phase change · evaporation (surface only) vs boiling (throughout)",
-              formulas: "Solid ↔ liquid ↔ gas transitions · evaporation vs boiling · heating curve plateau = phase change",
-              knowCold: ["Which state has fastest-moving particles? (Gas)", "Boiling vs evaporation — one difference? (Boiling occurs throughout liquid; evaporation only at surface)", "Ice melting — what happens to particle spacing? (Spacing increases)"],
-              topic: "States of matter",
+              book: "Expl", chapter: "Ch 15 §15.1–15.5", title: "The Atom",
+              pass2Book: "Mod", pass2Chapter: "Ch 5 §3 + Ch 4", pass2Title: "Periodic trends (backup)",
+              backupBookLine: "Tro Ch 9 §9.7 · §9.9",
+              focus: "Hewitt Ch 15: atom discovery · elements & periodic table · nucleus (protons/neutrons) · isotopes & weighted average atomic mass · electron shells & valence e⁻ · first 20 symbols H–Ca · builds on Week 1 Ch 17 atom intro",
+              formulas: "Z = # protons · A = p + n · avg atomic mass from isotopes · valence e⁻ in outer shell",
+              knowCold: ["Symbol for potassium? (K)", "Carbon-12 vs carbon-14 — same proton count? (Yes, isotopes)", "Where are protons located? (Nucleus)"],
+              topic: "The atom",
               tossups: [
-                  ("Which state of matter has particles with the most kinetic energy at the same temperature?", "Gas"),
-                  ("During boiling, is energy absorbed by or released from the substance?", "Absorbed")
+                  ("What is the chemical symbol for potassium?", "K"),
+                  ("Carbon-12 and carbon-14 are isotopes of carbon. How many protons does each have?", "6"),
+                  ("In an atom, where are protons located?", "In the nucleus")
               ]),
         block(week: 2, day: .tuesday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 4 — Human Inheritance · Advances in Modern Genetics", title: "Genetics — DNA & genes (part 1)",
@@ -193,17 +194,16 @@ extension SeedData {
 
         // WEEK 4
         block(week: 4, day: .monday, subject: .chemistry, pass: .pass1,
-              book: "Expl", chapter: "Ch 15 §15.1–15.5", title: "The Atom",
-              pass2Book: "Mod", pass2Chapter: "Ch 5 §3 + Ch 4", pass2Title: "Periodic trends (backup)",
-              backupBookLine: "Tro Ch 9 §9.7 · §9.9",
-              focus: "Hewitt Ch 15: atom discovery · elements & periodic table · nucleus (protons/neutrons) · isotopes & weighted average atomic mass · electron shells & valence e⁻ · first 20 symbols H–Ca",
-              formulas: "Z = # protons · A = p + n · avg atomic mass from isotopes · valence e⁻ in outer shell",
-              knowCold: ["Symbol for potassium? (K)", "Carbon-12 vs carbon-14 — same proton count? (Yes, isotopes)", "Where are protons located? (Nucleus)"],
-              topic: "The atom",
+              book: "Expl", chapter: "Ch 17 §17.3–17.5", title: "States of Matter",
+              pass2Book: "Mod", pass2Chapter: "Ch 10", pass2Title: "Matter and Energy (backup)",
+              backupBookLine: "Tro Ch 3",
+              focus: "Solid (fixed shape & volume) · liquid (fixed volume, takes shape of container) · gas (fills container) · particle model: spacing & motion differences · melting / freezing / boiling / condensation · phase changes absorb or release energy · heating curve: flat plateau during phase change · evaporation (surface only) vs boiling (throughout)",
+              formulas: "Solid ↔ liquid ↔ gas transitions · evaporation vs boiling · heating curve plateau = phase change",
+              knowCold: ["Which state has fastest-moving particles? (Gas)", "Boiling vs evaporation — one difference? (Boiling occurs throughout liquid; evaporation only at surface)", "Ice melting — what happens to particle spacing? (Spacing increases)"],
+              topic: "States of matter",
               tossups: [
-                  ("What is the chemical symbol for potassium?", "K"),
-                  ("Carbon-12 and carbon-14 are isotopes of carbon. How many protons does each have?", "6"),
-                  ("In an atom, where are protons located?", "In the nucleus")
+                  ("Which state of matter has particles with the most kinetic energy at the same temperature?", "Gas"),
+                  ("During boiling, is energy absorbed by or released from the substance?", "Absorbed")
               ]),
         block(week: 4, day: .tuesday, subject: .biology, pass: .pass1,
               book: "FLS", chapter: "Ch 5 — Evidence for Evolution · How Evolution Works", title: "Evolution — natural selection (part 1)",

@@ -308,7 +308,7 @@ struct WeekVideoBlockLabel: View {
     private var subtitle: String {
         if ScheduleVideoCatalog.isMathBlock(block.label),
            let reading = ScheduleOpenStaxCatalog.mathReading(week: block.week, day: block.day) {
-            return "OSA · Lar · BFN-A · \(reading.title)"
+            return "BFN-A · \(reading.title)"
         }
         if let subject = ScheduleVideoCatalog.scienceSubject(for: block.label),
            let studyBlock = scienceBlocks.first(where: { $0.day == block.day && $0.subject == subject }) {
@@ -408,13 +408,15 @@ struct WeekMathTopicBrowserRow: View {
                 Text("\(day.fullName) · \(ScheduleConstants.mathBlockTimeLabel(day: day))")
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Text("OSA §\(reading.sectionKeys.filter { $0 != "home" }.joined(separator: " · §"))")
+                Text(reading.bfnOptionText)
                     .font(.caption2.weight(.medium))
                     .foregroundStyle(.secondary)
-                Text("Also OK: \(reading.larBackupLine) · Backup: \(ScheduleBFNCatalog.algebraOptionText(for: reading.title))")
-                    .font(.caption2)
-                    .foregroundStyle(PlatformColor.systemBlue)
-                    .lineLimit(3)
+                if !reading.sectionKeys.isEmpty {
+                    Text("Also OK: OSA §\(reading.sectionKeys.filter { $0 != "home" }.joined(separator: " · §")) · \(reading.larBackupLine)")
+                        .font(.caption2)
+                        .foregroundStyle(PlatformColor.systemBlue)
+                        .lineLimit(3)
+                }
                 if videoCount > 0 {
                     Label("\(videoCount) optional video\(videoCount == 1 ? "" : "s")", systemImage: "play.circle")
                         .font(.caption2)

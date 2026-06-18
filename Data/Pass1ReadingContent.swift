@@ -202,38 +202,52 @@ enum Pass1ReadingContent {
         // WEEK 2
         m[k(2, .monday, .chemistry)] = [
             rs("Big picture", """
-            Matter exists as solid, liquid, or gas because of particle spacing and motion. Phase changes (melting, boiling, freezing, condensing) involve energy even when temperature stays constant on a heating curve plateau.
+            Hewitt Ch 15 (Part Two — The Atom) is the full atom chapter before deeper Part Three chemistry. Read §15.1–15.5 in order: how we discovered atoms, the periodic table, the nucleus, isotopes, and electron shells. Memorize symbols H through Ca — NSB asks these directly. Week 1 Ch 17 §17.1–17.3 introduced atoms; Ch 15 goes deeper on shells, isotopes, and symbols.
             """),
-            rs("Particle model of matter", """
-            Solid — particles close, fixed positions, vibrate in place. Fixed shape and volume.
+            rs("Discovering the atom & elements (Ch 15 §15.1–15.2)", """
+            Atoms are the basic units of elements — too small to see, but real.
 
-            Liquid — particles close but slide past each other. Fixed volume, takes container shape.
+            Elements are pure substances of one kind of atom; the periodic table organizes them by atomic number.
 
-            Gas — particles far apart, move freely. Fills container; compressible.
+            Periods = rows; groups = columns with similar valence-electron patterns.
 
-            At the same temperature, gas particles have the most kinetic energy and move fastest.
+            Metals, nonmetals, and metalloids have different properties across the table.
             """),
-            rs("Phase changes & energy", """
-            Melting (solid → liquid) and boiling (liquid → gas) absorb energy.
+            rs("The nucleus (Ch 15 §15.3)", """
+            Protons (+) and neutrons (neutral) live in the nucleus — nearly all the atom's mass.
 
-            Freezing and condensation release energy.
+            Atomic number Z = number of protons (defines the element).
 
-            Evaporation — only at the liquid surface, below boiling point.
+            Mass number A = protons + neutrons.
 
-            Boiling — throughout the liquid at the boiling point.
+            Electrons (−) orbit in shells outside the nucleus — negligible mass but determine chemistry.
+            """),
+            rs("Isotopes & average atomic mass (Ch 15 §15.4)", """
+            Isotopes — same element, same proton count, different neutron count (different mass number).
 
-            During a phase change on a heating curve, temperature stays flat while energy breaks or forms intermolecular attractions.
+            Carbon-12 and carbon-14 both have 6 protons; carbon-14 has more neutrons.
+
+            Average atomic mass on the periodic table is a weighted average of natural isotope abundances — not the mass of any single atom.
+            """),
+            rs("Electron shells & valence (Ch 15 §15.5)", """
+            Electrons occupy shells (energy levels) around the nucleus. Inner shells fill first; outermost shell holds valence electrons.
+
+            Valence electrons determine bonding, group behavior, and reactivity.
+
+            Group 1 — 1 valence e⁻ (very reactive metals). Group 17 — 7 valence e⁻ (reactive halogens). Group 18 — full outer shell (unreactive noble gases).
             """),
             rs("NSB tips", """
-            • "Which state has fastest particles at same T?" → Gas.
-            • Boiling absorbs energy (endothermic for the substance).
-            • Melting ice increases spacing between particles (same substance, different arrangement).
+            • Symbol for potassium → K (from Latin kalium).
+            • Carbon-12 and carbon-14 → both 6 protons (isotopes).
+            • Protons → nucleus.
+            • Use the Top 20 elements reference sheet — flash card any you miss.
+            • Periodic trends (radius, reactivity) → Week 1 Thu & Week 7 Thu (Ch 17).
             """)
         ]
 
         m[k(2, .thursday, .chemistry)] = [
             rs("Big picture", """
-            After states of matter, Hewitt Ch 18 explains how atoms connect. Ionic bonds transfer electrons (NaCl); metallic bonds share a sea of electrons in metals. Valence electrons in the outer shell drive all of this.
+            After atoms and valence electrons (Ch 15), Hewitt Ch 18 explains how atoms connect. Ionic bonds transfer electrons (NaCl); metallic bonds share a sea of electrons in metals. Valence electrons in the outer shell drive all of this.
             """),
             rs("Electron-dot structures & ions", """
             Lewis (electron-dot) diagrams show valence electrons as dots around the element symbol.
@@ -498,46 +512,32 @@ enum Pass1ReadingContent {
         // WEEK 4
         m[k(4, .monday, .chemistry)] = [
             rs("Big picture", """
-            Hewitt Ch 15 (Part Two — The Atom) is the full atom chapter before deeper Part Three chemistry. Read §15.1–15.5 in order: how we discovered atoms, the periodic table, the nucleus, isotopes, and electron shells. Memorize symbols H through Ca — NSB asks these directly.
+            Matter exists as solid, liquid, or gas because of particle spacing and motion. Phase changes (melting, boiling, freezing, condensing) involve energy even when temperature stays constant on a heating curve plateau.
             """),
-            rs("Discovering the atom & elements (Ch 15 §15.1–15.2)", """
-            Atoms are the basic units of elements — too small to see, but real.
+            rs("Particle model of matter", """
+            Solid — particles close, fixed positions, vibrate in place. Fixed shape and volume.
 
-            Elements are pure substances of one kind of atom; the periodic table organizes them by atomic number.
+            Liquid — particles close but slide past each other. Fixed volume, takes container shape.
 
-            Periods = rows; groups = columns with similar valence-electron patterns.
+            Gas — particles far apart, move freely. Fills container; compressible.
 
-            Metals, nonmetals, and metalloids have different properties across the table.
+            At the same temperature, gas particles have the most kinetic energy and move fastest.
             """),
-            rs("The nucleus (Ch 15 §15.3)", """
-            Protons (+) and neutrons (neutral) live in the nucleus — nearly all the atom's mass.
+            rs("Phase changes & energy", """
+            Melting (solid → liquid) and boiling (liquid → gas) absorb energy.
 
-            Atomic number Z = number of protons (defines the element).
+            Freezing and condensation release energy.
 
-            Mass number A = protons + neutrons.
+            Evaporation — only at the liquid surface, below boiling point.
 
-            Electrons (−) orbit in shells outside the nucleus — negligible mass but determine chemistry.
-            """),
-            rs("Isotopes & average atomic mass (Ch 15 §15.4)", """
-            Isotopes — same element, same proton count, different neutron count (different mass number).
+            Boiling — throughout the liquid at the boiling point.
 
-            Carbon-12 and carbon-14 both have 6 protons; carbon-14 has more neutrons.
-
-            Average atomic mass on the periodic table is a weighted average of natural isotope abundances — not the mass of any single atom.
-            """),
-            rs("Electron shells & valence (Ch 15 §15.5)", """
-            Electrons occupy shells (energy levels) around the nucleus. Inner shells fill first; outermost shell holds valence electrons.
-
-            Valence electrons determine bonding, group behavior, and reactivity.
-
-            Group 1 — 1 valence e⁻ (very reactive metals). Group 17 — 7 valence e⁻ (reactive halogens). Group 18 — full outer shell (unreactive noble gases).
+            During a phase change on a heating curve, temperature stays flat while energy breaks or forms intermolecular attractions.
             """),
             rs("NSB tips", """
-            • Symbol for potassium → K (from Latin kalium).
-            • Carbon-12 and carbon-14 → both 6 protons (isotopes).
-            • Protons → nucleus.
-            • Use the Top 20 elements reference sheet — flash card any you miss.
-            • Periodic trends (radius, reactivity) → Week 1 Thu & Week 7 Thu (Ch 17).
+            • "Which state has fastest particles at same T?" → Gas.
+            • Boiling absorbs energy (endothermic for the substance).
+            • Melting ice increases spacing between particles (same substance, different arrangement).
             """)
         ]
 

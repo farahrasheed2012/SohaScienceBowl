@@ -336,87 +336,87 @@ enum ScheduleBFNCatalog {
     private static let algebraByMathTitle: [String: Citation] = [
         "Scientific notation": Citation(
             unit: "Unit 4",
-            chapters: "Ch 19 Exponents · Ch 20 Scientific Notation",
+            chapters: "Ch 20 Scientific Notation",
             pages: "p141"
         ),
         "Ratios": Citation(
             unit: "Unit 3",
-            chapters: "Ch 11–18 Ratios · Unit Rates · Proportions",
+            chapters: "Ch 11 Ratio",
             pages: "p75"
         ),
         "Graphs & slope": Citation(
             unit: "Unit 6",
-            chapters: "Ch 31–38 Slope · Slope-Intercept · Read Graphs",
+            chapters: "Ch 32 Slope · Ch 33 Slope-Intercept Form",
             pages: "p247"
         ),
         "Graphs": Citation(
             unit: "Unit 6",
-            chapters: "Ch 31–38 Graphing Linear Equations",
+            chapters: "Ch 34 Graphing Linear Equations",
             pages: "p247"
         ),
         "Graph reading": Citation(
             unit: "Unit 6",
-            chapters: "Ch 31–38 Read Graphs · Slope as Rate",
+            chapters: "Ch 37 Reading Graphs · Slope as Rate",
             pages: "p247"
         ),
         "Unit conversion": Citation(
             unit: "Unit 2",
-            chapters: "Ch 4–10 The Number System · Decimals",
+            chapters: "Ch 9 Decimals · Metric Units",
             pages: "p23"
         ),
         "Unit conversion review": Citation(
             unit: "Unit 2",
-            chapters: "Ch 4–10 Fractions · Decimals · Metric",
+            chapters: "Ch 8 Fractions · Ch 9 Decimals",
             pages: "p23"
         ),
         "PEMDAS & estimation": Citation(
             unit: "Unit 1",
-            chapters: "Ch 1–3 Types of Numbers · Order of Operations",
+            chapters: "Ch 2 Order of Operations",
             pages: "p1"
         ),
         "Percent": Citation(
             unit: "Unit 3",
-            chapters: "Ch 11–18 Percent · Proportions",
+            chapters: "Ch 15 Percent",
             pages: "p75"
         ),
         "Proportions": Citation(
             unit: "Unit 3",
-            chapters: "Ch 11–18 Proportions · Cross-Multiply",
+            chapters: "Ch 13 Proportion · Ch 14 Cross-Multiplication",
             pages: "p75"
         ),
         "F = ma": Citation(
             unit: "Unit 5",
-            chapters: "Ch 24–30 Linear Equations · Plug-In",
+            chapters: "Ch 26 Solving Equations · Plug-In",
             pages: "p175"
         ),
         "Exponents": Citation(
             unit: "Unit 4",
-            chapters: "Ch 19 Exponents · Ch 20 Scientific Notation",
+            chapters: "Ch 19 Exponents",
             pages: "p141"
         ),
         "Body-scale ratios": Citation(
             unit: "Unit 3",
-            chapters: "Ch 11–18 Ratios · Unit Rates",
+            chapters: "Ch 12 Unit Rate",
             pages: "p75"
         ),
         "Formula substitution": Citation(
             unit: "Unit 5",
-            chapters: "Ch 24–30 Solve Equations · Rearrange Formulas",
+            chapters: "Ch 28 Literal Equations · Rearrange Formulas",
             pages: "p175"
         ),
         "Formula plug-in": Citation(
             unit: "Unit 5",
-            chapters: "Ch 24–30 Linear Equations · Substitution",
+            chapters: "Ch 26 Solving Equations · Substitution",
             pages: "p175"
         ),
         "W = Fd": Citation(
             unit: "Unit 5",
-            chapters: "Ch 24–30 Equations · Formula Rearranging",
+            chapters: "Ch 28 Literal Equations · Formula Rearranging",
             pages: "p175"
         ),
         "Concentration ratios": Citation(
             unit: "Unit 3",
-            chapters: "Ch 11–18 Proportions · Percent",
+            chapters: "Ch 13 Proportion · Ch 15 Percent",
             pages: "p75"
         ),
         "Mixed review": Citation(
@@ -426,17 +426,17 @@ enum ScheduleBFNCatalog {
         ),
         "Number review": Citation(
             unit: "Unit 2",
-            chapters: "Ch 4–10 Negatives · Fractions · Decimals",
+            chapters: "Ch 6 Integers · Ch 8 Fractions",
             pages: "p23"
         ),
         "Logic & probability": Citation(
             unit: "Unit 7",
-            chapters: "Ch 39–44 Data · Probability · Logic",
+            chapters: "Ch 42 Probability · Ch 43 Logic",
             pages: "p325"
         ),
         "v = fλ": Citation(
             unit: "Unit 11",
-            chapters: "Ch 57–60 Square Roots · Simplify Radicals",
+            chapters: "Ch 57 Square Roots · Ch 58 Simplifying Radicals",
             pages: "p505"
         ),
         "Flash review": Citation(
@@ -463,5 +463,9 @@ enum ScheduleBFNCatalog {
     static func algebraOptionText(for mathTitle: String) -> String {
         let c = algebraCitation(for: mathTitle)
         return "\(algebraCode) — \(algebraTitle) · \(c.shortLine)"
+    }
+
+    static func algebraOptionText(for reading: ScheduleOpenStaxCatalog.MathReading) -> String {
+        reading.bfnOptionText
     }
 }

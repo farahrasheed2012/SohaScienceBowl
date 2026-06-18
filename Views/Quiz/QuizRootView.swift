@@ -14,6 +14,15 @@ struct QuizRootView: View {
                     }
                 }
 
+                Section("Hewitt textbook drills") {
+                    NavigationLink(value: StudyNavigationRoute.hewittChapter17) {
+                        Label("Hewitt Ch 17 — Elements of Chemistry", systemImage: "flask.fill")
+                    }
+                    Text("59 NSB toss-up + bonus pairs · §17.1–17.8 · aligned with summer chem plan")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
                 Section("Texas Regional Sprint") {
                     NavigationLink(value: StudyNavigationRoute.regionalSprint) {
                         Label("Regional Sprint packs", systemImage: "flag.fill")

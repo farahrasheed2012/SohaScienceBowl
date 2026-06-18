@@ -136,6 +136,18 @@ struct PlanDrillRequest: Hashable {
             buzzerMixed: true
         )
     }
+
+    static var hewittChapter17: PlanDrillRequest {
+        PlanDrillRequest(
+            title: "Hewitt Ch 17",
+            subtitle: HewittChapter17Catalog.subtitle,
+            mode: "Hewitt Ch 17",
+            week: 0,
+            subject: .chemistry,
+            block: nil,
+            buzzerMixed: false
+        )
+    }
 }
 
 extension StudyBlock {
@@ -185,6 +197,8 @@ extension AppState {
                 return regionalSprintMixedQuestions(track: track, limit: 20)
             }
             return regionalSprintMixedQuestions(track: nil, limit: 25)
+        case "Hewitt Ch 17":
+            return hewittChapter17Questions(limit: 30)
         default:
             return []
         }

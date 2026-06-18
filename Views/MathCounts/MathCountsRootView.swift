@@ -143,7 +143,7 @@ struct MathCountsRootView: View {
             NavigationLink(value: StudyNavigationRoute.encyclopediaSubject(.math)) {
                 Label("NSB math topics (Learn tab)", systemImage: "books.vertical.fill")
             }
-            Text("Summer algebra blocks use OpenStax — see Today or Weeks for OSA readings.")
+            Text("Summer algebra blocks use BFN-A chapter-by-chapter — see Today or Weeks. Optional OpenStax/Larson for NSB drills.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

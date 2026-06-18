@@ -115,11 +115,11 @@ enum DeepDiveContent {
 
         // Week 2
         map[Key(week: 2, day: .monday, subject: .chemistry)] = """
-        Particle model: solid (fixed shape & volume) · liquid (fixed volume) · gas (fills container) · melting / freezing / boiling / condensation · phase changes absorb or release energy · evaporation (surface only) vs boiling (throughout liquid).
+        Hewitt Ch 15 §15.1–15.5: atom discovery · elements & periodic table · nucleus (protons/neutrons) · isotopes & weighted average atomic mass · electron shells · valence electrons · symbols H–Ca.
 
-        At the same temperature, gas particles move fastest. Ice melting increases spacing between particles.
+        Z = protons · A = p + n · isotopes same Z, different neutrons. Protons in nucleus. Symbol for potassium = K. Carbon-12 and carbon-14 both have 6 protons.
 
-        Know cold: which state has fastest particles (gas) · boiling vs evaporation (throughout vs surface only).
+        Know cold: symbol for K · C-12 vs C-14 proton count (6) · where protons are (nucleus).
         """
         map[Key(week: 2, day: .thursday, subject: .chemistry)] = """
         Electron-dot structures · ions (cations/anions) · ionic bonds (NaCl) · metallic bonds · valence electrons drive bonding.
@@ -185,11 +185,11 @@ enum DeepDiveContent {
 
         // Week 4
         map[Key(week: 4, day: .monday, subject: .chemistry)] = """
-        Hewitt Ch 15 §15.1–15.5: atom discovery · elements & periodic table · nucleus (protons/neutrons) · isotopes & weighted average atomic mass · electron shells · valence electrons.
+        Particle model: solid (fixed shape & volume) · liquid (fixed volume) · gas (fills container) · melting / freezing / boiling / condensation · phase changes absorb or release energy · evaporation (surface only) vs boiling (throughout liquid).
 
-        Z = protons · A = p + n · isotopes same Z, different neutrons. Protons in nucleus. Symbol for potassium = K. Carbon-12 and carbon-14 both have 6 protons.
+        At the same temperature, gas particles move fastest. Ice melting increases spacing between particles.
 
-        Know cold: symbol for K · C-12 vs C-14 proton count (6) · where protons are (nucleus).
+        Know cold: which state has fastest particles (gas) · boiling vs evaporation (throughout vs surface only).
         """
         map[Key(week: 4, day: .thursday, subject: .chemistry)] = """
         SI base units (kg, m, s, mol) · significant figures (intro) · lab equipment: beaker, flask, balance, graduated cylinder · safety goggles · read meniscus at eye level.
