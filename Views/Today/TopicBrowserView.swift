@@ -48,7 +48,7 @@ struct TopicBrowserView: View {
 
             Section {
                 Picker("Week", selection: $selectedWeek) {
-                    ForEach(1...10, id: \.self) { week in
+                    ForEach(1...12, id: \.self) { week in
                         Text("Week \(week)").tag(week)
                     }
                 }

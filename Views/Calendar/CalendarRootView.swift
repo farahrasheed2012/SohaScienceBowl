@@ -33,7 +33,7 @@ struct CalendarRootView: View {
                 if selectedDocument.supportsWeekNavigation {
                     ToolbarItem(placement: .navigation) {
                         Menu {
-                            ForEach(1...10, id: \.self) { week in
+                            ForEach(1...12, id: \.self) { week in
                                 Button {
                                     selectedWeek = week
                                 } label: {
@@ -147,7 +147,7 @@ struct CalendarRootView: View {
             }
 
             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 8), count: 5), spacing: 8) {
-                ForEach(1...10, id: \.self) { week in
+                ForEach(1...12, id: \.self) { week in
                     weekButton(week)
                 }
             }

@@ -70,12 +70,11 @@ enum ScheduleConstants {
         let target = calendar.startOfDay(for: date)
         let days = calendar.dateComponents([.day], from: start, to: target).day ?? 0
         if days < 0 { return 1 }
-        if days > 69 { return 10 } // after Aug 14 summer review
-        return min(10, max(1, (days / 7) + 1))
+        return min(12, max(1, (days / 7) + 1))
     }
 
     static func weekStartDate(for week: Int, calendar: Calendar = .current) -> Date? {
-        guard (1...10).contains(week) else { return nil }
+        guard (1...12).contains(week) else { return nil }
         return calendar.date(byAdding: .day, value: (week - 1) * 7, to: studyStartDate)
     }
 
@@ -108,7 +107,7 @@ enum ScheduleConstants {
     }
 
     static func summerPlanLabel() -> String {
-        "10-week summer plan · 50 science blocks · 1 hr each · Jun 8 – Aug 14"
+        "12-week summer plan · 50 science blocks · 1 hr each · Jun 8 – Aug 28"
     }
 
     /// Short topic label for each week (one linear summer pass — not “Pass 1/2 rotation”).
@@ -124,6 +123,8 @@ enum ScheduleConstants {
         case 8: return "Plants & electricity"
         case 9: return "Magnetism · waves · body systems"
         case 10: return "Summer capstone"
+        case 11: return "Bio/Phys week 9"
+        case 12: return "Bio/Phys week 10 · finish"
         default: return "Week \(week)"
         }
     }

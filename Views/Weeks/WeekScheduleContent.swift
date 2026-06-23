@@ -69,6 +69,15 @@ struct WeekScheduleContent: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Week \(week) · \(appState.weekTheme(for: week))")
                             .font(.headline)
+                        if ScheduleSplitTrack.isChemOnlyWeek(calendarWeek: week) {
+                            Text("Split track: Chem only — bio & phys right-shifted (start calendar week 3)")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                        } else if week == ScheduleSplitTrack.bioPhysStartCalendarWeek {
+                            Text("Split track: First bio/phys day — Week 1 content for bio & phys")
+                                .font(.caption)
+                                .foregroundStyle(Color.accentColor)
+                        }
                         Text("\(ScheduleConstants.weekDateRangeLabel(for: week)) · \(ScheduleConstants.passLabel(for: ScheduleConstants.studyPass(forWeek: week)))")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)

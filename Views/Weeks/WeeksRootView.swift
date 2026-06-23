@@ -8,7 +8,7 @@ struct WeeksRootView: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("10-week summer plan · Jun 8 – Aug 14, 2026")
+                        Text("12-week summer plan · Jun 8 – Aug 28, 2026")
                             .font(.subheadline)
                         Text(ScheduleConstants.passLabel(for: appState.currentPass))
                             .font(.caption)
@@ -21,7 +21,7 @@ struct WeeksRootView: View {
                 }
 
                 Section("All weeks") {
-                    ForEach(1...10, id: \.self) { week in
+                    ForEach(1...12, id: \.self) { week in
                         NavigationLink(value: week) {
                             weekRow(week)
                         }
@@ -71,6 +71,9 @@ struct WeeksRootView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
 
+                Text(ScheduleSplitTrack.weekBanner(calendarWeek: week))
+                    .font(.caption2)
+                    .foregroundStyle(PlatformColor.systemOrange)
                 Text("\(blocks.count) science · \(mathDays) math")
                     .font(.caption2)
                     .foregroundStyle(PlatformColor.systemBlue)

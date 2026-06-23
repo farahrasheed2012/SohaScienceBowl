@@ -207,7 +207,7 @@ struct SettingsView: View {
                 get: { appState.currentWeek },
                 set: { appState.userDidSetWeek($0) }
             )) {
-                ForEach(1...10, id: \.self) { w in
+                    ForEach(1...12, id: \.self) { w in
                     Text("Week \(w) · \(SeedData.topics(for: w)[.chemistry] ?? "")").tag(w)
                 }
             }

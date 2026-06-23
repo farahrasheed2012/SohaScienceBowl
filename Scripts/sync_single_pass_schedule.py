@@ -80,6 +80,19 @@ DATES = {
     8: ["Jul 27", "Jul 28", "Jul 29", "Jul 30", "Jul 31"],
     9: ["Aug 3", "Aug 4", "Aug 5", "Aug 6", "Aug 7"],
     10: ["Aug 10", "Aug 11", "Aug 12", "Aug 13", "Aug 14"],
+    11: ["Aug 17", "Aug 18", "Aug 19", "Aug 20", "Aug 21"],
+    12: ["Aug 24", "Aug 25", "Aug 26", "Aug 27", "Aug 28"],
+}
+
+# Mon=chem, Tue=bio, Wed=phys, Thu=chem, Fri=bio — same every calendar week
+DAY_KINDS = ("chem", "bio", "phys", "chem", "bio")
+BIO_PHYS_SHIFT = 2
+CHEM_ONLY_CALENDAR_WEEKS = frozenset({1, 2})
+
+WEEK_META_EXTENDED: dict[int, tuple[str, str]] = {
+    **WEEK_META,
+    11: ("Aug 17 – 21", "Bio/Phys week 9"),
+    12: ("Aug 24 – 28", "Bio/Phys week 10 · finish"),
 }
 
 REVIEW_ROWS = {
@@ -93,6 +106,8 @@ REVIEW_ROWS = {
     8: "Electricity + waves · V = IR and v = fλ toss-ups",
     9: "Mixed drill · 20 toss-ups all categories",
     10: "Final summer mock · 25 toss-ups · list 3 topics for school meetings",
+    11: "Bio/Phys week 9 — timed drill · log weak topics",
+    12: "Bio/Phys week 10 — final mock before school rhythm",
 }
 
 ALGEBRA_ROWS = {
@@ -359,6 +374,122 @@ SCIENCE_WEEKS: dict[int, list[tuple]] = {
 
 DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 EMPTY_TD = "<td>—</td>"
+
+
+def content_week_for_kind(calendar_week: int, kind: str) -> int | None:
+    """Map calendar week + block kind → curriculum week (matches ScheduleSplitTrack.swift)."""
+    if kind == "chem":
+        return calendar_week if 1 <= calendar_week <= 10 else None
+    if kind in ("bio", "phys"):
+        if calendar_week < 3:
+            return None
+        cw = calendar_week - BIO_PHYS_SHIFT
+        return cw if 1 <= cw <= 10 else None
+    return None
+
+
+def calendar_day_block(calendar_week: int, day_idx: int) -> tuple | None:
+    kind = DAY_KINDS[day_idx]
+    cw = content_week_for_kind(calendar_week, kind)
+    if cw is None:
+        return None
+    return SCIENCE_WEEKS[cw][day_idx]
+
+
+def split_track_banner_html(calendar_week: int) -> str:
+    if calendar_week in CHEM_ONLY_CALENDAR_WEEKS:
+        return (
+            f'<p class="split-track" style="background:#fff3cd;border:1px solid #e6c200;'
+            f'padding:0.1in 0.15in;margin:0 0 0.12in;font-size:9pt;">'
+            f"<strong>Split track:</strong> Chem Week {calendar_week} · "
+            f"Bio <strong>shifted</strong> · Phys <strong>shifted</strong></p>"
+        )
+    bio = calendar_week - BIO_PHYS_SHIFT
+    chem_label = f"Chem Week {calendar_week}" if calendar_week <= 10 else "Chem —"
+    suffix = " — <strong>first bio/phys day</strong>" if calendar_week == 3 else ""
+    after = " — <em>after Aug 14</em>" if calendar_week > 10 else ""
+    return (
+        f'<p class="split-track" style="background:#fff3cd;border:1px solid #e6c200;'
+        f'padding:0.1in 0.15in;margin:0 0 0.12in;font-size:9pt;">'
+        f"<strong>Split track:</strong> {chem_label} · Bio Week {bio} · Phys Week {bio}{suffix}{after}</p>"
+    )
+
+
+def split_track_banner_md(calendar_week: int) -> str:
+    if calendar_week in CHEM_ONLY_CALENDAR_WEEKS:
+        return (
+            f"> **Split track:** Chem **Week {calendar_week}** · "
+            f"Bio **shifted** · Phys **shifted**"
+        )
+    bio = calendar_week - BIO_PHYS_SHIFT
+    chem = f"Chem **Week {calendar_week}**" if calendar_week <= 10 else "Chem **—**"
+    extra = " · *(first bio/phys day)*" if calendar_week == 3 else ""
+    after = " · *(after Aug 14)*" if calendar_week > 10 else ""
+    return f"> **Split track:** {chem} · Bio **Week {bio}** · Phys **Week {bio}**{extra}{after}"
+
+
+def skipped_science_html(kind: str) -> str:
+    subject = "biology" if kind == "bio" else "physics"
+    return (
+        f'<td class="skipped">— <strong>No {subject}</strong> this calendar week<br>'
+        f'<span class="focus"><em>Right-shifted — starts calendar week 3 (Bio/Phys Week 1)</em></span></td>'
+    )
+
+
+def skipped_science_md(kind: str) -> str:
+    label = "Bio" if kind == "bio" else "Phys"
+    return (
+        f"| **{label}** | — *(right-shifted)* — no {label.lower()} this calendar week "
+        f"*(starts week 3 at Week 1)* | — | — | — | — |"
+    )
+
+
+SPLIT_TRACK_HEADER_MD = """## Soha split-track *(updated May 2026)*
+
+| Subject | Status | What to follow |
+|---------|--------|----------------|
+| **Chemistry** | ✅ Done weeks 1–2 | **Calendar week** = Chem week |
+| **Biology** | ⏭️ **None in weeks 1–2** | **Right-shifted +2** — calendar week 3 = **Bio Week 1**, week 4 = Bio Week 2, … |
+| **Physics** | ⏭️ **None in weeks 1–2** | **Right-shifted +2** — calendar week 3 = **Phys Week 1**, same pattern |
+| **Algebra** | On schedule | Follow calendar week |
+
+**What happened:** Soha did **chemistry (and algebra) only** in calendar weeks 1–2 (Jun 8–19). She did **zero** biology and **zero** physics blocks those two weeks.
+
+**From calendar week 3 (Jun 22):** First bio/phys day → **Bio Week 1 & Phys Week 1 content** (not Week 3). Each subject keeps the normal 1→10 order, shifted two calendar weeks later than chemistry.
+
+**After week 10:** Bio/phys weeks 9–10 land on **calendar weeks 11–12** (after Aug 14).
+
+| Calendar week | Dates | **Chem** | **Bio** | **Phys** |
+|---------------|-------|----------|---------|----------|
+| 1 | Jun 8 – 12 | ✅ Week 1 | — *(shifted)* | — *(shifted)* |
+| 2 | Jun 15 – 19 | ✅ Week 2 | — *(shifted)* | — *(shifted)* |
+| 3 | Jun 22 – 26 | Week 3 | **Week 1** *(start)* | **Week 1** *(start)* |
+| 4 | Jun 29 – Jul 3 | Week 4 | Week 2 | Week 2 |
+| 5 | Jul 6 – 10 | Week 5 | Week 3 | Week 3 |
+| 6 | Jul 13 – 17 | Week 6 | Week 4 | Week 4 |
+| 7 | Jul 20 – 24 | Week 7 | Week 5 | Week 5 |
+| 8 | Jul 27 – 31 | Week 8 | Week 6 | Week 6 |
+| 9 | Aug 3 – 7 | Week 9 | Week 7 | Week 7 |
+| 10 | Aug 10 – 14 | Week 10 | Week 8 | Week 8 |
+| 11 | Aug 17 – 21 | — | Week 9 | Week 9 |
+| 12 | Aug 24 – 28 | — | Week 10 | Week 10 |
+
+Each week banner shows: `Split track: Chem Week N · Bio Week X · Phys Week X` (weeks 1–2 show bio/phys as shifted).
+
+"""
+
+BRIDGE_SECTION_MD = """## BRIDGE · August 15 – 19
+
+| Date | Day | Notes |
+|------|-----|-------|
+| **Aug 15** | Sat | [Saturday timetable](weekly-timetable.md#saturday--shower-only) |
+| **Aug 16–18** | Sun–Tue | Optional rest / pack for school — **no separate bio/phys catch-up** (weeks 1–2 content is on the right-shifted summer schedule starting Jun 22) |
+| **Aug 19** | Wed | **First day of 7th grade** — school schedule |
+
+**Calendar weeks 11–12** (Aug 17–28): finish Bio **Week 9–10** and Phys **Week 9–10** if not done by Aug 14.
+
+"""
+
 
 # Tue/Thu Coach sessions differ in weeks 1–4; weeks 5–10 reuse the same label both days.
 COACH_ROWS = {
@@ -687,17 +818,29 @@ def primary_display_book(week: int, day_idx: int, kind: str, book: str) -> str:
     return book
 
 
-def generate_whiteboard_week(week: int) -> str:
-    dates, theme = WEEK_META[week]
-    blocks = SCIENCE_WEEKS[week]
-    date_list = DATES[week]
+def generate_whiteboard_week(calendar_week: int) -> str:
+    dates, theme = WEEK_META_EXTENDED[calendar_week]
+    date_list = DATES[calendar_week]
+    split_banner = split_track_banner_html(calendar_week)
 
     rows = []
     for i, day in enumerate(DAY_NAMES):
-        kind, book, title, focus, formulas, know, tossup = blocks[i]
-        display_book = primary_display_book(week, i, kind, book)
-        cell = html_cell(week, i, kind, display_book, title, focus, formulas, know, tossup)
-        alg_cell = algebra_html_cell(week, i)
+        block = calendar_day_block(calendar_week, i)
+        alg_cell = algebra_html_cell(calendar_week, i) if calendar_week <= 10 else EMPTY_TD
+
+        if block is None:
+            kind = DAY_KINDS[i]
+            if kind in ("bio", "phys"):
+                cell = skipped_science_html(kind)
+            else:
+                cell = EMPTY_TD
+        else:
+            kind, book, title, focus, formulas, know, tossup = block
+            cw = content_week_for_kind(calendar_week, kind) or calendar_week
+            display_book = primary_display_book(cw, i, kind, book)
+            cell = html_cell(cw, i, kind, display_book, title, focus, formulas, know, tossup)
+
+        coach = coach_cell(calendar_week, day) if calendar_week <= 10 else EMPTY_TD
 
         if day == "Mon":
             rows.append(
@@ -707,7 +850,7 @@ def generate_whiteboard_week(week: int) -> str:
         elif day == "Tue":
             rows.append(
                 f'    <tr><td class="date-col">{date_list[i]}</td><td class="day-col">{day}</td>'
-                f"{EMPTY_TD}{cell}{EMPTY_TD}{alg_cell}{coach_cell(week, day)}{EMPTY_TD}</tr>"
+                f"{EMPTY_TD}{cell}{EMPTY_TD}{alg_cell}{coach}{EMPTY_TD}</tr>"
             )
         elif day == "Wed":
             rows.append(
@@ -717,32 +860,41 @@ def generate_whiteboard_week(week: int) -> str:
         elif day == "Thu":
             rows.append(
                 f'    <tr><td class="date-col">{date_list[i]}</td><td class="day-col">{day}</td>'
-                f"{cell}{EMPTY_TD}{EMPTY_TD}{alg_cell}{coach_cell(week, day)}{EMPTY_TD}</tr>"
+                f"{cell}{EMPTY_TD}{EMPTY_TD}{alg_cell}{coach}{EMPTY_TD}</tr>"
             )
         else:
+            free = '<td class="free">Free block</td>' if calendar_week <= 10 else EMPTY_TD
+            review = f'<td class="review">{esc(REVIEW_ROWS[calendar_week])}</td>'
             rows.append(
                 f'    <tr><td class="date-col">{date_list[i]}</td><td class="day-col">{day}</td>'
-                f"{EMPTY_TD}{cell}{EMPTY_TD}"
-                f'<td class="free">Free block</td>{EMPTY_TD}'
-                f'<td class="review">{esc(REVIEW_ROWS[week])}</td></tr>'
+                f"{EMPTY_TD}{cell}{EMPTY_TD}{free}{EMPTY_TD}{review}</tr>"
             )
 
     note = ""
-    if week == 10:
-        note = f'  <p class="pass-note">{BLOCK_WORKFLOW_NOTE} Light capstone — review weak topics · flash-card drill at school meetings in fall.</p>\n'
+    if calendar_week == 10:
+        note = (
+            f'  <p class="pass-note">{BLOCK_WORKFLOW_NOTE} Light capstone — review weak topics · '
+            f"Bio/Phys weeks 9–10 continue in calendar weeks 11–12 if needed.</p>\n"
+        )
+    elif calendar_week > 10:
+        note = (
+            '  <p class="pass-note">Finish remaining bio/phys curriculum weeks after summer chem ends. '
+            "No new chemistry blocks.</p>\n"
+        )
     else:
         note = f'  <p class="pass-note">{BLOCK_WORKFLOW_NOTE}</p>\n'
 
     footer = ""
-    if week == 4:
+    if calendar_week == 4:
         footer = '\n  <p class="footer">Jul 4 weekend — Off.</p>'
 
-    return f"""<!-- WEEK {week} -->
-<section class="week" id="week-{week}">
+    return f"""<!-- WEEK {calendar_week} -->
+<section class="week" id="week-{calendar_week}">
   <div class="week-header">
-    <h2>Week {week} · {dates} · {theme}</h2>
+    <h2>Week {calendar_week} · {dates} · {theme}</h2>
     <div class="week-meta"><span class="pass-tag">SUMMER · ONE PASS</span><br>Hewitt + FLS + assigned §</div>
   </div>
+  {split_banner}
 {note}  <table>
     <tr><th>Date</th><th>Day</th><th>Chemistry · Hewitt (+ Mod backup)</th><th>Biology · FLS</th><th>Physics · Hewitt</th><th>Algebra · OSA (+ Lar backup)</th><th>Python · Coach<br><span style="font-weight:normal;text-transform:none">Tue/Thu 4:45–5:15</span></th><th>Fri review</th></tr>
 {chr(10).join(rows)}
@@ -751,10 +903,9 @@ def generate_whiteboard_week(week: int) -> str:
 """
 
 
-def generate_calendar_week_md(week: int) -> str:
-    dates, theme = WEEK_META[week]
-    blocks = SCIENCE_WEEKS[week]
-    date_list = DATES[week]
+def generate_calendar_week_md(calendar_week: int) -> str:
+    dates, theme = WEEK_META_EXTENDED[calendar_week]
+    date_list = DATES[calendar_week]
     full_days = [
         f"Monday, {date_list[0]}",
         f"Tuesday, {date_list[1]}",
@@ -763,7 +914,9 @@ def generate_calendar_week_md(week: int) -> str:
         f"Friday, {date_list[4]}",
     ]
     lines = [
-        f"### Week {week} · {dates} · {theme}",
+        f"### Week {calendar_week} · {dates} · {theme}",
+        "",
+        split_track_banner_md(calendar_week),
         "",
         "*Each science block: **1 hour** — recall → read assigned **§ section** (stop at Focus) → know cold → toss-ups. Tro/CB/BFN = backup only.*",
         "",
@@ -773,26 +926,32 @@ def generate_calendar_week_md(week: int) -> str:
         lines.append("")
         lines.append("| Block | Reading | Focus | Formulas & key terms | Know cold | Sample toss-ups |")
         lines.append("|-------|---------|-------|----------------------|-----------|-------------------|")
-        kind, book, title, focus, formulas, know, tossup = blocks[idx]
-        subj = {"chem": "Chem", "bio": "Bio", "phys": "Phys"}[kind]
-        lines.append(
-            f"| **{subj} · {book}** | *{title}* · backup Tro/CB/BFN | {focus} | {formulas} | {know} | 1. {tossup} |"
-        )
-        math_title, _, lar_part = osa_math_reading(week, idx)
-        alg_backup = format_algebra_backup(week, idx, math_title, lar_part)
-        lines.append(
-            f"| **Algebra · OSA** | *{format_osa_algebra_primary(week, idx)}* · "
-            f"backup {alg_backup} | 1 hr algebra block | — | — | — |"
-        )
-        if idx == 1:
-            label, focus_txt = COACH_ROWS[week]["tue"]
+        block = calendar_day_block(calendar_week, idx)
+        kind = DAY_KINDS[idx]
+        if block is None and kind in ("bio", "phys"):
+            lines.append(skipped_science_md(kind))
+        elif block is not None:
+            kind, book, title, focus, formulas, know, tossup = block
+            subj = {"chem": "Chem", "bio": "Bio", "phys": "Phys"}[kind]
+            lines.append(
+                f"| **{subj} · {book}** | *{title}* · backup Tro/CB/BFN | {focus} | {formulas} | {know} | 1. {tossup} |"
+            )
+        if calendar_week <= 10:
+            math_title, _, lar_part = osa_math_reading(calendar_week, idx)
+            alg_backup = format_algebra_backup(calendar_week, idx, math_title, lar_part)
+            lines.append(
+                f"| **Algebra · OSA** | *{format_osa_algebra_primary(calendar_week, idx)}* · "
+                f"backup {alg_backup} | 1 hr algebra block | — | — | — |"
+            )
+        if calendar_week <= 10 and idx == 1:
+            label, focus_txt = COACH_ROWS[calendar_week]["tue"]
             lines.append(f"| **Python · Coach** | {label} | {focus_txt} | — | — | — |")
-        elif idx == 3:
-            label, focus_txt = COACH_ROWS[week]["thu"]
+        elif calendar_week <= 10 and idx == 3:
+            label, focus_txt = COACH_ROWS[calendar_week]["thu"]
             lines.append(f"| **Python · Coach** | {label} | {focus_txt} | — | — | — |")
-        if idx == 4:
+        if calendar_week <= 10 and idx == 4:
             lines.append("| **Free block** | 3:00 – 4:00 PM Fri bio done · algebra 4:00–5:00 | Rest or BFN catch-up | — | — | — |")
-            lines.append(f"| **Review 4:40–5:40** | — | **{REVIEW_ROWS[week]}** | — | — | — |")
+            lines.append(f"| **Review 4:40–5:40** | — | **{REVIEW_ROWS[calendar_week]}** | — | — | — |")
         lines.append("")
     lines.append("---")
     lines.append("")
@@ -840,7 +999,7 @@ def patch_whiteboard(path: Path) -> None:
     end = text.find("<!-- MASTER INDEX 1 -->")
     if start == -1 or end == -1:
         raise SystemExit(f"Could not find week 1 / index markers in {path}")
-    new_weeks = "\n".join(generate_whiteboard_week(w) for w in range(1, 11))
+    new_weeks = "\n".join(generate_whiteboard_week(w) for w in range(1, 13))
     text = text[:start] + new_weeks + "\n\n" + text[end:]
     text = patch_whiteboard_legend(text)
     text = patch_whiteboard_master_index(text)
@@ -917,18 +1076,24 @@ Study **DOE Tips & Resources topics** only — assigned **§ sections**, not who
 
 def patch_calendar_md(path: Path) -> None:
     text = path.read_text()
-    start = text.find("## PASS 1 —")
-    if start == -1:
-        start = text.find("## WEEKS 1–10 —")
-    end = text.find("## BRIDGE ·")
-    if start != -1 and end != -1:
-        new_section = """## WEEKS 1–10 — *Single summer pass* *(June 8 – August 14)*
+    split_start = text.find("## Soha split-track")
+    weeks_match = re.search(r"## WEEKS 1–\d+", text)
+    if split_start != -1 and weeks_match:
+        text = text[:split_start] + SPLIT_TRACK_HEADER_MD + "\n" + text[weeks_match.start() :]
+
+    start_match = re.search(r"## WEEKS 1–\d+", text)
+    master_start = text.find("## Master chapter index")
+    if start_match and master_start != -1 and master_start > start_match.start():
+        new_section = """## WEEKS 1–12 — *Single summer pass* *(June 8 – August 28)*
 
 *One careful read through **Hewitt + FLS** (50 × 1-hr science blocks). Read assigned **§ sections** for each DOE topic — stop when Focus is covered. **Mod/OSB/Tro/CB/BFN** = backups. Extra DOE practice → Science Bowl Coach **Quiz** tab. Flash-card review → **school meetings** in fall.*
 
+*Chem every week · Bio/Phys right-shifted +2 calendar weeks (start Jun 22 at Week 1 content).*
+
 """
-        new_section += "\n".join(generate_calendar_week_md(w) for w in range(1, 11))
-        text = text[:start] + new_section + text[end:]
+        new_section += "\n".join(generate_calendar_week_md(w) for w in range(1, 13))
+        tail = text[master_start:]
+        text = text[: start_match.start()] + new_section + "\n" + BRIDGE_SECTION_MD + "\n" + tail
 
     text = patch_calendar_books_section(text)
     text = text.replace("*(Pass 2)*", "*(wk 6–7)*")
@@ -987,7 +1152,7 @@ def patch_weekly_html(path: Path) -> None:
 
 def patch_all_week_titles(text: str, *, html_h2: bool = False) -> str:
     """Replace old rotation labels (Foundations, Building depth, …) with topic-based week names."""
-    for w, (dates, theme) in WEEK_META.items():
+    for w, (dates, theme) in WEEK_META_EXTENDED.items():
         if html_h2:
             # Full h2 replacement avoids duplicate partial rewrites
             short_dates = dates  # e.g. Jun 8 – 12
@@ -1288,6 +1453,14 @@ def patch_prep_md(path: Path) -> None:
         "**Weeks 1–4** = Pass 1 *(Mod + FLS · learn from textbook)* · **Weeks 5–8** = Pass 2 *(Tro + CB · DOE questions first)* · **Weeks 9–10** = Pass 3 *(flash cards → book only if stuck)*",
         "**Weeks 1–10** = **one summer pass** *(Hewitt + FLS · assigned § section per 1-hr block)* · **Mod/OSB/Tro/CB/BFN** = backups · **DOE drill** = app Quiz tab · **Flash cards** = school meetings in fall",
     )
+    text = text.replace(
+        "**Bio & Phys:** use **content week = calendar week + 2** (catch-up Weeks 1–2 in calendar weeks 9–10)",
+        "**Bio & Phys:** **content week = calendar week − 2** from calendar week 3 onward (Jun 22 = Bio/Phys Week 1); weeks 9–10 finish in calendar weeks 11–12",
+    )
+    text = text.replace(
+        "weeks 1–2 show **Skipped** for Tue/Fri bio and Wed phys",
+        "weeks 1–2 show no bio/phys blocks; content starts Jun 22 at Week 1",
+    )
     text = re.sub(
         r"## Pass 2 — Weeks 5–8.*?(?=## Pass 3|$)",
         "",
@@ -1586,7 +1759,7 @@ def patch_prep_html(path: Path) -> None:
 def patch_readme(path: Path) -> None:
     path.write_text("""# Soha — Schedule folder
 
-## Summer 2026 — one pass (Jun 8 – Aug 14)
+## Summer 2026 — one pass (Jun 8 – Aug 28)
 
 | File | Purpose |
 |------|---------|
@@ -1596,6 +1769,16 @@ def patch_readme(path: Path) -> None:
 | **[science-bowl-prep.md](science-bowl-prep.md)** | Books · study method · chapter maps |
 
 **Plan:** One careful read through **Hewitt + FLS** (50 science blocks). Mod/OSB/Tro/CB/BFN = backups. DOE practice in the app. Flash-card review at school Science Bowl meetings.
+
+### Soha split-track *(May 2026)*
+
+| Subject | Rule |
+|---------|------|
+| **Chemistry** | ✅ Weeks 1–2 done |
+| **Biology & Physics** | ⏭️ **None in calendar weeks 1–2** · **right-shifted +2** — start Jun 22 at **Week 1** content |
+| **After Aug 14** | Bio/Phys weeks 9–10 on calendar weeks 11–12 |
+
+Details → **[summer-2026-calendar.md](summer-2026-calendar.md)** (top section)
 
 Regenerate bundled HTML in the Mac app:
 

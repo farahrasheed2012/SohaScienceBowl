@@ -157,9 +157,15 @@ extension StudyBlock {
 }
 
 extension AppState {
-    func scienceBlocks(for week: Int) -> [StudyBlock] {
-        blocks(for: week, pass: currentPass)
-            .sorted { $0.day.rawValue < $1.day.rawValue }
+    func scienceBlocks(for calendarWeek: Int) -> [StudyBlock] {
+        let subjects: [Subject] = [.chemistry, .biology, .physics]
+        let blocks = subjects.flatMap { subject -> [StudyBlock] in
+            guard let contentWeek = ScheduleSplitTrack.contentWeek(subject: subject, calendarWeek: calendarWeek) else {
+                return []
+            }
+            return self.blocks(for: contentWeek, pass: currentPass).filter { $0.subject == subject }
+        }
+        return blocks.sorted { $0.day.rawValue < $1.day.rawValue }
     }
 
     func weekTheme(for week: Int) -> String {
@@ -248,6 +254,11 @@ extension AppState {
         var pool = SeedData.tossupQuestions
             .filter { $0.week == week && $0.subject == subject }
             .map { $0.toUnified() }
+        if pool.isEmpty, let contentWeek = ScheduleSplitTrack.contentWeek(subject: subject, calendarWeek: week) {
+            pool = SeedData.tossupQuestions
+                .filter { $0.week == contentWeek && $0.subject == subject }
+                .map { $0.toUnified() }
+        }
         pool = supplementThinPool(pool: pool, subject: subject, week: week, limit: limit)
         return selectDrillQuestions(from: pool, limit: limit)
     }

@@ -180,6 +180,38 @@ enum BFNAlgebraCatalog {
         "\(bookCode) — \(editionTitle) · \(citationLine(chapterNumbers: chapterNumbers, reviewLabel: reviewLabel))"
     }
 
+    /// Standard in-chapter sections in every BFN-A chapter (read in order).
+    static let chapterSectionNames = ["Key Ideas", "Definitions", "Examples", "Mnemonic Devices", "Quiz Yourself"]
+
+    static let chapterSectionGuide = "Key Ideas → Definitions → Examples"
+
+    static func readingLine(chapterNumber: Int) -> String {
+        guard let ch = chapter(chapterNumber), let unit = unit(forChapter: chapterNumber) else {
+            return "Ch \(chapterNumber)"
+        }
+        return "Unit \(unit.number) · \(unit.name) · Ch \(ch.number) — \(ch.title) · \(pageLabel(forChapter: chapterNumber))"
+    }
+
+    static func compactReadingLine(chapterNumber: Int) -> String {
+        guard let ch = chapter(chapterNumber), let unit = unit(forChapter: chapterNumber) else {
+            return "Ch \(chapterNumber)"
+        }
+        return "U\(unit.number) · Ch \(ch.number) — \(ch.shortTitle) · \(pageLabel(forChapter: chapterNumber))"
+    }
+
+    static func groupedChapters(_ numbers: [Int]) -> [(unit: Unit, chapters: [Chapter])] {
+        var byUnit: [Int: [Chapter]] = [:]
+        for number in numbers.sorted() {
+            if let chapter = chapter(number) {
+                byUnit[chapter.unitNumber, default: []].append(chapter)
+            }
+        }
+        return units.compactMap { unit in
+            guard let chapters = byUnit[unit.number], !chapters.isEmpty else { return nil }
+            return (unit, chapters)
+        }
+    }
+
     private static func chapterRangeLabel(_ numbers: [Int]) -> String {
         guard let first = numbers.first, let last = numbers.last else { return "" }
         if first == last { return "\(first)" }

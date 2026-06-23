@@ -72,6 +72,7 @@ extension AppState {
         encyclopedia.resetProgress()
         ElementProgressStore.reset()
         textbookReading.reset()
+        pot6CatchUpCompletedCodes = []
 
         UserDefaults.standard.removeObject(forKey: Self.lastStudyDateKey)
         UserDefaults.standard.removeObject(forKey: Self.streakDaysKey)

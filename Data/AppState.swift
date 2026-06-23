@@ -162,7 +162,7 @@ final class AppState {
 
     func todayBlocks(for date: Date = Date()) -> [StudyBlock] {
         guard let weekday = Weekday.from(date) else { return [] }
-        return blocks(for: currentWeek, pass: currentPass).filter { $0.day == weekday }
+        return scienceBlocks(for: currentWeek).filter { $0.day == weekday }
     }
 
     func block(for week: Int, day: Weekday, subject: Subject) -> StudyBlock? {

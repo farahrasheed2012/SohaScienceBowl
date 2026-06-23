@@ -103,18 +103,52 @@ enum SeedData {
         return Array(result.prefix(targetCount))
     }
 
-    static func topics(for week: Int) -> [Subject: String] {
-        switch week {
-        case 1: return [.chemistry: "Atoms & periodic table", .biology: "Cell structure", .physics: "About Science + Motion"]
-        case 2: return [.chemistry: "States of matter & bonding", .biology: "Genetics", .physics: "Forces & Newton's laws"]
-        case 3: return [.chemistry: "Solutions & reactions", .biology: "Ecology", .physics: "Forces (continued)"]
-        case 4: return [.chemistry: "The atom", .biology: "Evolution & classification", .physics: "Momentum"]
-        case 5: return [.chemistry: "Covalent bonding & stoichiometry", .biology: "Photosynthesis & respiration", .physics: "Work & energy"]
-        case 6: return [.chemistry: "Solutions & neutralization", .biology: "Population ecology & microbes", .physics: "Gravity"]
-        case 7: return [.chemistry: "Reactions & periodic trends", .biology: "Immunity & plants", .physics: "Heat & thermodynamics"]
-        case 8: return [.chemistry: "Lab math & phase changes", .biology: "Plant transport & tissues", .physics: "Electricity intro"]
-        case 9: return [.chemistry: "Isotopes & ions", .biology: "Cell division & body systems", .physics: "Magnetism & waves"]
-        default: return [.chemistry: "Summer capstone", .biology: "Summer capstone", .physics: "Summer capstone"]
+    static func topics(for calendarWeek: Int) -> [Subject: String] {
+        var result: [Subject: String] = [:]
+        for subject in [Subject.chemistry, .biology, .physics] {
+            if let contentWeek = ScheduleSplitTrack.contentWeek(subject: subject, calendarWeek: calendarWeek) {
+                result[subject] = curriculumTopic(week: contentWeek, subject: subject)
+            } else if ScheduleSplitTrack.isChemOnlyWeek(calendarWeek: calendarWeek),
+                      subject == .biology || subject == .physics {
+                result[subject] = "Starts calendar week 3 (\(subject.rawValue) Week 1)"
+            }
+        }
+        return result
+    }
+
+    private static func curriculumTopic(week: Int, subject: Subject) -> String {
+        switch (week, subject) {
+        case (1, .chemistry): return "Atoms & periodic table"
+        case (2, .chemistry): return "States of matter & bonding"
+        case (3, .chemistry): return "Solutions & reactions"
+        case (4, .chemistry): return "The atom"
+        case (5, .chemistry): return "Covalent bonding & stoichiometry"
+        case (6, .chemistry): return "Solutions & neutralization"
+        case (7, .chemistry): return "Reactions & periodic trends"
+        case (8, .chemistry): return "Lab math & phase changes"
+        case (9, .chemistry): return "Isotopes & ions"
+        case (10, .chemistry): return "Summer capstone"
+        case (1, .biology): return "Cell structure"
+        case (2, .biology): return "Genetics"
+        case (3, .biology): return "Ecology"
+        case (4, .biology): return "Evolution & classification"
+        case (5, .biology): return "Photosynthesis & respiration"
+        case (6, .biology): return "Population ecology & microbes"
+        case (7, .biology): return "Immunity & plants"
+        case (8, .biology): return "Plant transport & tissues"
+        case (9, .biology): return "Cell division & body systems"
+        case (10, .biology): return "Summer capstone"
+        case (1, .physics): return "About Science + Motion"
+        case (2, .physics): return "Forces & Newton's laws"
+        case (3, .physics): return "Forces (continued)"
+        case (4, .physics): return "Momentum"
+        case (5, .physics): return "Work & energy"
+        case (6, .physics): return "Gravity"
+        case (7, .physics): return "Heat & thermodynamics"
+        case (8, .physics): return "Electricity intro"
+        case (9, .physics): return "Magnetism & waves"
+        case (10, .physics): return "Summer capstone"
+        default: return "Week \(week)"
         }
     }
 }

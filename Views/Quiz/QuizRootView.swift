@@ -293,7 +293,7 @@ struct DrillSetupView: View {
             Section("Week") {
                 Picker("Week", selection: $week) {
                     Text("All weeks").tag(0)
-                    ForEach(1...10, id: \.self) { w in
+                    ForEach(1...12, id: \.self) { w in
                         Text("Week \(w)").tag(w)
                     }
                 }

@@ -84,6 +84,15 @@ struct TodayView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Week \(appState.currentWeek) · \(appState.weekTheme(for: appState.currentWeek))")
                             .font(.headline)
+                        if ScheduleSplitTrack.isChemOnlyWeek(calendarWeek: appState.currentWeek) {
+                            Text("Split track: Chem only weeks 1–2 — bio & phys right-shifted (start Jun 22 at Week 1)")
+                                .font(.caption)
+                                .foregroundStyle(.orange)
+                        } else if appState.currentWeek == ScheduleSplitTrack.bioPhysStartCalendarWeek {
+                            Text("Split track: First bio/phys day — Bio Week 1 · Phys Week 1 content")
+                                .font(.caption)
+                                .foregroundStyle(Color.accentColor)
+                        }
                         Text(ScheduleConstants.passLabel(for: appState.currentPass))
                             .font(.subheadline)
                             .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
@@ -282,7 +291,7 @@ struct TodayView: View {
 
                 if ElementData.shouldPromoteElementPractice(
                     week: appState.currentWeek,
-                    blocks: appState.blocks(for: appState.currentWeek, pass: appState.currentPass)
+                    blocks: appState.scienceBlocks(for: appState.currentWeek)
                 ) {
                     Section {
                         Text("\(appState.elementMasteredCount) / \(ElementData.first20.count) mastered · checklist completes at 18")
