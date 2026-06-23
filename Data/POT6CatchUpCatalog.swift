@@ -152,8 +152,17 @@ enum POT6CatchUpCatalog {
         "T353",
     ]
 
+    /// POT 5 / Accel II spot-check — optional; not counted in Jan–Jun priority progress.
+    static var prerequisiteItems: [Item] {
+        allItems.filter(\.isPrerequisite).sorted { $0.potCode < $1.potCode }
+    }
+
+    static var prerequisiteCodes: [String] {
+        prerequisiteItems.map(\.potCode)
+    }
+
     static var janJuneSchoolCodes: [String] {
-        allItems.filter { $0.isJanJune && !$0.isReviewMarker }.map(\.potCode)
+        allItems.filter { $0.isJanJune && !$0.isReviewMarker && !$0.isPrerequisite }.map(\.potCode)
     }
 
     static var allSchoolCodes: [String] {
@@ -161,8 +170,10 @@ enum POT6CatchUpCatalog {
     }
 
     static var dayPlans: [DayPlan] {
-        (1...14).map { day in
-            DayPlan(day: day, title: dayTitle(day), items: allItems.filter { $0.catchUpDay == day })
+        (1...14).compactMap { day in
+            let items = allItems.filter { $0.catchUpDay == day && !$0.isPrerequisite }
+            guard !items.isEmpty else { return nil }
+            return DayPlan(day: day, title: dayTitle(day), items: items)
         }
     }
 
@@ -192,15 +203,39 @@ enum POT6CatchUpCatalog {
 
     static func practiceTopicIds(forDay day: Int) -> [String] {
         var seen = Set<String>()
-        return allItems.filter { $0.catchUpDay == day }.flatMap(\.practiceTopicIds).filter { seen.insert($0).inserted }
+        return allItems.filter { $0.catchUpDay == day && !$0.isPrerequisite }
+            .flatMap(\.practiceTopicIds)
+            .filter { seen.insert($0).inserted }
     }
 
     static func bfnChapterNumbers(forDay day: Int) -> [Int] {
         var seen = Set<Int>()
-        return allItems.filter { $0.catchUpDay == day }
+        return allItems.filter { $0.catchUpDay == day && !$0.isPrerequisite }
             .flatMap(\.bfnChapters)
             .filter { seen.insert($0).inserted }
             .sorted()
+    }
+
+    static var prerequisiteBFNChapterNumbers: [Int] {
+        var seen = Set<Int>()
+        return prerequisiteItems
+            .flatMap(\.bfnChapters)
+            .filter { seen.insert($0).inserted }
+            .sorted()
+    }
+
+    static var prerequisitePracticeTopicIds: [String] {
+        var seen = Set<String>()
+        return prerequisiteItems
+            .flatMap(\.practiceTopicIds)
+            .filter { seen.insert($0).inserted }
+    }
+
+    static var prerequisiteReadingOptions: MathAlgebraReadingCatalog.ReadingOptions {
+        MathAlgebraReadingCatalog.mergedReadingOptions(
+            bfnChapterNumbers: prerequisiteBFNChapterNumbers,
+            potCodes: prerequisiteCodes
+        )
     }
 
     static func readingOptions(forDay day: Int) -> MathAlgebraReadingCatalog.ReadingOptions {
