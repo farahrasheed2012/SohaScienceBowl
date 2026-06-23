@@ -204,27 +204,9 @@ enum POT6CatchUpCatalog {
     }
 
     static func readingOptions(forDay day: Int) -> MathAlgebraReadingCatalog.ReadingOptions {
-        var larsonNumbers: [Int] = []
-        var osaKeys: [String] = []
-        var seenLar = Set<Int>()
-        var seenOsa = Set<String>()
-
-        for item in allItems where item.catchUpDay == day {
-            let options = MathAlgebraReadingCatalog.readingOptions(
-                bfnChapterNumbers: item.bfnChapters,
-                potCode: item.potCode
-            )
-            for ch in options.larsonChapters where seenLar.insert(ch.number).inserted {
-                larsonNumbers.append(ch.number)
-            }
-            for sec in options.openStaxSections where seenOsa.insert(sec.key).inserted {
-                osaKeys.append(sec.key)
-            }
-        }
-
-        return MathAlgebraReadingCatalog.ReadingOptions(
-            larsonChapters: larsonNumbers.sorted().compactMap { MathAlgebraReadingCatalog.larsonChapter($0) },
-            openStaxSections: osaKeys.compactMap { MathAlgebraReadingCatalog.openStaxSection($0) }
+        MathAlgebraReadingCatalog.mergedReadingOptions(
+            bfnChapterNumbers: bfnChapterNumbers(forDay: day),
+            potCodes: allItems.filter { $0.catchUpDay == day }.map(\.potCode)
         )
     }
 }

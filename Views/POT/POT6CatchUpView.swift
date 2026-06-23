@@ -4,6 +4,7 @@ import SwiftUI
 struct POT6CatchUpView: View {
     @Environment(AppState.self) private var appState
     @State private var showMasterList = false
+    @State private var showOpenStaxMap = false
 
     var body: some View {
         @Bindable var appState = appState
@@ -15,6 +16,7 @@ struct POT6CatchUpView: View {
                     daySection(plan)
                 }
                 masterListSection
+                openStaxReferenceSection
                 resourcesSection
             }
             .platformListStyle()
@@ -145,12 +147,12 @@ struct POT6CatchUpView: View {
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(PlatformColor.systemBlue)
 
-            if !options.larsonChapters.isEmpty {
-                Text("Larson")
+            if !options.larsonSections.isEmpty {
+                Text("Larson (print book — ISBN \(MathAlgebraReadingCatalog.larsonISBN))")
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(.secondary)
-                ForEach(options.larsonChapters) { chapter in
-                    Text(chapter.label)
+                ForEach(options.larsonSections) { section in
+                    Text(section.label)
                         .font(.caption)
                 }
             }
@@ -269,6 +271,37 @@ struct POT6CatchUpView: View {
             }
 
             Text("\(POT6CatchUpCatalog.competitionOnlyCodes.count) competition-only codes (starred homework) are omitted — POT 6 BASIC skips those.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var openStaxReferenceSection: some View {
+        Section {
+            DisclosureGroup(isExpanded: $showOpenStaxMap) {
+                ForEach(MathAlgebraReadingCatalog.openStaxChapters2Through6) { chapter in
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Ch \(chapter.number) — \(chapter.title)")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                        ForEach(chapter.sections) { section in
+                            if let url = section.url {
+                                Link(section.label, destination: url)
+                                    .font(.caption)
+                            } else {
+                                Text(section.label)
+                                    .font(.caption)
+                            }
+                        }
+                    }
+                    .padding(.vertical, 2)
+                }
+            } label: {
+                Text("OpenStax Ch 2–6 — full section map")
+                    .font(.body.weight(.medium))
+            }
+
+            Text("Every § above is free online. Day/topic “Also OK” lists show the best matches; browse here for extras.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
