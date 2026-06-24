@@ -199,6 +199,11 @@ enum ScheduleOpenStaxCatalog {
         "4.1": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/4-1-linear-functions")!,
         "5.8": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/5-8-modeling-using-variation")!,
         "6.1": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-1-exponential-functions")!,
+        "6.2": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-2-graphs-of-exponential-functions")!,
+        "6.3": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-3-logarithmic-functions")!,
+        "6.4": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-4-graphs-of-logarithmic-functions")!,
+        "6.6": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-6-exponential-and-logarithmic-equations")!,
+        "6.7": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-7-exponential-and-logarithmic-models")!,
         "13.7": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/13-7-probability")!,
         "home": URL(string: "https://openstax.org/books/algebra-and-trigonometry-2e/pages/1-introduction-to-prerequisites")!
     ]

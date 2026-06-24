@@ -237,7 +237,11 @@ def algebra_html_cell(week: int, day_idx: int) -> str:
     focus = (
         "1 hr algebra · Check Your Knowledge"
         if assignment.review_label
-        else "1 hr algebra · read assigned BFN chapter(s)"
+        else (
+            "1 hr algebra · RRISD exponentials · read assigned OSA § + Lar Ch 8"
+            if assignment.topic_label and "RRISD" in assignment.topic_label
+            else "1 hr algebra · read assigned BFN chapter(s)"
+        )
     )
     return (
         f'<td class="alg study-cell">'

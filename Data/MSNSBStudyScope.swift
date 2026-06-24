@@ -15,7 +15,7 @@ enum MSNSBStudyScope {
 
     Life Science: cell biology, genetics, anatomy & physiology, plant biology, ecology, animal behavior.
     Physical Science: chemistry (reactions, periodic table, states of matter) · physics (forces, motion, waves, electromagnetism, thermodynamics).
-    Mathematics (algebra block): Full BFN-A Pre-Algebra & Algebra book (68 chapters) plus optional OpenStax/Larson for NSB math drills.
+    Mathematics (algebra block): BFN-A Ch 1–20 (weeks 1–2), then Math POT 6 Jan–Jun topics from T152 (weeks 3–10); optional OpenStax/Larson for NSB math drills.
     """
 
     static let bookUseGuidance =

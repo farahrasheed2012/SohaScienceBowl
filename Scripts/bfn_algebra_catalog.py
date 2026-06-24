@@ -1,4 +1,4 @@
-"""BFN-A full book catalog + summer schedule — mirrors Data/BFNAlgebraCatalog.swift."""
+"""BFN-A full book catalog + summer schedule — mirrors Data/BFNAlgebraSchedule.swift."""
 
 from __future__ import annotations
 
@@ -131,14 +131,14 @@ OSA_BY_LEGACY = {
 LAR_BY_WEEK = {
     1: ["Lar Ch 1", "Lar Ch 2", "Lar Ch 4", "Lar Ch 1–2", "Lar Ch 2"],
     2: ["Lar Ch 2", "Lar Ch 3", "Lar Ch 3", "Lar Ch 8", "Lar Ch 3"],
-    3: ["Lar Ch 3", "Lar Ch 4", "Lar Ch 3", "Lar Ch 2", "Lar Ch 1–4"],
-    4: ["Lar Ch 2", "Lar Ch 13", "Lar Ch 3", "Lar Ch 1–2", "Lar Ch 3"],
-    5: ["Lar Ch 1", "Lar Ch 2", "Lar Ch 4", "Lar Ch 1–2", "Lar Ch 2"],
-    6: ["Lar Ch 2", "Lar Ch 3", "Lar Ch 3", "Lar Ch 8", "Lar Ch 3"],
-    7: ["Lar Ch 3", "Lar Ch 4", "Lar Ch 3", "Lar Ch 2", "Lar Ch 1–4"],
-    8: ["Lar Ch 2", "Lar Ch 13", "Lar Ch 3", "Lar Ch 1–2", "Lar Ch 3"],
-    9: ["Lar Ch 1", "Lar Ch 2", "Lar Ch 4", "Lar Ch 1–2", "Lar Ch 1–4"],
-    10: ["Lar Ch 3", "Lar Ch 4", "Lar Ch 3", "Lar Ch 2", "Lar Ch 1–13"],
+    3: ["Lar Ch 7", "Lar Ch 1", "Lar Ch 3", "Lar Ch 3", "Lar Ch 1–4"],
+    4: ["Lar Ch 6", "Lar Ch 9", "Lar Ch 9", "Lar Ch 9", "Lar Ch 9"],
+    5: ["Lar Ch 9", "Lar Ch 4", "Lar Ch 4–5", "Lar Ch 4", "Lar Ch 6–7"],
+    6: ["Lar Ch 6", "Lar Ch 11", "Lar Ch 10", "Lar Ch 10", "Lar Ch 1"],
+    7: ["Lar Ch 1", "Lar Ch 11", "Lar Ch 11", "Lar Ch 11", "Lar Ch 1–4"],
+    8: ["Lar Ch 13", "Lar Ch 13", "Lar Ch 4", "Lar Ch 1–13", "Lar Ch 9"],
+    9: ["Lar Ch 8", "Lar Ch 8", "Lar Ch 8", "Lar Ch 8", "Lar Ch 1–4"],
+    10: ["Lar Ch 8", "Lar Ch 1–13", "Lar Ch 7", "Lar Ch 10", "Lar Ch 1–13"],
 }
 
 LEGACY_TITLES = {
@@ -159,6 +159,8 @@ LEGACY_TITLES = {
 class DayAssignment:
     chapter_numbers: tuple[int, ...]
     review_label: str | None
+    pot_codes: tuple[str, ...]
+    topic_label: str | None
     osa_section_keys: tuple[str, ...]
     lar_backup: str
 
@@ -166,17 +168,15 @@ class DayAssignment:
     def display_title(self) -> str:
         if self.review_label:
             return self.review_label
+        if self.topic_label:
+            return self.topic_label
+        bfn = _bfn_title(self.chapter_numbers)
+        if not self.pot_codes:
+            return bfn
+        pot = ", ".join(self.pot_codes)
         if not self.chapter_numbers:
-            return "BFN-A reading"
-        if len(self.chapter_numbers) == 1:
-            n = self.chapter_numbers[0]
-            title, _ = CHAPTER_BY_NUM[n]
-            return f"Ch {n} — {title}"
-        first, last = self.chapter_numbers[0], self.chapter_numbers[-1]
-        t0 = CHAPTER_BY_NUM[first][0]
-        t1 = CHAPTER_BY_NUM[last][0] if last != first else ""
-        suffix = f" · {t1}" if t1 and t1 != t0 else ""
-        return f"Ch {first}–{last} — {t0}{suffix}"
+            return f"POT 6 — {pot}"
+        return f"POT 6 — {pot} · {bfn}"
 
     @property
     def bfn_line(self) -> str:
@@ -194,24 +194,124 @@ class DayAssignment:
         return f"BFN-A · Unit {unit} · Ch {first}–{last} · {page}"
 
 
+def _bfn_title(chapter_numbers: tuple[int, ...]) -> str:
+    if not chapter_numbers:
+        return "BFN-A reading"
+    if len(chapter_numbers) == 1:
+        n = chapter_numbers[0]
+        title, _ = CHAPTER_BY_NUM[n]
+        return f"Ch {n} — {title}"
+    first, last = chapter_numbers[0], chapter_numbers[-1]
+    t0 = CHAPTER_BY_NUM[first][0]
+    t1 = CHAPTER_BY_NUM[last][0] if last != first else ""
+    suffix = f" · {t1}" if t1 and t1 != t0 else ""
+    return f"Ch {first}–{last} — {t0}{suffix}"
+
+
+def _day(
+    *,
+    pot_codes: tuple[str, ...] = (),
+    chapters: tuple[int, ...] = (),
+    topic_label: str | None = None,
+    osa: tuple[str, ...],
+    lar: str,
+    review: str | None = None,
+) -> DayAssignment:
+    return DayAssignment(chapters, review, pot_codes, topic_label, osa, lar)
+
+
+def _legacy_day(week: int, day_idx: int, chapters: tuple[int, ...]) -> DayAssignment:
+    legacy = LEGACY_TITLES[week][day_idx]
+    osa = tuple(OSA_BY_LEGACY.get(legacy, ["1.1"]))
+    lar = LAR_BY_WEEK[week][day_idx]
+    return _day(chapters=chapters, osa=osa, lar=lar)
+
+
+def _foundation_weeks() -> dict[tuple[int, int], DayAssignment]:
+    return {
+        (1, 0): _legacy_day(1, 0, (1, 2)),
+        (1, 1): _legacy_day(1, 1, (3, 4)),
+        (1, 2): _legacy_day(1, 2, (5, 6)),
+        (1, 3): _legacy_day(1, 3, (7, 8)),
+        (1, 4): _legacy_day(1, 4, (9, 10)),
+        (2, 0): _legacy_day(2, 0, (11, 12)),
+        (2, 1): _legacy_day(2, 1, (13, 14)),
+        (2, 2): _legacy_day(2, 2, (15, 16)),
+        (2, 3): _legacy_day(2, 3, (17, 18)),
+        (2, 4): _legacy_day(2, 4, (19, 20)),
+    }
+
+
+def _pot6_weeks() -> dict[tuple[int, int], DayAssignment]:
+    return {
+        (3, 0): _day(pot_codes=("T152",), chapters=(29, 30), osa=("4.1", "5.8"), lar="Lar Ch 7"),
+        (3, 1): _day(chapters=(21, 22), osa=("2.3",), lar="Lar Ch 1"),
+        (3, 2): _day(chapters=(23, 24), osa=("2.3",), lar="Lar Ch 3"),
+        (3, 3): _day(chapters=(25, 26), osa=("2.3",), lar="Lar Ch 3"),
+        (3, 4): _day(osa=("1.2", "5.8", "2.3"), lar="Lar Ch 1–4", review=REVIEW_LABELS[3]),
+        (4, 0): _day(chapters=(27, 28), osa=("2.3",), lar="Lar Ch 6"),
+        (4, 1): _day(pot_codes=("T225", "T226", "T227"), chapters=(47, 48), osa=("6.1",), lar="Lar Ch 9"),
+        (4, 2): _day(pot_codes=("T228", "T229"), chapters=(51,), osa=("6.1",), lar="Lar Ch 9"),
+        (4, 3): _day(pot_codes=("T230", "T231"), chapters=(51,), osa=("6.1",), lar="Lar Ch 9"),
+        (4, 4): _day(pot_codes=("T239", "T240"), chapters=(52, 56), osa=("6.1",), lar="Lar Ch 9"),
+        (5, 0): _day(pot_codes=("T241",), chapters=(54, 55), osa=("6.1",), lar="Lar Ch 9"),
+        (5, 1): _day(pot_codes=("T247",), chapters=(31,), osa=("2.1",), lar="Lar Ch 4"),
+        (5, 2): _day(pot_codes=("T248", "T250", "T251"), chapters=(33, 34, 35, 36), osa=("2.1", "4.1", "3.3"), lar="Lar Ch 4–5"),
+        (5, 3): _day(pot_codes=("T252", "T257"), chapters=(31, 26, 27), osa=("2.1", "2.3"), lar="Lar Ch 4"),
+        (5, 4): _day(pot_codes=("T258", "T259"), chapters=(37, 38, 29, 30, 36), osa=("4.1", "5.8"), lar="Lar Ch 6–7"),
+        (6, 0): _day(pot_codes=("T264", "T265"), chapters=(26, 27), osa=("2.3",), lar="Lar Ch 6"),
+        (6, 1): _day(pot_codes=("T266", "T267"), chapters=(57, 58, 59, 60), osa=("1.3",), lar="Lar Ch 11"),
+        (6, 2): _day(pot_codes=("T261", "T262"), chapters=(61, 62, 64), osa=("6.1",), lar="Lar Ch 10"),
+        (6, 3): _day(pot_codes=("T263", "T289"), chapters=(65, 66, 61, 62, 67, 68), osa=("6.1",), lar="Lar Ch 10"),
+        (6, 4): _day(pot_codes=("T282", "T283", "T284", "T155"), chapters=(45, 13, 14), osa=("5.8", "6.1"), lar="Lar Ch 1"),
+        (7, 0): _day(pot_codes=("T285", "T286", "T287"), chapters=(46, 47, 45), osa=("6.1",), lar="Lar Ch 1"),
+        (7, 1): _day(pot_codes=("T310", "T311", "T312"), osa=("2.1",), lar="Lar Ch 11"),
+        (7, 2): _day(pot_codes=("T313", "T314", "T315"), osa=("2.1",), lar="Lar Ch 11"),
+        (7, 3): _day(pot_codes=("T316", "T317"), osa=("2.1",), lar="Lar Ch 11"),
+        (7, 4): _day(osa=("2.3",), lar="Lar Ch 1–4", review=REVIEW_LABELS[7]),
+        (8, 0): _day(pot_codes=("T270", "T271"), chapters=(40, 41), osa=("13.7",), lar="Lar Ch 13"),
+        (8, 1): _day(pot_codes=("T275", "T276", "T277"), chapters=(42, 43), osa=("13.7",), lar="Lar Ch 13"),
+        (8, 2): _day(chapters=(32, 38), osa=("2.1", "3.3"), lar="Lar Ch 4"),
+        (8, 3): _day(pot_codes=("MIX1",), osa=("1.2", "5.8", "2.3"), lar="Lar Ch 1–13"),
+        (8, 4): _day(chapters=(50, 53, 63), osa=("6.1",), lar="Lar Ch 9"),
+        (9, 0): _day(
+            topic_label="RRISD · Exponential functions · OSA §6.1 · Ch 19, 49",
+            chapters=(19, 49),
+            osa=("6.1",),
+            lar="Lar Ch 8",
+        ),
+        (9, 1): _day(
+            topic_label="RRISD · Graphing exponentials · OSA §6.2",
+            osa=("6.2",),
+            lar="Lar Ch 8",
+        ),
+        (9, 2): _day(
+            topic_label="RRISD · Logarithmic functions intro · OSA §6.3",
+            osa=("6.3",),
+            lar="Lar Ch 8",
+        ),
+        (9, 3): _day(
+            topic_label="RRISD · Log graphs & exp equations · OSA §6.4 · §6.6",
+            osa=("6.4", "6.6"),
+            lar="Lar Ch 8",
+        ),
+        (9, 4): _day(osa=("1.2", "5.8"), lar="Lar Ch 1–4", review=REVIEW_LABELS[9]),
+        (10, 0): _day(
+            topic_label="RRISD · Exponential models · OSA §6.7 · growth & decay",
+            osa=("6.7",),
+            lar="Lar Ch 8",
+        ),
+        (10, 1): _day(pot_codes=("MIX2",), osa=("1.2", "5.8", "2.3"), lar="Lar Ch 1–13"),
+        (10, 2): _day(pot_codes=("T152", "T259"), chapters=(29, 30), osa=("4.1", "5.8"), lar="Lar Ch 7"),
+        (10, 3): _day(pot_codes=("T289",), chapters=(61, 62, 67, 68), osa=("6.1",), lar="Lar Ch 10"),
+        (10, 4): _day(osa=("home",), lar="Lar Ch 1–13", review=REVIEW_LABELS[10]),
+    }
+
+
 def _build_plan() -> dict[tuple[int, int], DayAssignment]:
-    remaining = list(range(1, 69))
-    result: dict[tuple[int, int], DayAssignment] = {}
-    for week in range(1, 11):
-        chapter_slots = [d for d in range(5) if not (d == 4 and week in REVIEW_FRIDAYS)]
-        for day_idx in range(5):
-            lar = LAR_BY_WEEK[week][day_idx]
-            legacy = LEGACY_TITLES[week][day_idx]
-            osa = tuple(OSA_BY_LEGACY.get(legacy, ["1.1"]))
-            if day_idx == 4 and week in REVIEW_FRIDAYS:
-                result[(week, day_idx)] = DayAssignment((), REVIEW_LABELS[week], osa, lar)
-                continue
-            slots_after = sum(1 for d in chapter_slots if d > day_idx)
-            take = 2 if len(remaining) > slots_after + 1 else 1
-            batch = tuple(remaining[:take])
-            del remaining[:take]
-            result[(week, day_idx)] = DayAssignment(batch, None, osa, lar)
-    return result
+    plan = _foundation_weeks()
+    plan.update(_pot6_weeks())
+    return plan
 
 
 PLAN = _build_plan()
