@@ -234,6 +234,13 @@ enum BlockAssignedReadingCatalog {
         )
     }
 
+    static func bfnChemAssignment(for block: StudyBlock) -> BookAssignment? {
+        guard block.subject == .chemistry, block.bookCode == "Expl" else { return nil }
+        guard let assignment = BFNChemistrySchedule.assignment(week: block.week, day: block.day) else { return nil }
+        let text = "\(assignment.bfnOptionText) — \(block.chapterTitle)"
+        return BookAssignment(displayText: text, links: [])
+    }
+
     static func hewittChemAssignment(for block: StudyBlock) -> BookAssignment? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
         guard block.subject == .chemistry, block.bookCode == "Expl" else { return nil }

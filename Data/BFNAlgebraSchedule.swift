@@ -200,8 +200,8 @@ enum BFNAlgebraSchedule {
             ],
             9: [
                 .monday: day(
-                    topicLabel: "RRISD · Exponential functions · OSA §6.1 · Ch 19, 49",
                     chapters: [19, 49],
+                    topicLabel: "RRISD · Exponential functions · OSA §6.1 · Ch 19, 49",
                     osa: ["6.1"],
                     lar: "Lar Ch 8"
                 ),

@@ -1,55 +1,55 @@
 import Foundation
 
-/// Soha did chemistry only in calendar weeks 1–2 (Jun 8–19). Biology and physics are
-/// right-shifted by 2 calendar weeks — same curriculum order, not skipped to August.
+/// Soha missed BFN-C weeks 1–2 (Jun 8–19). **All** science — chem, bio, phys — is
+/// right-shifted by 2 calendar weeks. Calendar week 3 (Jun 22) = Week 1 content for every subject.
 enum ScheduleSplitTrack {
-  static let chemOnlyCalendarWeeks = 1...2
-  static let bioPhysShiftWeeks = 2
-  static let bioPhysStartCalendarWeek = 3
+  static let preStartCalendarWeeks = 1...2
+  static let contentShiftWeeks = 2
+  static let scienceStartCalendarWeek = 3
 
   /// Curriculum week for a subject on a calendar week (`nil` = no block that day/week).
   static func contentWeek(subject: Subject, calendarWeek: Int) -> Int? {
-    switch subject {
-    case .chemistry:
-      guard (1...10).contains(calendarWeek) else { return nil }
-      return calendarWeek
-    case .biology, .physics:
-      guard calendarWeek >= bioPhysStartCalendarWeek else { return nil }
-      let week = calendarWeek - bioPhysShiftWeeks
-      guard (1...10).contains(week) else { return nil }
-      return week
-    }
+    guard calendarWeek >= scienceStartCalendarWeek else { return nil }
+    let week = calendarWeek - contentShiftWeeks
+    guard (1...10).contains(week) else { return nil }
+    return week
   }
 
+  static func isPreStartWeek(calendarWeek: Int) -> Bool {
+    preStartCalendarWeeks.contains(calendarWeek)
+  }
+
+  /// Backward-compatible name used in views.
   static func isChemOnlyWeek(calendarWeek: Int) -> Bool {
-    chemOnlyCalendarWeeks.contains(calendarWeek)
+    isPreStartWeek(calendarWeek: calendarWeek)
   }
 
-  /// Track week number shown in banners (Chem / Bio / Phys week N).
+  static var bioPhysStartCalendarWeek: Int { scienceStartCalendarWeek }
+  static var bioPhysShiftWeeks: Int { contentShiftWeeks }
+
+  /// Track week number shown in banners (content week N).
   static func trackWeek(subject: Subject, calendarWeek: Int) -> Int? {
     contentWeek(subject: subject, calendarWeek: calendarWeek)
   }
 
   static func topicLabel(subject: Subject, calendarWeek: Int) -> String? {
-    guard isChemOnlyWeek(calendarWeek: calendarWeek) else { return nil }
-    switch subject {
-    case .biology, .physics:
-      return "Starts calendar week 3 · \(subject.rawValue) Week 1 content"
-    case .chemistry:
-      return nil
-    }
+    guard isPreStartWeek(calendarWeek: calendarWeek) else { return nil }
+    return "Starts calendar week 3 · \(subject.rawValue) Week 1 content"
   }
 
   static func weekBanner(calendarWeek: Int) -> String {
-    let chem = trackWeek(subject: .chemistry, calendarWeek: calendarWeek) ?? calendarWeek
-    if isChemOnlyWeek(calendarWeek: calendarWeek) {
-      return "Chem Week \(chem) · Bio shifts to week 3 · Phys shifts to week 3"
+    if isPreStartWeek(calendarWeek: calendarWeek) {
+      return "Catch-up weeks — Chem/Bio/Phys Week 1 starts Jun 22"
     }
-    let bio = trackWeek(subject: .biology, calendarWeek: calendarWeek).map { "Bio Week \($0)" } ?? "Bio"
-    let phys = trackWeek(subject: .physics, calendarWeek: calendarWeek).map { "Phys Week \($0)" } ?? "Phys"
-    if calendarWeek == bioPhysStartCalendarWeek {
-      return "Chem Week \(chem) · \(bio) · \(phys) — first bio/phys day"
+    guard let cw = trackWeek(subject: .chemistry, calendarWeek: calendarWeek) else {
+      return "After summer science blocks"
     }
-    return "Chem Week \(chem) · \(bio) · \(phys)"
+    if calendarWeek == scienceStartCalendarWeek {
+      return "Week \(cw) · Chem · Bio · Phys — first science day"
+    }
+    if calendarWeek > 10 {
+      return "Week \(cw) · Chem · Bio · Phys — after Aug 14"
+    }
+    return "Week \(cw) · Chem · Bio · Phys"
   }
 }

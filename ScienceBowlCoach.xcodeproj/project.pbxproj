@@ -13,6 +13,8 @@
 		97850CAF726E4E74AD425A91 /* AppState+Schedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAF0D6F6E9D4B89987497D4 /* AppState+Schedule.swift */; };
 		9CE87DDE4359413AAE1966C8 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349716FFA3084929814886AE /* AppState.swift */; };
 		A1POT6APP001BUILD000001 /* AppState+POTCatchUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1POT6APP002FILE000001 /* AppState+POTCatchUp.swift */; };
+		A1BFNCAT002BUILD000001 /* BFNChemistryCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BFNCAT001BUILD000001 /* BFNChemistryCatalog.swift */; };
+		A1BFNSCH002BUILD000001 /* BFNChemistrySchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1BFNSCH001BUILD000001 /* BFNChemistrySchedule.swift */; };
 		9AD520766E2745CF9F776F65 /* BFNAlgebraCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200EABFE9F0C4F6C836F0C64 /* BFNAlgebraCatalog.swift */; };
 		0E001EF8AF05420A8E73EA3F /* BFNAlgebraSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1A1A9623F544364BD298ECC /* BFNAlgebraSchedule.swift */; };
 		41EEAC85BC634E3DAB7AB8AA /* BiologyTextbookCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C77D4B984447E6B5B714B3 /* BiologyTextbookCatalog.swift */; };
@@ -160,6 +162,8 @@
 		0AAF0D6F6E9D4B89987497D4 /* AppState+Schedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/AppState+Schedule.swift"; sourceTree = "<group>"; };
 		349716FFA3084929814886AE /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/AppState.swift"; sourceTree = "<group>"; };
 		A1POT6APP002FILE000001 /* AppState+POTCatchUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/AppState+POTCatchUp.swift"; sourceTree = "<group>"; };
+		A1BFNCAT001BUILD000001 /* BFNChemistryCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/BFNChemistryCatalog.swift"; sourceTree = "<group>"; };
+		A1BFNSCH001BUILD000001 /* BFNChemistrySchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/BFNChemistrySchedule.swift"; sourceTree = "<group>"; };
 		200EABFE9F0C4F6C836F0C64 /* BFNAlgebraCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/BFNAlgebraCatalog.swift"; sourceTree = "<group>"; };
 		D1A1A9623F544364BD298ECC /* BFNAlgebraSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/BFNAlgebraSchedule.swift"; sourceTree = "<group>"; };
 		96C77D4B984447E6B5B714B3 /* BiologyTextbookCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data/BiologyTextbookCatalog.swift"; sourceTree = "<group>"; };
@@ -346,6 +350,8 @@
 			A1POT6APP001BUILD000001 /* AppState+POTCatchUp.swift */,
 			9CE87DDE4359413AAE1966C8 /* AppState.swift */,
 			9AD520766E2745CF9F776F65 /* BFNAlgebraCatalog.swift */,
+			A1BFNCAT002BUILD000001 /* BFNChemistryCatalog.swift in Sources */,
+			A1BFNSCH002BUILD000001 /* BFNChemistrySchedule.swift in Sources */,
 			0E001EF8AF05420A8E73EA3F /* BFNAlgebraSchedule.swift */,
 			41EEAC85BC634E3DAB7AB8AA /* BiologyTextbookCatalog.swift */,
 			3D65DFDFDB05414DB08327FD /* BlockAssignedReadingCatalog.swift */,

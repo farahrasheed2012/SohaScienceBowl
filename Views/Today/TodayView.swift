@@ -84,12 +84,12 @@ struct TodayView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Week \(appState.currentWeek) · \(appState.weekTheme(for: appState.currentWeek))")
                             .font(.headline)
-                        if ScheduleSplitTrack.isChemOnlyWeek(calendarWeek: appState.currentWeek) {
-                            Text("Split track: Chem only weeks 1–2 — bio & phys right-shifted (start Jun 22 at Week 1)")
+                        if ScheduleSplitTrack.isPreStartWeek(calendarWeek: appState.currentWeek) {
+                            Text("Catch-up weeks — Chem/Bio/Phys Week 1 starts Jun 22 (missed BFN-C weeks 1–2)")
                                 .font(.caption)
                                 .foregroundStyle(.orange)
-                        } else if appState.currentWeek == ScheduleSplitTrack.bioPhysStartCalendarWeek {
-                            Text("Split track: First bio/phys day — Bio Week 1 · Phys Week 1 content")
+                        } else if appState.currentWeek == ScheduleSplitTrack.scienceStartCalendarWeek {
+                            Text("Split track: First science day — Chem · Bio · Phys Week 1")
                                 .font(.caption)
                                 .foregroundStyle(Color.accentColor)
                         }

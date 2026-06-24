@@ -108,8 +108,8 @@ enum SeedData {
         for subject in [Subject.chemistry, .biology, .physics] {
             if let contentWeek = ScheduleSplitTrack.contentWeek(subject: subject, calendarWeek: calendarWeek) {
                 result[subject] = curriculumTopic(week: contentWeek, subject: subject)
-            } else if ScheduleSplitTrack.isChemOnlyWeek(calendarWeek: calendarWeek),
-                      subject == .biology || subject == .physics {
+            } else if ScheduleSplitTrack.isPreStartWeek(calendarWeek: calendarWeek),
+                      subject == .biology || subject == .physics || subject == .chemistry {
                 result[subject] = "Starts calendar week 3 (\(subject.rawValue) Week 1)"
             }
         }

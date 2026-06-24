@@ -231,6 +231,7 @@ struct NSBCategoryDetailView: View {
             }
 
             if category.id == "chemistry" {
+                bfnChemistryTextbookSection
                 chemistryReferenceSection
             }
 
@@ -306,17 +307,24 @@ struct NSBCategoryDetailView: View {
 
     @ViewBuilder
     private var chemistryReferenceSection: some View {
-        Section("Also on the summer schedule (no checkboxes)") {
-            Text("Mod/Tro chapters below map to NSB chemistry topics — read assigned sections only, not the full book.")
+        Section("Backup chemistry books (no checkboxes)") {
+            Text("Hewitt, Mod, and Tro below map to the same NSB chemistry topics — read assigned sections only, not the full book.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Text("Primary: \(ChemistryTextbookCatalog.modTitle)")
+            Text("Hewitt backup: \(ChemistryTextbookCatalog.explTitle)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            Text("Ch 15 The Atom · Ch 17 Elements · Ch 18 Bonding · Ch 19 Mixing · Ch 20–21 Reactions")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+            Text("Mod backup: \(ChemistryTextbookCatalog.modTitle)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.top, 4)
             Text("Ch 2 Measurements · Ch 3 Atoms · Ch 5 Periodic Law · Ch 7 Formulas · Ch 8 Reactions · Ch 10 States · Ch 12 Solutions · Ch 14 Acids & Bases")
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Text("Alternate: \(ChemistryTextbookCatalog.troTitle)")
+            Text("Tro backup: \(ChemistryTextbookCatalog.troTitle)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
@@ -343,6 +351,38 @@ struct NSBCategoryDetailView: View {
                 .foregroundStyle(.secondary)
             Link("Open DOE Tips & Resources", destination: MSNSBOfficialCatalog.tipsURL)
                 .font(.caption.weight(.medium))
+        }
+    }
+
+    @ViewBuilder
+    private var bfnChemistryTextbookSection: some View {
+        let trackable = TextbookReadingCatalog.chapters(forCategoryId: "chemistry")
+        let completed = trackable.filter {
+            appState.textbookReading.isChapterComplete(chapterId: $0.id)
+        }.count
+
+        Section {
+            ForEach(BFNChemistryCatalog.chaptersGroupedByUnit(), id: \.unit.id) { group in
+                let scheduledInUnit = group.chapters.filter { chapter in
+                    trackable.contains { $0.id == chapter.trackableId }
+                }
+                if !scheduledInUnit.isEmpty {
+                    Section {
+                        ForEach(scheduledInUnit) { chapter in
+                            TextbookSimpleChapterRow(
+                                chapterId: chapter.trackableId,
+                                label: chapter.label
+                            )
+                        }
+                    } header: {
+                        Text("Unit \(group.unit.number) — \(group.unit.name)")
+                    }
+                }
+            }
+        } header: {
+            Text(BFNChemistryCatalog.editionTitle)
+        } footer: {
+            Text("Summer chemistry Mon/Thu: assigned BFN-C chapters only. Sections: \(BFNChemistryCatalog.chapterSectionGuide). \(completed)/\(trackable.count) chapters checked off.")
         }
     }
 

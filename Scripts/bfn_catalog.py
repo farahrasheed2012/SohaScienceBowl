@@ -195,8 +195,11 @@ def format_algebra_backup(week: int, day_idx: int, math_title: str, lar_part: st
 
 
 def format_chem_backup(week: int, day_idx: int, mod_display: str, tro_part: str) -> str:
+    from bfn_chemistry_catalog import HEWITT_CHEM_BACKUP  # local import avoids cycle at module load
+
+    hewitt = HEWITT_CHEM_BACKUP.get((week, day_idx), "Ch 17 if stuck")
     topic = science_bfn_topic(week, day_idx)
-    return f"Mod {mod_display}{tro_part} · {format_bfn_sci(topic)}"
+    return f"Hewitt {hewitt} · Mod {mod_display}{tro_part} · {format_bfn_sci(topic)}"
 
 
 def format_bio_backup(week: int, day_idx: int, osb_line: str) -> str:

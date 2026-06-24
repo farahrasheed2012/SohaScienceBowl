@@ -33,6 +33,9 @@ struct StudyBlock: Identifiable, Codable, Hashable {
     var primaryReadingLine: String {
         switch subject {
         case .chemistry:
+            if let bfn = BlockAssignedReadingCatalog.bfnChemAssignment(for: self) {
+                return bfn.displayText
+            }
             if let hewitt = BlockAssignedReadingCatalog.hewittChemAssignment(for: self) {
                 return hewitt.displayText
             }
@@ -85,11 +88,22 @@ struct StudyBlock: Identifiable, Codable, Hashable {
 
         switch subject {
         case .chemistry:
+            if let bfn = BlockAssignedReadingCatalog.bfnChemAssignment(for: self) {
+                options.append(
+                    StudyBookOption(
+                        id: "bfn-c-\(week)-\(day.rawValue)",
+                        role: .primary,
+                        text: bfn.displayText,
+                        links: bfn.links,
+                        isRecommended: true
+                    )
+                )
+            }
             if let hewitt = BlockAssignedReadingCatalog.hewittChemAssignment(for: self) {
                 options.append(
                     StudyBookOption(
                         id: "hewitt-\(week)-\(day.rawValue)",
-                        role: .primary,
+                        role: .backup,
                         text: hewitt.displayText,
                         links: hewitt.links,
                         isRecommended: false

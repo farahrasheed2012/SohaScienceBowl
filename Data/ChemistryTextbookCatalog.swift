@@ -1,7 +1,8 @@
 import Foundation
 
-/// Hewitt (Expl Part 3) primary chemistry; Modern Chemistry (Mod) and Tro backups.
+/// BFN-C primary chemistry; Hewitt (Expl), Modern Chemistry (Mod), and Tro backups.
 enum ChemistryTextbookCatalog {
+    static let bfnChemTitle = BFNChemistryCatalog.editionTitle
     static let modTitle = "Modern Chemistry (Sarquis, Student Edition 2012)"
     static let troTitle = "Introductory Chemistry (Nivaldo Tro, 4th Edition)"
     static let explTitle = ConceptualPhysicalScienceExplorationsCatalog.editionTitle
@@ -11,6 +12,7 @@ enum ChemistryTextbookCatalog {
         case "Mod": return modTitle
         case "Tro": return troTitle
         case "Expl": return explTitle
+        case "BFN-C": return bfnChemTitle
         default: return code
         }
     }

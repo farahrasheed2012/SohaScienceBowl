@@ -21,7 +21,7 @@ enum TextbookReadingCatalog {
     static func chapters(forCategoryId categoryId: String) -> [ChapterTrackable] {
         switch categoryId {
         case "chemistry":
-            return []
+            return bfnChemistryChapters
         case "mathematics":
             return bfnAlgebraChapters
         case "physics":
@@ -69,6 +69,8 @@ enum TextbookReadingCatalog {
             return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "FLS")
         case "mathematics":
             return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "BFN-A")
+        case "chemistry":
+            return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "BFN-C")
         default:
             return MSNSBStudyScope.readingProgressLabel(completed: summary.completed, total: summary.total, bookShortName: "Hewitt")
         }
@@ -118,5 +120,18 @@ enum TextbookReadingCatalog {
                 sectionIds: []
             )
         }
+    }
+
+    private static var bfnChemistryChapters: [ChapterTrackable] {
+        let scheduled = Set(BFNChemistrySchedule.allChapterNumbersOnSchedule())
+        return BFNChemistryCatalog.chapters
+            .filter { scheduled.contains($0.number) }
+            .map { chapter in
+                ChapterTrackable(
+                    id: chapter.trackableId,
+                    label: chapter.label,
+                    sectionIds: []
+                )
+            }
     }
 }

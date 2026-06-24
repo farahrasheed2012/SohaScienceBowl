@@ -19,6 +19,7 @@ from bfn_catalog import (  # noqa: E402
     format_phys_backup,
 )
 from fls_toc_data import FLS_PRIMARY  # noqa: E402
+from bfn_chemistry_catalog import compact_primary_display, HEWITT_CHEM_BACKUP  # noqa: E402
 
 SOHAAli = Path.home() / "Documents/SohaAli/Schedule"
 APP_RESOURCES = Path(__file__).resolve().parent.parent / "Resources/Schedule"
@@ -87,7 +88,9 @@ DATES = {
 # Mon=chem, Tue=bio, Wed=phys, Thu=chem, Fri=bio — same every calendar week
 DAY_KINDS = ("chem", "bio", "phys", "chem", "bio")
 BIO_PHYS_SHIFT = 2
-CHEM_ONLY_CALENDAR_WEEKS = frozenset({1, 2})
+CONTENT_SHIFT = 2
+PRE_START_CALENDAR_WEEKS = frozenset({1, 2})
+CHEM_ONLY_CALENDAR_WEEKS = PRE_START_CALENDAR_WEEKS  # alias
 
 WEEK_META_EXTENDED: dict[int, tuple[str, str]] = {
     **WEEK_META,
@@ -382,14 +385,12 @@ EMPTY_TD = "<td>—</td>"
 
 def content_week_for_kind(calendar_week: int, kind: str) -> int | None:
     """Map calendar week + block kind → curriculum week (matches ScheduleSplitTrack.swift)."""
-    if kind == "chem":
-        return calendar_week if 1 <= calendar_week <= 10 else None
-    if kind in ("bio", "phys"):
-        if calendar_week < 3:
-            return None
-        cw = calendar_week - BIO_PHYS_SHIFT
-        return cw if 1 <= cw <= 10 else None
-    return None
+    if kind not in ("chem", "bio", "phys"):
+        return None
+    if calendar_week < 3:
+        return None
+    cw = calendar_week - CONTENT_SHIFT
+    return cw if 1 <= cw <= 10 else None
 
 
 def calendar_day_block(calendar_week: int, day_idx: int) -> tuple | None:
@@ -401,47 +402,46 @@ def calendar_day_block(calendar_week: int, day_idx: int) -> tuple | None:
 
 
 def split_track_banner_html(calendar_week: int) -> str:
-    if calendar_week in CHEM_ONLY_CALENDAR_WEEKS:
+    if calendar_week in PRE_START_CALENDAR_WEEKS:
         return (
             f'<p class="split-track" style="background:#fff3cd;border:1px solid #e6c200;'
             f'padding:0.1in 0.15in;margin:0 0 0.12in;font-size:9pt;">'
-            f"<strong>Split track:</strong> Chem Week {calendar_week} · "
-            f"Bio <strong>shifted</strong> · Phys <strong>shifted</strong></p>"
+            f"<strong>Split track:</strong> Catch-up weeks — "
+            f"Chem/Bio/Phys <strong>Week 1 starts Jun 22</strong> "
+            f"(missed BFN-C weeks 1–2)</p>"
         )
-    bio = calendar_week - BIO_PHYS_SHIFT
-    chem_label = f"Chem Week {calendar_week}" if calendar_week <= 10 else "Chem —"
-    suffix = " — <strong>first bio/phys day</strong>" if calendar_week == 3 else ""
+    cw = calendar_week - CONTENT_SHIFT
+    suffix = " — <strong>first science day</strong>" if calendar_week == 3 else ""
     after = " — <em>after Aug 14</em>" if calendar_week > 10 else ""
     return (
         f'<p class="split-track" style="background:#fff3cd;border:1px solid #e6c200;'
         f'padding:0.1in 0.15in;margin:0 0 0.12in;font-size:9pt;">'
-        f"<strong>Split track:</strong> {chem_label} · Bio Week {bio} · Phys Week {bio}{suffix}{after}</p>"
+        f"<strong>Split track:</strong> Week {cw} · Chem · Bio · Phys{suffix}{after}</p>"
     )
 
 
 def split_track_banner_md(calendar_week: int) -> str:
-    if calendar_week in CHEM_ONLY_CALENDAR_WEEKS:
+    if calendar_week in PRE_START_CALENDAR_WEEKS:
         return (
-            f"> **Split track:** Chem **Week {calendar_week}** · "
-            f"Bio **shifted** · Phys **shifted**"
+            "> **Split track:** Catch-up weeks — Chem/Bio/Phys **Week 1 starts Jun 22** "
+            "(missed BFN-C weeks 1–2)"
         )
-    bio = calendar_week - BIO_PHYS_SHIFT
-    chem = f"Chem **Week {calendar_week}**" if calendar_week <= 10 else "Chem **—**"
-    extra = " · *(first bio/phys day)*" if calendar_week == 3 else ""
+    cw = calendar_week - CONTENT_SHIFT
+    extra = " · *(first science day)*" if calendar_week == 3 else ""
     after = " · *(after Aug 14)*" if calendar_week > 10 else ""
-    return f"> **Split track:** {chem} · Bio **Week {bio}** · Phys **Week {bio}**{extra}{after}"
+    return f"> **Split track:** Week **{cw}** · Chem · Bio · Phys{extra}{after}"
 
 
 def skipped_science_html(kind: str) -> str:
-    subject = "biology" if kind == "bio" else "physics"
+    subject = {"chem": "chemistry", "bio": "biology", "phys": "physics"}[kind]
     return (
         f'<td class="skipped">— <strong>No {subject}</strong> this calendar week<br>'
-        f'<span class="focus"><em>Right-shifted — starts calendar week 3 (Bio/Phys Week 1)</em></span></td>'
+        f'<span class="focus"><em>Right-shifted — starts calendar week 3 (Week 1 content)</em></span></td>'
     )
 
 
 def skipped_science_md(kind: str) -> str:
-    label = "Bio" if kind == "bio" else "Phys"
+    label = {"chem": "Chem", "bio": "Bio", "phys": "Phys"}[kind]
     return (
         f"| **{label}** | — *(right-shifted)* — no {label.lower()} this calendar week "
         f"*(starts week 3 at Week 1)* | — | — | — | — |"
@@ -452,33 +452,33 @@ SPLIT_TRACK_HEADER_MD = """## Soha split-track *(updated May 2026)*
 
 | Subject | Status | What to follow |
 |---------|--------|----------------|
-| **Chemistry** | ✅ Done weeks 1–2 | **Calendar week** = Chem week |
-| **Biology** | ⏭️ **None in weeks 1–2** | **Right-shifted +2** — calendar week 3 = **Bio Week 1**, week 4 = Bio Week 2, … |
-| **Physics** | ⏭️ **None in weeks 1–2** | **Right-shifted +2** — calendar week 3 = **Phys Week 1**, same pattern |
+| **Chemistry** | ⏭️ **None in weeks 1–2** | **Right-shifted +2** — calendar week 3 = **Chem Week 1** (BFN-C Ch 8–9), … |
+| **Biology** | ⏭️ **None in weeks 1–2** | **Right-shifted +2** — calendar week 3 = **Bio Week 1**, … |
+| **Physics** | ⏭️ **None in weeks 1–2** | **Right-shifted +2** — calendar week 3 = **Phys Week 1**, … |
 | **Algebra** | On schedule | Follow calendar week |
 
-**What happened:** Soha did **chemistry (and algebra) only** in calendar weeks 1–2 (Jun 8–19). She did **zero** biology and **zero** physics blocks those two weeks.
+**What happened:** Soha missed **BFN-C chemistry weeks 1–2** (Jun 8–19). All science blocks are **right-shifted +2** so Week 1 content for chem, bio, and phys starts **Jun 22** (calendar week 3).
 
-**From calendar week 3 (Jun 22):** First bio/phys day → **Bio Week 1 & Phys Week 1 content** (not Week 3). Each subject keeps the normal 1→10 order, shifted two calendar weeks later than chemistry.
+**From calendar week 3 (Jun 22):** First science day → **Chem Week 1 · Bio Week 1 · Phys Week 1** (all aligned).
 
-**After week 10:** Bio/phys weeks 9–10 land on **calendar weeks 11–12** (after Aug 14).
+**After week 10:** Chem/Bio/Phys weeks 9–10 land on **calendar weeks 11–12** (after Aug 14).
 
 | Calendar week | Dates | **Chem** | **Bio** | **Phys** |
 |---------------|-------|----------|---------|----------|
-| 1 | Jun 8 – 12 | ✅ Week 1 | — *(shifted)* | — *(shifted)* |
-| 2 | Jun 15 – 19 | ✅ Week 2 | — *(shifted)* | — *(shifted)* |
-| 3 | Jun 22 – 26 | Week 3 | **Week 1** *(start)* | **Week 1** *(start)* |
-| 4 | Jun 29 – Jul 3 | Week 4 | Week 2 | Week 2 |
-| 5 | Jul 6 – 10 | Week 5 | Week 3 | Week 3 |
-| 6 | Jul 13 – 17 | Week 6 | Week 4 | Week 4 |
-| 7 | Jul 20 – 24 | Week 7 | Week 5 | Week 5 |
-| 8 | Jul 27 – 31 | Week 8 | Week 6 | Week 6 |
-| 9 | Aug 3 – 7 | Week 9 | Week 7 | Week 7 |
-| 10 | Aug 10 – 14 | Week 10 | Week 8 | Week 8 |
-| 11 | Aug 17 – 21 | — | Week 9 | Week 9 |
-| 12 | Aug 24 – 28 | — | Week 10 | Week 10 |
+| 1 | Jun 8 – 12 | — *(shifted)* | — *(shifted)* | — *(shifted)* |
+| 2 | Jun 15 – 19 | — *(shifted)* | — *(shifted)* | — *(shifted)* |
+| 3 | Jun 22 – 26 | **Week 1** *(start)* | **Week 1** *(start)* | **Week 1** *(start)* |
+| 4 | Jun 29 – Jul 3 | Week 2 | Week 2 | Week 2 |
+| 5 | Jul 6 – 10 | Week 3 | Week 3 | Week 3 |
+| 6 | Jul 13 – 17 | Week 4 | Week 4 | Week 4 |
+| 7 | Jul 20 – 24 | Week 5 | Week 5 | Week 5 |
+| 8 | Jul 27 – 31 | Week 6 | Week 6 | Week 6 |
+| 9 | Aug 3 – 7 | Week 7 | Week 7 | Week 7 |
+| 10 | Aug 10 – 14 | Week 8 | Week 8 | Week 8 |
+| 11 | Aug 17 – 21 | Week 9 | Week 9 | Week 9 |
+| 12 | Aug 24 – 28 | Week 10 | Week 10 | Week 10 |
 
-Each week banner shows: `Split track: Chem Week N · Bio Week X · Phys Week X` (weeks 1–2 show bio/phys as shifted).
+Each week banner shows: `Split track: Week N · Chem · Bio · Phys` (weeks 1–2 = catch-up before science starts).
 
 """
 
@@ -487,10 +487,10 @@ BRIDGE_SECTION_MD = """## BRIDGE · August 15 – 19
 | Date | Day | Notes |
 |------|-----|-------|
 | **Aug 15** | Sat | [Saturday timetable](weekly-timetable.md#saturday--shower-only) |
-| **Aug 16–18** | Sun–Tue | Optional rest / pack for school — **no separate bio/phys catch-up** (weeks 1–2 content is on the right-shifted summer schedule starting Jun 22) |
+| **Aug 16–18** | Sun–Tue | Optional rest / pack for school — **no separate catch-up** (science Week 1 starts Jun 22 on the right-shifted schedule) |
 | **Aug 19** | Wed | **First day of 7th grade** — school schedule |
 
-**Calendar weeks 11–12** (Aug 17–28): finish Bio **Week 9–10** and Phys **Week 9–10** if not done by Aug 14.
+**Calendar weeks 11–12** (Aug 17–28): finish Chem/Bio/Phys **Week 9–10** if not done by Aug 14.
 
 """
 
@@ -542,14 +542,14 @@ COACH_ROWS = {
 COMMON_PASS_REPLACEMENTS = [
     ("Pass 1 bio · Jun", "FLS primary · Jun–Aug"),
     ("Pass 2–3 bio · Jul–Aug", "OSB/CB backup · anytime"),
-    ("Pass 1 chem · Jun", "Hewitt primary · Jun–Aug"),
-    ("Pass 2–3 chem · Jul–Aug", "Mod/Tro backup · anytime"),
+    ("Pass 1 chem · Jun", "BFN-C primary · Jun–Aug"),
+    ("Pass 2–3 chem · Jul–Aug", "Hewitt/Mod/Tro backup · anytime"),
     ("**FLS** (Pass 1) · **CB** (Pass 2–3)", "**FLS** primary · **OSB/CB** backup"),
-    ("**Mod** (Pass 1) · **Tro** (Pass 2–3)", "**Hewitt** primary · **Mod/Tro** backup"),
-    ("Mod (P1) · Tro (P2–3)", "Hewitt primary · Mod/Tro backup"),
+    ("**Mod** (Pass 1) · **Tro** (Pass 2–3)", "**BFN-C** primary · **Hewitt/Mod/Tro** backup"),
+    ("Mod (P1) · Tro (P2–3)", "BFN-C primary · Hewitt/Mod/Tro backup"),
     ("FLS (P1) · CB (P2–3)", "FLS primary · OSB/CB backup"),
     ("**FLS** (P1) · **CB** (P2–3)", "**FLS** primary · **OSB/CB** backup"),
-    ("**Mod** (P1) · **Tro** (P2–3)", "**Hewitt** primary · **Mod/Tro** backup"),
+    ("**Mod** (P1) · **Tro** (P2–3)", "**BFN-C** primary · **Hewitt/Mod/Tro** backup"),
     ("Pass 1–3", "one summer pass"),
     ("Pass 1–2", "weeks 1–10"),
     ("Book key & pass overview", "Book key & DOE topic scope"),
@@ -561,57 +561,107 @@ COMMON_PASS_REPLACEMENTS = [
     ("**OSB/FLS** primary", "**FLS** primary"),
     ("**OSB/FLS** (+ CB backup)", "**FLS** (+ OSB/CB backup)"),
     ("**OSB/FLS** primary · **CB** backup", "**FLS** primary · **OSB/CB** backup"),
-    ("Mod primary · Mon &amp; Thu", "Hewitt primary · Mon/Thu chem"),
+    ("Mod primary · Mon &amp; Thu", "BFN-C primary · Mon/Thu chem"),
     ("OSB/FLS primary · Tue &amp; Fri", "FLS primary · Tue &amp; Fri"),
     ("OpenStax Biology (OSB) + FLS — primary", "Focus on Life Science (FLS) — primary"),
     ("Modern Chemistry (Mod) — primary", "Modern Chemistry (Mod) — backup"),
-    ("**Mod** primary · **Tro** backup", "**Hewitt** primary · **Mod/Tro** backup"),
+    ("**Mod** primary · **Tro** backup", "**BFN-C** primary · **Hewitt/Mod/Tro** backup"),
     ("**FLS/OSB** primary · **CB** backup", "**FLS** primary · **OSB/CB** backup"),
-    ("**Mod** primary", "**Hewitt** primary"),
-    ("| **Mod** primary |", "| **Hewitt** primary |"),
-    ("Mod/Tro · Expl opt · BFN-Sci", "Hewitt · Mod/Tro backup · BFN-Sci"),
-    ("**Mod + OSB/FLS + Expl**", "**Hewitt + FLS**"),
-    ("pick 2 weak Mod topics", "pick 2 weak Hewitt chem topics"),
-    ("**Mod (primary)** | **Tro (backup)** | **Expl opt**", "**Hewitt (primary)** | **Mod (backup)** | **Tro (backup)**"),
-    ("| **Mod (primary)** | **Tro (backup)** | **Optional Expl** *(parallel)* |", "| **Hewitt (primary)** | **Mod (backup)** | **Tro (backup)** |"),
-    ("| **Mod (primary)** | **Tro (backup)** |", "| **Hewitt (primary)** | **Mod (backup)** |"),
-    ("**Mod** primary (+ optional Expl chem)", "**Hewitt** primary (+ **Mod** backup)"),
+    ("**Mod** primary", "**BFN-C** primary"),
+    ("| **Mod** primary |", "| **BFN-C** primary |"),
+    ("Mod/Tro · Expl opt · BFN-Sci", "BFN-C · Hewitt/Mod/Tro backup · BFN-Sci"),
+    ("**Mod + OSB/FLS + Expl**", "**BFN-C + FLS**"),
+    ("pick 2 weak Mod topics", "pick 2 weak BFN-C chem topics"),
+    ("**Mod (primary)** | **Tro (backup)** | **Expl opt**", "**BFN-C (primary)** | **Hewitt (backup)** | **Mod/Tro (backup)**"),
+    ("| **Mod (primary)** | **Tro (backup)** | **Optional Expl** *(parallel)* |", "| **BFN-C (primary)** | **Hewitt (backup)** | **Mod/Tro (backup)** |"),
+    ("| **Mod (primary)** | **Tro (backup)** |", "| **BFN-C (primary)** | **Hewitt/Mod (backup)** |"),
+    ("**Mod** primary (+ optional Expl chem)", "**BFN-C** primary (+ **Hewitt/Mod** backup)"),
     ("**Expl** Ch 15 + 17–24 *(optional parallel skim)*", "—"),
     ("**Expl** Ch 15 + 17–24 *(optional 10-min skim)*", "—"),
     ("**Expl** Ch 15 + 17–24 *(optional skim)*", "—"),
     ("| **Wed** | Physics | **Expl**", "| **Wed** | Physics | **Hewitt**"),
     ("| **Wed** | Physics | **Expl** *(physics chapters + App. B)*", "| **Wed** | Physics | **Hewitt** *(Ch 1 · App. B · 2–13)*"),
-    ("Chem (optional Mon/Thu):", "Chem (Hewitt primary Mon/Thu):"),
+    ("Chem (optional Mon/Thu):", "Chem (BFN-C primary Mon/Thu):"),
+    # Hewitt-era HTML → BFN-C primary (re-sync existing schedules)
+    ("Hewitt primary · Jun–Aug", "BFN-C primary · Jun–Aug"),
+    ("**Hewitt** primary · **Mod/Tro** backup", "**BFN-C** primary · **Hewitt/Mod/Tro** backup"),
+    ("Hewitt primary · Mod/Tro backup", "BFN-C primary · Hewitt/Mod/Tro backup"),
+    ("Hewitt primary · Mon/Thu chem", "BFN-C primary · Mon/Thu chem"),
+    ("**Hewitt** primary", "**BFN-C** primary"),
+    ("| **Hewitt** primary |", "| **BFN-C** primary |"),
+    ("Hewitt · Mod/Tro backup · BFN-Sci", "BFN-C · Hewitt/Mod/Tro backup · BFN-Sci"),
+    ("**Hewitt + FLS**", "**BFN-C + FLS**"),
+    ("pick 2 weak Hewitt chem topics", "pick 2 weak BFN-C chem topics"),
+    ("**Hewitt (primary)** | **Mod (backup)** | **Tro (backup)**", "**BFN-C (primary)** | **Hewitt (backup)** | **Mod/Tro (backup)**"),
+    ("| **Hewitt (primary)** | **Mod (backup)** | **Tro (backup)** |", "| **BFN-C (primary)** | **Hewitt (backup)** | **Mod/Tro (backup)** |"),
+    ("| **Hewitt (primary)** | **Mod (backup)** |", "| **BFN-C (primary)** | **Hewitt/Mod (backup)** |"),
+    ("**Hewitt** primary (+ **Mod** backup)", "**BFN-C** primary (+ **Hewitt/Mod** backup)"),
+    ("Chem (Hewitt primary Mon/Thu):", "Chem (BFN-C primary Mon/Thu):"),
+    ("**Hewitt** is **primary** chemistry · **Mod/Tro** are **backups**", "**BFN-C** is **primary** chemistry · **Hewitt/Mod/Tro** are **backups**"),
+    ("<strong>Hewitt</strong> Ch 15 + 17–24 primary · <strong>Mod/Tro</strong> backup", "<strong>BFN-C</strong> primary · <strong>Hewitt/Mod/Tro</strong> backup"),
+    ("<strong>Hewitt</strong> primary (+ <strong>Mod</strong> backup)", "<strong>BFN-C</strong> primary (+ <strong>Hewitt/Mod</strong> backup)"),
+    ("<td class=\"chem\"><strong>Hewitt</strong> primary (Ch 15 + 17–24)", "<td class=\"chem\"><strong>BFN-C</strong> primary"),
+    ("<strong>Hewitt Ch 17", "<strong>BFN-C"),
+    ("| **Mon/Thu** | — | **Hewitt** primary (Ch 15 + 17–24) | — |", "| **Mon/Thu** | — | **BFN-C** primary | — |"),
+    ("Primary chem (Ch 15 + 17–24) · Wed physics", "Chemistry backup · Wed physics"),
+    ("Primary chem (Ch 17–24) · Wed physics", "Chemistry backup · Wed physics"),
+    ("Chemistry · Hewitt (+ Mod backup)", "Chemistry · BFN-C (+ Hewitt/Mod backup)"),
+    ("Hewitt + FLS + assigned §", "BFN-C + FLS + assigned chapters"),
+    ("<strong>Chem:</strong> <strong>Hewitt</strong> Ch 17–24 primary · <strong>Mod/Tro</strong> backup", "<strong>Chem:</strong> <strong>BFN-C</strong> primary · <strong>Hewitt/Mod/Tro</strong> backup"),
+    ("<strong>Chem (BFN-C primary Mon/Thu):</strong> 17 Elements · 18 Bonding · 19 Mixing · 20–21 Reactions · 22 Organic stretch", "<strong>Chem (BFN-C primary Mon/Thu):</strong> U2 Matter · U3–4 Atoms/Periodic · U5 Bonding · U6–7 Mole/Reactions · U9–10 Solutions/Acids"),
+    ("calendar says primary (Mod/Tro/Hewitt/FLS/Mod/OSB/CB/Lar)", "calendar says primary (BFN-C/Hewitt/FLS/OSB/CB/Lar)"),
+    ("**Primary** chem (Ch 15 + 17–24) · Wed **physics**", "**Chemistry backup** · Wed **physics** (primary)"),
+    ("**Primary** chem (Ch 15 + 17–24)", "**Chemistry backup**"),
+    ("### Expl chapters — chemistry *(Hewitt primary Mon/Thu)*", "### BFN-C chapters — chemistry *(primary Mon/Thu)*"),
+    ("**Chemistry** in Expl (Part Three, Ch 17–24) is **primary** Mon/Thu reading — assigned **§ sections** only. **Mod/Tro** cover the same topics if Hewitt feels dense.", "**Chemistry** Mon/Thu uses **BFN-C** chapters aligned to NSB topics. **Hewitt** (Expl Ch 15 + 17–24) · **Mod/Tro** cover the same topics as backups."),
+    ("### Expl chapters *(all passes — your student text)*", "### Hewitt chapters *(summer pass — physics + chem backup)*"),
+    ("> **Chemistry note:** **Hewitt** (Expl Ch 17–24) is **primary** chemistry", "> **Chemistry note:** **BFN-C** (*Big Fat Notebook: High School Chemistry*) is **primary** chemistry"),
+    ("NSB chemistry topics rotate every 4 weeks. **Hewitt** (Expl Ch 17–24) is primary Mon/Thu", "NSB chemistry topics rotate every 4 weeks. **BFN-C** is primary Mon/Thu"),
+    ("**Hewitt** is **primary** chemistry · **Mod/Tro** are **backups**", "**BFN-C** is **primary** chemistry · **Hewitt/Mod/Tro** are **backups**"),
+    ("### Three-book chemistry map *(Hewitt + Mod + Tro)*", "### Three-book chemistry map *(BFN-C primary · Hewitt/Mod/Tro backup)*"),
+    ("| **Mon** | Chemistry | **Hewitt** primary |", "| **Mon** | Chemistry | **BFN-C** primary |"),
+    ("| **Thu** | Chemistry | **Hewitt** primary |", "| **Thu** | Chemistry | **BFN-C** primary |"),
+    ("**Plan:** One careful read through **Hewitt + FLS**", "**Plan:** One careful read through **BFN-C + FLS**"),
+    ("*One careful read through **Hewitt + FLS**", "*One careful read through **BFN-C + FLS**"),
+    ("**Weeks 1–10** = **one summer pass** *(Hewitt + FLS", "**Weeks 1–10** = **one summer pass** *(BFN-C + FLS"),
+    ("<td><strong>Hewitt</strong> chem</td>", "<td><strong>BFN-C</strong> chem</td>"),
+    ("<td><strong>Hewitt</strong> Ch 15 + 17–24</td>", "<td><strong>BFN-C</strong> assigned chapters</td>"),
+    ("**Mod/Tro** are backups for the same topics.", "**Hewitt/Mod/Tro** are backups for the same topics."),
+    ("**Rules:** One **primary** book per **1-hr** block — assigned **§ section** only. **Expl chem** is extra — 10-min skim after Mod/Tro if helpful, or skip. **BFN** books are for Friday review and \"stuck on a fact\" — not daily reading unless Lar/Mod/Tro runs long.", "**Rules:** One **primary** book per **1-hr** block — read BFN-C **Key Ideas → Definitions → Examples**. **Hewitt/Mod/Tro** are backups if BFN feels dense. **BFN-Sci** for Friday review and \"stuck on a fact\"."),
+    ("**Rules:** One **primary** book per **1-hr** block — assigned **§ section** only. **Expl chem** is extra — 10-min skim after Mod/Tro if helpful, or skip. **BFN** books are for Friday review and “stuck on a fact” — not daily reading unless Lar/Mod/Tro runs long.", "**Rules:** One **primary** book per **1-hr** block — read BFN-C **Key Ideas → Definitions → Examples**. **Hewitt/Mod/Tro** are backups if BFN feels dense. **BFN-Sci** for Friday review and “stuck on a fact”."),
+    ("> **Chemistry note:** **BFN-C** (*Big Fat Notebook: High School Chemistry*) is **primary** chemistry · **Mod/Tro** are **backups** — use only if a Hewitt § section feels dense.", "> **Chemistry note:** **BFN-C** (*Big Fat Notebook: High School Chemistry*) is **primary** chemistry · **Hewitt/Mod/Tro** are **backups** — use only if a BFN chapter feels dense."),
+    ("<td><strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong>", "<td><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong>"),
+    ("### Three-book chemistry map *(BFN-C primary · Hewitt/Mod/Tro backup)* *(BFN-C primary · Hewitt/Mod/Tro backup)*", "### Three-book chemistry map *(BFN-C primary · Hewitt/Mod/Tro backup)*"),
 ]
 
 BOOK_PICKER_REPLACEMENTS = [
     (
         "> **Chemistry note:** **Mod** is **primary** chemistry · **Tro** is **backup**. Optional **Expl Ch 15 + 17–24** is a second explanation of the same week\u2019s topic — pick it if Mod/Tro feels dense, or skip if primary reading is enough.",
-        "> **Chemistry note:** **Hewitt** (Expl Ch 15 + 17–24) is **primary** chemistry · **Mod/Tro** are **backups** — use only if a Hewitt § section feels dense.",
+        "> **Chemistry note:** **BFN-C** (*Big Fat Notebook: High School Chemistry*) is **primary** Mon/Thu chemistry · **Hewitt/Mod/Tro** are **backups** — use only if a BFN chapter feels dense.",
     ),
     (
         "**Chemistry** in Expl (Part Three, Ch 15 + 17–24) is **optional parallel reading** alongside **Mod/Tro** — same topics, Hewitt\u2019s conceptual style.",
-        "**Chemistry** in Expl (Part Three, Ch 15 + 17–24) is **primary** Mon/Thu reading — assigned **§ sections** only. **Mod/Tro** cover the same topics if Hewitt feels dense.",
+        "**Chemistry** Mon/Thu uses **BFN-C** chapters aligned to NSB topics. **Hewitt** (Expl Ch 15 + 17–24) · **Mod/Tro** cover the same topics as backups.",
     ),
     (
         "**Rules:** One **primary** book per **1-hr** block — assigned **§ section** only. **Expl chem** is extra — 10-min skim after Mod/Tro if helpful, or skip. **BFN** books are for Friday review and \"stuck on a fact\" — not daily reading unless Lar/Mod/Tro runs long.",
-        "**Rules:** One **primary** book per **1-hr** block — assigned **§ section** only. **Mod/Tro** are backups — use only if Hewitt/FLS feels dense. **BFN** books are for Friday review and \"stuck on a fact\" — not daily reading unless Lar runs long.",
+        "**Rules:** One **primary** book per **1-hr** block — read BFN-C **Key Ideas → Definitions → Examples**. **Hewitt/Mod/Tro** are backups if BFN feels dense. **BFN-Sci** for Friday review and \"stuck on a fact\".",
     ),
     (
         "**Expl chem** is parallel, not required — 10 min after Mod/Tro if the primary chapter feels dense.",
-        "**Mod/Tro** are backups — use only if a Hewitt § section feels dense.",
+        "**Hewitt/Mod/Tro** are backups — use only if a BFN-C chapter feels dense.",
     ),
     (
         "### Three-book chemistry map *(Mod + Tro + optional Expl)*",
-        "### Three-book chemistry map *(Hewitt + Mod + Tro)*",
+        "### Three-book chemistry map *(BFN-C + Hewitt + Mod + Tro)*",
     ),
     (
         "NSB chemistry topics rotate every 4 weeks. **Mod** teaches in June; **Tro** revisits the same topics in July with DOE questions first. **Expl** optional chapters match by **topic**, not by identical chapter numbers.",
-        "NSB chemistry topics rotate every 4 weeks. **Hewitt** (Expl Ch 15 + 17–24) is primary Mon/Thu — assigned **§ sections** only. **Mod/Tro** are backups for the same topics.",
+        "NSB chemistry topics rotate every 4 weeks. **BFN-C** is primary Mon/Thu — assigned chapters only. **Hewitt/Mod/Tro** are backups for the same topics.",
     ),
     (
         "### Expl chapters — chemistry *(optional Mon/Thu parallel)*",
-        "### Expl chapters — chemistry *(Hewitt primary Mon/Thu)*",
+        "### BFN-C chapters — chemistry *(primary Mon/Thu)*",
     ),
     (
         "| Maps to rotation week |",
@@ -619,16 +669,30 @@ BOOK_PICKER_REPLACEMENTS = [
     ),
 ]
 
-HEWITT_CHEM_INDEX_HTML = """      <h3>Conceptual Physical Science Explorations (Hewitt) — primary chem</h3>
+BFN_CHEM_INDEX_HTML = """      <h3>Big Fat Notebook: High School Chemistry (BFN-C) — primary chem</h3>
+      <table>
+        <tr><th>Unit</th><th>Chapters</th><th>Summer weeks</th></tr>
+        <tr><td>1 Basics</td><td>4–5 Measurement · Lab safety</td><td>4 Thu</td></tr>
+        <tr><td>2 Matter</td><td>6–8 Atoms · states</td><td>1 Mon · 4 Mon · 8 Thu</td></tr>
+        <tr><td>3 Atomic theory</td><td>9–10</td><td>1 Mon · 2 Mon · 9 Mon</td></tr>
+        <tr><td>4 Periodic table</td><td>11–13</td><td>1 Thu · 7 Thu</td></tr>
+        <tr><td>5 Bonding</td><td>14–16</td><td>2 Thu · 5 Mon · 9 Thu</td></tr>
+        <tr><td>6 Compounds</td><td>18–19 Mole</td><td>5 Thu · 8 Mon</td></tr>
+        <tr><td>7 Reactions</td><td>20–21</td><td>3 Thu · 7 Mon</td></tr>
+        <tr><td>9 Solutions</td><td>25–27</td><td>3 Mon · 6 Mon</td></tr>
+        <tr><td>10 Acids/bases</td><td>28–31</td><td>6 Thu</td></tr>
+      </table>
+"""
+
+HEWITT_CHEM_BACKUP_INDEX_HTML = """      <h3>Conceptual Physical Science Explorations (Hewitt) — backup chem</h3>
       <table>
         <tr><th>Ch</th><th>Title</th><th>Weeks</th></tr>
         <tr><td>15</td><td>The Atom</td><td>2</td></tr>
         <tr><td>17</td><td>Elements of Chemistry</td><td>1, 4, 8–10</td></tr>
-        <tr><td>18</td><td>How Atoms Bond and Molecules Attract</td><td>1, 4, 5, 9</td></tr>
-        <tr><td>19</td><td>How Chemicals Mix</td><td>3, 6, 7</td></tr>
-        <tr><td>20</td><td>How Chemicals React</td><td>2, 7</td></tr>
-        <tr><td>21</td><td>Two Types of Chemical Reactions</td><td>3, 6</td></tr>
-        <tr><td>22</td><td>Organic Compounds</td><td>stretch</td></tr>
+        <tr><td>18</td><td>How Atoms Bond and Molecules Attract</td><td>2, 5, 9</td></tr>
+        <tr><td>19</td><td>How Chemicals Mix</td><td>3, 6</td></tr>
+        <tr><td>20</td><td>How Chemicals React</td><td>3, 7</td></tr>
+        <tr><td>21</td><td>Two Types of Chemical Reactions</td><td>6</td></tr>
       </table>
 """
 
@@ -687,17 +751,26 @@ def apply_book_picker_replacements(text: str) -> str:
 
 
 def patch_index_sections(text: str) -> str:
-    if "Hewitt) — primary chem" not in text:
-        text = text.replace(
-            "<h3>Modern Chemistry (Mod) — primary</h3>",
-            HEWITT_CHEM_INDEX_HTML + "      <h3>Modern Chemistry (Mod) — backup</h3>",
-            1,
+    chem_index = BFN_CHEM_INDEX_HTML + HEWITT_CHEM_BACKUP_INDEX_HTML
+    if "BFN-C) — primary chem" not in text:
+        text = re.sub(
+            r"\s*<h3>Conceptual Physical Science Explorations \(Hewitt\) — primary chem</h3>\s*<table>.*?</table>",
+            "\n" + chem_index,
+            text,
+            count=1,
+            flags=re.DOTALL,
         )
-        text = text.replace(
-            "<h3>Modern Chemistry (Mod) — backup</h3>",
-            HEWITT_CHEM_INDEX_HTML + "      <h3>Modern Chemistry (Mod) — backup</h3>",
-            1,
-        )
+        if "BFN-C) — primary chem" not in text:
+            text = text.replace(
+                "<h3>Modern Chemistry (Mod) — primary</h3>",
+                chem_index + "      <h3>Modern Chemistry (Mod) — backup</h3>",
+                1,
+            )
+            text = text.replace(
+                "<h3>Modern Chemistry (Mod) — backup</h3>",
+                chem_index + "      <h3>Modern Chemistry (Mod) — backup</h3>",
+                1,
+            )
     text = text.replace(
         "<h3>Conceptual Physical Science Explorations (Expl)</h3>",
         "<h3>Conceptual Physical Science Explorations (Hewitt) — primary physics</h3>",
@@ -705,31 +778,32 @@ def patch_index_sections(text: str) -> str:
     return apply_common_replacements(text)
 
 
-def generate_chemistry_map_rows() -> list[tuple[str, str, str, str, str]]:
-    rows: list[tuple[str, str, str, str, str]] = []
+def generate_chemistry_map_rows() -> list[tuple[str, str, str, str, str, str]]:
+    rows: list[tuple[str, str, str, str, str, str]] = []
     for week in range(1, 5):
         for day_idx in (0, 3):
             _, mod_book, title, *_ = SCIENCE_WEEKS[week][day_idx]
-            hewitt = HEWITT_CHEM_PRIMARY[(week, day_idx)].replace("Hewitt ", "")
+            bfn = compact_primary_display(week, day_idx)
+            hewitt = HEWITT_CHEM_BACKUP.get((week, day_idx), "—")
             mod = format_mod_reading(week, day_idx, mod_book).replace("Mod ", "")
             tro = TRO_BACKUP.get((week, day_idx), "—")
             day = "Mon" if day_idx == 0 else "Thu"
-            rows.append((f"{week} {day}", title, hewitt, mod, tro))
+            rows.append((f"{week} {day}", title, bfn, hewitt, mod, tro))
     return rows
 
 
 def generate_chemistry_map_html() -> str:
     rows = []
-    for wk_day, title, hewitt, mod, tro in generate_chemistry_map_rows():
+    for wk_day, title, bfn, hewitt, mod, tro in generate_chemistry_map_rows():
         rows.append(
             f"        <tr><td>{esc(wk_day)}</td><td>{esc(title)}</td>"
-            f"<td>{esc(hewitt)}</td><td>{esc(mod)}</td><td>{esc(tro)}</td></tr>"
+            f"<td>{esc(bfn)}</td><td>{esc(hewitt)}</td><td>{esc(mod)}</td><td>{esc(tro)}</td></tr>"
         )
     return (
         "      <h3>Three-book chemistry map</h3>\n"
         "      <table style=\"font-size:7pt\">\n"
-        "        <tr><th>Wk</th><th>Topic</th><th>Hewitt (primary)</th>"
-        "<th>Mod (backup)</th><th>Tro (backup)</th></tr>\n"
+        "        <tr><th>Wk</th><th>Topic</th><th>BFN-C (primary)</th>"
+        "<th>Hewitt (backup)</th><th>Mod (backup)</th><th>Tro (backup)</th></tr>\n"
         + "\n".join(rows)
         + "\n      </table>"
     )
@@ -737,11 +811,11 @@ def generate_chemistry_map_html() -> str:
 
 def generate_chemistry_map_md() -> str:
     lines = [
-        "| Rotation week | NSB topic | **Hewitt (primary)** | **Mod (backup)** | **Tro (backup)** |",
-        "|---------------|-----------|---------------------|------------------|------------------|",
+        "| Rotation week | NSB topic | **BFN-C (primary)** | **Hewitt (backup)** | **Mod (backup)** | **Tro (backup)** |",
+        "|---------------|-----------|---------------------|---------------------|------------------|------------------|",
     ]
-    for wk_day, title, hewitt, mod, tro in generate_chemistry_map_rows():
-        lines.append(f"| **{wk_day}** | {title} | {hewitt} | {mod} | {tro} |")
+    for wk_day, title, bfn, hewitt, mod, tro in generate_chemistry_map_rows():
+        lines.append(f"| **{wk_day}** | {title} | {bfn} | {hewitt} | {mod} | {tro} |")
     return "\n".join(lines)
 
 
@@ -757,7 +831,7 @@ def patch_chemistry_map_html(text: str) -> str:
 
 def patch_chemistry_map_md(text: str) -> str:
     return re.sub(
-        r"\| Rotation week \| NSB topic \| \*\*(?:Mod|Hewitt) \(primary\)\*\*.*?\n\n\*\*Not scheduled",
+        r"\| Rotation week \| NSB topic \| \*\*(?:Mod|Hewitt|BFN-C) \(primary\)\*\*.*?\n\n\*\*Not scheduled",
         generate_chemistry_map_md() + "\n\n**Not scheduled",
         text,
         count=1,
@@ -774,28 +848,16 @@ def coach_cell(week: int, day: str) -> str:
     )
 
 
-HEWITT_CHEM_PRIMARY: dict[tuple[int, int], str] = {
-    (1, 0): "Hewitt Ch 17 §17.1–17.3",
-    (1, 3): "Hewitt Ch 17 §17.6–17.8",
-    (2, 0): "Hewitt Ch 15 §15.1–15.5",
-    (2, 3): "Hewitt Ch 18 §18.1–18.4",
-    (3, 0): "Hewitt Ch 19 §19.1–19.4",
-    (3, 3): "Hewitt Ch 20 §20.1–20.4",
-    (4, 0): "Hewitt Ch 17 §17.3–17.5",
-    (4, 3): "Hewitt Ch 17 §17.1–17.4",
-    (5, 0): "Hewitt Ch 18 §18.5–18.8",
-    (5, 3): "Hewitt Ch 19 §19.3–19.4",
-    (6, 0): "Hewitt Ch 19 §19.3–19.5",
-    (6, 3): "Hewitt Ch 21 §21.1–21.3",
-    (7, 0): "Hewitt Ch 20 §20.1–20.4",
-    (7, 3): "Hewitt Ch 17 §17.6–17.7",
-    (8, 0): "Hewitt Ch 17 §17.4–17.5",
-    (8, 3): "Hewitt Ch 17 §17.3–17.5",
-    (9, 0): "Hewitt Ch 17 §17.2–17.3",
-    (9, 3): "Hewitt Ch 18 §18.2–18.4",
-    (10, 0): "Hewitt Review",
-    (10, 3): "Hewitt Review",
-}
+def primary_display_book(week: int, day_idx: int, kind: str, book: str) -> str:
+    if kind == "chem":
+        return compact_primary_display(week, day_idx)
+    key = (week, day_idx)
+    if kind == "bio":
+        return FLS_PRIMARY.get(key, book.replace("OSB", "FLS", 1))
+    if kind == "phys":
+        return HEWITT_PHYS_PRIMARY.get(key, book.replace("Expl", "Hewitt", 1))
+    return book
+
 
 HEWITT_PHYS_PRIMARY: dict[tuple[int, int], str] = {
     (1, 2): "Hewitt Ch 1 §1.2–1.5 + App. B",
@@ -811,17 +873,6 @@ HEWITT_PHYS_PRIMARY: dict[tuple[int, int], str] = {
 }
 
 
-def primary_display_book(week: int, day_idx: int, kind: str, book: str) -> str:
-    key = (week, day_idx)
-    if kind == "chem":
-        return HEWITT_CHEM_PRIMARY.get(key, book.replace("Mod", "Hewitt", 1))
-    if kind == "bio":
-        return FLS_PRIMARY.get(key, book.replace("OSB", "FLS", 1))
-    if kind == "phys":
-        return HEWITT_PHYS_PRIMARY.get(key, book.replace("Expl", "Hewitt", 1))
-    return book
-
-
 def generate_whiteboard_week(calendar_week: int) -> str:
     dates, theme = WEEK_META_EXTENDED[calendar_week]
     date_list = DATES[calendar_week]
@@ -834,7 +885,7 @@ def generate_whiteboard_week(calendar_week: int) -> str:
 
         if block is None:
             kind = DAY_KINDS[i]
-            if kind in ("bio", "phys"):
+            if kind in ("chem", "bio", "phys"):
                 cell = skipped_science_html(kind)
             else:
                 cell = EMPTY_TD
@@ -882,8 +933,7 @@ def generate_whiteboard_week(calendar_week: int) -> str:
         )
     elif calendar_week > 10:
         note = (
-            '  <p class="pass-note">Finish remaining bio/phys curriculum weeks after summer chem ends. '
-            "No new chemistry blocks.</p>\n"
+            '  <p class="pass-note">Finish remaining chem/bio/phys curriculum weeks (Week 9–10).</p>\n'
         )
     else:
         note = f'  <p class="pass-note">{BLOCK_WORKFLOW_NOTE}</p>\n'
@@ -896,11 +946,11 @@ def generate_whiteboard_week(calendar_week: int) -> str:
 <section class="week" id="week-{calendar_week}">
   <div class="week-header">
     <h2>Week {calendar_week} · {dates} · {theme}</h2>
-    <div class="week-meta"><span class="pass-tag">SUMMER · ONE PASS</span><br>Hewitt + FLS + assigned §</div>
+    <div class="week-meta"><span class="pass-tag">SUMMER · ONE PASS</span><br>BFN-C + FLS + assigned chapters</div>
   </div>
   {split_banner}
 {note}  <table>
-    <tr><th>Date</th><th>Day</th><th>Chemistry · Hewitt (+ Mod backup)</th><th>Biology · FLS</th><th>Physics · Hewitt</th><th>Algebra · OSA (+ Lar backup)</th><th>Python · Coach<br><span style="font-weight:normal;text-transform:none">Tue/Thu 4:45–5:15</span></th><th>Fri review</th></tr>
+    <tr><th>Date</th><th>Day</th><th>Chemistry · BFN-C (+ Hewitt/Mod backup)</th><th>Biology · FLS</th><th>Physics · Hewitt</th><th>Algebra · OSA (+ Lar backup)</th><th>Python · Coach<br><span style="font-weight:normal;text-transform:none">Tue/Thu 4:45–5:15</span></th><th>Fri review</th></tr>
 {chr(10).join(rows)}
   </table>{footer}
 </section>
@@ -932,13 +982,20 @@ def generate_calendar_week_md(calendar_week: int) -> str:
         lines.append("|-------|---------|-------|----------------------|-----------|-------------------|")
         block = calendar_day_block(calendar_week, idx)
         kind = DAY_KINDS[idx]
-        if block is None and kind in ("bio", "phys"):
+        if block is None and kind in ("chem", "bio", "phys"):
             lines.append(skipped_science_md(kind))
         elif block is not None:
             kind, book, title, focus, formulas, know, tossup = block
             subj = {"chem": "Chem", "bio": "Bio", "phys": "Phys"}[kind]
+            cw = content_week_for_kind(calendar_week, kind) or calendar_week
+            if kind == "chem":
+                reading_label = compact_primary_display(cw, idx)
+                backup_note = "backup Hewitt/Mod/Tro/BFN-Sci"
+            else:
+                reading_label = book
+                backup_note = "backup Tro/CB/BFN"
             lines.append(
-                f"| **{subj} · {book}** | *{title}* · backup Tro/CB/BFN | {focus} | {formulas} | {know} | 1. {tossup} |"
+                f"| **{subj} · {reading_label}** | *{title}* · {backup_note} | {focus} | {formulas} | {know} | 1. {tossup} |"
             )
         if calendar_week <= 10:
             math_title, _, lar_part = osa_math_reading(calendar_week, idx)
@@ -971,12 +1028,13 @@ def patch_whiteboard_legend(text: str) -> str:
     )
     legend_table = """  <table>
     <tr><th>Code</th><th>Book</th><th>When</th></tr>
+    <tr><td><strong>BFN-C</strong></td><td>Big Fat Notebook: High School Chemistry (ISBN 9781523504251)</td><td>Primary chemistry · Mon &amp; Thu</td></tr>
     <tr><td><strong>FLS</strong></td><td>Focus on Life Science — Prentice Hall CA ed. (ISBN 9780130443465)</td><td>Primary biology · Tue &amp; Fri</td></tr>
     <tr><td><strong>OSB</strong></td><td>OpenStax Biology 2e — free online (openstax.org)</td><td>Biology backup · same DOE topics</td></tr>
     <tr><td><strong>CB</strong></td><td>Campbell Biology: Concepts &amp; Connections — 7th ed. (ISBN 9780321696816)</td><td>Biology backup · deeper TAG level</td></tr>
+    <tr><td><strong>Hewitt</strong></td><td>Conceptual Physical Science Explorations — Hewitt student text (ISBN 9780321567918)</td><td>Chemistry backup (Ch 15 + 17–24) · Wed physics</td></tr>
     <tr><td><strong>Mod</strong></td><td>Modern Chemistry 2012 — Sarquis (ISBN 9780547586632)</td><td>Chemistry backup · Mon &amp; Thu</td></tr>
     <tr><td><strong>Tro</strong></td><td>Introductory Chemistry — Tro 4th ed. (ISBN 9780321687937)</td><td>Chemistry backup</td></tr>
-    <tr><td><strong>Hewitt</strong></td><td>Conceptual Physical Science Explorations — Hewitt student text (ISBN 9780321567918)</td><td>Primary chem (Ch 15 + 17–24) · Wed physics</td></tr>
     <tr><td><strong>OSA</strong></td><td>OpenStax Algebra &amp; Trigonometry 2e — free online (openstax.org)</td><td>Primary algebra · Mon–Fri · assigned §</td></tr>
     <tr><td><strong>Lar</strong></td><td>Holt McDougal Larson Algebra 1 2011 (ISBN 9780547315157)</td><td>Algebra backup · Ch 1–13</td></tr>
     <tr><td><strong>BFN-A/Bio/Sci</strong></td><td>Big Fat Notebooks — Algebra · Biology · Science</td><td>Backup quizzes · Fri review</td></tr>
@@ -984,7 +1042,7 @@ def patch_whiteboard_legend(text: str) -> str:
   </table>"""
     text = re.sub(
         r"<section class=\"week legend-page\">.*?<!-- WEEK 1 -->",
-        f"<section class=\"week legend-page\">\n  <div class=\"week-header\">\n    <h2>Book key &amp; DOE topic scope</h2>\n    <div class=\"week-meta\">Summer 2026 · Soha<br>Jun 8 – Aug 19</div>\n  </div>\n{legend_table}\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">DOE study topics (not whole textbooks)</h3>\n  <p style=\"font-size:8pt;margin:0 0 0.1in\">Life: cell biology, genetics, anatomy &amp; physiology, plant biology, ecology, animal behavior · Physical: chem reactions/periodic table/states of matter + physics forces/motion/waves/electromagnetism/thermo · Math: algebra, geometry, probability, statistics (OSA § block).</p>\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">Pick your book *(Soha)*</h3>\n  <table style=\"font-size:8pt\">\n    <tr><th>When</th><th>Primary</th><th>Also OK</th><th>Backup</th></tr>\n    <tr><td>Mon/Thu Chem</td><td><strong>Hewitt</strong> Ch 15 + 17–24</td><td>—</td><td><strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td></tr>\n    <tr><td>Tue/Fri Bio</td><td><strong>FLS</strong></td><td>—</td><td><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td></tr>\n    <tr><td>Wed Phys</td><td><strong>Hewitt</strong></td><td>—</td><td><strong>BFN-Sci</strong></td></tr>\n    <tr><td>Mon–Fri Algebra</td><td><strong>OSA</strong> assigned §</td><td>—</td><td><strong>Lar</strong> · <strong>BFN-A</strong></td></tr>\n    <tr><td>Tue/Thu Python</td><td><strong>Coach</strong> Journey week</td><td>—</td><td>Playground + live notes</td></tr>\n  </table>\n  <table style=\"margin-top:0.2in\">\n    <tr><th>Plan</th><th>Dates</th><th>Chemistry</th><th>Biology</th><th>Physics</th><th>Python</th></tr>\n    <tr><td><strong>One summer pass</strong></td><td>Jun 8 – Aug 14</td><td><strong>Hewitt</strong> chem</td><td><strong>FLS</strong> (+ OSB/CB backup)</td><td><strong>Hewitt</strong></td><td><strong>Coach</strong> wk 1–10</td></tr>\n    <tr><td><strong>Backups</strong></td><td>anytime</td><td><strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong> · <strong>CB</strong> · BFN-Bio</td><td>BFN-Sci</td><td>Quiz → DOE in app</td></tr>\n    <tr><td><strong>Bridge</strong></td><td>Aug 15 – 18</td><td colspan=\"4\">Optional flash cards · school meetings in fall · Aug 19 = first day of school</td></tr>\n  </table>\n  <p class=\"footer\">Each cell: read assigned <strong>§ section</strong> only · <strong>Formulas</strong> · <strong>Focus</strong> · <strong>Know</strong> · <strong>Toss-up</strong> · Full detail + answers in summer-2026-calendar.md · Daily times → weekly-timetable.md</p>\n</section>\n\n<!-- WEEK 1 -->",
+        f"<section class=\"week legend-page\">\n  <div class=\"week-header\">\n    <h2>Book key &amp; DOE topic scope</h2>\n    <div class=\"week-meta\">Summer 2026 · Soha<br>Jun 8 – Aug 19</div>\n  </div>\n{legend_table}\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">DOE study topics (not whole textbooks)</h3>\n  <p style=\"font-size:8pt;margin:0 0 0.1in\">Life: cell biology, genetics, anatomy &amp; physiology, plant biology, ecology, animal behavior · Physical: chem reactions/periodic table/states of matter + physics forces/motion/waves/electromagnetism/thermo · Math: algebra, geometry, probability, statistics (OSA § block).</p>\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">Pick your book *(Soha)*</h3>\n  <table style=\"font-size:8pt\">\n    <tr><th>When</th><th>Primary</th><th>Also OK</th><th>Backup</th></tr>\n    <tr><td>Mon/Thu Chem</td><td><strong>BFN-C</strong> assigned chapters</td><td>—</td><td><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td></tr>\n    <tr><td>Tue/Fri Bio</td><td><strong>FLS</strong></td><td>—</td><td><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td></tr>\n    <tr><td>Wed Phys</td><td><strong>Hewitt</strong></td><td>—</td><td><strong>BFN-Sci</strong></td></tr>\n    <tr><td>Mon–Fri Algebra</td><td><strong>OSA</strong> assigned §</td><td>—</td><td><strong>Lar</strong> · <strong>BFN-A</strong></td></tr>\n    <tr><td>Tue/Thu Python</td><td><strong>Coach</strong> Journey week</td><td>—</td><td>Playground + live notes</td></tr>\n  </table>\n  <table style=\"margin-top:0.2in\">\n    <tr><th>Plan</th><th>Dates</th><th>Chemistry</th><th>Biology</th><th>Physics</th><th>Python</th></tr>\n    <tr><td><strong>One summer pass</strong></td><td>Jun 8 – Aug 14</td><td><strong>BFN-C</strong> chem</td><td><strong>FLS</strong> (+ OSB/CB backup)</td><td><strong>Hewitt</strong></td><td><strong>Coach</strong> wk 1–10</td></tr>\n    <tr><td><strong>Backups</strong></td><td>anytime</td><td><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong> · <strong>CB</strong> · BFN-Bio</td><td>BFN-Sci</td><td>Quiz → DOE in app</td></tr>\n    <tr><td><strong>Bridge</strong></td><td>Aug 15 – 18</td><td colspan=\"4\">Optional flash cards · school meetings in fall · Aug 19 = first day of school</td></tr>\n  </table>\n  <p class=\"footer\">Each cell: read assigned BFN-C chapter or **§ section** · <strong>Formulas</strong> · <strong>Focus</strong> · <strong>Know</strong> · <strong>Toss-up</strong> · Full detail + answers in summer-2026-calendar.md · Daily times → weekly-timetable.md</p>\n</section>\n\n<!-- WEEK 1 -->",
         text,
         count=1,
         flags=re.DOTALL,
@@ -1021,7 +1079,8 @@ def patch_calendar_books_section(text: str) -> str:
 | **FLS** | *Focus on Life Science* — Prentice Hall California ed. (2001) | 9780130443465 | Primary bio · Tue & Fri |
 | **OSB** | *OpenStax Biology 2e* — free online | openstax.org | Biology backup · same DOE topics |
 | **CB** | *Campbell Biology: Concepts & Connections* — **7th ed.** | 9780321696816 | Biology backup · anytime |
-| **Hewitt** | *Conceptual Physical Science Explorations* — Hewitt **student text** | 9780321567918 | Primary chem (Ch 15 + 17–24) · Wed **physics** |
+| **BFN-C** | *Big Fat Notebook: High School Chemistry* | 9781523504251 | **Primary** chemistry · Mon & Thu |
+| **Hewitt** | *Conceptual Physical Science Explorations* — Hewitt **student text** | 9780321567918 | Chemistry **backup** (Ch 15 + 17–24) · Wed **physics** |
 | **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Chemistry backup · Mon & Thu |
 | **Tro** | *Introductory Chemistry* — Tro **4th ed.** | 9780321687937 | Chemistry backup · anytime |
 | **ExplLab** | *Explorations: Laboratory Manual* *(optional hands-on)* | 9780321051837 | Wed labs when you want |
@@ -1045,11 +1104,11 @@ def patch_calendar_books_section(text: str) -> str:
         ("| **Tro** | *Introductory Chemistry* — Tro **4th ed.** | 9780321687937 | Tro backup · anytime |",
          "| **Tro** | *Introductory Chemistry* — Tro **4th ed.** | 9780321687937 | Chemistry backup · anytime |"),
         ("| **Mon** | Chemistry | **Mod** (P1) · **Tro** (P2–3) | **Expl** Ch 15 + 17–24 *(optional skim)* | **BFN-Sci** |",
-         "| **Mon** | Chemistry | **Hewitt** primary | — | **Mod** · **Tro** · **BFN-Sci** |"),
+         "| **Mon** | Chemistry | **BFN-C** primary | — | **Hewitt** · **Mod** · **Tro** · **BFN-Sci** |"),
         ("| **Tue** | Biology | **FLS** (P1) · **CB** (P2–3) | — | **BFN-Bio** |",
          "| **Tue** | Biology | **FLS** primary | — | **OSB** · **CB** · **BFN-Bio** |"),
         ("| **Thu** | Chemistry | **Mod** (P1) · **Tro** (P2–3) | **Expl** Ch 15 + 17–24 *(optional skim)* | **BFN-Sci** |",
-         "| **Thu** | Chemistry | **Hewitt** primary | — | **Mod** · **Tro** · **BFN-Sci** |"),
+         "| **Thu** | Chemistry | **BFN-C** primary | — | **Hewitt** · **Mod** · **Tro** · **BFN-Sci** |"),
         ("| **Fri** | Biology | **FLS** (P1) · **CB** (P2–3) | — | **BFN-Bio** |",
          "| **Fri** | Biology | **FLS** primary | — | **OSB** · **CB** · **BFN-Bio** |"),
         ("| **Mon–Thu** | Algebra | **Lar** | — | **BFN-A** |",
@@ -1062,7 +1121,7 @@ def patch_calendar_books_section(text: str) -> str:
 
 | Block | Chemistry | Biology | Physics | Python |
 |-------|-----------|---------|---------|--------|
-| **Mon/Thu** | **Hewitt** chem (Ch 15 + 17–24) | — | — | — |
+| **Mon/Thu** | **BFN-C** chem | — | — | — |
 | **Tue/Fri** | — | **FLS** (+ OSB/CB backup) | — | — |
 | **Wed** | — | — | **Hewitt** physics | — |
 | **Mon–Fri** | — | — | — | **OSA** algebra (+ Lar backup) |
@@ -1090,9 +1149,9 @@ def patch_calendar_md(path: Path) -> None:
     if start_match and master_start != -1 and master_start > start_match.start():
         new_section = """## WEEKS 1–12 — *Single summer pass* *(June 8 – August 28)*
 
-*One careful read through **Hewitt + FLS** (50 × 1-hr science blocks). Read assigned **§ sections** for each DOE topic — stop when Focus is covered. **Mod/OSB/Tro/CB/BFN** = backups. Extra DOE practice → Science Bowl Coach **Quiz** tab. Flash-card review → **school meetings** in fall.*
+*One careful read through **BFN-C + FLS** (50 × 1-hr science blocks). Read assigned BFN-C chapters / **§ sections** for each DOE topic — stop when Focus is covered. **Hewitt/Mod/OSB/Tro/CB/BFN** = backups. Extra DOE practice → Science Bowl Coach **Quiz** tab. Flash-card review → **school meetings** in fall.*
 
-*Chem every week · Bio/Phys right-shifted +2 calendar weeks (start Jun 22 at Week 1 content).*
+*All science right-shifted +2 — Chem/Bio/Phys Week 1 starts Jun 22 (calendar week 3). Weeks 9–10 finish in calendar weeks 11–12.*
 
 """
         new_section += "\n".join(generate_calendar_week_md(w) for w in range(1, 13))
@@ -1100,6 +1159,7 @@ def patch_calendar_md(path: Path) -> None:
         text = text[: start_match.start()] + new_section + "\n" + BRIDGE_SECTION_MD + "\n" + tail
 
     text = patch_calendar_books_section(text)
+    text = apply_common_replacements(text)
     text = text.replace("*(Pass 2)*", "*(wk 6–7)*")
     text = text.replace("*(stretch Pass 1 wk 4)*", "*(wk 4, 8)*")
     text = text.replace("— Pass 1 biology", "— primary biology")
@@ -1115,7 +1175,7 @@ def patch_weekly_timetable(path: Path) -> None:
             text = text[:insert_at] + "\n" + DOE_TOPIC_SCOPE + text[insert_at:]
     reps = [
         ("same **10-week Pass 1–3 schedule**", "same **10-week summer schedule**"),
-        ("**Mod** (Pass 1) · **Tro** (Pass 2–3)", "**Hewitt** primary · **Mod/Tro** backup"),
+        ("**Mod** (Pass 1) · **Tro** (Pass 2–3)", "**BFN-C** primary · **Hewitt/Mod/Tro** backup"),
         ("**FLS** (Pass 1) · **CB** (Pass 2–3)", "**FLS** primary · **OSB/CB** backup"),
         ("Pass 1–3", "one summer pass"),
         ("| **Mon–Thu** | Algebra | **Lar** | — | **BFN-A** |",
@@ -1138,12 +1198,13 @@ def patch_weekly_html(path: Path) -> None:
         ("Pass 1 · Pass 2 · Pass 3", "one summer pass"),
         ("Weeks 1–4 = Pass 1", "Weeks 1–10 = one summer pass"),
         ("FLS (P1) · CB (P2–3)", "FLS primary · OSB/CB backup"),
-        ("Mod (P1) · Tro (P2–3)", "Hewitt primary · Mod/Tro backup"),
-        ("Mod/Tro · Expl opt · BFN-Sci", "Hewitt · Mod/Tro backup · BFN-Sci"),
-        ("FLS/CB/Expl/Lar", "Hewitt/FLS/Mod/OSB/CB/Lar"),
-        ("calendar says primary (Mod/Tro/FLS/CB/Expl/Lar)", "calendar says primary (Hewitt/FLS) — backups on picker table"),
+        ("Mod (P1) · Tro (P2–3)", "BFN-C primary · Hewitt/Mod/Tro backup"),
+        ("Mod/Tro · Expl opt · BFN-Sci", "BFN-C · Hewitt/Mod/Tro backup · BFN-Sci"),
+        ("FLS/CB/Expl/Lar", "BFN-C/Hewitt/FLS/Mod/OSB/CB/Lar"),
+        ("calendar says primary (Mod/Tro/FLS/CB/Expl/Lar)", "calendar says primary (BFN-C/Hewitt/FLS) — backups on picker table"),
+        ("calendar says primary (Mod/Tro/Hewitt/FLS/Mod/OSB/CB/Lar)", "calendar says primary (BFN-C/Hewitt/FLS) — backups on picker table"),
         ("Chemistry — 30 min<br><span style=\"font-size:7.5pt\">Mod/Tro · Expl opt · BFN-Sci</span>",
-         "Chemistry — 1 hr<br><span style=\"font-size:7.5pt\">Hewitt · Mod/Tro backup · BFN-Sci</span>"),
+         "Chemistry — 1 hr<br><span style=\"font-size:7.5pt\">BFN-C · Hewitt/Mod/Tro backup · BFN-Sci</span>"),
         ("Book key & pass overview", "Book key & DOE topic scope"),
         ("one chapter in one day", "assigned § section per block"),
         ("whole chapter", "assigned § section"),
@@ -1455,11 +1516,11 @@ def patch_prep_md(path: Path) -> None:
 
     text = text.replace(
         "**Weeks 1–4** = Pass 1 *(Mod + FLS · learn from textbook)* · **Weeks 5–8** = Pass 2 *(Tro + CB · DOE questions first)* · **Weeks 9–10** = Pass 3 *(flash cards → book only if stuck)*",
-        "**Weeks 1–10** = **one summer pass** *(Hewitt + FLS · assigned § section per 1-hr block)* · **Mod/OSB/Tro/CB/BFN** = backups · **DOE drill** = app Quiz tab · **Flash cards** = school meetings in fall",
+        "**Weeks 1–10** = **one summer pass** *(BFN-C + FLS · assigned § section per 1-hr block)* · **Hewitt/Mod/OSB/Tro/CB/BFN** = backups · **DOE drill** = app Quiz tab · **Flash cards** = school meetings in fall",
     )
     text = text.replace(
         "**Bio & Phys:** use **content week = calendar week + 2** (catch-up Weeks 1–2 in calendar weeks 9–10)",
-        "**Bio & Phys:** **content week = calendar week − 2** from calendar week 3 onward (Jun 22 = Bio/Phys Week 1); weeks 9–10 finish in calendar weeks 11–12",
+        "**Bio & Phys:** **content week = calendar week − 2** from calendar week 3 onward (Jun 22 = Week 1 for **all** science); weeks 9–10 finish in calendar weeks 11–12",
     )
     text = text.replace(
         "weeks 1–2 show **Skipped** for Tue/Fri bio and Wed phys",
@@ -1496,7 +1557,8 @@ def patch_prep_md(path: Path) -> None:
 | **FLS** | *Focus on Life Science* — Prentice Hall **California ed. (2001)** | 9780130443465 | **Primary** biology · Tue & Fri |
 | **OSB** | *OpenStax Biology 2e* — free online | openstax.org | Biology **backup** · same DOE topics |
 | **CB** | *Campbell Biology: Concepts & Connections* — **7th ed.** | 9780321696816 | Biology **backup** · deeper TAG level |
-| **Hewitt** | *Conceptual Physical Science Explorations* — Hewitt **student text** | 9780321567918 | **Primary** chem (Ch 15 + 17–24) · Wed **physics** |
+| **BFN-C** | *Big Fat Notebook: High School Chemistry* | 9781523504251 | **Primary** chemistry · Mon & Thu |
+| **Hewitt** | *Conceptual Physical Science Explorations* — Hewitt **student text** | 9780321567918 | Chemistry **backup** (Ch 15 + 17–24) · Wed **physics** |
 | **Mod** | *Modern Chemistry* — Sarquis **Student Edition 2012** | 9780547586632 | Chemistry **backup** · Mon & Thu |
 | **Tro** | *Introductory Chemistry* — Nivaldo Tro **4th ed.** | 9780321687937 | Chemistry **backup** |
 | **ExplLab** | *Explorations: Laboratory Manual* | 9780321051837 | Optional Wed labs |
@@ -1516,11 +1578,11 @@ def patch_prep_md(path: Path) -> None:
 
 | Block | Biology | Chemistry | Physics |
 |-------|---------|-----------|---------|
-| **Mon/Thu** | — | **Hewitt** primary (Ch 15 + 17–24) | — |
+| **Mon/Thu** | — | **BFN-C** primary | — |
 | **Tue/Fri** | **FLS** primary (+ OSB/CB backup) | — | — |
 | **Wed** | — | — | **Hewitt** |
 
-**1-hr block:** read assigned **§ section** for the DOE topic → know cold → toss-ups. Tro/CB/BFN = backups only.
+**1-hr block:** read assigned **BFN-C chapter** or **§ section** for the DOE topic → know cold → toss-ups. Hewitt/Mod/Tro/CB/BFN = backups only.
 
 **Best workflow:** [DOE past questions](https://science.osti.gov/wdts/nsb/Regional-Competitions) → miss one → read that section → retry · extra drill in Science Bowl Coach **Quiz** tab.
 
@@ -1562,13 +1624,13 @@ def patch_prep_md(path: Path) -> None:
         ("**Pass difficulty:** Pass 1 = learn from textbook · Pass 2 = DOE regional-style questions first · Pass 3 = flash cards only unless stuck.",
          "**Summer plan:** One pass through DOE **Tips & Resources** topics — read assigned **§ sections** only (not whole textbooks). Tro/CB/BFN = backups. Extra DOE → app Quiz tab. Flash cards at school meetings."),
         ("**Mod** (Pass 1) and **Tro** (Pass 2) stay **primary**",
-         "**Hewitt** is **primary** chemistry · **Mod/Tro** are **backups**"),
+         "**BFN-C** is **primary** chemistry · **Hewitt/Mod/Tro** are **backups**"),
         ("| **Mon** | Chemistry | **Mod** (Pass 1) · **Tro** (Pass 2–3) |",
-         "| **Mon** | Chemistry | **Hewitt** primary |"),
+         "| **Mon** | Chemistry | **BFN-C** primary |"),
         ("| **Tue** | Biology | **FLS** (Pass 1) · **CB** (Pass 2–3) |",
          "| **Tue** | Biology | **FLS** primary |"),
         ("| **Thu** | Chemistry | **Mod** (Pass 1) · **Tro** (Pass 2–3) |",
-         "| **Thu** | Chemistry | **Hewitt** primary |"),
+         "| **Thu** | Chemistry | **BFN-C** primary |"),
         ("| **Fri** | Biology | **FLS** (Pass 1) · **CB** (Pass 2–3) |",
          "| **Fri** | Biology | **FLS** primary |"),
         ("pick **2 weak subtopics** for Pass 2", "log **2 weak subtopics** in app Progress"),
@@ -1577,7 +1639,7 @@ def patch_prep_md(path: Path) -> None:
          "Backup: re-read Tro/CB/Expl section only if stuck on a topic"),
         ("**Pass 2 level-up on Expl:**", "**Expl physics stretch topics:**"),
         ("| **Pass 1 — Mod** | **Pass 2 — Tro** |",
-         "| **Hewitt (primary)** | **Mod (backup)** |"),
+         "| **BFN-C (primary)** | **Hewitt (backup)** |"),
         ("*Expl chapters *(all passes — your student text)*",
          "*Expl chapters *(summer pass — your student text)*"),
         ("One **primary** book per 30-min block.",
@@ -1590,6 +1652,7 @@ def patch_prep_md(path: Path) -> None:
 
     text = patch_chemistry_map_md(text)
     text = apply_book_picker_replacements(text)
+    text = apply_common_replacements(text)
     text = patch_prep_reading_guide_md(text)
     text = patch_all_week_titles(text)
     path.write_text(text)
@@ -1663,7 +1726,7 @@ def patch_prep_html(path: Path) -> None:
     )
     text = text.replace(
         "<tr><th>Pass</th><th>Dates</th><th>Biology</th><th>Chemistry</th></tr>\n        <tr><td><strong>1 Learn</strong></td><td>Jun 8 – Jul 3</td><td class=\"bio\"><strong>FLS</strong></td><td class=\"chem\"><strong>Mod</strong> + opt <strong>Expl</strong> chem</td></tr>\n        <tr><td><strong>2 Practice</strong></td><td>Jul 6 – Jul 31</td><td class=\"bio\"><strong>CB</strong> + DOE</td><td class=\"chem\"><strong>Tro</strong> + DOE + opt <strong>Expl</strong> chem</td></tr>\n        <tr><td><strong>3 Review</strong></td><td>Aug 3 – 14</td><td class=\"bio\"><strong>CB</strong> + <strong>FLS</strong> cards</td><td class=\"chem\"><strong>Tro</strong> + <strong>Mod</strong> cards</td></tr>",
-        "<tr><th>Block</th><th>Biology</th><th>Chemistry</th><th>Physics</th></tr>\n        <tr><td><strong>Mon/Thu</strong></td><td>—</td><td class=\"chem\"><strong>Hewitt</strong> primary (Ch 15 + 17–24)</td><td>—</td></tr>\n        <tr><td><strong>Tue/Fri</strong></td><td class=\"bio\"><strong>FLS</strong> primary</td><td>—</td><td>—</td></tr>\n        <tr><td><strong>Wed</strong></td><td>—</td><td>—</td><td class=\"phys\"><strong>Hewitt</strong></td></tr>\n        <tr><td><strong>Backup</strong></td><td class=\"bio\"><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td><td class=\"chem\"><strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td><td class=\"phys\"><strong>BFN-Sci</strong></td></tr>",
+        "<tr><th>Block</th><th>Biology</th><th>Chemistry</th><th>Physics</th></tr>\n        <tr><td><strong>Mon/Thu</strong></td><td>—</td><td class=\"chem\"><strong>BFN-C</strong> primary</td><td>—</td></tr>\n        <tr><td><strong>Tue/Fri</strong></td><td class=\"bio\"><strong>FLS</strong> primary</td><td>—</td><td>—</td></tr>\n        <tr><td><strong>Wed</strong></td><td>—</td><td>—</td><td class=\"phys\"><strong>Hewitt</strong></td></tr>\n        <tr><td><strong>Backup</strong></td><td class=\"bio\"><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td><td class=\"chem\"><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td><td class=\"phys\"><strong>BFN-Sci</strong></td></tr>",
     )
     text = text.replace(
         "<tr><th>Physics stage</th><th>Book</th><th>Pass 2 change</th></tr>\n        <tr><td>Primary (§)</td><td class=\"phys\"><strong>Expl</strong> Ch 1 · App. B · 2–4 · 6 · 10–13</td><td>Learn concepts</td></tr>\n        <tr><td>Backup</td><td class=\"phys\">Same + Ch 5 · 7 · 14</td><td>DOE first, re-read</td></tr>\n        <tr><td>Pass 3 (Aug)</td><td class=\"phys\">Flash cards → book if stuck</td><td>Review only</td></tr>",
@@ -1672,7 +1735,7 @@ def patch_prep_html(path: Path) -> None:
     text = patch_chemistry_map_html(text)
     text = text.replace(
         "Pass 1 chem · Mon &amp; Thu",
-        "Hewitt primary · Mon/Thu chem",
+        "BFN-C primary · Mon/Thu chem",
     )
     html_reps = [
         ("30-min science block", "1-hr science block"),
@@ -1685,28 +1748,28 @@ def patch_prep_html(path: Path) -> None:
         ("one chapter in one day", "assigned § section per block"),
         ("FLS (Pass 1)", "FLS primary"),
         ("CB (Pass 2–3)", "OSB/CB backup"),
-        ("Mod (Pass 1)", "Hewitt primary"),
-        ("Tro (Pass 2–3)", "Mod/Tro backup"),
+        ("Mod (Pass 1)", "BFN-C primary"),
+        ("Tro (Pass 2–3)", "Hewitt/Mod/Tro backup"),
         ("Pass 1 (Jun)", "Primary (§)"),
         ("Pass 2 (Jul)", "Backup"),
-        ("Weeks 1–4 = Pass 1 (Mod+FLS)", "Weeks 1–10 = one pass (Hewitt+FLS)"),
-        ("Weeks 5–8 = Pass 2 (Tro+CB, DOE first)", "Mod/OSB/Tro/CB backup · DOE in Quiz tab"),
+        ("Weeks 1–4 = Pass 1 (Mod+FLS)", "Weeks 1–10 = one pass (BFN-C+FLS)"),
+        ("Weeks 5–8 = Pass 2 (Tro+CB, DOE first)", "Hewitt/Mod/OSB/Tro/CB backup · DOE in Quiz tab"),
         ("Weeks 9–10 = Pass 3 (flash cards)", "Weeks 9–10 capstone · flash cards at school"),
         ("review Pass 1 gaps", "review weak § sections"),
         ("OSB/FLS primary", "FLS primary"),
-        ("Mod primary · Mon &amp; Thu", "Hewitt primary · Mon/Thu chem"),
-        ("Mod primary · Mon & Thu", "Hewitt primary · Mon/Thu chem"),
+        ("Mod primary · Mon &amp; Thu", "BFN-C primary · Mon/Thu chem"),
+        ("Mod primary · Mon & Thu", "BFN-C primary · Mon/Thu chem"),
         ("Mod/Tro primary · optional <strong>Expl Ch 15 + 17–24</strong> parallel",
-         "<strong>Hewitt</strong> Ch 15 + 17–24 primary · <strong>Mod/Tro</strong> backup"),
+         "<strong>BFN-C</strong> primary · <strong>Hewitt/Mod/Tro</strong> backup"),
         ("<strong>OSB/FLS</strong> primary", "<strong>FLS</strong> primary"),
         ("<strong>Mod</strong> primary (+ opt <strong>Expl</strong> chem)",
-         "<strong>Hewitt</strong> primary (+ <strong>Mod</strong> backup)"),
+         "<strong>BFN-C</strong> primary (+ <strong>Hewitt/Mod</strong> backup)"),
         ("class=\"phys\"><strong>Expl</strong></td>", "class=\"phys\"><strong>Hewitt</strong></td>"),
-        ("Mod/Tro · Expl opt · BFN-Sci", "Hewitt · Mod/Tro backup · BFN-Sci"),
+        ("Mod/Tro · Expl opt · BFN-Sci", "BFN-C · Hewitt/Mod/Tro backup · BFN-Sci"),
         ("Chemistry — 30 min<br><span style=\"font-size:7.5pt\">Mod/Tro · Expl opt · BFN-Sci</span>",
-         "Chemistry — 1 hr<br><span style=\"font-size:7.5pt\">Hewitt · Mod/Tro backup · BFN-Sci</span>"),
+         "Chemistry — 1 hr<br><span style=\"font-size:7.5pt\">BFN-C · Hewitt/Mod/Tro backup · BFN-Sci</span>"),
         ("calendar says primary (Mod/Tro/FLS/CB/Expl/Lar)",
-         "calendar says primary (Hewitt/FLS) — backups on picker table"),
+         "calendar says primary (BFN-C/FLS) — backups on picker table"),
     ]
     for old, new in html_reps:
         text = text.replace(old, new)
@@ -1739,7 +1802,26 @@ def patch_prep_html(path: Path) -> None:
         '<tr class="phys"><td><strong>Expl</strong></td><td><em>Conceptual Physical Science Explorations</em> — student text</td>'
         '<td>9780321567918</td><td>Physics · Wed</td></tr>',
         '<tr class="phys"><td><strong>Hewitt</strong></td><td><em>Conceptual Physical Science Explorations</em> — Hewitt student text</td>'
-        '<td>9780321567918</td><td>Primary chem (Ch 15 + 17–24) · Wed physics</td></tr>',
+        '<td>9780321567918</td><td>Chemistry backup · Wed physics</td></tr>',
+    )
+    text = text.replace(
+        '<tr class="chem"><td><strong>Mod</strong></td><td><em>Modern Chemistry</em> — 2012</td><td>9780547586632</td><td>Chemistry backup · Mon &amp; Thu</td></tr>',
+        '<tr class="chem"><td><strong>BFN-C</strong></td><td><em>Big Fat Notebook: High School Chemistry</em></td>'
+        '<td>9781523504251</td><td>Primary chem · Mon &amp; Thu</td></tr>\n'
+        '    <tr class="chem"><td><strong>Mod</strong></td><td><em>Modern Chemistry</em> — 2012</td>'
+        '<td>9780547586632</td><td>Chemistry backup · Mon &amp; Thu</td></tr>',
+    )
+    text = text.replace(
+        "Primary chem (Ch 17–24) · Wed physics",
+        "Chemistry backup · Wed physics",
+    )
+    text = text.replace(
+        "Primary chem (Ch 15 + 17–24) · Wed physics",
+        "Chemistry backup · Wed physics",
+    )
+    text = text.replace(
+        '<td class="chem"><strong>Tro</strong> · <strong>BFN-Sci</strong></td>',
+        '<td class="chem"><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td>',
     )
     text = text.replace(
         '<tr class="bio"><td><strong>CB</strong></td><td><em>Campbell Biology: C&amp;C</em> — 7th ed.</td>'
@@ -1756,6 +1838,7 @@ def patch_prep_html(path: Path) -> None:
             text,
         )
     text = apply_book_picker_replacements(text)
+    text = apply_common_replacements(text)
     text = patch_index_sections(text)
     path.write_text(text)
 
@@ -1772,15 +1855,15 @@ def patch_readme(path: Path) -> None:
 | **[summer-2026-whiteboard.html](summer-2026-whiteboard.html)** | Print grid · week jump in Science Bowl Coach Calendar tab |
 | **[science-bowl-prep.md](science-bowl-prep.md)** | Books · study method · chapter maps |
 
-**Plan:** One careful read through **Hewitt + FLS** (50 science blocks). Mod/OSB/Tro/CB/BFN = backups. DOE practice in the app. Flash-card review at school Science Bowl meetings.
+**Plan:** One careful read through **BFN-C + FLS** (50 science blocks). Hewitt/Mod/OSB/Tro/CB/BFN = backups. DOE practice in the app. Flash-card review at school Science Bowl meetings.
 
 ### Soha split-track *(May 2026)*
 
 | Subject | Rule |
 |---------|------|
-| **Chemistry** | ✅ Weeks 1–2 done |
-| **Biology & Physics** | ⏭️ **None in calendar weeks 1–2** · **right-shifted +2** — start Jun 22 at **Week 1** content |
-| **After Aug 14** | Bio/Phys weeks 9–10 on calendar weeks 11–12 |
+| **Chemistry** | ⏭️ **Missed weeks 1–2** · **right-shifted +2** — start Jun 22 at **Week 1** (BFN-C) |
+| **Biology & Physics** | ⏭️ **None in calendar weeks 1–2** · **right-shifted +2** — start Jun 22 at **Week 1** |
+| **After Aug 14** | Chem/Bio/Phys weeks 9–10 on calendar weeks 11–12 |
 
 Details → **[summer-2026-calendar.md](summer-2026-calendar.md)** (top section)
 
