@@ -22,6 +22,10 @@ extension AppState {
         pot6CatchUpCompletedCodes = codes
     }
 
+    func resetPOT6CatchUpProgress() {
+        pot6CatchUpCompletedCodes = []
+    }
+
     var pot6CatchUpJanJuneProgress: (done: Int, total: Int) {
         let codes = POT6CatchUpCatalog.janJuneSchoolCodes
         let done = codes.filter { pot6CatchUpCompletedCodes.contains($0) }.count

@@ -21,7 +21,8 @@ struct POT6CatchUpView: View {
                 alternateBooksSection
                 resourcesSection
             }
-            .platformListStyle()
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
             .navigationTitle("POT 6 Catch-Up")
             .largeNavigationBarTitle()
             .studyNavigationDestinations()
@@ -258,80 +259,83 @@ struct POT6CatchUpView: View {
     }
 
     private func topicRow(_ item: POT6CatchUpCatalog.Item, showPrerequisiteTag: Bool = true) -> some View {
+        let isDone = appState.isPOT6CatchUpDone(item.potCode)
         let alt = MathAlgebraReadingCatalog.readingOptions(
             bfnChapterNumbers: item.bfnChapters,
             potCode: item.potCode
         )
 
         return VStack(alignment: .leading, spacing: 6) {
-            Button {
-                appState.togglePOT6CatchUp(item.potCode)
-            } label: {
-                HStack(alignment: .top, spacing: 12) {
-                    Image(systemName: appState.isPOT6CatchUpDone(item.potCode) ? "checkmark.circle.fill" : "circle")
-                        .foregroundStyle(appState.isPOT6CatchUpDone(item.potCode) ? PlatformColor.systemGreen : .secondary)
+            HStack(alignment: .top, spacing: 12) {
+                Button {
+                    appState.togglePOT6CatchUp(item.potCode)
+                } label: {
+                    Image(systemName: isDone ? "checkmark.circle.fill" : "circle")
+                        .foregroundStyle(isDone ? PlatformColor.systemGreen : .secondary)
                         .font(.title3)
-                        .padding(.top, 2)
+                        .frame(width: 28, height: 28)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(isDone ? "Mark \(item.potCode) not done" : "Mark \(item.potCode) done")
 
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack(spacing: 8) {
-                            Text(item.potCode)
-                                .font(.caption.weight(.bold).monospaced())
-                                .foregroundStyle(PlatformColor.systemPurple)
-                            if showPrerequisiteTag && item.isPrerequisite {
-                                tagLabel("POT 5 review", color: PlatformColor.systemPurple)
-                            } else if !item.isJanJune {
-                                tagLabel("Later in year", color: PlatformColor.systemOrange)
-                            }
-                        }
-
-                        Text(item.title)
-                            .font(.body.weight(.medium))
-                            .foregroundStyle(.primary)
-                            .multilineTextAlignment(.leading)
-
-                        if !item.bfnChapters.isEmpty {
-                            VStack(alignment: .leading, spacing: 4) {
-                                ForEach(item.bfnChapters, id: \.self) { chapterNumber in
-                                    if let chapter = BFNAlgebraCatalog.chapter(chapterNumber),
-                                       let unit = BFNAlgebraCatalog.unit(forChapter: chapterNumber) {
-                                        VStack(alignment: .leading, spacing: 2) {
-                                            Text("Unit \(unit.number) · \(unit.name)")
-                                                .font(.caption2.weight(.semibold))
-                                                .foregroundStyle(PlatformColor.systemOrange)
-                                            Text("Ch \(chapter.number) — \(chapter.title) · \(BFNAlgebraCatalog.pageLabel(forChapter: chapterNumber))")
-                                                .font(.caption)
-                                                .foregroundStyle(.secondary)
-                                            Text(BFNAlgebraCatalog.chapterSectionGuide)
-                                                .font(.caption2)
-                                                .foregroundStyle(.tertiary)
-                                        }
-                                    }
-                                }
-                            }
-                        } else if item.catchUpDay == 11 {
-                            Text("Geometry — use Math POT video + Learn practice (no BFN-A chapter)")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-
-                        if item.isReviewMarker {
-                            Text("Re-do unchecked topics from days 1–12 · 20–30 min Math POT homework style")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 8) {
+                        Text(item.potCode)
+                            .font(.caption.weight(.bold).monospaced())
+                            .foregroundStyle(PlatformColor.systemPurple)
+                        if showPrerequisiteTag && item.isPrerequisite {
+                            tagLabel("POT 5 review", color: PlatformColor.systemPurple)
+                        } else if !item.isJanJune {
+                            tagLabel("Later in year", color: PlatformColor.systemOrange)
                         }
                     }
 
-                    Spacer(minLength: 0)
+                    Text(item.title)
+                        .font(.body.weight(.medium))
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.leading)
+
+                    if !item.bfnChapters.isEmpty {
+                        VStack(alignment: .leading, spacing: 4) {
+                            ForEach(item.bfnChapters, id: \.self) { chapterNumber in
+                                if let chapter = BFNAlgebraCatalog.chapter(chapterNumber),
+                                   let unit = BFNAlgebraCatalog.unit(forChapter: chapterNumber) {
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text("Unit \(unit.number) · \(unit.name)")
+                                            .font(.caption2.weight(.semibold))
+                                            .foregroundStyle(PlatformColor.systemOrange)
+                                        Text("Ch \(chapter.number) — \(chapter.title) · \(BFNAlgebraCatalog.pageLabel(forChapter: chapterNumber))")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                        Text(BFNAlgebraCatalog.chapterSectionGuide)
+                                            .font(.caption2)
+                                            .foregroundStyle(.tertiary)
+                                    }
+                                }
+                            }
+                        }
+                    } else if item.catchUpDay == 11 {
+                        Text("Geometry — use Math POT video + Learn practice (no BFN-A chapter)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    if item.isReviewMarker {
+                        Text("Re-do unchecked topics from days 1–12 · 20–30 min Math POT homework style")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
+
+                Spacer(minLength: 0)
             }
-            .buttonStyle(.plain)
 
             if !alt.isEmpty {
                 alternateReadingDisclosure(alt, label: "Other books (Larson / OpenStax)")
                     .padding(.leading, 36)
             }
         }
+        .listRowBackground(Color.clear)
     }
 
     private func tagLabel(_ text: String, color: Color) -> some View {
@@ -409,6 +413,15 @@ struct POT6CatchUpView: View {
 
     private var resourcesSection: some View {
         Section("Resources") {
+            Button("Reset POT 6 checkboxes") {
+                appState.resetPOT6CatchUpProgress()
+            }
+            .font(.caption)
+
+            Text("Checkboxes are saved on this Mac. Green circle = marked done. Tap the circle only — not the whole row.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
             Label("\(BFNAlgebraCatalog.editionTitle) (ISBN \(BFNAlgebraCatalog.isbn))", systemImage: "book.closed.fill")
             Label("Math POT topic videos — search by T-code on Google Drive (registration PDF)", systemImage: "play.rectangle.fill")
             Label("Evaluation: mathpotacademy.com/evaluation.html", systemImage: "person.fill.questionmark")
