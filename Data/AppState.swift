@@ -56,6 +56,14 @@ final class AppState {
     var topicStats: [TopicStats]
     var importedQuestions: [UnifiedQuestion]
     var duplicateStats: [DuplicateImportStats]
+    var pot6CatchUpCompletedCodes: Set<String> {
+        didSet {
+            UserDefaults.standard.set(
+                Array(pot6CatchUpCompletedCodes).sorted(),
+                forKey: "pot6CatchUpCompletedCodes"
+            )
+        }
+    }
 
     var doeStore = DOEQuestionStore.shared
     var encyclopedia = EncyclopediaStore()
@@ -99,6 +107,9 @@ final class AppState {
         topicStats = PersistenceService.loadTopicStats()
         importedQuestions = PersistenceService.loadImportedQuestions()
         duplicateStats = PersistenceService.loadDuplicateStats()
+        pot6CatchUpCompletedCodes = Set(
+            UserDefaults.standard.stringArray(forKey: "pot6CatchUpCompletedCodes") ?? []
+        )
         refreshScheduleFromCalendar()
         seedElementFlashCardsIfNeeded()
     }

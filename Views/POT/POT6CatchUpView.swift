@@ -275,7 +275,11 @@ struct POT6CatchUpView: View {
                         .font(.title3)
                         .frame(width: 28, height: 28)
                 }
+                #if os(macOS)
+                .buttonStyle(.borderless)
+                #else
                 .buttonStyle(.plain)
+                #endif
                 .accessibilityLabel(isDone ? "Mark \(item.potCode) not done" : "Mark \(item.potCode) done")
 
                 VStack(alignment: .leading, spacing: 6) {
@@ -416,6 +420,9 @@ struct POT6CatchUpView: View {
             Button("Reset POT 6 checkboxes") {
                 appState.resetPOT6CatchUpProgress()
             }
+            #if os(macOS)
+            .buttonStyle(.borderless)
+            #endif
             .font(.caption)
 
             Text("Checkboxes are saved on this Mac. Green circle = marked done. Tap the circle only — not the whole row.")

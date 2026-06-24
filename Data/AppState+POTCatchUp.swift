@@ -1,13 +1,6 @@
 import Foundation
 
 extension AppState {
-    private static let pot6CatchUpKey = "pot6CatchUpCompletedCodes"
-
-    var pot6CatchUpCompletedCodes: Set<String> {
-        get { Set(UserDefaults.standard.stringArray(forKey: Self.pot6CatchUpKey) ?? []) }
-        set { UserDefaults.standard.set(Array(newValue).sorted(), forKey: Self.pot6CatchUpKey) }
-    }
-
     func isPOT6CatchUpDone(_ code: String) -> Bool {
         pot6CatchUpCompletedCodes.contains(code)
     }
