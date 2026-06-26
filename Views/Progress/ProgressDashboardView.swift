@@ -19,7 +19,7 @@ struct ProgressDashboardView: View {
                 }
 
                 Section("This week") {
-                    ForEach(Subject.allCases) { subject in
+                    ForEach(Subject.scienceCases) { subject in
                         VStack(alignment: .leading, spacing: 8) {
                             HStack {
                                 SubjectBadge(subject: subject)
@@ -35,7 +35,7 @@ struct ProgressDashboardView: View {
                 }
 
                 Section("Lifetime accuracy") {
-                    ForEach(Subject.allCases) { subject in
+                    ForEach(Subject.scienceCases) { subject in
                         HStack {
                             Text(subject.rawValue)
                             Spacer()
@@ -46,7 +46,7 @@ struct ProgressDashboardView: View {
                 }
 
                 Section("Last 7 days") {
-                    ForEach(Subject.allCases) { subject in
+                    ForEach(Subject.scienceCases) { subject in
                         HStack {
                             Text(subject.rawValue)
                             Spacer()
@@ -57,7 +57,7 @@ struct ProgressDashboardView: View {
                 }
 
                 Section("Last 30 days") {
-                    ForEach(Subject.allCases) { subject in
+                    ForEach(Subject.scienceCases) { subject in
                         HStack {
                             Text(subject.rawValue)
                             Spacer()
@@ -91,6 +91,8 @@ struct ProgressDashboardView: View {
                 }
 
                 EncyclopediaProgressSection()
+
+                mathProgressSection
 
                 Section("Weakest topics") {
                     if appState.weakTopics.isEmpty {
@@ -149,6 +151,56 @@ struct ProgressDashboardView: View {
             .studyNavigationDestinations()
         }
     }
+
+    private var mathProgressSection: some View {
+        let math = MathProgressService.shared
+        let total = POT6TopicRegistry.allTopics.count
+
+        return Section("Math · POT 6") {
+            HStack {
+                Text("Overall accuracy")
+                Spacer()
+                Text("\(Int(math.overallAccuracy * 100))%")
+                    .foregroundStyle(.secondary)
+            }
+            HStack {
+                Text("Topics mastered")
+                Spacer()
+                Text("\(math.masteredCount) / \(total)")
+                    .foregroundStyle(.secondary)
+            }
+            HStack {
+                Text("Math XP (in total)")
+                Spacer()
+                Text("\(math.mathXPTotal)")
+                    .foregroundStyle(GameColors.xpGold)
+            }
+            HStack {
+                Text("Longest drill streak")
+                Spacer()
+                Text("\(math.longestDrillStreak)")
+                    .foregroundStyle(.secondary)
+            }
+
+            ForEach(POT6Category.allCases) { category in
+                let accuracy = math.categoryAccuracy(category)
+                if accuracy > 0 || !POT6TopicRegistry.topics(in: category).isEmpty {
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text(category.rawValue)
+                                .font(.caption)
+                            Spacer()
+                            Text(accuracy > 0 ? "\(Int(accuracy * 100))%" : "—")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        ProgressView(value: accuracy)
+                            .tint(GameColors.math)
+                    }
+                }
+            }
+        }
+    }
 }
 
 struct ChecklistView: View {
@@ -162,7 +214,7 @@ struct ChecklistView: View {
                     .foregroundStyle(.secondary)
             }
 
-            ForEach(Subject.allCases) { subject in
+            ForEach(Subject.scienceCases) { subject in
                 Section(subject.rawValue) {
                     ForEach(appState.checklistItems.filter { $0.subject == subject }) { item in
                         Toggle(isOn: Binding(

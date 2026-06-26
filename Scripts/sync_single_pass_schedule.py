@@ -215,7 +215,12 @@ def format_osa_sections(section_keys: list[str]) -> str:
 
 
 def osa_math_reading(week: int, day_idx: int) -> tuple[str, list[str], str]:
-    return OSA_MATH[week][day_idx]
+    if week in OSA_MATH:
+        return OSA_MATH[week][day_idx]
+    from bfn_algebra_catalog import day_assignment
+
+    assignment = day_assignment(week, day_idx)
+    return assignment.display_title, list(assignment.osa_section_keys), assignment.lar_backup
 
 
 def format_bfn_algebra_primary(week: int, day_idx: int) -> str:
@@ -243,7 +248,15 @@ def algebra_html_cell(week: int, day_idx: int) -> str:
         else (
             "1 hr algebra · RRISD exponentials · read assigned OSA § + Lar Ch 8"
             if assignment.topic_label and "RRISD" in assignment.topic_label
-            else "1 hr algebra · read assigned BFN chapter(s)"
+            else (
+                "1 hr algebra · POT 6 app drills"
+                if assignment.topic_label and "drills" in assignment.topic_label.lower()
+                else (
+                    "1 hr algebra · POT 6 geometry · Lar Ch 11"
+                    if assignment.pot_codes and week >= 11
+                    else "1 hr algebra · read assigned BFN chapter(s)"
+                )
+            )
         )
     )
     return (

@@ -34,6 +34,7 @@ extension Subject {
         case .biology: return .biology
         case .chemistry: return .chemistry
         case .physics: return .physics
+        case .math: return .math
         }
     }
 }

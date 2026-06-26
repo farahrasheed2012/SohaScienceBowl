@@ -1,27 +1,29 @@
 import Foundation
 
-/// Summer algebra block — BFN-A Ch 1–20 (weeks 1–2), then Math POT 6 from T152 (weeks 3–10).
+/// Summer algebra block — BFN-A Ch 1–20 (weeks 1–2), then POT 6 **algebra** topics (weeks 3–10). Geometry is in the POT 6 Geo tab.
 enum BFNAlgebraSchedule {
     struct DayAssignment: Hashable {
         let chapterNumbers: [Int]
         let reviewLabel: String?
         let potCodes: [String]
         let topicLabel: String?
+        let catchUpDay: Int?
         let osaSectionKeys: [String]
         let larBackup: String
 
         var isReviewDay: Bool { reviewLabel != nil }
 
         var displayTitle: String {
+            let catchUpPrefix = catchUpDay.map { "Catch-up Day \($0) · " } ?? ""
             if let reviewLabel { return reviewLabel }
-            if let topicLabel { return topicLabel }
+            if let topicLabel { return catchUpPrefix + topicLabel }
             let bfn = BFNAlgebraCatalog.displayTitle(chapterNumbers: chapterNumbers, reviewLabel: nil)
-            if potCodes.isEmpty { return bfn }
+            if potCodes.isEmpty { return catchUpPrefix + bfn }
             let pot = potCodes.joined(separator: ", ")
             if chapterNumbers.isEmpty {
-                return "POT 6 — \(pot)"
+                return "\(catchUpPrefix)POT 6 — \(pot)"
             }
-            return "POT 6 — \(pot) · \(bfn)"
+            return "\(catchUpPrefix)POT 6 — \(pot) · \(bfn)"
         }
 
         var bfnOptionText: String {
@@ -71,10 +73,12 @@ enum BFNAlgebraSchedule {
         4: ["Lar Ch 6", "Lar Ch 9", "Lar Ch 9", "Lar Ch 9", "Lar Ch 9"],
         5: ["Lar Ch 9", "Lar Ch 4", "Lar Ch 4–5", "Lar Ch 4", "Lar Ch 6–7"],
         6: ["Lar Ch 6", "Lar Ch 11", "Lar Ch 10", "Lar Ch 10", "Lar Ch 1"],
-        7: ["Lar Ch 1", "Lar Ch 11", "Lar Ch 11", "Lar Ch 11", "Lar Ch 1–4"],
-        8: ["Lar Ch 13", "Lar Ch 13", "Lar Ch 4", "Lar Ch 1–13", "Lar Ch 9"],
+        7: ["Lar Ch 1", "Lar Ch 7", "Lar Ch 10", "Lar Ch 1", "Lar Ch 1–4"],
+        8: ["Lar Ch 4", "Lar Ch 13", "Lar Ch 13", "Lar Ch 1–13", "Lar Ch 9"],
         9: ["Lar Ch 8", "Lar Ch 8", "Lar Ch 8", "Lar Ch 8", "Lar Ch 1–4"],
-        10: ["Lar Ch 8", "Lar Ch 1–13", "Lar Ch 7", "Lar Ch 10", "Lar Ch 1–13"],
+        10: ["Lar Ch 8", "Lar Ch 1–13", "Lar Ch 9", "Lar Ch 1–13", "Lar Ch 1–13"],
+        11: ["Lar Ch 11", "Lar Ch 11", "Lar Ch 11", "Lar Ch 11", "Lar Ch 11"],
+        12: ["Lar Ch 11", "Lar Ch 11", "Lar Ch 1–13", "Lar Ch 1–13", "Lar Ch 1–13"],
     ]
 
     private static let legacyTitlesByWeekDay: [Int: [String]] = [
@@ -112,6 +116,7 @@ enum BFNAlgebraSchedule {
     private static func day(
         potCodes: [String] = [],
         chapters: [Int] = [],
+        catchUpDay: Int? = nil,
         topicLabel: String? = nil,
         osa: [String],
         lar: String,
@@ -122,6 +127,7 @@ enum BFNAlgebraSchedule {
             reviewLabel: review,
             potCodes: potCodes,
             topicLabel: topicLabel,
+            catchUpDay: catchUpDay,
             osaSectionKeys: osa,
             larBackup: lar
         )
@@ -153,50 +159,72 @@ enum BFNAlgebraSchedule {
         ]
     }
 
-    /// Weeks 3–10 follow Math POT 6 Jan–Jun topics from T152, with BFN bridge days for Ch 21–28.
+    /// Weeks 3–10: BFN bridge Ch 21–30 (week 3), then POT 6 algebra school topics (week 4+).
     private static func pot6Weeks() -> [Int: [Weekday: DayAssignment]] {
         [
             3: [
-                .monday: day(potCodes: ["T152"], chapters: [29, 30], osa: ["4.1", "5.8"], lar: "Lar Ch 7"),
-                .tuesday: day(chapters: [21, 22], osa: ["2.3"], lar: "Lar Ch 1"),
-                .wednesday: day(chapters: [23, 24], osa: ["2.3"], lar: "Lar Ch 3"),
-                .thursday: day(chapters: [25, 26], osa: ["2.3"], lar: "Lar Ch 3"),
+                .monday: day(chapters: [21, 22], osa: ["2.3"], lar: "Lar Ch 1"),
+                .tuesday: day(chapters: [23, 24], osa: ["2.3"], lar: "Lar Ch 3"),
+                .wednesday: day(chapters: [25, 26], osa: ["2.3"], lar: "Lar Ch 3"),
+                .thursday: day(chapters: [27, 28], osa: ["2.3"], lar: "Lar Ch 6"),
                 .friday: day(osa: ["1.2", "5.8", "2.3"], lar: "Lar Ch 1–4", review: reviewLabels[3]),
             ],
             4: [
-                .monday: day(chapters: [27, 28], osa: ["2.3"], lar: "Lar Ch 6"),
-                .tuesday: day(potCodes: ["T225", "T226", "T227"], chapters: [47, 48], osa: ["6.1"], lar: "Lar Ch 9"),
-                .wednesday: day(potCodes: ["T228", "T229"], chapters: [51], osa: ["6.1"], lar: "Lar Ch 9"),
-                .thursday: day(potCodes: ["T230", "T231"], chapters: [51], osa: ["6.1"], lar: "Lar Ch 9"),
-                .friday: day(potCodes: ["T239", "T240"], chapters: [52, 56], osa: ["6.1"], lar: "Lar Ch 9"),
+                .monday: day(chapters: [29, 30], osa: ["4.1", "5.8"], lar: "Lar Ch 7"),
+                .tuesday: day(potCodes: ["T225", "T226", "T227"], chapters: [47, 48], catchUpDay: 1, osa: ["6.1"], lar: "Lar Ch 9"),
+                .wednesday: day(potCodes: ["T228", "T229"], chapters: [51], catchUpDay: 2, osa: ["6.1"], lar: "Lar Ch 9"),
+                .thursday: day(potCodes: ["T230", "T231"], chapters: [51], catchUpDay: 2, osa: ["6.1"], lar: "Lar Ch 9"),
+                .friday: day(potCodes: ["T239", "T240"], chapters: [52, 56], catchUpDay: 3, osa: ["6.1"], lar: "Lar Ch 9"),
             ],
             5: [
-                .monday: day(potCodes: ["T241"], chapters: [54, 55], osa: ["6.1"], lar: "Lar Ch 9"),
-                .tuesday: day(potCodes: ["T247"], chapters: [31], osa: ["2.1"], lar: "Lar Ch 4"),
-                .wednesday: day(potCodes: ["T248", "T250", "T251"], chapters: [33, 34, 35, 36], osa: ["2.1", "4.1", "3.3"], lar: "Lar Ch 4–5"),
-                .thursday: day(potCodes: ["T252", "T257"], chapters: [31, 26, 27], osa: ["2.1", "2.3"], lar: "Lar Ch 4"),
-                .friday: day(potCodes: ["T258", "T259"], chapters: [37, 38, 29, 30, 36], osa: ["4.1", "5.8"], lar: "Lar Ch 6–7"),
+                .monday: day(potCodes: ["T241"], chapters: [54, 55], catchUpDay: 3, osa: ["6.1"], lar: "Lar Ch 9"),
+                .tuesday: day(potCodes: ["T247"], chapters: [31], catchUpDay: 4, osa: ["2.1"], lar: "Lar Ch 4"),
+                .wednesday: day(potCodes: ["T248", "T250", "T251"], chapters: [33, 34, 35, 36], catchUpDay: 4, osa: ["2.1", "4.1", "3.3"], lar: "Lar Ch 4–5"),
+                .thursday: day(potCodes: ["T252", "T254", "T257"], chapters: [31, 26, 27], catchUpDay: 5, osa: ["2.1", "2.3"], lar: "Lar Ch 4"),
+                .friday: day(potCodes: ["T258", "T259"], chapters: [37, 38, 29, 30, 36], catchUpDay: 5, osa: ["4.1", "5.8"], lar: "Lar Ch 6–7"),
             ],
             6: [
-                .monday: day(potCodes: ["T264", "T265"], chapters: [26, 27], osa: ["2.3"], lar: "Lar Ch 6"),
-                .tuesday: day(potCodes: ["T266", "T267"], chapters: [57, 58, 59, 60], osa: ["1.3"], lar: "Lar Ch 11"),
-                .wednesday: day(potCodes: ["T261", "T262"], chapters: [61, 62, 64], osa: ["6.1"], lar: "Lar Ch 10"),
-                .thursday: day(potCodes: ["T263", "T289"], chapters: [65, 66, 61, 62, 67, 68], osa: ["6.1"], lar: "Lar Ch 10"),
-                .friday: day(potCodes: ["T282", "T283", "T284", "T155"], chapters: [45, 13, 14], osa: ["5.8", "6.1"], lar: "Lar Ch 1"),
+                .monday: day(potCodes: ["T264", "T265"], chapters: [26, 27], catchUpDay: 6, osa: ["2.3"], lar: "Lar Ch 6"),
+                .tuesday: day(potCodes: ["T266", "T267"], chapters: [57, 58, 59, 60], catchUpDay: 6, osa: ["1.3"], lar: "Lar Ch 11"),
+                .wednesday: day(potCodes: ["T261", "T262"], chapters: [61, 62, 64], catchUpDay: 7, osa: ["6.1"], lar: "Lar Ch 10"),
+                .thursday: day(potCodes: ["T263", "T289"], chapters: [65, 66, 61, 62, 67, 68], catchUpDay: 8, osa: ["6.1"], lar: "Lar Ch 10"),
+                .friday: day(potCodes: ["T282", "T283", "T284"], chapters: [45, 13, 14], catchUpDay: 9, osa: ["5.8", "6.1"], lar: "Lar Ch 1"),
             ],
             7: [
-                .monday: day(potCodes: ["T285", "T286", "T287"], chapters: [46, 47, 45], osa: ["6.1"], lar: "Lar Ch 1"),
-                .tuesday: day(potCodes: ["T310", "T311", "T312"], osa: ["2.1"], lar: "Lar Ch 11"),
-                .wednesday: day(potCodes: ["T313", "T314", "T315"], osa: ["2.1"], lar: "Lar Ch 11"),
-                .thursday: day(potCodes: ["T316", "T317"], osa: ["2.1"], lar: "Lar Ch 11"),
+                .monday: day(potCodes: ["T281", "T285", "T286", "T287"], chapters: [46, 47, 45], catchUpDay: 9, osa: ["3.1", "3.2", "6.1"], lar: "Lar Ch 1"),
+                .tuesday: day(
+                    chapters: [29, 30],
+                    topicLabel: "POT 6 Algebra · Review — lines, systems & verbal models",
+                    osa: ["2.2", "4.1", "5.8"],
+                    lar: "Lar Ch 7"
+                ),
+                .wednesday: day(
+                    chapters: [67, 68],
+                    topicLabel: "RRISD · Quadratic transformations · OSA §3.5 & §5.1 · Ch 67–68",
+                    osa: ["3.5", "5.1"],
+                    lar: "Lar Ch 10"
+                ),
+                .thursday: day(
+                    chapters: [45, 46],
+                    topicLabel: "RRISD · Domain & range · OSA §3.1 & §3.2",
+                    osa: ["3.1", "3.2"],
+                    lar: "Lar Ch 1"
+                ),
                 .friday: day(osa: ["2.3"], lar: "Lar Ch 1–4", review: reviewLabels[7]),
             ],
             8: [
-                .monday: day(potCodes: ["T270", "T271"], chapters: [40, 41], osa: ["13.7"], lar: "Lar Ch 13"),
-                .tuesday: day(potCodes: ["T275", "T276", "T277"], chapters: [42, 43], osa: ["13.7"], lar: "Lar Ch 13"),
-                .wednesday: day(chapters: [32, 38], osa: ["2.1", "3.3"], lar: "Lar Ch 4"),
-                .thursday: day(potCodes: ["MIX1"], osa: ["1.2", "5.8", "2.3"], lar: "Lar Ch 1–13"),
-                .friday: day(chapters: [50, 53, 63], osa: ["6.1"], lar: "Lar Ch 9"),
+                .monday: day(
+                    potCodes: ["T270", "T271"],
+                    chapters: [18, 39, 40, 41],
+                    catchUpDay: 11,
+                    topicLabel: "RRISD · Scatter plots & linear regression · OSA §4.2 & §4.3 · T270, T271",
+                    osa: ["4.2", "4.3"],
+                    lar: "Lar Ch 4"
+                ),
+                .tuesday: day(potCodes: ["T275", "T276", "T277"], chapters: [42, 43], catchUpDay: 11, osa: ["13.7"], lar: "Lar Ch 13"),
+                .wednesday: day(potCodes: ["T278", "T279", "T280"], chapters: [43], catchUpDay: 11, osa: ["13.7"], lar: "Lar Ch 13"),
+                .thursday: day(potCodes: ["MIX1"], catchUpDay: 12, osa: ["1.2", "5.8", "2.3"], lar: "Lar Ch 1–13"),
+                .friday: day(potCodes: ["T272", "T274"], chapters: [32, 38, 44], osa: ["2.1", "3.3", "13.7"], lar: "Lar Ch 4"),
             ],
             9: [
                 .monday: day(
@@ -216,21 +244,25 @@ enum BFNAlgebraSchedule {
                     lar: "Lar Ch 8"
                 ),
                 .thursday: day(
-                    topicLabel: "RRISD · Log graphs & exp equations · OSA §6.4 · §6.6",
-                    osa: ["6.4", "6.6"],
-                    lar: "Lar Ch 8"
+                    topicLabel: "POT 6 Algebra · App drills & weak spots",
+                    osa: ["2.1", "6.1", "13.7"],
+                    lar: "Lar Ch 1–13"
                 ),
                 .friday: day(osa: ["1.2", "5.8"], lar: "Lar Ch 1–4", review: reviewLabels[9]),
             ],
             10: [
                 .monday: day(
-                    topicLabel: "RRISD · Exponential models · OSA §6.7 · growth & decay",
-                    osa: ["6.7"],
+                    topicLabel: "RRISD · Log graphs, exp equations & models · OSA §6.4 · §6.6 · §6.7",
+                    osa: ["6.4", "6.6", "6.7"],
                     lar: "Lar Ch 8"
                 ),
-                .tuesday: day(potCodes: ["MIX2"], osa: ["1.2", "5.8", "2.3"], lar: "Lar Ch 1–13"),
-                .wednesday: day(potCodes: ["T152", "T259"], chapters: [29, 30], osa: ["4.1", "5.8"], lar: "Lar Ch 7"),
-                .thursday: day(potCodes: ["T289"], chapters: [61, 62, 67, 68], osa: ["6.1"], lar: "Lar Ch 10"),
+                .tuesday: day(potCodes: ["MIX2"], catchUpDay: 13, osa: ["1.2", "5.8", "2.3"], lar: "Lar Ch 1–13"),
+                .wednesday: day(potCodes: ["T290"], chapters: [51], catchUpDay: 13, osa: ["6.1"], lar: "Lar Ch 9"),
+                .thursday: day(
+                    topicLabel: "POT 6 · Weak spots & app drills",
+                    osa: ["1.2", "5.8", "2.3", "6.1"],
+                    lar: "Lar Ch 1–13"
+                ),
                 .friday: day(osa: ["home"], lar: "Lar Ch 1–13", review: reviewLabels[10]),
             ],
         ]

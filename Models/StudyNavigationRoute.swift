@@ -31,4 +31,12 @@ enum StudyNavigationRoute: Hashable {
     case hewittChapter17
     case miniGamesHub
     case miniGame(MiniGameRoute)
+    case pot6Category(POT6Category)
+    case pot6Topic(code: String)
+    case pot6DailyDrill
+    case pot6CatchUp
+    case pot6Books(POT6BookLibrary)
+    case pot6GeometrySubgroup(POT6GeometrySubgroup)
+    case pot6GeometryCatchUp
+    case pot6GeometryDailyDrill
 }

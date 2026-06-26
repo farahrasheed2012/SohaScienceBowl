@@ -50,6 +50,22 @@ extension View {
                 MiniGamesHubView()
             case .miniGame(let route):
                 miniGameView(for: route)
+            case .pot6Category(let category):
+                MathCategoryView(category: category)
+            case .pot6Topic(let code):
+                POT6TopicDetailView(topicCode: code)
+            case .pot6DailyDrill:
+                MathWeakAreaDrillView()
+            case .pot6CatchUp:
+                POT6CatchUpView()
+            case .pot6Books(let library):
+                POT6BooksView(initialLibrary: library)
+            case .pot6GeometrySubgroup(let subgroup):
+                POT6GeometrySubgroupView(subgroup: subgroup)
+            case .pot6GeometryCatchUp:
+                POT6GeometryCatchUpView()
+            case .pot6GeometryDailyDrill:
+                MathWeakAreaDrillView(mode: .geometry)
             }
         }
     }

@@ -53,6 +53,7 @@ enum ScheduleVideoCatalog {
         case .chemistry: kind = .chemistry
         case .biology: kind = .biology
         case .physics: kind = .physics
+        case .math: return mathLinks(week: block.week, day: block.day)
         }
         return links(week: block.week, day: block.day, kind: kind)
     }

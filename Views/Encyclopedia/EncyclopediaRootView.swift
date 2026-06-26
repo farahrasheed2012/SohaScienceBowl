@@ -29,38 +29,45 @@ struct EncyclopediaRootView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Hi, Soha!")
-                            .font(.headline)
-                        Text("Pick a subject to study.")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                        Text("\(encyclopedia.topics.count) NSB topics · 6 categories")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        HStack(spacing: 16) {
-                            Label("\(encyclopedia.reviewedTopicIds.count) reviewed", systemImage: "checkmark.circle")
-                            Label("\(encyclopedia.currentStreak) day streak", systemImage: "flame.fill")
-                        }
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        practiceCoverageSummary
-                    }
-                    .padding(.vertical, 4)
-                }
-
-                Section("Subjects") {
-                    ForEach(NSBSubject.allCases) { subject in
-                        NavigationLink(value: StudyNavigationRoute.encyclopediaSubject(subject)) {
-                            subjectRow(subject)
-                        }
-                    }
-                }
+                headerSection
+                subjectsSection
             }
             .navigationTitle("Learn")
             .largeNavigationBarTitle()
             .studyNavigationDestinations()
+        }
+    }
+
+    private var subjectsSection: some View {
+        Section("Subjects") {
+            ForEach(NSBSubject.allCases) { subject in
+                NavigationLink(value: StudyNavigationRoute.encyclopediaSubject(subject)) {
+                    subjectRow(subject)
+                }
+            }
+        }
+    }
+
+    private var headerSection: some View {
+        Section {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Hi, Soha!")
+                    .font(.headline)
+                Text("Science Bowl articles and practice drills. Math POT 6 has its own tab.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Text("\(encyclopedia.topics.count) NSB topics · 6 categories")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                HStack(spacing: 16) {
+                    Label("\(encyclopedia.reviewedTopicIds.count) reviewed", systemImage: "checkmark.circle")
+                    Label("\(encyclopedia.currentStreak) day streak", systemImage: "flame.fill")
+                }
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                practiceCoverageSummary
+            }
+            .padding(.vertical, 4)
         }
     }
 
@@ -91,9 +98,15 @@ struct EncyclopediaRootView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(subject.rawValue)
                     .font(.body)
-                Text("\(topics.count) topics · \(coverage.ready) with drills")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                if subject == .math {
+                    Text("\(topics.count) NSB articles · \(POT6TopicRegistry.schoolTopics.count) POT 6 topics")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                } else {
+                    Text("\(topics.count) topics · \(coverage.ready) with drills")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
             }
             Spacer(minLength: 8)
             VStack(alignment: .trailing, spacing: 4) {
@@ -155,7 +168,12 @@ struct EncyclopediaTopicListView: View {
 
     var body: some View {
         List {
-            if gapCount > 0 {
+            if subject == .math {
+                mathCatchUpSection
+                pot6Section
+            }
+
+            if gapCount > 0 && subject != .math {
                 Section {
                     Toggle("Show practice gaps only", isOn: $showCoverageGapsOnly)
                 } footer: {
@@ -201,5 +219,78 @@ struct EncyclopediaTopicListView: View {
             Spacer(minLength: 0)
         }
         .padding(.vertical, 2)
+    }
+
+    @ViewBuilder
+    private var mathCatchUpSection: some View {
+        let janJune = appState.pot6CatchUpJanJuneProgress
+
+        Section {
+            NavigationLink(value: StudyNavigationRoute.pot6CatchUp) {
+                HStack {
+                    Label("13-Day Catch-Up Plan", systemImage: "calendar.badge.clock")
+                    Spacer()
+                    Text("\(janJune.done)/\(janJune.total)")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(janJune.done == janJune.total ? PlatformColor.systemGreen : PlatformColor.systemPurple)
+                }
+            }
+            NavigationLink(value: StudyNavigationRoute.pot6DailyDrill) {
+                Label("Daily Math Block", systemImage: "play.circle.fill")
+            }
+            NavigationLink(value: StudyNavigationRoute.pot6Books(.bfn)) {
+                Label("Books & Materials", systemImage: "book.closed.fill")
+            }
+            NavigationLink(value: StudyNavigationRoute.pot6GeometryCatchUp) {
+                Label("8-Day Geometry Plan", systemImage: "triangle.fill")
+            }
+        } header: {
+            Text("POT 6 Study Plan")
+        } footer: {
+            Text("Algebra catch-up is in the POT 6 tab; geometry is in **POT 6 Geo**.")
+        }
+    }
+
+    @ViewBuilder
+    private var pot6Section: some View {
+        let mathProgress = MathProgressService.shared
+        let geometryCodes = Set(POT6GeometryCatalog.schoolCodes)
+        let pot6Topics = mathProgress.mergedTopics().filter {
+            !$0.isCompetitionOnly && !geometryCodes.contains($0.code)
+        }
+
+        Section {
+            ForEach(pot6Topics) { topic in
+                NavigationLink(value: StudyNavigationRoute.pot6Topic(code: topic.code)) {
+                    HStack(spacing: 12) {
+                        Image(systemName: topic.masteryLevel.systemImage)
+                            .foregroundStyle(MathAccent.color)
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack(spacing: 4) {
+                                Text(topic.title)
+                                    .font(.body)
+                                if topic.isCompetitionOnly {
+                                    Text("🏆")
+                                }
+                            }
+                            Text("\(topic.code) · \(topic.pot6Category.rawValue)")
+                                .font(.caption2)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer(minLength: 0)
+                        if mathProgress.attemptCount(for: topic.code) > 0 {
+                            Text("\(Int(topic.accuracyRate * 100))%")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                    .padding(.vertical, 2)
+                }
+            }
+        } header: {
+            Text("POT 6 · Topics & Drills")
+        } footer: {
+            Text("\(pot6Topics.count) algebra & stats topics — geometry is in the **POT 6 Geo** tab.")
+        }
     }
 }

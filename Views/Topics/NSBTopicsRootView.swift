@@ -409,7 +409,7 @@ struct NSBCategoryDetailView: View {
         } header: {
             Text(BFNAlgebraCatalog.editionTitle)
         } footer: {
-            Text("Summer algebra: BFN Ch 1–20 (weeks 1–2), then POT 6 from T152 (weeks 3–10). \(completed)/\(trackable.count) BFN chapters checked off.")
+            Text("Summer algebra: BFN Ch 1–20 (weeks 1–2), then POT 6 algebra on the calendar (weeks 3–10). \(completed)/\(trackable.count) BFN chapters checked off.")
         }
     }
 

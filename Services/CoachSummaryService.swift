@@ -44,7 +44,7 @@ enum CoachSummaryService {
             "This week by subject",
         ]
 
-        for subject in Subject.allCases {
+        for subject in Subject.scienceCases {
             let pct = Int(appState.weekAccuracy(subject: subject) * 100)
             let answered = appState.drillResults
                 .filter {

@@ -93,6 +93,7 @@ final class EncyclopediaStore {
         case .biology: ["Life Science"]
         case .chemistry: ["Chemistry", "Physical Science"]
         case .physics: ["Physical Science", "Energy"]
+        case .math: []
         }
         let candidates = topics.filter { subjectNames.contains($0.subject) }
         let queryWords = Set(
@@ -178,6 +179,7 @@ final class EncyclopediaStore {
                 case .biology: topic.subject == "Life Science"
                 case .chemistry: topic.subject == "Chemistry" || topic.subject == "Physical Science"
                 case .physics: topic.subject == "Physical Science" || topic.subject == "Energy"
+                case .math: topic.subject == "Math"
                 }
             }
         } else {

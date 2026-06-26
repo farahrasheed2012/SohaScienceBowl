@@ -25,14 +25,14 @@ extension AppState {
         return (done, codes.count)
     }
 
-    var pot6CatchUpPrerequisiteProgress: (done: Int, total: Int) {
-        let codes = POT6CatchUpCatalog.prerequisiteCodes
+    var pot6CatchUpMasterProgress: (done: Int, total: Int) {
+        let codes = POT6AlgebraCatalog.schoolCodes
         let done = codes.filter { pot6CatchUpCompletedCodes.contains($0) }.count
         return (done, codes.count)
     }
 
-    var pot6CatchUpMasterProgress: (done: Int, total: Int) {
-        let codes = POT6CatchUpCatalog.allSchoolCodes
+    var pot6GeometryPlanProgress: (done: Int, total: Int) {
+        let codes = POT6GeometryCatalog.schoolCodes
         let done = codes.filter { pot6CatchUpCompletedCodes.contains($0) }.count
         return (done, codes.count)
     }

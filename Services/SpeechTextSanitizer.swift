@@ -28,6 +28,24 @@ enum SpeechTextSanitizer {
             options: .regularExpression
         )
 
+        s = s.replacingOccurrences(of: "√", with: " square root of ")
+        s = s.replacingOccurrences(of: "π", with: " pi ")
+        s = s.replacingOccurrences(
+            of: #"x\^2"#,
+            with: "x squared",
+            options: .regularExpression
+        )
+        s = s.replacingOccurrences(
+            of: #"(\w)\^2"#,
+            with: "$1 squared",
+            options: .regularExpression
+        )
+        s = s.replacingOccurrences(
+            of: #"(\w)\^3"#,
+            with: "$1 cubed",
+            options: .regularExpression
+        )
+
         // Caret exponents: 10^8
         s = s.replacingOccurrences(
             of: #"\^(\d+)"#,

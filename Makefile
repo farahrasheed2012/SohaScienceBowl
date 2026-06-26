@@ -15,6 +15,7 @@ fls:
 verify:
 	python3 Scripts/verify_topic_readings.py
 	python3 Scripts/verify_question_coverage.py
+	python3 Scripts/verify_pot6_coverage.py
 
 xcode:
 	python3 Scripts/generate_xcode_project.py

@@ -148,6 +148,7 @@ enum SeedData {
         case (8, .physics): return "Electricity intro"
         case (9, .physics): return "Magnetism & waves"
         case (10, .physics): return "Summer capstone"
+        case (_, .math): return "Math POT 6"
         default: return "Week \(week)"
         }
     }

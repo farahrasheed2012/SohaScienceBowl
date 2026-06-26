@@ -95,6 +95,7 @@ struct SettingsView: View {
             .alert("Reset XP and streak?", isPresented: $showResetXPConfirm) {
                 Button("Reset", role: .destructive) {
                     XPManager.shared.resetProgress()
+                    MathProgressService.shared.resetProgress()
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {

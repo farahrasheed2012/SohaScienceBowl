@@ -16,7 +16,7 @@ enum MSNSBStudyScope {
     Life Science: cell biology, genetics, anatomy & physiology, plant biology, ecology, animal behavior.
     Physical Science: chemistry (reactions, periodic table, states of matter) · physics (forces, motion, waves, electromagnetism, thermodynamics).
     Chemistry (Mon/Thu): BFN-C chapters aligned to NSB topics; Hewitt/Mod/Tro backups.
-    Mathematics (algebra block): BFN-A Ch 1–20 (weeks 1–2), then Math POT 6 Jan–Jun topics from T152 (weeks 3–10); optional OpenStax/Larson for NSB math drills.
+    Mathematics (algebra block): BFN-A Ch 1–20 (weeks 1–2), then POT 6 algebra topics on the summer calendar (weeks 3–10); geometry in POT 6 Geo tab.
     """
 
     static let bookUseGuidance =

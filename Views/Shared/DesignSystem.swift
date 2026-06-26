@@ -28,6 +28,7 @@ extension Subject {
         case .biology: return GameColors.biology
         case .chemistry: return GameColors.chemistry
         case .physics: return GameColors.physics
+        case .math: return GameColors.math
         }
     }
 
@@ -36,8 +37,15 @@ extension Subject {
         case .biology: return "leaf.fill"
         case .chemistry: return "flask.fill"
         case .physics: return "bolt.fill"
+        case .math: return "sum"
         }
     }
+}
+
+extension POT6Category {
+    var accentColor: Color { GameColors.math }
+
+    var gameIcon: String { icon }
 }
 
 // MARK: - Typography

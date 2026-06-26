@@ -55,7 +55,7 @@ struct TopicBrowserView: View {
 
                 Picker("Subject", selection: $subjectFilter) {
                     Text("All").tag(Optional<Subject>.none)
-                    ForEach(Subject.allCases) { subject in
+                    ForEach(Subject.scienceCases) { subject in
                         Text(subject.rawValue).tag(Optional(subject))
                     }
                 }

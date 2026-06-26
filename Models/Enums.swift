@@ -4,14 +4,19 @@ enum Subject: String, CaseIterable, Codable, Identifiable {
     case biology = "Biology"
     case chemistry = "Chemistry"
     case physics = "Physics"
+    case math = "Math"
 
     var id: String { rawValue }
+
+    /// Bio, Chem, Phys — summer schedule science blocks (excludes Math POT 6).
+    static let scienceCases: [Subject] = [.biology, .chemistry, .physics]
 
     var systemColorName: String {
         switch self {
         case .biology: return "green"
         case .chemistry: return "blue"
         case .physics: return "orange"
+        case .math: return "indigo"
         }
     }
 }

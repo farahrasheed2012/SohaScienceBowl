@@ -184,7 +184,51 @@ struct TodayView: View {
                         week: appState.currentWeek,
                         day: weekday
                     ) {
+                        let mathProgress = MathProgressService.shared
+                        let recommended = mathProgress.recommendedDailyTopics(limit: 3)
+                        let todayXP = mathProgress.todayXP
+                        let dailyGoal = 100
+
                         Section {
+                            VStack(alignment: .leading, spacing: 10) {
+                                Text("Today's focus")
+                                    .font(.subheadline.weight(.semibold))
+                                if recommended.isEmpty {
+                                    Text("Start with the Daily Math Block — we'll pick topics for you.")
+                                        .font(.caption)
+                                        .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+                                } else {
+                                    ForEach(recommended) { topic in
+                                        NavigationLink(value: StudyNavigationRoute.pot6Topic(code: topic.code)) {
+                                            HStack {
+                                                Text(topic.title)
+                                                Spacer()
+                                                if topic.isCompetitionOnly { Text("🏆") }
+                                            }
+                                            .font(.caption)
+                                        }
+                                    }
+                                }
+                                ProgressView(value: Double(min(todayXP, dailyGoal)), total: Double(dailyGoal))
+                                    .tint(GameColors.math)
+                                Text("\(todayXP) / \(dailyGoal) XP today")
+                                    .font(.caption)
+                                    .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+                            }
+                            .todayListRow(isDarkCoach: isDarkCoach, theme: theme)
+
+                            studyActionRow(
+                                title: "Start Drill",
+                                systemImage: "sum",
+                                prominent: true
+                            ) {
+                                navigationPath.append(StudyNavigationRoute.pot6DailyDrill)
+                            } subtitle: {
+                                Text("15 questions · weak areas + spaced review")
+                                    .font(.caption)
+                                    .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
+                            }
+
                             StudyMathReadingAndVideos(
                                 reading: mathReading,
                                 week: appState.currentWeek,
@@ -204,12 +248,12 @@ struct TodayView: View {
                                     )
                                 )
                             } subtitle: {
-                                Text("Toss-ups from today's math topic")
+                                Text("Toss-ups from today's reading")
                                     .font(.caption)
                                     .foregroundStyle(isDarkCoach ? theme.secondaryText : .secondary)
                             }
                         } header: {
-                            coachSectionHeader("Math · \(mathReading.title)")
+                            coachSectionHeader("📐 Math · POT 6")
                         }
                     }
 

@@ -409,6 +409,7 @@ extension AppState {
         case .biology: "Life Science"
         case .chemistry: "Chemistry"
         case .physics: "Physical Science"
+        case .math: "Math"
         }
         return encyclopedia.questions(subject: subjectName, difficulty: nil, limit: limit, type: "tossUp")
             .map { $0.toUnified() }

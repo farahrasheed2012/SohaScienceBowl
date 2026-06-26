@@ -66,6 +66,8 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                 return expl.displayText
             }
             return ConceptualPhysicalScienceExplorationsCatalog.formattedLine(chapter: chapter, title: chapterTitle)
+        case .math:
+            return "Math POT 6 — \(chapterTitle)"
         }
     }
 
@@ -306,6 +308,17 @@ struct StudyBlock: Identifiable, Codable, Hashable {
                     text: ScheduleBFNCatalog.scienceOptionText(for: self),
                     links: [],
                     isRecommended: false
+                )
+            )
+
+        case .math:
+            options.append(
+                StudyBookOption(
+                    id: "pot6-\(week)-\(day.rawValue)",
+                    role: .primary,
+                    text: "Math POT 6 — \(chapterTitle)",
+                    links: [],
+                    isRecommended: true
                 )
             )
         }

@@ -71,7 +71,7 @@ struct QuizRootView: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
 
-                    ForEach(Subject.allCases) { subject in
+                    ForEach(Subject.scienceCases) { subject in
                         NavigationLink {
                             PlanDrillView(request: .thisWeek(week: appState.currentWeek, subject: subject))
                         } label: {
@@ -260,11 +260,7 @@ struct QuizRootView: View {
     }
 
     private func quizIcon(for subject: Subject) -> String {
-        switch subject {
-        case .biology: return "leaf.fill"
-        case .chemistry: return "flask.fill"
-        case .physics: return "bolt.fill"
-        }
+        subject.gameIcon
     }
 }
 
@@ -284,7 +280,7 @@ struct DrillSetupView: View {
         Form {
             Section("Subject") {
                 Picker("Subject", selection: $subject) {
-                    ForEach(Subject.allCases) { s in
+                    ForEach(Subject.scienceCases) { s in
                         Text(s.rawValue).tag(s)
                     }
                 }
