@@ -135,7 +135,7 @@ struct POT6BooksView: View {
             Link(destination: MathAlgebraReadingCatalog.osaBookHome) {
                 Label("Open full book on openstax.org", systemImage: "arrow.up.right.square")
             }
-            Text("Mapped sections appear on catch-up days and in topic reading links.")
+            Text("Mapped sections appear on each topic in catch-up and Topics & Drills.")
                 .font(.caption)
                 .foregroundStyle(theme.secondaryText)
         }

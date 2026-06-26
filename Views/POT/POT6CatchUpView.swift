@@ -34,7 +34,7 @@ struct POT6CatchUpView: View {
                     .font(.headline)
                     .foregroundStyle(PlatformColor.systemPurple)
 
-                Text("Catch up on Jan–June 2026 POT 6 **algebra** topics before joining \(POT6CatchUpCatalog.classSchedule). Check off each T-code — tap a topic for **books, notes & drills**. Geometry is in **POT 6 Geo**.")
+                Text("Catch up on Jan–June 2026 POT 6 **algebra** topics. Each T-code lists **BFN-A**, **Larson**, and **OpenStax** below. Tap the title for notes & drills. Geometry → **POT 6 Geo**.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -188,9 +188,21 @@ struct POT6CatchUpView: View {
                             .foregroundStyle(.primary)
                             .multilineTextAlignment(.leading)
                     }
+
+                    if !item.isReviewMarker || item.potCode.hasPrefix("MIX") {
+                        POT6TopicReadingSummaryView(potCode: item.potCode)
+                    }
                 }
 
                 Spacer(minLength: 0)
+            }
+
+            if !item.isReviewMarker, POT6TopicRegistry.topic(for: item.potCode) != nil {
+                NavigationLink(value: StudyNavigationRoute.pot6Topic(code: item.potCode)) {
+                    Label("Concept notes & drills", systemImage: "sum")
+                        .font(.caption.weight(.semibold))
+                }
+                .padding(.leading, 36)
             }
         }
         .padding(.vertical, 2)

@@ -42,6 +42,16 @@ struct POT6TopicDetailView: View {
     private func learnTab(_ topic: MathTopic) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
+                if POT6TopicReadingSummaryView.hasReading(for: topic.code) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Reading")
+                            .font(.headline)
+                            .foregroundStyle(MathAccent.color)
+                        topicReadingBlock(topic)
+                    }
+                    .mathCard()
+                }
+
                 if appState.readQuestionsAloud {
                     Button {
                         let text = topic.conceptSummary + " Key formulas: " + topic.keyFormulas.joined(separator: ". ")
@@ -82,8 +92,6 @@ struct POT6TopicDetailView: View {
                 }
                 .mathCard()
 
-                topicReadingBlock(topic)
-
                 ForEach(topic.workedExamples) { example in
                     POT6WorkedExampleCard(example: example)
                 }
@@ -94,36 +102,7 @@ struct POT6TopicDetailView: View {
 
     @ViewBuilder
     private func topicReadingBlock(_ topic: MathTopic) -> some View {
-        let bfnChapters = POT6CatchUpCatalog.allItems.first { $0.potCode == topic.code }?.bfnChapters ?? []
-        let reading = MathAlgebraReadingCatalog.readingOptions(
-            bfnChapterNumbers: bfnChapters,
-            potCode: topic.code
-        )
-
-        if !bfnChapters.isEmpty || !reading.isEmpty {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Reading")
-                    .font(.headline)
-                    .foregroundStyle(MathAccent.color)
-
-                if !bfnChapters.isEmpty {
-                    POT6BFNReadingView(chapterNumbers: bfnChapters, compact: true)
-                } else if POT6GeometryCatalog.schoolCodes.contains(topic.code) {
-                    Text("BFN-A has no geometry chapters — use Larson and Math POT video below.")
-                        .font(.caption)
-                        .foregroundStyle(theme.secondaryText)
-                }
-
-                if !reading.isEmpty {
-                    POT6ReadingOptionsView(
-                        options: reading,
-                        disclosureLabel: "Larson & OpenStax",
-                        style: .inline
-                    )
-                }
-            }
-            .mathCard()
-        }
+        POT6TopicReadingSummaryView(potCode: topic.code)
     }
 }
 

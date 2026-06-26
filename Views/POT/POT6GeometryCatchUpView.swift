@@ -29,7 +29,7 @@ struct POT6GeometryCatchUpView: View {
                     .font(.headline)
                     .foregroundStyle(PlatformColor.systemTeal)
 
-                Text("Check off each geometry T-code. Tap a topic for **Larson, OpenStax, notes & drills** — or use **POT 6 Geo → Topics**.")
+                Text("Check off each geometry T-code. **Larson & OpenStax** are listed under each topic; tap the title for notes & drills.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -119,6 +119,8 @@ struct POT6GeometryCatchUpView: View {
                         .foregroundStyle(.primary)
                         .multilineTextAlignment(.leading)
                 }
+
+                POT6TopicReadingSummaryView(potCode: code)
             }
         }
         .padding(.vertical, 2)

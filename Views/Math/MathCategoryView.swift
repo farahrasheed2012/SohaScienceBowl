@@ -12,8 +12,12 @@ struct MathCategoryView: View {
     var body: some View {
         List {
             ForEach(topics) { topic in
-                NavigationLink(value: StudyNavigationRoute.pot6Topic(code: topic.code)) {
-                    topicRow(topic)
+                VStack(alignment: .leading, spacing: 6) {
+                    NavigationLink(value: StudyNavigationRoute.pot6Topic(code: topic.code)) {
+                        topicRow(topic)
+                    }
+                    POT6TopicReadingSummaryView(potCode: topic.code)
+                        .padding(.leading, 40)
                 }
             }
         }

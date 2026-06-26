@@ -102,3 +102,40 @@ struct POT6ReadingOptionsView: View {
         }
     }
 }
+
+/// Per-topic BFN-A + Larson + OpenStax — used in catch-up, topic lists, and detail pages.
+struct POT6TopicReadingSummaryView: View {
+    let potCode: String
+
+    private var bfnChapters: [Int] {
+        POT6CatchUpCatalog.allItems.first { $0.potCode == potCode }?.bfnChapters ?? []
+    }
+
+    private var alternateReading: MathAlgebraReadingCatalog.ReadingOptions {
+        MathAlgebraReadingCatalog.readingOptions(bfnChapterNumbers: bfnChapters, potCode: potCode)
+    }
+
+    static func hasReading(for potCode: String) -> Bool {
+        let bfn = POT6CatchUpCatalog.allItems.first { $0.potCode == potCode }?.bfnChapters ?? []
+        let alt = MathAlgebraReadingCatalog.readingOptions(bfnChapterNumbers: bfn, potCode: potCode)
+        return !bfn.isEmpty || !alt.isEmpty
+    }
+
+    var body: some View {
+        if Self.hasReading(for: potCode) {
+            VStack(alignment: .leading, spacing: 8) {
+                if !bfnChapters.isEmpty {
+                    POT6BFNReadingView(chapterNumbers: bfnChapters, compact: true)
+                } else if POT6GeometryCatalog.schoolCodes.contains(potCode) {
+                    Text("BFN-A has no geometry chapters")
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                }
+
+                if !alternateReading.isEmpty {
+                    POT6ReadingOptionsView(options: alternateReading, style: .inline)
+                }
+            }
+        }
+    }
+}
