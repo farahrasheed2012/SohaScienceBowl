@@ -66,10 +66,7 @@ struct StudyMaterialHeader: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             } else {
-                Label(block.readingPaceLabel, systemImage: "book.pages")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                ReadingPaceBadge(block: block)
             }
         }
         .padding(20)
@@ -93,9 +90,20 @@ struct StudyBookOptionsCard: View {
             Label("Reading options", systemImage: "books.vertical.fill")
                 .font(compact ? .subheadline.weight(.semibold) : .headline)
 
-            Text("Primary · Also OK · Backup — read assigned § sections only (stop when Focus is covered)")
+            Text("Primary · Also OK · Backup — assigned FLS sections only (page estimate ≠ whole chapter)")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+
+            if block.subject == .biology, let summary = block.readingPageSummary {
+                HStack(alignment: .top, spacing: 6) {
+                    Image(systemName: block.isHeavyReadingDay ? "exclamationmark.triangle.fill" : "book.pages")
+                        .font(.caption)
+                        .foregroundStyle(block.isHeavyReadingDay ? PlatformColor.systemOrange : PlatformColor.systemTeal)
+                    Text(summary + (block.isHeavyReadingDay ? " · split or use OSB backup" : ""))
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(block.isHeavyReadingDay ? PlatformColor.systemOrange : PlatformColor.systemTeal)
+                }
+            }
 
             ForEach(options) { option in
                 StudyBookOptionRow(option: option, compact: compact)
@@ -526,6 +534,24 @@ struct StudyMaterialScrollContent: View {
                     }
                 }
             }
+        }
+    }
+}
+
+struct ReadingPaceBadge: View {
+    let block: StudyBlock
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if let summary = block.readingPageSummary {
+                Label(summary, systemImage: block.isHeavyReadingDay ? "exclamationmark.triangle.fill" : "book.pages")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(block.isHeavyReadingDay ? PlatformColor.systemOrange : PlatformColor.systemTeal)
+            }
+            Label(block.readingPaceLabel, systemImage: "text.book.closed")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 }

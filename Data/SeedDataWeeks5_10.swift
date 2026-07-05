@@ -18,7 +18,7 @@ extension SeedData {
                   ("Is O₂ held together by ionic or covalent bonds?", "Covalent")
               ]),
         block(week: 5, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 2 — Photosynthesis", title: "Photosynthesis (part 1)",
+              book: "FLS", chapter: "Ch 2 — Cell Processes and Energy · §2.4 Photosynthesis (~p56–61)", title: "Photosynthesis (part 1)",
               backupBookLine: "OSB Ch 4 · CB Ch 8",
               focus: "~1 hr · part 1: chloroplast · light reactions · pigments · inputs CO₂ + H₂O + light. Fri = respiration (Ch 5).",
               formulas: "6CO₂ + 6H₂O + light → C₆H₁₂O₆ + 6O₂ · chloroplast",
@@ -51,7 +51,7 @@ extension SeedData {
                   ("What is the approximate molar mass of water (H₂O)?", "18 g/mol")
               ]),
         block(week: 5, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 2 — Cellular Respiration", title: "Cellular Respiration (part 2)",
+              book: "FLS", chapter: "Ch 2 — Cell Processes and Energy · §2.5 Cellular Respiration (~p62–67)", title: "Cellular Respiration (part 2)",
               backupBookLine: "OSB Ch 5 · CB Ch 9",
               focus: "~1 hr · part 2: mitochondria · aerobic respiration · glucose + O₂ → CO₂ + H₂O + ATP · compare to photosynthesis",
               formulas: "C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP · mitochondria",
@@ -76,7 +76,7 @@ extension SeedData {
                   ("What is the unit of molarity?", "mol/L (M)")
               ]),
         block(week: 6, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 7 — The Six Kingdoms", title: "Population Ecology (part 2)",
+              book: "FLS", chapter: "Ch 7 — Living Things · §7.3 The Six Kingdoms (~p225–235)", title: "Population Ecology (part 2)",
               backupBookLine: "OSB Ch 20 · CB Ch 36",
               focus: "~1 hr · carrying capacity (K) · exponential vs logistic growth · limiting factors · primary vs secondary succession",
               formulas: "carrying capacity · biotic vs abiotic · primary succession",
@@ -109,7 +109,7 @@ extension SeedData {
                   ("Is a solution with pH 11 acidic or basic?", "Basic")
               ]),
         block(week: 6, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 8 — Bacteria · Viruses", title: "Bacteria & Viruses",
+              book: "FLS", chapter: "Ch 8 — Viruses and Bacteria · §8.1 Bacteria (~p236–251) · §8.2 Viruses (~p252–267)", title: "Bacteria & Viruses",
               backupBookLine: "OSB Ch 13 · CB Ch 16",
               focus: "~1 hr · prokaryote · bacteria shapes · virus vs bacterium · antibiotic vs antiviral · vaccines (intro)",
               formulas: "bacteria = prokaryote · virus needs host · antibiotic ≠ virus",
@@ -134,7 +134,7 @@ extension SeedData {
                   ("Combustion reactions require which reactant gas?", "Oxygen (O₂)")
               ]),
         block(week: 7, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 21 — The Body's Defenses", title: "Immune System",
+              book: "FLS", chapter: "Ch 21 — Fighting Disease · §21.1 The Body's Defenses (~p648–664)", title: "Immune System",
               backupBookLine: "OSB Ch 17 · CB Ch 24",
               focus: "~1 hr · innate vs adaptive · B cells · T cells · antibodies · memory cells · vaccines",
               formulas: "innate vs adaptive · memory cells · antibody",
@@ -167,7 +167,7 @@ extension SeedData {
                   ("Which halogen is generally most reactive, fluorine or iodine?", "Fluorine")
               ]),
         block(week: 7, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 10 — What Are Plants? · Roots, Stems, and Leaves", title: "Plant Structure (part 1)",
+              book: "FLS", chapter: "Ch 10 — Introduction to Plants · §10.1 What Are Plants? (~p298–307) · §10.2 Roots, Stems, and Leaves (~p308–317)", title: "Plant Structure (part 1)",
               backupBookLine: "OSB Ch 14 · CB Ch 31",
               focus: "~1 hr · part 1: root · stem · leaf · meristem · vascular tissue overview. Fri = xylem/phloem (Ch 15).",
               formulas: "xylem · phloem · meristem · root/stem/leaf",
@@ -192,7 +192,7 @@ extension SeedData {
                   ("Convert 25°C to kelvin.", "298 K")
               ]),
         block(week: 8, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 11 — Seed Plants", title: "Plant Transport & Tissues (part 2)",
+              book: "FLS", chapter: "Ch 11 — Seed Plants · §11.1 Seed Plants (~p328–345)", title: "Plant Transport & Tissues (part 2)",
               backupBookLine: "OSB Ch 15 · CB Ch 31",
               focus: "~1 hr · part 2: xylem (water up) · phloem (sugars) · stomata · transpiration (intro)",
               formulas: "xylem · phloem · stomata · transpiration",
@@ -225,7 +225,7 @@ extension SeedData {
                   ("Is melting ice a physical or chemical change?", "Physical")
               ]),
         block(week: 8, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 17 — Bones and Muscles", title: "Animal Structure & Tissues",
+              book: "FLS", chapter: "Ch 17 — Bones, Muscles, and Skin · §17.1 Bones and Muscles (~p530–544)", title: "Animal Structure & Tissues",
               backupBookLine: "OSB Ch 18 · CB Ch 20",
               focus: "~1 hr · epithelial · muscle · nervous · connective tissues · organ systems overview",
               formulas: "epithelial · muscle · nervous · connective",
@@ -250,7 +250,7 @@ extension SeedData {
                   ("Carbon-12 has 6 protons — how many electrons in a neutral atom?", "6")
               ]),
         block(week: 9, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 3 — Genetics: The Science of Heredity · Traits and Inheritance", title: "Cell Reproduction (intro)",
+              book: "FLS", chapter: "Ch 3 — Genetics: The Science of Heredity · §3.1 Genetics: The Science of Heredity (~p68–77) · §3.2 Traits and Inheritance (~p78–88)", title: "Cell Reproduction (intro)",
               backupBookLine: "OSB Ch 6 · CB Ch 8",
               focus: "~1 hr · mitosis stages (overview) · chromosome · diploid vs haploid (intro) · why cells divide",
               formulas: "mitosis → 2 identical cells · chromosome · diploid",
@@ -283,7 +283,7 @@ extension SeedData {
                   ("When sodium loses one electron, what ion forms?", "Na⁺")
               ]),
         block(week: 9, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 18 — Food and Energy · Ch 19 — The Circulatory System", title: "Digestive & Circulatory (deeper)",
+              book: "FLS", chapter: "Ch 18 — Food and Digestion · §18.1 Food and Energy (~p560–575) · Ch 19 — Circulation · §19.1 The Circulatory System (~p592–606)", title: "Digestive & Circulatory (deeper)",
               backupBookLine: "OSB Ch 16 § · CB Ch 21–23",
               focus: "~1 hr · digestive path · small intestine absorption · heart chambers · arteries/veins/capillaries · alveoli",
               formulas: "small intestine = absorption · artery away · vein toward heart",

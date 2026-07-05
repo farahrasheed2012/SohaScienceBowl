@@ -146,23 +146,13 @@ struct StudySessionView: View {
             }
 
             if !block.isFlashCardOnly {
-                HStack(alignment: .top, spacing: 10) {
-                    Image(systemName: "book.pages")
-                        .foregroundStyle(Color.accentColor)
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Reading pace · \(block.readingScopeShort)")
-                            .font(.subheadline.weight(.semibold))
-                        Text(block.readingPaceLabel)
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .padding(14)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(PlatformColor.secondaryGroupedBackground)
-                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
+                ReadingPaceBadge(block: block)
+                    .padding(14)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(PlatformColor.secondaryGroupedBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
             }
 
             StudyMaterialScrollContent(block: block)

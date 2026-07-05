@@ -23,7 +23,7 @@ extension SeedData {
                   ("In a neutral atom, how does the number of electrons compare to the number of protons?", "They are equal")
               ]),
         block(week: 1, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 1 — Parts of a Cell · Two Kinds of Cells", title: "Cell Structure and Function",
+              book: "FLS", chapter: "Ch 1 — Cell Structure and Function · §1.3 Parts of a Cell (~p21–28) · §1.4 Two Kinds of Cells (~p29–37)", title: "Cell Structure and Function",
                       backupBookLine: "OSB Ch 3 §3.2–3.4 · CB Ch 4",
               focus: "Nucleus (contains DNA/chromosomes) · cell membrane (selective barrier) · cytoplasm · mitochondria → ATP · ribosomes → proteins · ER & Golgi → transport/modify proteins · vacuole (large in plants) · chloroplast (plants only, photosynthesis) · cell wall (plants only) · prokaryote (no nucleus) vs eukaryote (has nucleus)",
               formulas: "ATP = energy currency · organelle → function pairs",
@@ -62,7 +62,7 @@ extension SeedData {
                   ("When sodium loses one electron, what ion does it form?", "Na⁺")
               ]),
         block(week: 1, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 16 — Your Body Systems", title: "Levels of Organization",
+              book: "FLS", chapter: "Ch 16 — Healthy Body Systems · §16.1 Your Body Systems (~p508–518)", title: "Levels of Organization",
                       backupBookLine: "OSB Ch 1 §1.1 · CB Ch 6–7",
               focus: "~1 hr · section: cell → tissue → organ → system → organism · specialization · tissue types",
               formulas: "Levels of organization in order",
@@ -88,7 +88,7 @@ extension SeedData {
                   ("In an atom, where are protons located?", "In the nucleus")
               ]),
         block(week: 2, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 4 — Human Inheritance · Advances in Modern Genetics", title: "Genetics — DNA & genes (part 1)",
+              book: "FLS", chapter: "Ch 4 — Modern Genetics · §4.1 Human Inheritance (~p100–110) · §4.2 Advances in Modern Genetics (~p111–121)", title: "Genetics — DNA & genes (part 1)",
                       backupBookLine: "OSB Ch 8 §8.1–8.2 · CB Ch 9",
               focus: "~1 hr · part 1: DNA · gene · chromosome · allele · dominant vs recessive. Finish Punnett squares Friday (Ch 8).",
               formulas: "Tt × Tt → 3 dominant : 1 recessive phenotype · homozygous (TT, tt) vs heterozygous (Tt)",
@@ -122,7 +122,7 @@ extension SeedData {
                   ("When a metal atom loses electrons, does it form a cation or an anion?", "Cation")
               ]),
         block(week: 2, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 4 — Genetic Disorders", title: "Genetics — Punnett squares (part 2)",
+              book: "FLS", chapter: "Ch 4 — Modern Genetics · §4.3 Genetic Disorders (~p122–133)", title: "Genetics — Punnett squares (part 2)",
                       backupBookLine: "OSB Ch 8 §8.2–8.3 · CB Ch 9",
               focus: "~1 hr · part 2: genotype vs phenotype · Punnett square · Tt × Tt → 3:1 · heterozygous vs homozygous",
               formulas: "Tt × Tt → 3 dominant : 1 recessive phenotype · homozygous (TT, tt) vs heterozygous (Tt)",
@@ -147,7 +147,7 @@ extension SeedData {
                   ("What separation method would you use to separate sand from water?", "Filtration")
               ]),
         block(week: 3, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 7 — Classification of Living Things · The Six Kingdoms", title: "Ecology — communities (part 1)",
+              book: "FLS", chapter: "Ch 7 — Living Things · §7.2 Classification of Living Things (~p214–224) · §7.3 The Six Kingdoms (~p225–235)", title: "Ecology — communities (part 1)",
                       backupBookLine: "OSB Ch 19 §19.1 · CB Ch 36–37",
               focus: "~1 hr · part 1: producers · consumers · decomposers · food chains · symbiosis types",
               formulas: "Mutualism (+/+) · commensalism (+/0) · parasitism (+/−) · 10% energy rule",
@@ -181,7 +181,7 @@ extension SeedData {
                   ("Does an exothermic reaction release or absorb heat?", "Releases")
               ]),
         block(week: 3, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 17 — Bones and Muscles · Ch 18 — Food and Energy", title: "Body systems — musculoskeletal & cardiopulmonary",
+              book: "FLS", chapter: "Ch 17 — Bones, Muscles, and Skin · §17.1 Bones and Muscles (~p530–544) · Ch 18 — Food and Digestion · §18.1 Food and Energy (~p560–575)", title: "Body systems — musculoskeletal & cardiopulmonary",
                       backupBookLine: "OSB Ch 16 §16.1–16.3 · CB Ch 21–23",
               focus: "~1 hr · section: levers · heart · arteries/veins · lungs O₂/CO₂ · capillaries",
               formulas: "Lever: fulcrum · effort · load · artery = away from heart · vein = toward heart",
@@ -206,7 +206,7 @@ extension SeedData {
                   ("During boiling, is energy absorbed by or released from the substance?", "Absorbed")
               ]),
         block(week: 4, day: .tuesday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 5 — Evidence for Evolution · How Evolution Works", title: "Evolution — natural selection (part 1)",
+              book: "FLS", chapter: "Ch 5 — Evolution · §5.1 Evidence for Evolution (~p134–141) · §5.2 How Evolution Works (~p142–150)", title: "Evolution — natural selection (part 1)",
                       backupBookLine: "OSB Ch 11 · CB Ch 13–14",
               focus: "~1 hr · part 1: natural selection · variation · adaptation · fossil evidence. Fri = classification (Ch 12).",
               formulas: "Taxonomy mnemonic · Homo sapiens",
@@ -240,7 +240,7 @@ extension SeedData {
                   ("Which piece of lab glassware is used to measure liquid volume most precisely?", "Graduated cylinder")
               ]),
         block(week: 4, day: .friday, subject: .biology, pass: .pass1,
-              book: "FLS", chapter: "Ch 6 — Fossil Evidence", title: "Classification & taxonomy (part 2)",
+              book: "FLS", chapter: "Ch 6 — Earth's History · §6.1 Fossil Evidence (~p160–173)", title: "Classification & taxonomy (part 2)",
                       backupBookLine: "OSB Ch 12 · CB Ch 14",
               focus: "~1 hr · part 2: Domain → Kingdom → … → Species · binomial nomenclature · Homo sapiens",
               formulas: "Taxonomy mnemonic · Homo sapiens",

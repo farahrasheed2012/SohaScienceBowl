@@ -175,10 +175,13 @@ struct WeekScheduleContent: View {
             Text(block.primaryTopic)
                 .font(.subheadline.weight(.semibold))
 
-            Text(block.readingPaceLabel)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            if let summary = block.readingPageSummary {
+                Text(summary)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(block.isHeavyReadingDay ? PlatformColor.systemOrange : PlatformColor.systemTeal)
+            }
+
+            ReadingPaceBadge(block: block)
 
             StudyBlockReadingAndVideos(
                 block: block,
@@ -372,6 +375,11 @@ struct WeekTopicBrowserRow: View {
                 Text("\(block.day.fullName) · \(ScheduleConstants.blockTimeLabel(day: block.day, subject: block.subject))")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                if let summary = block.readingPageSummary {
+                    Text(summary)
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(block.isHeavyReadingDay ? PlatformColor.systemOrange : PlatformColor.systemTeal)
+                }
                 Text(block.primaryReadingLine)
                     .font(.caption2.weight(.medium))
                     .foregroundStyle(.secondary)

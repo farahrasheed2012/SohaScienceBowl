@@ -42,7 +42,7 @@ enum BlockReadingContent {
 
                 **Reading pace:** \(block.readingPaceLabel)
 
-                Plan **~35–40 min** for that section only. Read for NSB toss-up facts — skip pages outside today's Focus.
+                Plan **~35–40 min** for that section only\(block.estimatedReadingPages.map { " (~\($0) pp)" } ?? ""). Read for NSB toss-up facts — skip pages outside today's Focus.
 
                 Copy every formula from today's block into your Science Bowl notebook.
 

@@ -131,9 +131,15 @@ extension AppState {
 
         if let weekday = Weekday.from(date) {
             if let block = todayBlocks(for: date).first {
+                let subtitle: String
+                if let pace = block.readingPageSummary {
+                    subtitle = "\(pace) · \(block.primaryTopic)"
+                } else {
+                    subtitle = "\(block.displayChapter) · \(block.primaryTopic)"
+                }
                 return NextUpItem(
                     title: "Next: \(block.day.shortName) \(block.subject.rawValue)",
-                    subtitle: "\(block.displayChapter) · \(block.primaryTopic)",
+                    subtitle: subtitle,
                     duration: "\(ScheduleConstants.scienceSessionMinutes) min",
                     route: .fullSession(block)
                 )

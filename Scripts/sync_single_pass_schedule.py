@@ -18,7 +18,7 @@ from bfn_catalog import (  # noqa: E402
     format_chem_backup,
     format_phys_backup,
 )
-from fls_toc_data import FLS_PRIMARY  # noqa: E402
+from fls_toc_data import FLS_PRIMARY, fls_pace_note  # noqa: E402
 from bfn_chemistry_catalog import compact_primary_display, HEWITT_CHEM_BACKUP  # noqa: E402
 
 SOHAAli = Path.home() / "Documents/SohaAli/Schedule"
@@ -66,8 +66,8 @@ Earth & Space and Energy are also official Rule 3-1 categories — use DOE sampl
 """
 
 BLOCK_WORKFLOW_NOTE = (
-    "1-hr block: ~10 min recall → ~30 min read **assigned § section** (stop when Focus is covered) "
-    "→ ~10 min know cold → ~10 min toss-ups."
+    "1-hr block: ~10 min recall → ~30 min read **assigned FLS/OSB sections only** "
+    "(page estimate on bio cells — not the whole chapter) → ~10 min know cold → ~10 min toss-ups."
 )
 
 DATES = {
@@ -726,6 +726,7 @@ def html_cell(
     tossup: str,
 ) -> str:
     cls = {"chem": "chem", "bio": "bio", "phys": "phys"}.get(kind, "study-cell")
+    pace_span = ""
     if kind == "chem":
         _, mod_book, *_ = SCIENCE_WEEKS[week][day_idx]
         mod = format_mod_reading(week, day_idx, mod_book)
@@ -737,11 +738,13 @@ def html_cell(
     elif kind == "bio":
         backup_text = format_bio_backup(week, day_idx, osb_backup_line(week, day_idx))
         backup = f'<span class="optional-book"><em>Backup:</em> {esc(backup_text)}</span>'
+        pace_span = ""
     else:
         backup = f'<span class="optional-book"><em>Backup:</em> {esc(format_phys_backup(week, day_idx))}</span>'
+        pace_span = ""
     return (
         f'<td class="{cls} study-cell">'
-        f"<strong>{esc(book)}</strong> — {esc(title)}{backup}"
+        f"<strong>{esc(book)}</strong> — {esc(title)}{pace_span}{backup}"
         f'<span class="formulas"><em>Formulas:</em> {esc(formulas)}</span>'
         f'<span class="focus"><em>Focus:</em> {esc(focus)}</span>'
         f'<span class="know"><em>Know:</em> {esc(know)}</span>'
@@ -1055,7 +1058,7 @@ def patch_whiteboard_legend(text: str) -> str:
   </table>"""
     text = re.sub(
         r"<section class=\"week legend-page\">.*?<!-- WEEK 1 -->",
-        f"<section class=\"week legend-page\">\n  <div class=\"week-header\">\n    <h2>Book key &amp; DOE topic scope</h2>\n    <div class=\"week-meta\">Summer 2026 · Soha<br>Jun 8 – Aug 19</div>\n  </div>\n{legend_table}\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">DOE study topics (not whole textbooks)</h3>\n  <p style=\"font-size:8pt;margin:0 0 0.1in\">Life: cell biology, genetics, anatomy &amp; physiology, plant biology, ecology, animal behavior · Physical: chem reactions/periodic table/states of matter + physics forces/motion/waves/electromagnetism/thermo · Math: algebra, geometry, probability, statistics (OSA § block).</p>\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">Pick your book *(Soha)*</h3>\n  <table style=\"font-size:8pt\">\n    <tr><th>When</th><th>Primary</th><th>Also OK</th><th>Backup</th></tr>\n    <tr><td>Mon/Thu Chem</td><td><strong>BFN-C</strong> assigned chapters</td><td>—</td><td><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td></tr>\n    <tr><td>Tue/Fri Bio</td><td><strong>FLS</strong></td><td>—</td><td><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td></tr>\n    <tr><td>Wed Phys</td><td><strong>Hewitt</strong></td><td>—</td><td><strong>BFN-Sci</strong></td></tr>\n    <tr><td>Mon–Fri Algebra</td><td><strong>OSA</strong> assigned §</td><td>—</td><td><strong>Lar</strong> · <strong>BFN-A</strong></td></tr>\n    <tr><td>Tue/Thu Python</td><td><strong>Coach</strong> Journey week</td><td>—</td><td>Playground + live notes</td></tr>\n  </table>\n  <table style=\"margin-top:0.2in\">\n    <tr><th>Plan</th><th>Dates</th><th>Chemistry</th><th>Biology</th><th>Physics</th><th>Python</th></tr>\n    <tr><td><strong>One summer pass</strong></td><td>Jun 8 – Aug 14</td><td><strong>BFN-C</strong> chem</td><td><strong>FLS</strong> (+ OSB/CB backup)</td><td><strong>Hewitt</strong></td><td><strong>Coach</strong> wk 1–10</td></tr>\n    <tr><td><strong>Backups</strong></td><td>anytime</td><td><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong> · <strong>CB</strong> · BFN-Bio</td><td>BFN-Sci</td><td>Quiz → DOE in app</td></tr>\n    <tr><td><strong>Bridge</strong></td><td>Aug 15 – 18</td><td colspan=\"4\">Optional flash cards · school meetings in fall · Aug 19 = first day of school</td></tr>\n  </table>\n  <p class=\"footer\">Each cell: read assigned BFN-C chapter or **§ section** · <strong>Formulas</strong> · <strong>Focus</strong> · <strong>Know</strong> · <strong>Toss-up</strong> · Full detail + answers in summer-2026-calendar.md · Daily times → weekly-timetable.md</p>\n</section>\n\n<!-- WEEK 1 -->",
+        f"<section class=\"week legend-page\">\n  <div class=\"week-header\">\n    <h2>Book key &amp; DOE topic scope</h2>\n    <div class=\"week-meta\">Summer 2026 · Soha<br>Jun 8 – Aug 19</div>\n  </div>\n{legend_table}\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">DOE study topics (not whole textbooks)</h3>\n  <p style=\"font-size:8pt;margin:0 0 0.1in\">Life: cell biology, genetics, anatomy &amp; physiology, plant biology, ecology, animal behavior · Physical: chem reactions/periodic table/states of matter + physics forces/motion/waves/electromagnetism/thermo · Math: algebra, geometry, probability, statistics (OSA § block).</p>\n  <h3 style=\"font-size:9pt;margin:0.15in 0 0.08in\">Pick your book *(Soha)*</h3>\n  <table style=\"font-size:8pt\">\n    <tr><th>When</th><th>Primary</th><th>Also OK</th><th>Backup</th></tr>\n    <tr><td>Mon/Thu Chem</td><td><strong>BFN-C</strong> assigned chapters</td><td>—</td><td><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · <strong>BFN-Sci</strong></td></tr>\n    <tr><td>Tue/Fri Bio</td><td><strong>FLS</strong></td><td>—</td><td><strong>OSB</strong> · <strong>CB</strong> · <strong>BFN-Bio</strong></td></tr>\n    <tr><td>Wed Phys</td><td><strong>Hewitt</strong></td><td>—</td><td><strong>BFN-Sci</strong></td></tr>\n    <tr><td>Mon–Fri Algebra</td><td><strong>OSA</strong> assigned §</td><td>—</td><td><strong>Lar</strong> · <strong>BFN-A</strong></td></tr>\n    <tr><td>Tue/Thu Python</td><td><strong>Coach</strong> Journey week</td><td>—</td><td>Playground + live notes</td></tr>\n  </table>\n  <table style=\"margin-top:0.2in\">\n    <tr><th>Plan</th><th>Dates</th><th>Chemistry</th><th>Biology</th><th>Physics</th><th>Python</th></tr>\n    <tr><td><strong>One summer pass</strong></td><td>Jun 8 – Aug 14</td><td><strong>BFN-C</strong> chem</td><td><strong>FLS</strong> (+ OSB/CB backup)</td><td><strong>Hewitt</strong></td><td><strong>Coach</strong> wk 1–10</td></tr>\n    <tr><td><strong>Backups</strong></td><td>anytime</td><td><strong>Hewitt</strong> · <strong>Mod</strong> · <strong>Tro</strong> · BFN-Sci</td><td><strong>OSB</strong> · <strong>CB</strong> · BFN-Bio</td><td>BFN-Sci</td><td>Quiz → DOE in app</td></tr>\n    <tr><td><strong>Bridge</strong></td><td>Aug 15 – 18</td><td colspan=\"4\">Optional flash cards · school meetings in fall · Aug 19 = first day of school</td></tr>\n  </table>\n  <p class=\"footer\">Each cell: read assigned **FLS sections only** (page estimate on bio — not whole chapter) · <strong>Formulas</strong> · <strong>Focus</strong> · <strong>Know</strong> · <strong>Toss-up</strong> · Full detail + answers in summer-2026-calendar.md · Daily times → weekly-timetable.md</p>\n</section>\n\n<!-- WEEK 1 -->",
         text,
         count=1,
         flags=re.DOTALL,
@@ -1068,8 +1071,26 @@ def patch_whiteboard_master_index(text: str) -> str:
     return patch_index_sections(text)
 
 
+def patch_whiteboard_styles(text: str) -> str:
+    if ".reading-pace" in text:
+        return text
+    insertion = (
+        ".reading-pace {\n"
+        "      display: block;\n"
+        "      margin-top: 0.12em;\n"
+        "      color: #1b5e20;\n"
+        "      font-size: 0.95em;\n"
+        "      font-weight: 600;\n"
+        "    }\n\n"
+        "    .reading-pace em { font-style: normal; font-weight: 600; color: #2e7d32; }\n\n"
+        "    .optional-book {"
+    )
+    return text.replace(".optional-book {", insertion, 1)
+
+
 def patch_whiteboard(path: Path) -> None:
     text = path.read_text()
+    text = patch_whiteboard_styles(text)
     start = text.find("<!-- WEEK 1 -->")
     end = text.find("<!-- MASTER INDEX 1 -->")
     if start == -1 or end == -1:

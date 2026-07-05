@@ -77,8 +77,21 @@ struct StudyBlockCard: View {
             Text(block.primaryTopic)
                 .font(.subheadline.weight(.semibold))
 
+            if let summary = block.readingPageSummary {
+                Text(summary)
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(block.isHeavyReadingDay ? PlatformColor.systemOrange : PlatformColor.systemTeal)
+            }
+
             Text(block.primaryReadingLine)
                 .font(.caption.weight(.medium))
+
+            if !block.isFlashCardOnly {
+                Text(block.readingPaceLabel)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(4)
+            }
 
             Text(block.focus)
                 .font(.caption)

@@ -320,12 +320,21 @@ enum BlockAssignedReadingCatalog {
         return BookAssignment(displayText: "OSB \(text)", links: links)
     }
 
+    static func flsChapterSections(for block: StudyBlock) -> [(chapter: Int, sectionIds: [String])]? {
+        let key = Key(week: block.week, day: block.day, subject: block.subject)
+        guard block.subject == .biology, let spec = flsByKey[key] else { return nil }
+        return spec.chapterSections
+    }
+
     static func flsAssignment(for block: StudyBlock) -> BookAssignment? {
         let key = Key(week: block.week, day: block.day, subject: block.subject)
         guard block.subject == .biology, block.bookCode == "FLS",
               let spec = flsByKey[key] else { return nil }
         let chapters = FocusOnLifeScienceCatalog.formatReadingLine(chapterSections: spec.chapterSections)
-        let text = "\(FocusOnLifeScienceCatalog.editionTitle) — \(chapters) — \(block.chapterTitle)"
+        let heavy = FocusOnLifeScienceCatalog.isHeavyReading(chapterSections: spec.chapterSections)
+            ? " · Heavy day — split or OSB backup"
+            : ""
+        let text = "\(FocusOnLifeScienceCatalog.editionTitle) — \(chapters)\(heavy) — \(block.chapterTitle)"
         return BookAssignment(displayText: text, links: [])
     }
 

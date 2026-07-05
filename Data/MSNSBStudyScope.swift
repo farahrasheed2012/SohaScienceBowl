@@ -23,7 +23,7 @@ enum MSNSBStudyScope {
         "Textbooks are a lookup tool. Open the assigned section, read until Focus makes sense, then drill toss-ups."
 
     /// FLS chapters referenced by summer biology blocks (not every chapter in the book).
-    static let scheduledFLSChapterNumbers: Set<Int> = [1, 2, 3, 4, 5, 7, 8, 10, 11, 16, 21]
+    static let scheduledFLSChapterNumbers: Set<Int> = [1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 16, 17, 18, 19, 21]
 
     /// Hewitt (Expl) chapters on the summer physics plan.
     static let scheduledExplChapterNumbers: Set<Int> = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 15]

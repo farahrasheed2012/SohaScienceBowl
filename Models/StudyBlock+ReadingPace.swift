@@ -1,6 +1,26 @@
 import Foundation
 
 extension StudyBlock {
+    /// FLS section assignment with estimated printed pages (biology only).
+    var readingPageSummary: String? {
+        guard subject == .biology, bookCode == "FLS",
+              let sections = BlockAssignedReadingCatalog.flsChapterSections(for: self) else { return nil }
+        return FocusOnLifeScienceCatalog.readingPaceSummary(chapterSections: sections)
+    }
+
+    var estimatedReadingPages: Int? {
+        guard subject == .biology, bookCode == "FLS",
+              let sections = BlockAssignedReadingCatalog.flsChapterSections(for: self) else { return nil }
+        let pages = FocusOnLifeScienceCatalog.estimatedPages(chapterSections: sections)
+        return pages > 0 ? pages : nil
+    }
+
+    var isHeavyReadingDay: Bool {
+        guard subject == .biology, bookCode == "FLS",
+              let sections = BlockAssignedReadingCatalog.flsChapterSections(for: self) else { return false }
+        return FocusOnLifeScienceCatalog.isHeavyReading(chapterSections: sections)
+    }
+
     /// User-facing guidance: most blocks are a section or part, not a full chapter in one hour.
     var readingPaceLabel: String {
         let title = chapterTitle.lowercased()
@@ -10,14 +30,20 @@ extension StudyBlock {
         if isFlashCardOnly || ch.contains("review") {
             return "Review block — revisit weak topics from your notebook. Open the book only for parts you cannot recall."
         }
+
+        if subject == .biology, bookCode == "FLS", let summary = readingPageSummary {
+            var label = "Sections only — not the whole chapter. \(summary). Stop when Focus bullets make sense."
+            if isHeavyReadingDay {
+                label += " Heavy day: split across the weekend or use OpenStax backup in Reading options."
+            }
+            return label
+        }
+
         if title.contains("part 1") || focusLower.contains("part 1") {
             return "Read part 1 only today — not the whole chapter. Finish on the next same-subject day this week (e.g. Tue/Fri for biology, Mon/Thu for chemistry, Wed for physics)."
         }
         if title.contains("part 2") || focusLower.contains("part 2") {
             return "Finish part 2 today — you started this chapter on an earlier same-subject day. Still not rushing the whole book; just complete today's section."
-        }
-        if bookCode == "FLS" {
-            return "Read only today's listed section titles — find them in your book's table of contents. Not the whole chapter; stop when the Focus bullets make sense."
         }
         if ch.contains("§") {
             return "Read only the listed section (§) — not the entire chapter. Stop when the Focus bullets make sense."
@@ -43,9 +69,12 @@ extension StudyBlock {
         let ch = chapter.lowercased()
 
         if isFlashCardOnly || ch.contains("review") { return "review" }
+        if let pages = estimatedReadingPages {
+            if isHeavyReadingDay { return "heavy · ~\(pages) pp · sections" }
+            return "~\(pages) pp · sections only"
+        }
         if title.contains("part 1") || focusLower.contains("part 1") { return "section · part 1" }
         if title.contains("part 2") || focusLower.contains("part 2") { return "section · part 2" }
-        if bookCode == "FLS" { return "assigned sections" }
         if ch.contains("§") { return "one section" }
         if ch.hasPrefix("Ch ") || ch.hasPrefix("ch ") { return "assigned sections" }
         return "assigned section"

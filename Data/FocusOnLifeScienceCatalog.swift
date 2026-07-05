@@ -110,14 +110,23 @@ enum FocusOnLifeScienceCatalog {
         return ch.sections.first { $0.id == sectionId }?.title
     }
 
-    /// e.g. `Ch 1 — Cell Structure and Function · Parts of a Cell · Two Kinds of Cells`
+    /// e.g. `§4.1 Human Inheritance (~p100–110)`
+    static func formatSectionReference(chapter chapterNumber: Int, sectionId: String) -> String {
+        guard let title = sectionTitle(chapter: chapterNumber, sectionId: sectionId),
+              let range = estimatedSectionPageRange(chapter: chapterNumber, sectionId: sectionId) else {
+            return "§\(sectionId)"
+        }
+        return "§\(sectionId) \(title) (~p\(range.start)–\(range.end))"
+    }
+
+    /// e.g. `Ch 4 — Modern Genetics · §4.1 Human Inheritance (~p100–110) · §4.2 Advances… (~p111–121)`
     static func formatChapterSections(chapter chapterNumber: Int, sectionIds: [String]) -> String {
         guard let ch = chapter(chapterNumber) else { return "Ch \(chapterNumber)" }
-        let titles = sectionIds.compactMap { sectionTitle(chapter: chapterNumber, sectionId: $0) }
-        if titles.isEmpty {
+        if sectionIds.isEmpty {
             return "Ch \(ch.number) — \(ch.title)"
         }
-        return "Ch \(ch.number) — \(ch.title) · \(titles.joined(separator: " · "))"
+        let refs = sectionIds.map { formatSectionReference(chapter: chapterNumber, sectionId: $0) }
+        return "Ch \(ch.number) — \(ch.title) · \(refs.joined(separator: " · "))"
     }
 
     /// One or more chapters; section ids are internal catalog keys mapped to printed section titles.
@@ -125,5 +134,68 @@ enum FocusOnLifeScienceCatalog {
         chapterSections
             .map { formatChapterSections(chapter: $0.chapter, sectionIds: $0.sectionIds) }
             .joined(separator: " · ")
+    }
+
+    private static let lastPrintedPage = 752
+
+    /// Printed page span for a full chapter (not assigned reading — context only).
+    static func chapterPageCount(_ number: Int) -> Int {
+        guard let ch = chapter(number) else { return 0 }
+        if let next = chapters.first(where: { $0.number == number + 1 }) {
+            return next.startPage - ch.startPage
+        }
+        return lastPrintedPage - ch.startPage + 1
+    }
+
+    /// Rough printed page range for one section (even split within chapter).
+    static func estimatedSectionPageRange(chapter number: Int, sectionId: String) -> (start: Int, end: Int)? {
+        guard let ch = chapter(number),
+              let index = ch.sections.firstIndex(where: { $0.id == sectionId }) else { return nil }
+        let total = chapterPageCount(number)
+        let count = ch.sections.count
+        let startOffset = Int((Double(total) * Double(index) / Double(count)).rounded(.down))
+        let endOffset = Int((Double(total) * Double(index + 1) / Double(count)).rounded(.down))
+        let start = ch.startPage + startOffset
+        let end = ch.startPage + endOffset - 1
+        return (start, max(start, end))
+    }
+
+    /// Rough page count for assigned section ids (even split across chapter sections).
+    static func estimatedSectionPages(chapter number: Int, sectionIds: [String]) -> Int {
+        guard let ch = chapter(number), !ch.sections.isEmpty, !sectionIds.isEmpty else { return 0 }
+        let total = chapterPageCount(number)
+        let matched = sectionIds.filter { id in ch.sections.contains { $0.id == id } }.count
+        guard matched > 0 else { return 0 }
+        return max(1, Int((Double(total) * Double(matched) / Double(ch.sections.count)).rounded()))
+    }
+
+    static func estimatedPages(chapterSections: [(chapter: Int, sectionIds: [String])]) -> Int {
+        chapterSections.reduce(0) { partial, spec in
+            partial + estimatedSectionPages(chapter: spec.chapter, sectionIds: spec.sectionIds)
+        }
+    }
+
+    /// ≥25 estimated pages in one bio block — split or use OSB backup.
+    static func isHeavyReading(chapterSections: [(chapter: Int, sectionIds: [String])]) -> Bool {
+        estimatedPages(chapterSections: chapterSections) >= 25
+    }
+
+    /// e.g. `Read §4.1 Human Inheritance (~p100–110) · §4.2 Advances… (~p111–121) (~23 pp · Ch 4 is 34 pp)`
+    static func readingPaceSummary(chapterSections: [(chapter: Int, sectionIds: [String])]) -> String {
+        let pages = estimatedPages(chapterSections: chapterSections)
+        let refs = chapterSections.flatMap { spec in
+            spec.sectionIds.map { formatSectionReference(chapter: spec.chapter, sectionId: $0) }
+        }
+        guard !refs.isEmpty else { return "Read assigned sections only — stop when Focus is covered" }
+
+        let refLine = refs.joined(separator: " · ")
+        if chapterSections.count == 1, let spec = chapterSections.first {
+            let whole = chapterPageCount(spec.chapter)
+            if let ch = chapter(spec.chapter), spec.sectionIds.count == ch.sections.count {
+                return "Read \(refLine) (~\(pages) pp · whole Ch \(spec.chapter))"
+            }
+            return "Read \(refLine) (~\(pages) pp · Ch \(spec.chapter) is \(whole) pp)"
+        }
+        return "Read \(refLine) (~\(pages) pp total)"
     }
 }

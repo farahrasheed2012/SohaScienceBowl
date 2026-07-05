@@ -118,15 +118,42 @@ _CHAPTER_LOOKUP: dict[int, tuple[str, dict[str, str]]] = {
 }
 
 
+def format_section_reference(chapter: int, section_id: str) -> str:
+    """Match FocusOnLifeScienceCatalog.formatSectionReference in Swift."""
+    title, sec_map = _CHAPTER_LOOKUP.get(chapter, ("", {}))
+    if section_id not in sec_map:
+        return f"§{section_id}"
+    rng = _estimated_section_page_range(chapter, section_id)
+    if rng:
+        return f"§{section_id} {sec_map[section_id]} (~p{rng[0]}–{rng[1]})"
+    return f"§{section_id} {sec_map[section_id]}"
+
+
+def _estimated_section_page_range(chapter: int, section_id: str) -> tuple[int, int] | None:
+    sections = _CHAPTER_LOOKUP_SECTIONS.get(chapter, [])
+    if section_id not in sections:
+        return None
+    index = sections.index(section_id)
+    total = _chapter_page_count(chapter)
+    count = len(sections)
+    start_offset = int(total * index / count)
+    end_offset = int(total * (index + 1) / count)
+    start = START_PAGES[chapter] + start_offset
+    end = START_PAGES[chapter] + end_offset - 1
+    return start, max(start, end)
+
+
 def format_chapter_sections(chapter: int, section_ids: list[str]) -> str:
     """Match FocusOnLifeScienceCatalog.formatChapterSections in Swift."""
     title, sec_map = _CHAPTER_LOOKUP.get(chapter, ("", {}))
     if not title:
         return f"Ch {chapter}"
-    sec_titles = [sec_map[sid] for sid in section_ids if sid in sec_map]
-    if not sec_titles:
+    if not section_ids:
         return f"Ch {chapter} — {title}"
-    return f"Ch {chapter} — {title} · {' · '.join(sec_titles)}"
+    refs = [format_section_reference(chapter, sid) for sid in section_ids if sid in sec_map]
+    if not refs:
+        return f"Ch {chapter} — {title}"
+    return f"Ch {chapter} — {title} · {' · '.join(refs)}"
 
 
 def format_fls_reading(chapter_sections: list[tuple[int, list[str]]]) -> str:
@@ -157,8 +184,77 @@ FLS_BY_BLOCK: dict[tuple[int, int], list[tuple[int, list[str]]]] = {
     (9, 4): [(18, ["18.1"]), (19, ["19.1"])],
 }
 
-FLS_PRIMARY: dict[tuple[int, int], str] = {
-    key: format_fls_reading(specs) for key, specs in FLS_BY_BLOCK.items()
+# Printed start pages — matches FocusOnLifeScienceCatalog.startPage
+START_PAGES = {
+    1: 4, 2: 38, 3: 68, 4: 100, 5: 134, 6: 160, 7: 204, 8: 236, 9: 268,
+    10: 298, 11: 328, 12: 364, 13: 396, 14: 430, 15: 468, 16: 508, 17: 530,
+    18: 560, 19: 592, 20: 622, 21: 648, 22: 682, 23: 722,
+}
+_LAST_PAGE = 752
+_CHAPTER_LOOKUP_SECTIONS: dict[int, list[str]] = {
+    num: [sid for sid, _ in sections] for num, _, sections in FLS_CHAPTERS
+}
+
+
+def _chapter_page_count(chapter: int) -> int:
+    nums = sorted(START_PAGES)
+    start = START_PAGES[chapter]
+    idx = nums.index(chapter)
+    if idx + 1 < len(nums):
+        return START_PAGES[nums[idx + 1]] - start
+    return _LAST_PAGE - start + 1
+
+
+def _estimated_section_pages(chapter: int, section_ids: list[str]) -> int:
+    sections = _CHAPTER_LOOKUP_SECTIONS.get(chapter, [])
+    if not sections or not section_ids:
+        return 0
+    matched = sum(1 for sid in section_ids if sid in sections)
+    if matched == 0:
+        return 0
+    total = _chapter_page_count(chapter)
+    return max(1, round(total * matched / len(sections)))
+
+
+def estimated_pages(specs: list[tuple[int, list[str]]]) -> int:
+    return sum(_estimated_section_pages(ch, secs) for ch, secs in specs)
+
+
+def reading_pace_summary(specs: list[tuple[int, list[str]]]) -> str:
+    pages = estimated_pages(specs)
+    refs: list[str] = []
+    for ch, secs in specs:
+        for sid in secs:
+            refs.append(format_section_reference(ch, sid))
+    if not refs:
+        return "Read assigned sections only — stop when Focus is covered"
+    ref_line = " · ".join(refs)
+    if len(specs) == 1:
+        ch, secs = specs[0]
+        whole = _chapter_page_count(ch)
+        all_sections = _CHAPTER_LOOKUP_SECTIONS.get(ch, [])
+        if len(secs) == len(all_sections):
+            return f"Read {ref_line} (~{pages} pp · whole Ch {ch})"
+        return f"Read {ref_line} (~{pages} pp · Ch {ch} is {whole} pp)"
+    return f"Read {ref_line} (~{pages} pp total)"
+
+
+def is_heavy_reading(specs: list[tuple[int, list[str]]]) -> bool:
+    return estimated_pages(specs) >= 25
+
+
+def fls_pace_note(week: int, day_idx: int) -> str:
+    specs = FLS_BY_BLOCK.get((week, day_idx))
+    if not specs:
+        return ""
+    return reading_pace_summary(specs)
+
+
+# Primary lines for calendar HTML — § refs and page ranges in the title line
+FLS_PRIMARY = {
+    key: format_fls_reading(specs)
+    + (" · Heavy day — split or OSB backup" if is_heavy_reading(specs) else "")
+    for key, specs in FLS_BY_BLOCK.items()
 }
 FLS_PRIMARY[(10, 1)] = "FLS Review"
 FLS_PRIMARY[(10, 4)] = "FLS Review"

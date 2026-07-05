@@ -21,9 +21,22 @@ Middle School NSB questions come from textbook-level science, but **DOE does not
 | **Progress checklist** | 22 Bio · Chem · Phys topics (atoms, cells, genetics, forces, …) |
 | **Daily blocks** | Focus + Know cold + toss-ups for one section per hour |
 | **Learn encyclopedia** | 124 topic articles with drills |
-| **NSB Topics checkboxes** | ~11 FLS + ~11 Hewitt sections on the summer schedule — **not** every chapter in those books |
+| **NSB Topics checkboxes** | ~15 FLS + Hewitt sections on the summer schedule — **not** every chapter in those books |
 
 Earth & Space, Energy, and Math are official NSB categories but **not** on the summer Bio/Chem/Phys block plan — prep those from DOE samples when needed.
+
+## FLS chapter sizes vs daily reading
+
+Prentice Hall FLS chapters are **22–44 printed pages** each. You are **not** reading whole chapters most days.
+
+| | Typical |
+|---|---------|
+| **Full FLS chapter** | 30–44 pp |
+| **One FLS section** | ~6–18 pp |
+| **Most bio blocks** | ~11–23 pp (1–2 sections) |
+| **Heavy bio blocks** | ~31–32 pp (W3 Fri, W6 Fri, W9 Fri) |
+
+The app shows **~page estimates** on Today, Week, Study session, and the print calendar. **Heavy day** = split across the weekend or use **OpenStax backup**.
 
 ## Summer totals
 
@@ -40,6 +53,7 @@ Earth & Space, Energy, and Math are official NSB categories but **not** on the s
 - **Most blocks:** ~45–60 min on the listed § or part, plus Focus / Know cold / toss-ups.
 - **Combo chapters:** split across two same-subject days in the same week.
 - **Physics (Wed):** multi-chapter ranges split across consecutive Wednesdays.
+- **Heavy biology (3 Fridays):** ~31 pp — use OSB backup or split reading.
 
 ## Week themes
 

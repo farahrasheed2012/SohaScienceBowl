@@ -440,7 +440,7 @@ struct NSBCategoryDetailView: View {
         } header: {
             Text(FocusOnLifeScienceCatalog.editionTitle)
         } footer: {
-            Text("NSB summer schedule sections only — \(completed)/\(scheduledChapters.count) of \(scheduledChapters.count) scheduled FLS chapters checked. Other FLS chapters are optional.")
+            Text("NSB summer schedule sections only — \(completed)/\(scheduledChapters.count) scheduled FLS chapters. Check off assigned sections; full chapters are 30–44 pp but each day is ~6–20 pp.")
         }
     }
 
